@@ -6,15 +6,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Home | LapTop_shop</title>
-    <link href="{{ asset('public/fronend/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/prettyPhoto.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/price-range.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/animate.css') }}" rel="stylesheet">
-	<link href="{{ asset('public/fronend/css/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/style_overview.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/fronend/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/prettyPhoto.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/price-range.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/animate.css') }}" rel="stylesheet">
+	<link href="{{ asset('fronend/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
+    <link href="{{ asset('fronend/css/style.css') }}" rel="stylesheet">
 
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <!-- fonts -->
@@ -271,11 +271,11 @@
 
 
 
-    <script src="{{ asset('public/fronend/js/jquery.js') }}"></script>
-	<script src="{{ asset('public/fronend/js/bootstrap.min.js') }}"></script>
-	<script src="{{ asset('public/fronend/js/jquery.scrollUp.min.js') }}"></script>
-	<script src="{{ asset('public/fronend/js/price-range.js') }}"></script>
-    <script src="{{ asset('public/fronend/js/jquery.prettyPhoto.js') }}"></script>
-    <script src="{{ asset('public/fronend/js/main.js') }}"></script>
+    <script src="{{ asset('fronend/js/jquery.js') }}"></script>
+	<script src="{{ asset('fronend/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('fronend/js/jquery.scrollUp.min.js') }}"></script>
+	<script src="{{ asset('fronend/js/price-range.js') }}"></script>
+    <script src="{{ asset('fronend/js/jquery.prettyPhoto.js') }}"></script>
+    <script src="{{ asset('fronend/js/main.js') }}"></script>
 </body>
 </html>
