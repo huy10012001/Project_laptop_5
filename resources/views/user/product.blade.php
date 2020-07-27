@@ -1,9 +1,46 @@
+
+@php
+session_start();
+@endphp
 @extends('layout_home')
 
 @section( 'dell')
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function AddCart(order_id)
+ {
+    
+    var userName = document.getElementById("name").value;
+    if(userName=="")
+    location="/login";
+    else
+    {
+    $.get(
+       
+       " {{ asset('Addcart')}}",
+       {
+          order_id:order_id,
+         
+           function()
+           {
+             location.reload();
+           }
+       }
+    )
+    }
+ }
+</script>
+
 <div class="container">
     <!--tìm theo chi tiết sản phẩm trang home-->
+    @if(Session::has('key'))
 
+  <input type="hidden" id="name"  value="session" />
+
+@else
+<input type="hidden" id="name"  value="" />
+@endif 
+    
 
 <div class="col-sm-3">
     <div class="left-sidebar">
@@ -89,24 +126,26 @@
 <div class="col-sm-9 padding-right">
 
     <div class="features_items"><!--features_items-->
-        <h2 class="title text-center">sản phẩm Laptop</h2>
+        <h2 class="title text-center">sản phẩm Laptop {{$c->name}}</h2>
         <!--sản phẩm-->
 
-
+ @foreach($c->product as $p)
 <div class="col-sm-4">
+
     <div class="product-image-wrapper">
+         
         <div class="single-products">
                 <div class="productinfo text-center">
-                    <img src="{{ ('public/fronend/images/slide1.jpg') }}" alt="" />
-                    <h2>$56</h2>
-                    <p>Easy Polo Black Edition</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                    <img src="{{ url('fronend/images/slide1.jpg') }}" alt="" />
+                    <h2>{{$p->price}}</h2>
+                    <p>{{$p->name}}</p>
+                    <a onclick="AddCart('{{$p->id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                 </div>
                 <div class="product-overlay">
                     <div class="overlay-content">
-                        <h2>$56s</h2>
-                        <p>Easy Polo Black Edition</p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                        <h2>{{$p->price}}</h2>
+                        <p>{{$p->name}}</p>
+                        <a   onclick="AddCart('{{$p->id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>
                 </div>
         </div>
@@ -117,7 +156,10 @@
             </ul>
         </div>
     </div>
+   
 </div>
+@endforeach 
+
 </div><!--features_items-->
 
 </div>

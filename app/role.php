@@ -42,7 +42,7 @@ class role extends Model
     public function user()
     {
            
-        return $this->belongsToMany('App\user');
+        return $this->belongsToMany('App\User');
    
     }
 }

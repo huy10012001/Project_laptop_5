@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Model;
 
-class contact__user extends Model
+class contact_user extends Model
 {
     
 

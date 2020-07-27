@@ -12,21 +12,29 @@ class Order extends Model
 // khai báo table ứng với model
 protected $table = "order";
 // khai báo trường khóa chính
-protected $primaryKey = 'id';
+
 
 // mặc định khóa chính sẽ tự động tăng
-public $incrementing = true;   // false: khóa chỉnh sẽ không tự động tăng
-protected $fillable = ['id','transaction_id' ,'product_id','qty', 'amount', 'status', 'updated_at', 'created_at'];
-public function transaction()
+public $incrementing =true;   // false: khóa chỉnh sẽ không tự động tăng
+protected $fillable = ['id','total','status','date',  'user_id', 'updated_at', 'created_at'];
+public function user()
 {
-    return $this->hasOne('App\transaction','id');
+    return $this->belongsTo('App\User');
 }
-
 public function product()
 {
-       
-    return $this->belongsToMany('App\Product');
+     
+
+    return $this->belongsToMany('App\Product')->withPivot('price', 'qty','amount')-> withTrashed();
+   
 
 }
+/*public function productB()
+{
+     
 
+    return $this->belongsToMany('App\Product')->withPivot('price', 'qty','amount');
+   
+
+}*/
 }

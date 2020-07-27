@@ -15,14 +15,13 @@ class CreateOrderTable extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('transaction_id')->index()->nullable();
-           
-            $table->foreign('transaction_id')->references('id')->on('transaction')->onUpdate('cascade');
-        
-            $table->integer('qty');
-            $table->integer('amount');
+            
+   
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('user')->onUpdate('cascade');
             $table->enum('status', array('0','1'))->default('0');
+              $table->integer('total');
+           $table->date('date');
             $table->timestamps();
         });
     }

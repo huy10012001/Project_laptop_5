@@ -130,12 +130,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-		<form action="#" method="post">
+				<form action="{{ url('/postLogin') }}" method="post">
+        {{ csrf_field() }}		
             <h5 style="color: white;" >Email:</h5>
             <input type="email" class="form-control" name="email" required><br>
-            <h5 style="color: white;" name="password" required>Password:</h5>
-            <input type="password" class="form-control" ><br>
-            <button type="button" class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
+            <h5 style="color: white;">Password:</h5>
+            <input type="password"   required name="password"  class="form-control" ><br>
+            <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
             <p style="color: white;">bạn đã có tài khoản?  <a href="#">Đăng kí</a></p>
 
 		</form>

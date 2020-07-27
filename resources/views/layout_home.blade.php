@@ -54,6 +54,17 @@
 						</div>
 
 					</div>
+					@if(Session::has('key'))
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="#"><i class="fa fa-user"></i> {{Session::get('key')->name}}</a></li>
+								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> giỏ hàng</a></li>
+								<li><a href="{{ URL::to('/logout') }}"><i class="fa fa-lock"></i> đăng xuất</a></li>
+							</ul>
+						</div>
+					</div>
+					@else
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
@@ -65,6 +76,7 @@
 							</ul>
 						</div>
 					</div>
+					@endif
 				</div>
 			</div>
 		</div><!--/header-middle-->
@@ -86,8 +98,8 @@
 								<li><a href="{{ URL::to('/home') }}" class="active">Trang Chủ</a></li>
 								<li class="dropdown"><a href="#">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="{{ URL::to('/product') }}">Dell</a></li>
-										<li><a href="product-details.html">HP</a></li>
+                                        <li><a href="{{ URL::to('/product/3') }}">Dell</a></li>
+										<li><a href="{{ URL::to('/product/4') }}">HP</a></li>
 										<li><a href="checkout.html">ASUS</a></li>
 										<li><a href="cart.html">MacBook</a></li>
 										<li><a href="login.html">Huawei</a></li>

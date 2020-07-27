@@ -21,7 +21,7 @@ class CreateUserTable extends Migration
             $table->string('age');
             $table->string('phone');
             $table->string('address');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('password');
             $table->timestamps();
         });

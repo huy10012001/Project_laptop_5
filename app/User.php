@@ -38,22 +38,16 @@ class User extends Model
      */
    
     
-    public function cart()
-    {
-           
-        return $this->hasOne('App\Cart');
-   
-    }
+  
     public function role()
     {
            
         return $this->belongsToMany('App\role');
-   
     }
-    public function transaction()
+    public function Order()
     {
            
-        return $this->hasMany('App\transaction');
+        return $this->hasMany('App\Order');
    
     }
 }

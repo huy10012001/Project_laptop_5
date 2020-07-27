@@ -20,7 +20,7 @@
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
                             </div>
                             <div class="col-sm-6">
-                                <img src="{{ ('public/fronend/images/slide6.jpg') }}" class="girl img-responsive" alt="" />
+                                <img src="{{ ('fronend/images/slide6.jpg') }}" class="girl img-responsive" alt="" />
 
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
                             </div>
                             <div class="col-sm-6">
-                                <img src="{{ ('public/fronend/images/slide5.jpg') }}" class="girl img-responsive" alt="" />
+                                <img src="{{ ('fronend/images/slide5.jpg') }}" class="girl img-responsive" alt="" />
 
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
                             </div>
                             <div class="col-sm-6">
-                                <img src="{{ ('public/fronend/images/slide4.jpg') }}" class="girl img-responsive" alt="" />
+                                <img src="{{ ('fronend/images/slide4.jpg') }}" class="girl img-responsive" alt="" />
 
                             </div>
                         </div>
@@ -83,7 +83,7 @@
     <div class="product-image-wrapper">
         <div class="single-products">
                 <div class="productinfo text-center">
-                    <img src="{{ ('public/fronend/images/slide1.jpg') }}" alt="" />
+                    <img src="{{ ('fronend/images/slide1.jpg') }}" alt="" />
                     <h2>$56</h2>
                     <p>Easy Polo Black Edition</p>
                     <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>

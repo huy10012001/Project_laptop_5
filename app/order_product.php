@@ -3,25 +3,28 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class cart_item_product extends Model
+class order_product extends Model
 {
-    
+  
+  
+
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+     use SoftDeletes;
     protected $table = "order_product";
     // khai báo trường khóa chính
     protected $primaryKey = array('order_id', 'product_id');
     // mặc định khóa chính sẽ tự động tăng
-  
+    public $incrementing = false;
     protected $fillable = ['order_id',
-        'product_id'
+        'product_id','price','qty','amount'
     ];
     
     /**
