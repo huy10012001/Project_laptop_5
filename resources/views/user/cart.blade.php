@@ -15,12 +15,22 @@ $(document).ready(function() {
       return false;
     }
   });
-});</script>
+});
+$(document).ready(function() {
+  $('#form').submit(function(event){
+    var event= $('#demo').vale();
+      event.preventDefault();
+      return false;
+       
+  });
+});
+</script>
 <script type="text/javascript">
-    
-    function updateCart(qty,order_id,product_id)
- {
+       
    
+    function updateCart(qty,product_id,order_id)
+ {
+  
     $.get(
        " {{ asset('cart/update')}}",
        {
@@ -32,10 +42,10 @@ $(document).ready(function() {
        }
     );
  }
-    function deleteCart(order_id,product_id)
+    function deleteCart(product_id,order_id)
  {
-   
   
+
     $.get(
        " {{ asset('cart/delete')}}",
        {
@@ -52,10 +62,75 @@ $(document).ready(function() {
     
 <tbody>
 </div><!-- /.container-fluid -->
-
+   
+                      
+    @if(Session::has('cart'))
+    <table  class="table table-bordered table-hover">
+                      <thead>
+                            <tr>
+                                <th>Product Id</th>
+                                <th>Product Price</th>
+                                <th>qty</th>  
+                                <th>Amount</th>
+                               
+                               
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+              @foreach(Session::get('cart')->items as $product)
+              <tr> 
+                  <tr>
+                               <td> {{$product['id']}}</td>
+                               @if($product['status']==1)
+                               {  
+                                 <td> {{$product['price']}}</td>
+                                <td></td>
+                                <td><input   type="number" name="qty"  id="myInput"     value="{{$product['qty']}}"
+                                  oninput="updateCart(this.value,<?php echo $product['id'] ?>)"></td>
+                                <td>  {{$product['amount']}} </td>
+                                <td class="text-right">
+                                <a class="btn btn-danger btn-sm" 
+                                onclick="deleteCart(<?php echo $product['id'] ?>)">
+                                         <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                 </td>
+                                
+                              }
+                              @else
+                              {
+                                
+                                <td> {{$product['price']}}</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right">
+                                <a class="btn btn-danger btn-sm" 
+                                onclick="deleteCart(<?php echo $product['id'] ?>)">
+                                         <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                 </td>
+                                </tr>
+                                 
+                                  <tr><Td>da het hang</Td> </tr>
+                                    
+                              }
+                              @endif
+                                
+                   </tr>
+              </tr>
+                          
+             @endforeach
+             @if(Session::get('cart')->totalPrice>0)
+              {{Session::get('cart')->totalPrice}}
+              {{Session::get('cart')->totalQty}}
+            
+            @endif
+             </tbody>
+    </table>
     <!-- Main content -->
+    @else
     @if(isset($orders)  )
-    <form role="form" action="{{ url('/order') }}" method="post"
+    <form role="form" id="form" action="{{ url('/order') }}" method="post"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}                   
     <section class="content">
@@ -77,11 +152,11 @@ $(document).ready(function() {
                             </tr>
                             </thead>
                             <tbody>
-                        
+                            @php  $countQy=0  @endphp
                             @foreach($orders->product as $p)
                             <tr> 
                                <tr>
-
+                           
                                @if($p->trashed())
                                <td>{{ $p->pivot->product_id  }}</td>
                             
@@ -92,7 +167,7 @@ $(document).ready(function() {
                                 
                                 <td class="text-right">
                                 <a class="btn btn-danger btn-sm" 
-                                onclick="deleteCart('{{$orders->id}}','{{$p->id}}')">
+                                onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
                                          <i class="fas fa-trash"></i> Delete
                                     </a>
                                  </td>
@@ -100,19 +175,24 @@ $(document).ready(function() {
                                  <tr><td>Da het hang.</td></tr>
                                @else
                                 <td>{{ $p->pivot->product_id  }}</td>
+                          
                                 <td>{{ $p->pivot->price  }}</td>
+                               
                                 <td>{{ $p->pivot->amount  }}</td>
+                                <td>{{ $p->pivot->qty  }}</td>
                                 <td><input   type="number" name="qty"  id="myInput"     value="{{ $p->pivot->qty}}"
-                                  oninput="updateCart(this.value,'{{$orders->id}}','{{$p->id}}')"/></td>
+                                  oninput="updateCart(this.value,'{{$p->id}}','{{$orders->id}}')"/></td>
                                 
                                 <td>{{ $p->name  }}</td>
                              
                                 <td class="text-right">
                                 <a class="btn btn-danger btn-sm" 
-                                onclick="deleteCart('{{$orders->id}}','{{$p->id}}')">
+                                onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
                                          <i class="fas fa-trash"></i> Delete
                                     </a>
+                                  
                                  </td>
+                                 @php  $countQy+=$p->pivot->qty @endphp
                                  @endif
                             </tr>
                           
@@ -133,10 +213,13 @@ $(document).ready(function() {
                      
                        @if($orders->total>0)
                        <input type="submit" value="Mua" class="btn btn-primary"  > 
-                       <p id="demo">{{ $orders->total  }}</p>
-                       @else
-                       <input type="submit" value="Tiếp tục Mua" class="btn btn-primary" href="{{ url('index/' )}}">
-                       @endif
+                       <p id="demo1">{{ $orders->total  }}</p>
+                       <p id="demo1">{{ $countQy  }}</p>
+                      @else
+                      
+                      <input type="button" onclick="location.href = 'home'"  value="Tiếp tục Mua" class="btn btn-primary" href="{{ url('index/' )}}">
+                     
+                      @endif  
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -148,15 +231,15 @@ $(document).ready(function() {
         </div>
         <!-- /.row -->
     </section>
+    
     @else
     <input type="submit" value="Tiếp tục Mua" class="btn btn-primary" href="{{ url('index/' )}}">
     @endif
   
     </form>
-   
+    @endif
 </body>
 
-<p id="demo"></p>
 
 
 

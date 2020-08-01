@@ -27,6 +27,7 @@
                     <div class="card-header">
                         <h3 class="card-title">DataTable with minimal features & hover style</h3>
                     </div>
+
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="product" class="table table-bordered table-hover">
@@ -58,29 +59,25 @@
                                     @php
                                     $count=0;
                                     @endphp
-                                    @foreach($p::find($p->id)->role as $p)
+                                    @foreach($p::find($p->id)->role as $p1)
                                        @php
                                        echo $count=$count+1;
                                        
                                       @endphp
                                     
-                                      .{{ $p->name }} 
+                                      .{{ $p1->name }} 
                                       <br/>
                                    @endforeach
                                     </td>
-                                  @else
-                                     <td>123</td>
+                                   @else
+                                     <td></td>
                                    @endif
                                     <td class="text-right">
-                                    <a class="btn btn-primary btn-sm" href="#">
-                                        <i class="fas fa-folder"></i> View
+                                   
+                                    <a class="btn btn-info btn-sm" href="{{ url('admin/user/viewRole/'.$p->id) }}">
+                                        <i class="fas fa-pencil-alt"></i> Edit Role
                                     </a>
-                                    <a class="btn btn-info btn-sm" href="{{ url('admin/role/update/'.$p->id) }}">
-                                        <i class="fas fa-pencil-alt"></i> Edit
-                                    </a>
-                                    <a class="btn btn-danger btn-sm" href="">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </a>
+                                   
                                     </td>
                             </tr>
                             @endforeach
@@ -94,7 +91,7 @@
                                 <th>phone</th>
                                 <th>address</th>
                                 <th>image</th>
-                                
+                                <th></th>
                                 <th></th>
                                 
                                 

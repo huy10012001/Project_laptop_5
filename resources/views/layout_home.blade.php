@@ -16,8 +16,73 @@
     <link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
 
 </head><!--/head-->
+<script>
+    $(document).ready(function() {
+  $('#cartModal').modal('show');
+});
+
+</script>
+<script type="text/javascript">
+    function updateCart(qty,product_id,order_id)
+    {
+		
+        $.get(
+       " {{ asset('cart/update')}}",
+       {
+           qty:qty,order_id:order_id,product_id:product_id,
+         function()
+           {
+          //  document.getElementById("total").innerHTML = 123;
+           }
+       }
+    );
+       }
+
+    function deleteCart(product_id,order_id)
+    {
+    $.get(
+       " {{ asset('cart/delete')}}",
+       {
+         order_id:order_id,product_id:product_id,
+         function()
+           {
+              // location.reload();
+           }
+       }
+    );
+ }
+</script>
+<script type="text/javascript">
+       
+
+  /*  function deleteCart(product_id,order_id)
+ {
+  
+
+    $.get(
+       " {{ asset('cart/delete')}}",
+       {
+         order_id:order_id,product_id:product_id,
+         function()
+           {
+              location.reload();
+           }
+       }
+    );
+ }*/
+</script>
+<style>
+
+.img-fluid {
+    width: 100px;
+    height: 70px;
+}
+</style>
 
 <body>
+
+
+
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">
@@ -50,33 +115,194 @@
 				<div class="row">
 					<div class="col-sm-4" >
 						<div class="logo pull-left">
-							<a href="{{ URL::to('/home')}}"><img src="{{ ('public/fronend/images/logo3.png') }}" alt="" /></a>
+							<a href="{{ URL::to('/home')}}"><img src="{{ ('fronend/images/logo3.png') }}" alt="" /></a>
 						</div>
 
 					</div>
-					@if(Session::has('key'))
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> {{Session::get('key')->name}}</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> giỏ hàng</a></li>
-								<li><a href="{{ URL::to('/logout') }}"><i class="fa fa-lock"></i> đăng xuất</a></li>
-							</ul>
-						</div>
-					</div>
-					@else
-					<div class="col-sm-8">
-						<div class="shop-menu pull-right">
-							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> tài khoản</a></li>
+							@if(!Session::has('key'))
+								<li ><button><a href="#" style="background: none; color:black;" ><i class="fa fa-user"></i> <b>tài khoản</b></a></button></li>
+								<li><button><a href="{{ URL::to('/login') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Nhập</b></a></button></li>
+							@else
+							<li ><button><a href="#" style="background: none; color:black;" ><i class="fa fa-user"></i> <b>{{App\User::find(Session::get('key'))->first()->name}}</b></a></button></li>
+								<li><button><a href="{{ URL::to('/logout') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Xuất</b></a></button></li>
+							@endif
+
+                                <li>
+
+                                        <button type="button"data-toggle="modal" data-target="#cartModal"><i class="fa fa-shopping-cart"></i>
+                                        <b>  giỏ hàng   </b>
+                                        </button>
 
 
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> giỏ hàng</a></li>
-								<li><a href="{{ URL::to('/login') }}"><i class="fa fa-lock"></i> đăng nhập</a></li>
+                                <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-bottom-0">
+                                              <h5 class="modal-title" id="exampleModalLabel">
+                                                Your Shopping Cart
+                                              </h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+												 <!--Trường hợp user chưa đăng nhập thao tác với session-->
+											@if(Session::has('cart'))
+                                              <table class="table table-image">
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">sản phẩm</th>
+                                                    <th scope="col">Giá</th>
+                                                    <th scope="col">Số lượng</th>
+                                                    <th scope="col">Tổng cộng</th>
+                                                    <th scope="col">Xóa</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr>
+                                                    <td >
+                                                      <img src="{{ ('fronend/images/logo3.png') }}" class="img-fluid img-thumbnail" alt="Sheep"  >
+													</td>
+													@foreach(Session::get('cart')->items as $product)
+												   
+													<td>{{App\Product::withTrashed()->find($product['id'])->name}}</td>
+												      <!--Trường hợp còn hàng(status là 1)-->
+            									  	@if($product['status']==1)
+           											<td>{{$product['price']}}</td>
+                                                    <td class="qty">
+                                                        <div class="buttons_added">
+
+                                                            <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
+                                 							 oninput="updateCart(this.value,<?php echo $product['id'] ?>,<?php echo $product['price'] ?>)">
+
+                                                        </div></td>
+                                                    <td class = "amount">{{$product['amount']}}</td>
+                                                    <td>
+                                                      <a href="#" onclick="deleteCart(<?php echo $product['id'] ?>)">
+                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                          </svg>
+                                                      </a>
+													</td>
+													@else
+													<td>{{$product['price']}}</td>
+                                                    <td class="qty"> </td>
+                                                    <td class = "amount"></td>
+                                                    <td>
+                                                      <a href="#" onclick="deleteCart(<?php echo $product['id'] ?>)">
+                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                          </svg>
+                                                      </a>
+													</td>
+													
+												  	</tr>
+													@endif
+												  @endforeach	
+                                                </tbody>
+                                            </table>
+                                            <div class="d-flex justify-content-end">
+                                                <h5>Total: <span class="price text-success" id="total" >
+												{{Session::get('cart')->totalPrice}}</span></h5>
+											</div>
+											 <!--Trường hợp user  đăng nhập thao tác với database-->
+											@elseif(isset($orders))
+											<table class="table table-image">
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">sản phẩm</th>
+                                                    <th scope="col">Giá</th>
+                                                    <th scope="col">Số lượng</th>
+                                                    <th scope="col">Tổng cộng</th>
+                                                    <th scope="col">Xóa</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr>
+                                                    <td>
+                                                      <img src="{{ ('fronend/images/logo3.png') }}" class="img-fluid img-thumbnail" alt="Sheep"  >
+													</td>
+													@foreach($orders->product as $p)
+												   
+													<td>{{$p->name}}</td>
+												      <!--Trường hợp còn hàng(status là 1)-->
+            									  
+           											<td>{{$p->pivot->price }}</td>
+													   <!--Trường hợp còn hàng(khác trashed)-->
+													@if(!($p->trashed()))
+                                                    <td class="qty">
+                                                        <div class="buttons_added">
+															<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
+                                 						oninput="onChange(this.value,'{{$p->id}}','{{$orders->id}}')">
+
+                                                        </div></td>
+                                                    <td class = "amount">{{$p->pivot->amount }}</td>
+                                                    <td>
+                                                      <a href="#"  onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                          </svg>
+                                                      </a>
+													</td>
+													</tr>
+													@else
+													
+                                                    <td class="qty"> </td>
+                                                    <td class = "amount"></td>
+                                                    <td>
+                                                      <a href="#"  onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                          </svg>
+                                                      </a>
+													</td>
+													
+													
+												  	</tr>
+													@endif
+												  @endforeach	
+                                                </tbody>
+                                            </table>
+                                            <div class="d-flex justify-content-end">
+                                                <h5>Total: <span class="price text-success" id="total" >
+												{{ $orders->total }}</span></h5>
+											</div>
+											@endif
+
+													
+                                            </div><!--/cart model-->
+                                            <div class="modal-footer border-top-0 d-flex justify-content-between">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
+                                              <button type="button" class="btn btn-success" ><a href="{{ URL::to('/cart-detail') }}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
+
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+                                </li>
+
+
+
+
+
+							
 							</ul>
 						</div>
-					</div>
-					@endif
+                    </div>
+                    <!---->
 				</div>
 			</div>
 		</div><!--/header-middle-->
@@ -98,117 +324,120 @@
 								<li><a href="{{ URL::to('/home') }}" class="active">Trang Chủ</a></li>
 								<li class="dropdown"><a href="#">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="{{ URL::to('/product/3') }}">Dell</a></li>
-										<li><a href="{{ URL::to('/product/4') }}">HP</a></li>
-										<li><a href="checkout.html">ASUS</a></li>
-										<li><a href="cart.html">MacBook</a></li>
-										<li><a href="login.html">Huawei</a></li>
+									@foreach(App\Category::all() as $c)
+										@if($c->product->count()>0)
+										<li><a href=" {{url('product/'.$c->name)}}">{{$c->name}}</a></li>
+										@endif
+									@endforeach
                                     </ul>
                                 </li>
 								<li class="dropdown"><a href="#">Về Chúng Tôi<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">thông tin về shop</a></li>
-										<li><a href="blog-single.html">thông tin LapTop-shop</a></li>
-                                    </ul>
-                                </li>
+										<ul role="menu" class="sub-menu">
+											<li><a href="blog.html">thông tin về shop</a></li>
+											<li><a href="blog-single.html">thông tin LapTop-shop</a></li>
+										</ul>
+									</li>
 
-								<li><a href="{{ URL::to('/contact') }}">liên hệ</a></li>
-							</ul>
+									<li><a href="{{ URL::to('/contact') }}">liên hệ</a></li>
+								</ul>
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Search"/>
+						<div class="col-sm-3">
+							<div class="search_box pull-right">
+								<input type="text" placeholder="Search"/>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
-<!--slider-->
-@yield('slide')
-<!--/slider-->
+			</div><!--/header-bottom-->
+		</header><!--/header-->
+	<!--slider-->
+	@yield('slide')
+	<!--/slider-->
 
-	<section>
-		<div class="container">
-			<div class="row">
-                <!--tìm theo chi tiết-->
-                @yield('detail_home')
-                <!--end tìm theo chi tiéte-->
-
-                <!--sản phẩm-->
-				@yield('product')
-                <!--end sản phẩm-->
-
-                <!--ccontact-->
-                @yield('contact')
-                <!--end contact-->
-                @yield('dell')
-                <!--sản phẩm dell-->
-
-
-
-
-                <!--login-->
-                @yield('login')
-                <!--end login-->
-
-
-
-
-
-
-
-
-			</div>
-		</div>
-	</section>
-
-	<footer id="footer"><!--Footer-->
-
-
-		<div class="footer-widget">
+		<section>
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-3">
-						<div class="single-widget">
-							<h2>CHÍNH SÁCH VÀ HỖ TRỢ</h2>
-							<ul class="nav nav-pills nav-stacked">
-								<li><a href="#">Phương Thức Thanh toán</a></li>
-								<li><a href="#">Phương Thức vận chuyển</a></li>
-								<li><a href="#">Giao Hàng Tận nhà</a></li>
-								<li><a href="#">Quy Định Bảo hành</a></li>
-								<li><a href="#">Quy Định Đặt Cọc</a></li>
-							</ul>
+					<!--tìm theo chi tiết-->
+					@yield('detail_home')
+					<!--end tìm theo chi tiéte-->
+
+					<!--sản phẩm-->
+					@yield('product')
+					<!--end sản phẩm-->
+					@yield('detail')
+					<!--ccontact-->
+					@yield('contact')
+					<!--end contact-->
+					@yield('dell')
+					<!--sản phẩm dell-->
+
+
+
+
+					<!--login-->
+					@yield('login')
+					<!--end login-->
+
+					<!--cart_detail-->
+					@yield('cart_detail')
+					<!--end cart detail-->
+
+
+
+
+
+
+
+				</div>
+			</div>
+		</section>
+
+		<footer id="footer"><!--Footer-->
+
+
+			<div class="footer-widget">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="single-widget">
+								<h2>CHÍNH SÁCH VÀ HỖ TRỢ</h2>
+								<ul class="nav nav-pills nav-stacked">
+									<li><a href="#">Phương Thức Thanh toán</a></li>
+									<li><a href="#">Phương Thức vận chuyển</a></li>
+									<li><a href="#">Giao Hàng Tận nhà</a></li>
+									<li><a href="#">Quy Định Bảo hành</a></li>
+									<li><a href="#">Quy Định Đặt Cọc</a></li>
+								</ul>
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="single-widget">
-							<h2>Hãng Laptop </h2>
-							<ul class="nav nav-pills nav-stacked">
-								<li><a href="#">Dell</a></li>
-								<li><a href="#">Asus</a></li>
-								<li><a href="#">MacBook</a></li>
-								<li><a href="#">HP</a></li>
-								<li><a href="#">Huewai</a></li>
-							</ul>
+						<div class="col-sm-3">
+							<div class="single-widget">
+								<h2>Hãng Laptop </h2>
+								<ul class="nav nav-pills nav-stacked">
+								@foreach(App\Category::all() as $c)
+								@if($c->product->count()>0)
+									<li><a href=" {{url('product/'.$c->name)}}">{{$c->name}}</a></li>
+								@endif
+								@endforeach
+								</ul>
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="single-widget">
-							<h2>Địa Chỉ và Liên Hề</h2>
-							<ul class="nav nav-pills nav-stacked">
-								<li><a href="https://www.google.com/maps/place/FPT-Aptech+Computer+Education+HCM/@10.7865832,106.6639139,17z/data=!4m12!1m6!3m5!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!2sFPT-Aptech+Computer+Education+HCM!8m2!3d10.7865832!4d106.6661026!3m4!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!8m2!3d10.7865832!4d106.6661026?hl=vi-VN">- Đ/C :590 Cách Mạng Tháng Tám, Phường 11, Quận 3, Hồ Chí Minh 723564, Việt Nam</a></li>
-                                <li><a href="#">- Số điện thoại liên hệ:  +08 123 456 789</a></li>
-                                <li><a href="#">- email: Laptopshop@gmail.com</a></li>
-                                <li><a href="#">- Thời gian mở cửa 8:00-22:00</a></li>
-                                <li><a href="#">- Từ Thứ 2 đến chủ nhật </a></li>
-                                <ul class="nav navbar-nav">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<div class="col-sm-3">
+							<div class="single-widget">
+								<h2>Địa Chỉ và Liên Hề</h2>
+								<ul class="nav nav-pills nav-stacked">
+									<li><a href="https://www.google.com/maps/place/FPT-Aptech+Computer+Education+HCM/@10.7865832,106.6639139,17z/data=!4m12!1m6!3m5!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!2sFPT-Aptech+Computer+Education+HCM!8m2!3d10.7865832!4d106.6661026!3m4!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!8m2!3d10.7865832!4d106.6661026?hl=vi-VN">- Đ/C :590 Cách Mạng Tháng Tám, Phường 11, Quận 3, Hồ Chí Minh 723564, Việt Nam</a></li>
+									<li><a href="#">- Số điện thoại liên hệ:  +08 123 456 789</a></li>
+									<li><a href="#">- email: Laptopshop@gmail.com</a></li>
+									<li><a href="#">- Thời gian mở cửa 8:00-22:00</a></li>
+									<li><a href="#">- Từ Thứ 2 đến chủ nhật </a></li>
+									<ul class="nav navbar-nav">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+										<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                                 </ul>
 
 							</ul>

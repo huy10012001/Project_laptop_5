@@ -1,24 +1,45 @@
 <!-- Lưu tại resources/views/product/index.blade.php -->
-<script>
-      function deleteOrder(order_id)
- {  
 
-      
+
+<script>
+
+
+/*function addRole(user_id)
+ {
+     
+  alert($( "#test" ).val());
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url:  " {{ asset('admin/user/addRole')}}",
+        data: { user_id:user_id ,role_id:$( "#test  " ).val()}, 
+        success: function(data) {
+            location.reload();  
+            return data;
+          
+            
+        }
+    });
+ }*/
+
+    function deleteRole(user_id,role_id)
+ {
+   
+  
     $.get(
-       " {{ asset('admin/order/delete')}}",
+       " {{ asset('admin/user/deleteRole')}}",
        {
-           order_id:order_id,
-           function()
-           {    
-              
-              location.reload();
+        user_id:user_id,role_id:role_id,
+         function()
+           {
+               location.reload();
            }
        }
     );
  }
- 
 </script>
-
 @extends('layout.layout')
 @section('title', 'product index')
 @section('content')
@@ -54,62 +75,57 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                        <br/>
+                        <h3 class="card-title">vai trò của người dùng {{$p->name}}</h3>
+                       
                     </div>
                     @if(Session::has('message'))
-                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message')}}</p>
                         {{Session::forget('message')}}
-                    @endif
+                         @endif
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="product" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Order Id</th>
-                                <th>User Id</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Date</th>
-                                <th></th>
+                                <th>Role Id</th>
+                                <th>Role</th>
+                               
+                               
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                            
-                            @foreach($orders as $o)
-                            <tr>
-                                <td>{{$o->id}}</td>
-                                <td>{{$o->user_id}}</td>
-                                <td>{{$o->status}}</td>
-                                <td>{{$o->total}}</td>
-                                <td>{{$o->date}}</td>
-                                <td class="text-right">
-                                    <a class="btn btn-primary btn-sm" href="{{ url('admin/order/view/'.$o->id) }}">
-                                        <i class="fas fa-folder"></i> View
-                                    </a>
-                                    <a class="btn btn-info btn-sm" href="{{ url('admin/order/update/'.$o->id) }}">
+                                @foreach($p->role as $p1)
+                                <tr> 
+                                    <td>{{$p1->id}}</td>
+                                    <td>{{$p1->name}}</td>
+                                   
+                                    <td class="text-right">
+                                    <a class ="btn btn-info btn-sm" href="{{ url('admin/user/updateRole/'.$p->id.'/'.$p1->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <a class="btn btn-danger btn-sm" onclick="deleteOrder('{{$o->id}}')">
-                                        <i class="fas fa-trash"></i> Delete
+                                    <a class="btn btn-danger btn-sm" 
+                                   onclick="deleteRole('{{$p->id}}','{{$p1->id}}')">
+                                         <i class="fas fa-trash"></i> Delete
                                     </a>
-                                </td>
-                               
-                                
-                            </tr>
+                                    </td>
+                                </tr>
+                           
                             @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
+                                 <th>Role Id</th>
+                                <th>Role </th>
                                
-                                <th>Order Id</th>
-                                <th>User Id</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Date</th>
+                                
                                 <th></th>
                             </tr>
-
                             </tfoot>
                         </table>
+                        
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -119,6 +135,26 @@
         </div>
         <!-- /.row -->
     </section>
+    <form  action="{{ url('admin/user/postAddRole/'.$p->id) }}" method="post"
+    enctype="multipart/form-data"     >
+                            {{ csrf_field() }}
+        
+        <div class="card-body">
+            <div class="form-group">
+                <label for="txt-name">Role</label>
+                    <select name="roleUser">
+                        @foreach(App\role::all() as  $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
+                    <br/></br>
+                    <button type="submit"  name="submit" class="btn btn-primary">Add</button>
+                    <br/> <br/>
+            </div>
+                              
+        </div>
+                            <!-- /.card-body -->
+    </form>
 @endsection
 @section('script-section')
     <script>

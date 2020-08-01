@@ -15,10 +15,14 @@ class homeController123 extends Controller
     
     public function cart(Request $request){
         $value=$request->session()->get('key');
+     
         //check user da dang nhap neu chua quya lai login
         if(empty($value))
         {
-            return redirect()->action('loginController@index');
+          //  return redirect()->action('loginController@index');
+        
+          return view('user.cart_detail');
+
         }
         else
         {
@@ -29,20 +33,17 @@ class homeController123 extends Controller
             if(!empty($orders))
             {
                
-               $products=Order::find($orders->id)->product;
+              // $products=Order::find($orders->id)->product;
                //nếu có sản phẩm khi show sản phẩm trong giỏ hàng của user
-                if(count($products)>0)
-                
-                 return view('user.cart')->with(['orders'=>$orders]);
+               /// if(count($products)>0)
+                    return view('user.cart_detail')->with(['orders'=>$orders]);
                 //echo $products;
-                else
-                return view('user.cart');
-              
-             
+               // else
+                //return view('user.cart_detail');
             }
             else
             {
-                return view('user.cart');
+                return view('user.cart_detail');
             }
            
     
@@ -54,7 +55,7 @@ class homeController123 extends Controller
     }
     public function delete($order_id,$product_id) {
        
-        echo 1;
+        
        /* $p = order_product::where([
             'order_id'=>$order_id,
              'product_id'=>$product_id

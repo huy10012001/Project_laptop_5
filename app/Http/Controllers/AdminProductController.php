@@ -13,19 +13,24 @@ use App\Order;
 
 class AdminProductController extends Controller
 {
-    public function index() {
-      // $products = Product::withTrashed()->get();
+  
+    public function index() 
+    {
         $products = Product::all();
-       // $products->all();
-       
         return view('admin.product.index')->with(['products'=>$products]);
     }
-    public function create() {
-        //$image = $request->input('image');
-       
+    public function create()
+    {
         return view('admin.product.create');
+        if(!empty($p))
+            return view('admin.category.update', ['p'=>$p]);
+        else
+        {
+            return abort('404');
+        }
     }
-    public function postCreate(Request $request) {
+    public function postCreate(Request $request) 
+    {
         // nhận tất cả tham số vào mảng product
         $product = $request->all();
         // xử lý upload hình vào thư mục
@@ -44,22 +49,30 @@ class AdminProductController extends Controller
         {
             $imageName = null;
         }
-         $p = new Product($product);
-           $category= $_POST['category'];
-          $p->category_id = $category;
+        $p = new Product($product);
+        $category= $_POST['category'];
+        $p->category_id = $category;
         $p->image=$imageName;
         $p->save();
-//
-       return redirect()->action('AdminProductController@index');
+        $request->session()->put(['message'=>'Thêm mới thành công','alert-class'=>'alert-success']);
+        return redirect()->action('AdminProductController@index');
     }
-    public function update($id) {
+    public function update($id,Request $request)
+    {
+        
         $p = Product::find($id);
-        return view('admin.product.update', ['p'=>$p]);
+        if(!empty($p))
+        { 
+           
+            return view('admin.product.update', ['p'=>$p]);
+        }
+        else
+            return abort('404');
     }
-    public function postUpdate(Request $request, $id) {
+    public function postUpdate(Request $request, $id) 
+    {
         $name=$request->input('name');
         $price=$request->input('price');
-       
         $category= $_POST['category'];
         // xử lý upload hình vào thư mục
         if($request->hasFile('image'))
@@ -68,89 +81,107 @@ class AdminProductController extends Controller
             $extension = $file->getClientOriginalExtension();
             if($extension != 'jpg' && $extension != 'png' && $extension !='jpeg')
             {
-               // return redirect('product/update/')->with('loi','Bạn chỉ được chọn file có đuôi jpg,png,jpeg');
-                return Redirect::back()->with('loi','Bạn chỉ được chọn file có đuôi jpg,png,jpeg');
+               return Redirect::back()->with('loi','Bạn chỉ được chọn file có đuôi jpg,png,jpeg');
             }
             $imageName = $file->getClientOriginalName();
             $file->move("images",$imageName);
-        } else { // không upload hình mới => giữ lại hình cũ
+        } 
+        else 
+        { // không upload hình mới => giữ lại hình cũ
             $p = Product::find($id);
             $imageName = $p->image;
         }
         $p = Product::find($id);
         $p->name=$name;
-        $p->price=$price;
+       
         $p->category_id=$category;
         $p->image = $imageName;
-
-        $p->save();
-    
+       
+        //trường hợp user đã đăng nhập
         //update lại tổng  giá sản phẩm trong giỏ hàng
-         order_product::join('product', 'order_product.product_id', '=', 'product.id')
-         ->join('order','order_product.order_id','=','order.id')
-         ->where(
-            ['product.id'=>$id
-            ,'order.status'=>'0']
-         )
-         ->update(['order_product.price' => Product::find($id)->price,'order_product.amount'=>DB::raw('product.price*order_product.qty' )]);
-        
-        //update lại tổng thành tiền
-        //query 
-        $carts= DB::table('order')
-        ->leftJoin(DB::raw('(Select order_product.order_id,SUM(order_product.amount) as count
-        FROM order_product,`order`
-        WHERE `order`.id=order_product.order_id  and deleted_at is null 
-          GROUP BY (order_product.order_id)
-          ) as T'), function ($join) {
-              $join->on ( 'T.order_id', '=', 'order.id' );
-          })
-          ->where(['order.status'=>'0'])
-          ->whereNotNull('T.count')
-          ->update(['total'=>DB::raw('T.count' )]);
-
-         /*$carts=cart::all();
-        foreach($carts as $c)
+        if( $p->price!=$price)
         {
-            $total=0;
-            foreach($c::find($c->id)->product as $p)
+
+            $p->price=$price;
+            $p->save();
+            //Trường hợp user chưa đăng nhập
+            if($request->session()->get('cart'))
             {
-                $total +=$p->pivot->amount;
-                }
-            $c->total=$total;
-            $c->save();
-        }*/
+                $cart=new Cart(session()->get('cart'));
+                $cart->Adminupdate($p,$price);
+                $request->session()->put('cart',$cart);
+            }
+            
+            order_product::join('product', 'order_product.product_id', '=', 'product.id')
+            ->join('order','order_product.order_id','=','order.id')
+            ->where(
+                ['product.id'=>$id
+                ,'order.status'=>'0']
+            )
+            ->update(['order_product.price' => Product::find($id)->price,'order_product.amount'=>DB::raw('product.price*order_product.qty' )]);
+            //update lại tổng thành tiền
+                //query 
+            $carts= DB::table('order')
+            ->leftJoin(DB::raw('(Select order_product.order_id,SUM(order_product.amount) as count
+            FROM order_product,`order`
+            WHERE `order`.id=order_product.order_id  and deleted_at is null 
+            GROUP BY (order_product.order_id)
+            ) as T'), function ($join) 
+            {
+                $join->on ( 'T.order_id', '=', 'order.id' );
+            })
+            ->where(['order.status'=>'0'])
+            ->whereNotNull('T.count')
+            ->update(['total'=>DB::raw('T.count' )]);
+        }
+        else
+        {
+            $p->price=$price;
+            $p->save();
+        }
+        $request->session()->put(['message'=>'Cập nhập thành công','alert-class'=>'alert-success']);
         return redirect()->action('AdminProductController@index');
         
     }
-    public function delete($id) {
+    public function delete(Request $request) {
+        $id=$request->product_id; 
+        //Không tìm thấy id thì quay về trang 404
+        if($id=="")
+            return abort('404');
         $p = Product::find($id);
-         $p->delete();
-        $carts=order_product::join('product', 'order_product.product_id', '=', 'product.id')
-         ->join('order','order_product.order_id','=','order.id')
-         ->where(
-            ['product.id'=>$id
-            ,'order.status'=>'0']
-         );
-        $carts->delete();
-        $price=Product::withTrashed()->find($id)->price;
-        if(!empty($carts->withTrashed()->first()))
-        { 
-           
-            $carts= DB::table('order')->setBindings([$id])
-        ->leftJoin(DB::raw('(
-            SELECT total-(price*qty)  AS Decreamount,order_product.order_id
-            from order_product,`order`
-            WHERE order_product.order_id=`order`.id AND product_id=?
-          ) as T'), function ($join) {
-            $join->on ( 'T.order_id', '=', 'order.id' );
-          })->where(['order.status'=>'0'])
-          ->whereNotNull('T.Decreamount')
-          ->update(['total'=>DB::raw('T.Decreamount' )]);
+        $p->delete();
+        $request->session()->put(['message'=>'xóa thành công','alert-class'=>'alert-success']);
+        //Trường hợp user chưa đăng nhập
+        if($request->session()->get('cart'))
+        {
+            $cart=new Cart(session()->get('cart'));
+            $cart->Admindelete($p);
+            $request->session()->put('cart',$cart);
         }
         
-
+        //Cập nhập tình trạng đã hết hàng của user
+        $carts=order_product::join('product', 'order_product.product_id', '=', 'product.id')
+        ->join('order','order_product.order_id','=','order.id')
+        ->where(
+        ['product.id'=>$id
+        ,'order.status'=>'0']
+        );
+        $carts->delete();
+        //Cập nhập lại tổng tiền giỏ hàng sau khí xóa sản phẩm
+        $carts= DB::table('order')->setBindings([$id])
+         ->leftJoin(DB::raw('(
+        SELECT total-(price*qty)  AS Decreamount,order_product.order_id
+        from order_product,`order`
+        WHERE order_product.order_id=`order`.id AND product_id=?
+        ) as T'), function ($join) {
+            $join->on ( 'T.order_id', '=', 'order.id' );
+        })
+        ->where(['order.status'=>'0'])
+        ->whereNotNull('T.Decreamount')
+        ->update(['total'=>DB::raw('T.Decreamount' )]);
+         return redirect()->action('AdminProductController@index');
         
-        return redirect()->action('AdminProductController@index');
+       // }
     }
 }
 

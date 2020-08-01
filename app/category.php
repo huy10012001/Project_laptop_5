@@ -13,7 +13,7 @@ class category extends Model
     protected $primaryKey = 'id';
     // mặc định khóa chính sẽ tự động tăng
     public $incrementing = true;   // false: khóa chỉnh sẽ không tự động tăng
-    protected $fillable = ['id', 'name', 'updated_at', 'created_at'];
+    protected $fillable = ['id', 'name', 'updated_at', 'created_at','deleted_at'];
     public function product()
     {
         return $this->hasMany('App\Product');

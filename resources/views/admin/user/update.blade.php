@@ -1,5 +1,50 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
 
+<script>
+
+function myFunction() {
+    var select = document.createElement("select");
+    select.name="role[]"; 
+ <?php
+   foreach(App\role::all() as  $category)
+ {?>
+     
+    var option = document.createElement("option");
+    option.text = "<?php echo "$category->name"?>";
+    option.value ="<?php echo "$category->id"?>";
+  
+    select.appendChild(option);
+    
+ <?php }?>
+
+var demo=document.getElementById("demo");
+
+
+demo.appendChild(select);
+demo.appendChild(document.createTextNode (" "));
+var newLink = document.createElement("a");
+    // add the URL attribute
+    newLink.setAttribute("class", "btn btn-danger btn-sm");
+  
+    newIcon=document.createElement("i");
+    newIcon.setAttribute("class","fas fa-trash");
+    newLink.appendChild(newIcon);
+   
+    // Add some text
+    newText = document.createTextNode("Delete");
+    // Add it to the new hyperlink
+    newLink.appendChild(document.createTextNode (" "));
+    newLink.appendChild(newText);
+  
+    // Find the place to put it
+    newLink.setAttribute('onclick',' runCommand();');
+    // add this to the DOM in memory
+     demo.appendChild(newLink);
+     demo.appendChild(document.createElement("br"));
+     demo.appendChild(document.createElement("br"));
+
+}
+</script>
 @extends('layout.layout')
 @section('title', 'product - create new')
 @section('content')
@@ -10,7 +55,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create Product</h3>
+                            <h3 class="card-title">Update user {{$p->name}}</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -27,52 +72,39 @@
                         @if (\Session::get('success'))
                             <div class="alert alert-success">
                                 <p>{{ \Session::get('success') }}</p>
-                          </div>
+                            </div>
                         @endif
                     <!-- form start -->
-                        <form role="form" action="{{ url('admin/product/postCreate') }}" method="post"
+                        <form role="form" action="{{ url('admin/user/postUpdate/'.$p->id) }}"  method="post"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="card-body">
-                               
+                                
                                 <div class="form-group">
-                                    <label for="txt-name">Category Name</label>
-                                    <select name="category" >
-                                 
-                                        @foreach(App\category::all() as  $category)
-                                        
+                                    <label for="txt-name">Role</label>
+                                    <div id="demo">
+                                    @foreach(App    \User::find($p->id)->role as $p)
+                                  
+                                     <select name="role[]">
+                                     <option value="@php echo  $p->id @endphp"
+                                     selected  hidden> 
+                                         {{$p->name}}
+                                     </option> 
+                                        @foreach(App\role::all() as  $category)
                                         <option value="{{$category->id}}">{{$category->name}}</option>
-                                        
-  
-  
+                                         @endforeach
+                                      </select>
+                                      <a class="btn btn-danger btn-sm"  onclick=" runCommand()">
+                                         <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                        <br/> <br/>
                                         @endforeach
-                                    </select>
-
+                                   </div>
+                                    
+                                     
                                 </div>
-                               
-                                <div class="form-group">
-                                    <label for="txt-name">Produc Name</label>
-                                    <input type="text" class="form-control" id="txt-name" name="name"
-                                           placeholder="Input Product Name">
-                                </div>
-                               
-                                <div class="form-group">
-                                    <label>Price</label>
-                                    <input type="text" class="form-control" id="txt-name" name="price"
-                                           placeholder="Input Product Name">
-                                </div>
+                            <i class="fa fa-plus" aria-hidden="true" onclick="myFunction()" >Chọn thêm role</i> 
                               
-                                <div class="form-group">
-                                    <label for="image">Image</label>   
-                                    <br/> 
-                                    <img  class="img-fluid" id="output"/>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
-                                            <label class="custom-file-label" for="image">Choose Image</label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Cart;
-
+use Illuminate\Support\Facades\DB;
 use App\order_product;
 use App\Order;
 use App\cart_product;
@@ -28,7 +28,7 @@ class UserCartcontroller extends Controller
     public function order(Request $request)
     { 
         $user_id= $request->session()->get('key');
-        //Tìm order của user hiện tại
+        //Tìm order đang đặt của user hiện tại
         $carts=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
         //chuyển trạng thái sang đã đặt hàng
         $carts->status="1";
@@ -47,7 +47,19 @@ class UserCartcontroller extends Controller
         $a=$request->order_id;
         $b=$request->product_id;
         $c=$request->qty;
+        $product=Product::find($b);
         //tìm order trong giỏ hàng hiện tại
+       if($request->session()->get('cart'))
+        {
+            $cart=new Cart(session()->get('cart'));
+            $cart->update1($product,$c);
+            $request->session()->put('cart',$cart);
+        }
+        
+        else
+        { 
+           if($a==""  || $b=="" ||$c=="")
+                return abort('404');
         order_product::where
         ([
             'order_id'=>$a,
@@ -61,47 +73,93 @@ class UserCartcontroller extends Controller
             
         ])->sum('amount');
         $c->save();
+       }
     }
     public function delete(Request $request) {
-        $order_id=$request->order_id;
+     
+       
         $product_id=$request->product_id; 
-        //Tìm order trong giỏ hàng hiện tại
-        $p = order_product::withTrashed()->where
-        ([
-            'order_id'=>$order_id,
-            'product_id'=>$product_id
-             
-        ])->first();
-        //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
-        if(!$p->trashed())
+        $order_id=$request->order_id;
+        $product=Product::withTrashed()->find($product_id);
+        if($request->session()->get('cart'))
         {
-           $c=Order::find($order_id);
-           $c->total=$c->total-$p->amount;
-           $c->save();
+            $cart=new Cart(session()->get('cart'));
+            $cart->delete1($product);
+            $request->session()->put('cart',$cart);
+            //Nếu user đã xóa hết sản phẩm trong giỏ hàng thì hủy session cart
+            if(empty($cart->items))
+            $request->session()->forget('cart');
         }
-        //Xóa order trong giỏ hàng hiện tại
-        order_product::withTrashed()->where
-        ([
-            'order_id'=>$order_id,
-            'product_id'=>$product_id
-        ])->forceDelete();
+        else
+        {
+        //Tìm order trong giỏ hàng hiện tại
+            if($order_id==""  || $product_id=="")
+                return abort('404');
+            $p = order_product::withTrashed()->where
+            ([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id
+             
+            ])->first();
+        //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+            if(!($p->trashed()))
+            {   
+                $c=Order::find($order_id);
+                $c->total=$c->total-$p->amount;
+                $c->save();
+            }
+             
+             //Xóa order trong giỏ hàng hiện tại
+             order_product::where
+             ([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id
+             ])->forceDelete();
+        }
+       
     }
     public function addCart(Request $request){
        
+       
+        $id=$request->product_id;
+        
+        $product=Product::find($id);
       
-        $id=$request->order_id;
         $user= $request->session()->get('key');
+     
+       if(empty($user))
+        {
+          if($request->session()->get('cart'))
+           {
+               $cart=new Cart(session()->get('cart'));
+           }
+          else
+           {
+               
+            $cart=new Cart();
+           }
+         
+            $cart->add($product);
+          
+            $request->session()->put('cart',$cart);
+             //dd($cart);
+         // session()->forget('cart');
+           
+       
+           return redirect()->action('homeController123@cart');
+        }
+        else
+        {
         $user_id=$user->id;
+        if($id=="")
+            return abort('404');
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
         //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
             
-        if(empty($user_id))
-        {
-            return redirect()->action('loginController@index');
-        }
+      
          
-        elseif(empty($carts))
+        if(empty($carts))
         {
             $carts=new Order();
             $carts->user_id=$user_id;
@@ -135,17 +193,19 @@ class UserCartcontroller extends Controller
             $order_product->save();
         }
         //neu da co san pham thi tagn qty len 1
-         else
-        {  
-           $order_product::where
-            ([
+            else
+            {  
+                $order_product::where
+                ([
                 'order_id'=>$carts->id,
                 'product_id'=>$id
-            ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
+                ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
            
-            $order_product->save();
-          }
-            return Redirect::back();
+                 $order_product->save();
+            }
+                return Redirect::back();
+        }
     }
+    
  
 }

@@ -5,6 +5,8 @@ use App\Product;
 use App\Cart;
 use Illuminate\Support\ServiceProvider;
 use  Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use App\Order;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,18 +26,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('header',function($view)
+        view()->composer('layout_home', function($view)
         {
- 
-            $loai_sp=Product::all();
-          
-            if(Session('cart'))
-            {
-                $oldCard=Session::get('cart');
-                $cart=new Cart($oldCard);
+                 $value=\Session::get('key');
+                if(!empty($value))
+                { 
+                    $user_id=$value->id;
+                //lấy giỏ hàng của user_id
+                $orders=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
+                $view->with(['orders'=>$orders]);
+                }
+           
 
-            }
-            $view->with('loai_sp',$loai_sp);
+         
         });
 
     }

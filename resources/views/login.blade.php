@@ -25,6 +25,14 @@
 </head><!--/head-->
 
 <body>
+@if(Session::has('alert'))
+<script>
+   
+    alert('123123');
+
+</script>
+            
+  @endif
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">

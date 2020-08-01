@@ -17,7 +17,7 @@ class Product extends Model
     protected $fillable = ['id','category_id' ,'name', 'price', 'description', 'image','deleted_at', 'updated_at', 'created_at'];
     public function category()
     {
-        return $this->belongsTo('App\category');
+        return $this->belongsTo('App\category')->withTrashed();
     }
   
     public function order()

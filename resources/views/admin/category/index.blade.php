@@ -1,8 +1,32 @@
 <!-- Lưu tại resources/views/product/index.blade.php -->
+<script>
+      function deleteCategory(category_id)
+ {  
+
+      
+    $.get(
+       " {{ asset('admin/category/delete')}}",
+       {
+         category_id:category_id,
+         function()
+           {
+               location.reload();
+           }
+       }
+    );
+ }
+ 
+</script>
+
 @extends('layout.layout')
 @section('title', 'product index')
+
 @section('content')
+
     <!-- Content Header (Page header) -->
+   
+  
+  
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -27,6 +51,12 @@
                     <div class="card-header">
                         <h3 class="card-title">DataTable with minimal features & hover style</h3>
                     </div>
+                    
+                    @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        {{Session::forget('message')}}
+                    @endif
+                    
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="product" class="table table-bordered table-hover">
@@ -34,7 +64,7 @@
                             <tr>
                                 <th>Product Id</th>
                                 <th>Product Category</th>
-                                
+                                <th>Action</th>
                                
                             </tr>
                             </thead>
@@ -52,7 +82,7 @@
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/category/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <a class="btn btn-danger btn-sm" href="{{ url('admin/category/delete/'.$p->id) }}">
+                                    <a class="btn btn-danger btn-sm"   onclick="deleteCategory('{{$p->id}}')">
                                         <i class="fas fa-trash"></i> Delete
                                     </a>
                                 </td>
@@ -79,7 +109,9 @@
         </div>
         <!-- /.row -->
     </section>
+
 @endsection
+
 @section('script-section')
     <script>
         $(function () {

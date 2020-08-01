@@ -7,19 +7,17 @@ session_start();
 @section( 'dell')
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function AddCart(order_id)
+    function AddCart(product_id)
  {
     
-    var userName = document.getElementById("name").value;
-    if(userName=="")
-    location="/login";
-    else
-    {
+    //var userName = document.getElementById("name").value;
+
+    
     $.get(
        
        " {{ asset('Addcart')}}",
        {
-          order_id:order_id,
+        product_id:product_id,
          
            function()
            {
@@ -27,20 +25,13 @@ session_start();
            }
        }
     )
-    }
+   
  }
 </script>
 
 <div class="container">
     <!--tìm theo chi tiết sản phẩm trang home-->
-    @if(Session::has('key'))
 
-  <input type="hidden" id="name"  value="session" />
-
-@else
-<input type="hidden" id="name"  value="" />
-@endif 
-    
 
 <div class="col-sm-3">
     <div class="left-sidebar">
@@ -137,18 +128,20 @@ session_start();
         <div class="single-products">
                 <div class="productinfo text-center">
                     <img src="{{ url('fronend/images/slide1.jpg') }}" alt="" />
-                    <h2>{{$p->price}}</h2>
+                    <h2>{{number_format($p->price)}}</h2>
                     <p>{{$p->name}}</p>
                     <a onclick="AddCart('{{$p->id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                 </div>
                 <div class="product-overlay">
                     <div class="overlay-content">
-                        <h2>{{$p->price}}</h2>
+                        <h2>{{number_format($p->price)}}</h2>
                         <p>{{$p->name}}</p>
                         <a   onclick="AddCart('{{$p->id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>
                 </div>
+                
         </div>
+        
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
@@ -158,6 +151,7 @@ session_start();
     </div>
    
 </div>
+
 @endforeach 
 
 </div><!--features_items-->

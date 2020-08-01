@@ -1,4 +1,24 @@
 <!-- Lưu tại resources/views/product/index.blade.php -->
+<script>
+      function deleteContact(contact_id)
+ {  
+
+      
+    $.get(
+       " {{ asset('admin/contact_user/delete')}}",
+       {
+         contact_id:contact_id,
+         function()
+           {    
+             
+               location.reload();
+           }
+       }
+    );
+ }
+ 
+</script>
+
 @extends('layout.layout')
 @section('title', 'product index')
 @section('content')
@@ -27,6 +47,10 @@
                     <div class="card-header">
                         <h3 class="card-title">DataTable with minimal features & hover style</h3>
                     </div>
+                    @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        {{Session::forget('message')}}
+                    @endif
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="product" class="table table-bordered table-hover">
@@ -51,7 +75,7 @@
                                     <td>{{$p->phone}}</td>
                                     <td>{{$p->address}}</td>
                                     <td>{{$p->subject}}</td>
-                                    <td><a class="btn btn-danger btn-sm" href="{{ url('admin/contact_user/delete/'.$p->id) }}">
+                                    <td><a class="btn btn-danger btn-sm" onclick="deleteContact('{{$p->id}}')">
                                         <i class="fas fa-trash"></i> Delete
                                     </a></td>
                             </tr>

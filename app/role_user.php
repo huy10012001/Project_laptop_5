@@ -19,7 +19,7 @@ class role_user extends Model
     // khai báo trường khóa chính
     protected $primaryKey = array('user_id', 'role_id');
     // mặc định khóa chính sẽ tự động tăng
-  
+    public $incrementing = false;
     protected $fillable = ['role_id',
         'user_id'
     ];

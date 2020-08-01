@@ -5,11 +5,154 @@ use App\Http\Requests\OrderRequest;
 use Illuminate\Http\Request;
 use App\Order;
 use App\User;
+use App\role;
+use App\role_user;
+use Illuminate\Support\Facades\Redirect;
 class Adminusercontroller extends Controller
 {
     public function index() {
         $orders=User::all();
         return view('admin.user.index')->with(['user'=>$orders]);
     }
-  
+    public function update($id,Request $request) {
+        $p = User::find($id);
+        
+        if(!empty($p))
+        { 
+          
+            return view('admin.user.view', ['p'=>$p]);
+        }
+        else
+            return abort('404');
+      
+        
+    }
+    /*public function addRole(Request $request)
+    {
+       
+       // $user_id= $request->role_id;
+         $role= $_POST['role_id'];
+        $request->session()->put(['message'=>$role,'alert-class'=>'alert-success']);
+       /*  $role= $request->role_id;
+          
+        // $role= $request->role_id;
+        
+    
+       $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role])->first();
+        if(empty($p))
+        { 
+            $a=new role_user();
+            $a->user_id=$user_id;
+            $a->role_id=$role;
+             $a->save(); 
+           
+            $request->session()->put(['message'=>'Thêm mới thành công','alert-class'=>'alert-success']);
+        }
+        else
+        {  
+            
+            $request->session()->put(['message'=>'thêm không thành công','alert-class'=>'alert-danger']);
+        }
+            
+       
+    }*/
+    public function postAddRole(Request $request,$id)
+    {
+        $role= $_POST['roleUser'];
+        $p = role_user::where(["user_id"=>$id,"role_id"=>$role])->first();
+         if(empty($p))
+        { 
+            $a=new role_user();
+            $a->user_id=$id;
+            $a->role_id=$role;
+            $a->save(); 
+            $request->session()->put(['message'=>"thêm thành công",'alert-class'=>'alert-success']);
+        }
+        else
+        {  
+            
+            $request->session()->put(['message'=>"thêm không thành công do user đã có role này",'alert-class'=>'alert-danger']);
+        }
+        return Redirect("admin/user/viewRole/$id");
+    }
+    public function updateRole($user_id,$role_id,Request $request)
+    {
+        $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->first();
+       
+        if(!empty($p))
+        { 
+          
+            return view('admin.user.editrole', ['p'=>$p]);
+        }
+        else
+          return abort('404');
+    }
+    public function postUpdateROLE($user_id,$role_id,Request $request)
+    {
+        $role= $_POST['role'];
+        $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role])->first();
+        if(empty($p) or $role_id ==$role)
+        { 
+          
+            role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->update(['role_id'=>$role]);
+            $request->session()->put(['message'=>'Cập nhập thành công','alert-class'=>'alert-success']);
+        }
+        else
+        {  
+            $request->session()->put(['message'=>'User đã có role này','alert-class'=>'alert-danger']);
+        }
+            
+        return Redirect("admin/user/viewRole/$user_id");
+    }
+    public function deleteRole(Request $request)
+    {
+        $user_id= $request->user_id;
+        $role_id=$request->role_id;
+         if($user_id=="")
+         return abort('404');
+        $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->delete();
+        
+     $request->session()->put(['message'=>'Xoá thành công','alert-class'=>'alert-success']);
+         
+        
+            
+      
+    }
+   /* public function update($id,Request $request) {
+        $p = User::find($id);
+        
+        if(!empty($p))
+        { 
+          
+            return view('admin.user.update', ['p'=>$p]);
+        }
+        else
+            return abort('404');
+      
+        
+    }
+    public function postUpdate(Request $request, $id) {
+        
+      
+        $p = User::find($id);
+     
+        
+ 
+
+        $role = $_POST['role'];
+        $c=role_user::where(['user_id'=>$id])->delete();
+       
+      
+      
+        foreach($role as $value)
+        {
+         
+            $c=new role_user();
+            $c->user_id=$id;
+            $c->role_id=$value;
+            $c->Save();
+      
+        }
+      
+    }*/
 }

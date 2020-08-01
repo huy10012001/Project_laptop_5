@@ -24,15 +24,22 @@ class Adminrolecontroller extends Controller
         $product = $request->all();
         // xử lý upload hình vào thư mục
         
-        $p = new Product($product);
+        $p = new Role($product);
        
         $p->save();
-
+        $request->session()->put(['message'=>'Thêm thành công','alert-class'=>'alert-success']);
         return redirect()->action('Adminrolecontroller@index');
     }
-    public function update($id) {
+    public function update($id,Request $request) {
         $p = role::find($id);
-        return view('admin.role.update', ['p'=>$p]);
+        if(!empty($p))
+        { 
+          
+            return view('admin.role.update', ['p'=>$p]);
+        }
+        else
+            return abort('404');
+        
     }
     public function postUpdate(Request $request, $id) {
         $name=$request->input('name');
@@ -43,13 +50,26 @@ class Adminrolecontroller extends Controller
         $p->name=$name;
        
         $p->save();
+        $request->session()->put(['message'=>'Cập nhập thành công','alert-class'=>'alert-success']);
         return redirect()->action('Adminrolecontroller@index');
         
     }
-    public function delete($id) {
+    public function delete(Request $request) {
+
+        $id=$request->role_id; 
+        //Không tìm thấy id thì quay về trang 404
+         if($id=="")
+            return abort('404');
         $p = role::find($id);
-        $p->delete();
-        return redirect()->action('Adminrolecontroller@index');
+        $p1=$p->user;
+        if($p1->count()>0)
+            $request->session()->put(['message'=>'Xóa không thành công vì có user thuộc role này','alert-class'=>'alert-danger']);
+        else
+        {
+            $p->delete();
+            $request->session()->put(['message'=>'Xóa thành công','alert-class'=>'alert-success']);
+        }
+        
     }
 }
 

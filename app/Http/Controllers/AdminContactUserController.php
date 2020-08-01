@@ -18,10 +18,15 @@ class AdminContactUserController extends Controller
    
   
    
-    public function delete($id) {
+    public function delete(Request $request) {
+        $id=$request->contact_id; 
+      
+        if($id=="")
+          return abort('404');
         $p = contact_user::find($id);
         $p->delete();
-        return redirect()->action('AdminContactUserController@index');
+         $request->session()->put(['message'=>'Xóa thành công','alert-class'=>'alert-success']);
+       
     }
 }
 

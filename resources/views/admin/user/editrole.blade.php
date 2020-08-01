@@ -1,4 +1,5 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
+
 @extends('layout.layout')
 @section('title', 'product - create new')
 @section('content')
@@ -9,7 +10,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Cập nhập danh mục  {{$p->name}}</h3>
+                            <h3 class="card-title">{{App\User::find($p->user_id)->name}}</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -29,17 +30,33 @@
                             </div>
                         @endif
                     <!-- form start -->
-                    <form role="form" action="{{ url('admin/category/postUpdate/'.$p->id) }}"  method="post"
+                        <form role="form" action="{{ url('admin/user/postUpdateRole/'.$p->user_id.'/'.$p->role_id) }}"  method="post"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}
-                         
                             <div class="card-body">
-                              
+                                
                                 <div class="form-group">
-                                    <label for="txt-name">Category Name</label>
-                                    <input type="text" class="form-control" id="txt-name" name="name" value="{{$p->name}}"
-                                           placeholder="Input Product Name">
+                                    <label for="txt-name">Role</label>
+                                   
+                                    
+                                  
+                                     <select name="role">
+                                     <option value="@php echo  $p->role_id @endphp"
+                                     selected  hidden> 
+                                         {{App\role::find($p->role_id)->name}}
+                                     </option> 
+                                        @foreach(App\role::all() as  $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                         @endforeach
+                                      </select>
+                                     
+                                       
+                                       
+                                 
+                                    
+                                     
                                 </div>
+                           
                               
                             </div>
                             <!-- /.card-body -->
@@ -57,5 +74,19 @@
 @section('script-section')
     <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
-   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bsCustomFileInput.init();
+        });
+    </script>
+    <script>
+         var loadFile = function(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      var output = document.getElementById('output');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+    </script>
 @endsection

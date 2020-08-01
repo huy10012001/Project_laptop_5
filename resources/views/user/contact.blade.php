@@ -55,7 +55,7 @@
                         <div class="contact-us-form">
                             <div class="contact-form">
                                 <span class="legend">Mời bạn điền thông tin liên hệ</span>
-                                <form action="" method="post">
+                                <form action="{{ url('postContact') }}" method="post">
                                 {{ csrf_field() }}
                                     <div class="form-top">
                                         <div class="form-group col-sm-6 col-md-6">
@@ -104,7 +104,7 @@
                                         </div>
                                         <div class="form-group col-sm-12 col-md-12" >
                                             <label>Nội dung <sup>*</sup></label>
-                                            <textarea class="yourmessage" name="ct_content" style=" border-radius: 5px;"></textarea>
+                                            <textarea class="yourmessage" name="ct_ " style=" border-radius: 5px;"></textarea>
                                             @if($errors->has('ct_content'))
                                             <div class="has-error">
                                                 <p class="help-block">

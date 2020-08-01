@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
 class CreateUserTable extends Migration
 {
     /**
@@ -17,13 +17,14 @@ class CreateUserTable extends Migration
             $table->id();
           
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->collation('utf8_bin');
             $table->string('age');
             $table->string('phone');
             $table->string('address');
             $table->string('image')->nullable();
             $table->string('password');
             $table->timestamps();
+   
         });
     }
 

@@ -10,7 +10,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Update Order {{$p->id}}</h3>
+                            <h3 class="card-title">Cập nhập đơn hàng {{$p->id}}</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -43,9 +43,8 @@
                                          {{$p->status}}
                                      </option> 
                                        
-                                      
                                         <option value="1">1</option>
-                                        <option value="0">0</option>   
+                                        
   
   
                                        
