@@ -1,5 +1,9 @@
 <script type="text/javascript">
-
+if(!!window.performance && window.performance.navigation.type === 2)
+{
+    console.log('Reloading');
+    window.location.reload();
+}
     function onChange(qty,product_id,order_id)
     {
        if(qty=="")

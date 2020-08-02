@@ -14,28 +14,56 @@
 	<link href="{{ asset('fronend/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('fronend/css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head><!--/head-->
 <script >
-    $(document).ready(function() {
-  $('#cartModal').modal('show');
 
-});
 
 </script>
 <script type="text/javascript">
+
 //Ha2m show lai gio hang khi loadlai
+$(document).ready(function(){
+	if (Cookies.get('modal')=="showed") {
+    // show dialog...
+	$("#cartModal").modal("show");
+}
+
+   
+$("#cartModal").on('show.bs.modal', function(){
+	
+	Cookies.set('modal', 'showed');
+	//$.cookie('modal', 'showed');
+	//$.cookie("test", 1);
+});
+ 
+  $("#cartModal").on('hide.bs.modal', function(){
+	//$.removeCookie('showDialog');
+//	$.removeCookie("test");
+	//$.removeCookie('modal'); 
+	Cookies.remove('modal');
+	location.reload();
+  });
+});
+
 	function updateCart(qty,product_id,order_id)
     {
 		if(qty=="")
        {
         	alert('số lượng không được null');
+			
 			location.reload();
+			
        }
         else if(qty<0 ||qty>10)
         {
             alert('số lượng từ 1 tới 10');
+			
 			location.reload();
+
            
         }
        else
@@ -186,7 +214,7 @@
                                               <h5 class="modal-title" id="exampleModalLabel">
                                                 Your Shopping Cart
                                               </h5>
-                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <button type="button" onclick="javascript:window.location.reload()"  class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                               </button>
                                             </div>
@@ -323,12 +351,12 @@
                                                 <h5>Total: <span class="price text-success" id="total" >
 												{{ $orders->total }}</span></h5>
 											</div>
-											@endif
+								@endif
 
 													
                                             </div><!--/cart model-->
                                             <div class="modal-footer border-top-0 d-flex justify-content-between">
-                                              <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
+                                              <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
                                               <button type="button" class="btn btn-success" ><a href="{{ URL::to('/cart-detail') }}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
 
                                             </div>
