@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Redirect;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Else_;
 use SebastianBergmann\Environment\Console;
-
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
 class UserCartcontroller extends Controller
 {
     public function index( Request $request){
@@ -54,6 +55,7 @@ class UserCartcontroller extends Controller
             $cart=new Cart(session()->get('cart'));
             $cart->update1($product,$c);
             $request->session()->put('cart',$cart);
+           
         }
         
         else
@@ -86,9 +88,14 @@ class UserCartcontroller extends Controller
             $cart=new Cart(session()->get('cart'));
             $cart->delete1($product);
             $request->session()->put('cart',$cart);
+            
             //Nếu user đã xóa hết sản phẩm trong giỏ hàng thì hủy session cart
             if(empty($cart->items))
             $request->session()->forget('cart');
+            return Response::json(array(
+                'total'=>$cart->totalPrice,
+              
+               )); 
         }
         else
         {
@@ -102,11 +109,13 @@ class UserCartcontroller extends Controller
              
             ])->first();
         //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+            $c=Order::find($order_id);
             if(!($p->trashed()))
             {   
-                $c=Order::find($order_id);
+               
                 $c->total=$c->total-$p->amount;
                 $c->save();
+                
             }
              
              //Xóa order trong giỏ hàng hiện tại
@@ -115,6 +124,11 @@ class UserCartcontroller extends Controller
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
              ])->forceDelete();
+             
+            return Response::json(array(
+                'total'=>$c->total,
+              
+               )); 
         }
        
     }
@@ -129,18 +143,32 @@ class UserCartcontroller extends Controller
      
        if(empty($user))
         {
-          if($request->session()->get('cart'))
+           if($request->session()->get('cart'))
            {
                $cart=new Cart(session()->get('cart'));
            }
-          else
+           else
            {
-               
-            $cart=new Cart();
+              $cart=new Cart();
            }
-         
+           if(isset($cart->items[$id]))
+           { 
+               if($cart->items[$id]['qty']<10 )
+               {
+                   $cart->add($product);
+               }
+                else
+              {  
+                return Response::json(array(
+                   'status'=>'error',
+                    'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
+                  )); 
+              }
+            }
+           else
+           {
             $cart->add($product);
-          
+           }
             $request->session()->put('cart',$cart);
              //dd($cart);
          // session()->forget('cart');
@@ -157,25 +185,16 @@ class UserCartcontroller extends Controller
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
         //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
             
-      
-         
         if(empty($carts))
         {
             $carts=new Order();
             $carts->user_id=$user_id;
-            $carts->total=Product::find($id)->price;
+            $carts->total=0;
             $carts->status="0";
             $carts->date=Carbon::now();
             $carts->save();
         }
-    
-        else
-        {
-            //add giả sản phẩm vào tổng
-            $carts->total=$carts->total+=Product::find($id)->price;
-            $carts->save();
-        }
-        //kiem tra san pham vua them da nam trong cart chua
+         //kiem tra san pham vua them da nam trong cart chua
          $order_product=order_product::where([
             'order_id'=>$carts->id,
             'product_id'=>$id
@@ -191,19 +210,32 @@ class UserCartcontroller extends Controller
             $order_product->qty=1;
             $order_product->amount=$order_product->price;
             $order_product->save();
+            $carts->total=$carts->total+=Product::find($id)->price;
+            $carts->save();
         }
-        //neu da co san pham thi tagn qty len 1
-            else
-            {  
-                $order_product::where
-                ([
+        //neu da co san pham thi tagn qty len 1,nếu số lượng lớn hơn 10 thì thông báo lỗi
+        elseif($order_product->qty>9)
+        {
+            return Response::json(array(
+                'status'=>'error',
+                 'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
+               )); 
+        }
+        else
+        {  
+            $order_product::where
+            ([
                 'order_id'=>$carts->id,
                 'product_id'=>$id
-                ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
-           
-                 $order_product->save();
-            }
-                return Redirect::back();
+            ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
+             $order_product->save();
+            $carts->total=$carts->total+=Product::find($id)->price;
+            $carts->save();
+        }
+       
+       
+       
+            
         }
     }
     

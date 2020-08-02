@@ -1,18 +1,33 @@
 <script type="text/javascript">
+
     function onChange(qty,product_id,order_id)
     {
-        $.get(
-       " {{ asset('cart/update')}}",
+       if(qty=="")
        {
+        alert('số lượng không được null');
+        location.reload();
+       }
+        else if(qty<0 ||qty>10)
+        {
+            alert('số lượng từ 1 tới 10');
+            location.reload();
+        }
+       else
+        {
+         $.get(
+        " {{ asset('cart/update')}}",
+         {
            qty:qty,order_id:order_id,product_id:product_id,
          function()
            {
+             
                location.reload();
            }
        }
     );
        }
-
+    }
+    
     function deleteCart(product_id,order_id)
     {
     $.get(
@@ -25,7 +40,7 @@
            }
        }
     );
- }
+    }
 </script>
 @extends('layout_home')
 @section( 'cart_detail')
@@ -69,9 +84,10 @@
                                 
                             <td class="">
 							<div class="buttons_added">
-                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
+                             <input aria-label="quantity"
+                             class="input-qty" max="10" min="1" name="" required  type="number" 
                              value="{{$product['qty']}}"
-                             oninput="onChange(this.value,<?php echo $product['id'] ?>)">
+                             onChange="onChange(this.value,<?php echo $product['id'] ?>)">
                             </div>
 							</td>
 						        <td class="cart_total">
@@ -143,7 +159,7 @@ nhiều ưu đãi hấp dẫn.
                 </div>
 
                 <div class="col-sm-7"  style="background: white;"    >
-                    <form action="{{ url('/postLogin') }}" method="post">
+                    <form  action="{{ url('/postLogin') }}" method="post">
                         {{ csrf_field() }}
                         <h3>Đăng Nhập</h3>
                             <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
@@ -306,7 +322,7 @@ $('input.input-qty').each(function() {
 						        <div class="buttons_added">
                                 <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
                                  value="{{ $p->pivot->qty}}"
-                                 oninput="onChange(this.value,'{{$p->id}}','{{$orders->id}}')">
+                                 onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}')">
                                 </div>
 						        </td>
 						      

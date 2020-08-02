@@ -11,9 +11,25 @@ session_start();
  {
     
     //var userName = document.getElementById("name").value;
-
     
-    $.get(
+    $.ajax({
+    type:  "GET",
+    url: "{{ asset('Addcart')}}",
+    
+    data: { product_id: product_id },
+    datatype: 'json',
+    success: function (data) {
+        if(data.status=="error")
+        {
+            alert(data.message);
+        }
+       
+        location.reload();
+
+    },
+  
+    });
+    /*$.get(
        
        " {{ asset('Addcart')}}",
        {
@@ -24,7 +40,7 @@ session_start();
              location.reload();
            }
        }
-    )
+    )*/
    
  }
 </script>

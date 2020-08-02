@@ -16,61 +16,102 @@
     <link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
 
 </head><!--/head-->
-<script>
+<script >
     $(document).ready(function() {
   $('#cartModal').modal('show');
+
 });
 
 </script>
 <script type="text/javascript">
-    function updateCart(qty,product_id,order_id)
+//Ha2m show lai gio hang khi loadlai
+	function updateCart(qty,product_id,order_id)
     {
-		
-        $.get(
-       " {{ asset('cart/update')}}",
+		if(qty=="")
        {
-           qty:qty,order_id:order_id,product_id:product_id,
-         function()
-           {
-          //  document.getElementById("total").innerHTML = 123;
-           }
+        	alert('số lượng không được null');
+			location.reload();
        }
-    );
-       }
+        else if(qty<0 ||qty>10)
+        {
+            alert('số lượng từ 1 tới 10');
+			location.reload();
+           
+        }
+       else
+		{
+			//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
+			var total=0;
+			$("tbody").find("tr").each(function() {
+			var qty = $(this).find('td .input-qty').val();
+			var price= $(this).find('td.price').text();
+			if(!!qty)
+			{ 
+				$(this).find('td.amount').html(qty*price);
+				total+=qty*price;
+			}
+ 			 });
+			$("#total").html(total);
+			$.ajax({
+				type:  "GET",
+      			url:	 " {{ asset('cart/update')}}",
+      		 	data:{qty:qty,order_id:order_id,product_id:product_id},
+				datatype: 'json',
+				success:function(data)
+           		{
+					//var a=data.status;
+					//alert(a);
+          		//  document.getElementById("total").innerHTML = 123;
+           		}
+       		}
+    	);
+		}
+    }
 
-    function deleteCart(product_id,order_id)
-    {
-    $.get(
-       " {{ asset('cart/delete')}}",
-       {
-         order_id:order_id,product_id:product_id,
-         function()
-           {
-              // location.reload();
-           }
-       }
-    );
- }
-</script>
-<script type="text/javascript">
+		 /*	$.ajax({
+    		type:  "GET",
+    	url: "{{ asset('Addcart')}}",
+    
+    data: { product_id: product_id },
+    datatype: 'json',
+    success: function (data) {
+        if(data.status=="error")
+        {
+            alert(data.message);
+        }
        
+        location.reload();
 
-  /*  function deleteCart(product_id,order_id)
- {
+    },
   
-
-    $.get(
-       " {{ asset('cart/delete')}}",
-       {
-         order_id:order_id,product_id:product_id,
-         function()
-           {
-              location.reload();
+    });*/
+    function deleteModal(emn)
+	{
+		$(emn).closest( "tr" ).hide();
+	}
+	function deleteCartModal(product_id,order_id)
+ 	{
+		
+		$.ajax({
+			type:  "GET",//type là get
+      		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
+      		data:{ order_id:order_id,product_id:product_id},//pass tham số vào key
+			datatype: 'json',
+         	success:function(data)
+           {	
+			   
+			
+			$("#total").html(data.total);//dữ liệu từ response
+               //location.reload();
+			  
            }
        }
     );
- }*/
+
+ 	}
+ 
 </script>
+ 
 <style>
 
 .img-fluid {
@@ -115,7 +156,7 @@
 				<div class="row">
 					<div class="col-sm-4" >
 						<div class="logo pull-left">
-							<a href="{{ URL::to('/home')}}"><img src="{{ ('fronend/images/logo3.png') }}" alt="" /></a>
+							<a href="{{ URL::to('/home')}}"><img src="{{ ('images/logo3.png') }}" alt="" /></a>
 						</div>
 
 					</div>
@@ -130,6 +171,7 @@
 								<li><button><a href="{{ URL::to('/logout') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Xuất</b></a></button></li>
 							@endif
 
+							
                                 <li>
 
                                         <button type="button"data-toggle="modal" data-target="#cartModal"><i class="fa fa-shopping-cart"></i>
@@ -162,39 +204,44 @@
                                                     <th scope="col">Xóa</th>
                                                   </tr>
                                                 </thead>
-                                                <tbody>
-                                                  <tr>
+                                                <tbody class="cart-body">
+												<tr>
                                                     <td >
                                                       <img src="{{ ('fronend/images/logo3.png') }}" class="img-fluid img-thumbnail" alt="Sheep"  >
 													</td>
 													@foreach(Session::get('cart')->items as $product)
-												   
-													<td>{{App\Product::withTrashed()->find($product['id'])->name}}</td>
+												   	
+													   
+														<td class="">{{App\Product::withTrashed()->find($product['id'])->name}}</td>
 												      <!--Trường hợp còn hàng(status là 1)-->
-            									  	@if($product['status']==1)
-           											<td>{{$product['price']}}</td>
-                                                    <td class="qty">
-                                                        <div class="buttons_added">
+														@if($product['status']==1)
+														  
+           												<td class="price">{{$product['price']}}</td>
+                                                   		
+                                                        <td class="buttons_added qty ">
 
                                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
-                                 							 oninput="updateCart(this.value,<?php echo $product['id'] ?>,<?php echo $product['price'] ?>)">
+                                 							onchange="updateCart(this.value,<?php echo $product['id'] ?>,<?php echo $product['price'] ?>)">
 
-                                                        </div></td>
-                                                    <td class = "amount">{{$product['amount']}}</td>
-                                                    <td>
-                                                      <a href="#" onclick="deleteCart(<?php echo $product['id'] ?>)">
+														</td>
+                                                   	 <td class = "amount">{{$product['amount']}}</td>
+                                                   	 <td>
+                                                      <a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                                                           </svg>
                                                       </a>
 													</td>
+													
+													</tr>
+													
 													@else
 													<td>{{$product['price']}}</td>
                                                     <td class="qty"> </td>
                                                     <td class = "amount"></td>
                                                     <td>
-                                                      <a href="#" onclick="deleteCart(<?php echo $product['id'] ?>)">
+                                                      <a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -234,18 +281,18 @@
 													<td>{{$p->name}}</td>
 												      <!--Trường hợp còn hàng(status là 1)-->
             									  
-           											<td>{{$p->pivot->price }}</td>
+           											<td class="price">{{$p->pivot->price }}</td>
 													   <!--Trường hợp còn hàng(khác trashed)-->
 													@if(!($p->trashed()))
                                                     <td class="qty">
                                                         <div class="buttons_added">
 															<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
-                                 						oninput="onChange(this.value,'{{$p->id}}','{{$orders->id}}')">
+                                 						onchange="updateCart(this.value,'{{$p->id}}','{{$orders->id}}')">
 
                                                         </div></td>
                                                     <td class = "amount">{{$p->pivot->amount }}</td>
                                                     <td>
-                                                      <a href="#"  onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+                                                      <a href="#"  onclick="deleteModal(this);deleteCartModal('{{$p->id}}','{{$orders->id}}',)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -258,7 +305,7 @@
                                                     <td class="qty"> </td>
                                                     <td class = "amount"></td>
                                                     <td>
-                                                      <a href="#"  onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+                                                      <a href="#"  onclick="deleteModal(this);deleteCartModal('{{$p->id}}','{{$orders->id}}',)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>

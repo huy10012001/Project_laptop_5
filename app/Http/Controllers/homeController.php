@@ -18,7 +18,7 @@ class homeController extends Controller
     public function index(Request $request){
 
         //$request->session()->flush();
-        return view('user.cart_detail');
+        return view('index');
     }
    
     public function contact(){
