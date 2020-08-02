@@ -26,6 +26,10 @@ class UserCartcontroller extends Controller
         $value=$request->session()->get('key');
         return view('admin.index')->with('id',$value);
     }
+    public function checkout(Request $request)
+    { 
+        return view('checkout');
+    }
     public function order(Request $request)
     { 
         $user_id= $request->session()->get('key');
@@ -44,11 +48,14 @@ class UserCartcontroller extends Controller
     }
     public function getUpdateCart(Request $request) 
     {
-     
+        
         $a=$request->order_id;
         $b=$request->product_id;
         $c=$request->qty;
-        $product=Product::find($b);
+        if($c>10 ||$c<0 ||empty($c))
+        $request->session()->put('qty','qty phải từ 0 tới 10 và không được trống');
+        else
+        {$product=Product::find($b);
         //tìm order trong giỏ hàng hiện tại
        if($request->session()->get('cart'))
         {
@@ -76,6 +83,7 @@ class UserCartcontroller extends Controller
         ])->sum('amount');
         $c->save();
        }
+        }
     }
     public function delete(Request $request) {
      

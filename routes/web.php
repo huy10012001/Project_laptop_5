@@ -18,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 //trang front end
+Route::get('/checkout','homeController@checkout');
 Route::get('/home','homeController@home' );
 Route::get('/contact','homeController@contact' );
 Route::get('product/{name}','homeController@product');
@@ -92,8 +93,10 @@ Route::get('/logout','loginController@logout' );
 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');
-
-
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('/postLoginCheckOut', 'loginController@postLoginCheckOut');
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('/postRegisterCheckOut', 'loginController@postRegisterCheckOut');
 ;
 //Route::get('/cart/{id}','Admincontroller@addCart' );
 

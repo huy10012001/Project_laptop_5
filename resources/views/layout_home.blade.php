@@ -51,22 +51,23 @@ $("#cartModal").on('show.bs.modal', function(){
 
 	function updateCart(qty,product_id,order_id)
     {
-		if(qty=="")
-       {
-        	alert('số lượng không được null');
-			
-			location.reload();
-			
-       }
-        else if(qty<0 ||qty>10)
-        {
-            alert('số lượng từ 1 tới 10');
-			
-			location.reload();
-
-           
-        }
-       else
+		
+		$.ajax({
+				type:  "GET",
+      			url:	 " {{ asset('cart/update')}}",
+      		 	data:{qty:qty,order_id:order_id,product_id:product_id},
+				datatype: 'json',
+				success:function(data)
+           		{
+					//var a=data.status;
+					//alert(a);
+          		//  document.getElementById("total").innerHTML = 123;
+           		}
+       		}
+    		);
+	
+		if(qty!="" && qty >0 && qty<=10)
+       
 		{
 			//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
 			var total=0;
@@ -80,21 +81,17 @@ $("#cartModal").on('show.bs.modal', function(){
 			}
  			 });
 			$("#total").html(total);
-			$.ajax({
-				type:  "GET",
-      			url:	 " {{ asset('cart/update')}}",
-      		 	data:{qty:qty,order_id:order_id,product_id:product_id},
-				datatype: 'json',
-				success:function(data)
-           		{
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           		}
-       		}
-    	);
+			
 		}
     }
+	function updateModal(qty)
+	{
+		//Nếu nhập bé hơn 1 thì mặc định là 1
+		if($(qty).val()<1)
+			$(qty).val(1);
+		else if($(qty).val()>10)
+			$(qty).val(10);
+	}
 
 		 /*	$.ajax({
     		type:  "GET",
@@ -207,7 +204,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </button>
 
 
-                                <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
@@ -247,7 +244,7 @@ $("#cartModal").on('show.bs.modal', function(){
            												<td class="price">{{$product['price']}}</td>
                                                    		
                                                         <td class="buttons_added qty ">
-
+														
                                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                  							onchange="updateCart(this.value,<?php echo $product['id'] ?>,<?php echo $product['price'] ?>)">
 
@@ -315,7 +312,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                                     <td class="qty">
                                                         <div class="buttons_added">
 															<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
-                                 						onchange="updateCart(this.value,'{{$p->id}}','{{$orders->id}}')">
+                                 						onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}')">
 
                                                         </div></td>
                                                     <td class = "amount">{{$p->pivot->amount }}</td>
