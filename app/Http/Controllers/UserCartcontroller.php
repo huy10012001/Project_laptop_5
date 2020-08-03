@@ -32,37 +32,51 @@ class UserCartcontroller extends Controller
     }
     public function getOrder(Request $request)
     { 
-        $name=$request->name;
-        $phone=$request->phone;
-        $add=$request->address;
-        if($name==null || $phone==null||$add==null)
+        //Nếu user thay đổi giỏ hàng thì return status ở json
+        if($request->session()->has('change'))
         {
-            return abort('404');
+            return Response::json(array(
+                'status'=>'change',
+              
+               )); 
         }
-        $user_id= $request->session()->get('key');
-        //Tìm order đang đặt của user hiện tại
-        $orders=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
-        //chuyển trạng thái sang đã đặt hàng
-        $orders->name=$name;
-        $orders->address=$add;
-        $orders->phone=$phone;
-        $orders->status="1";
-        $orders->date=Carbon::now();
-        $orders->save();
-        //xóa   order_product đã hết hàng trong giỏ hàng
-        order_product::withTrashed()->where(
-        [
+        
+        else
+        {
+            $name=$request->name;
+            $phone=$request->phone;
+            $add=$request->address;
+            if($name==null || $phone==null||$add==null)
+            {
+            return abort('404');
+             }
+            $user_id= $request->session()->get('key');
+            //Tìm order đang đặt của user hiện tại
+            $orders=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
+            //chuyển trạng thái sang đã đặt hàng
+            $orders->name=$name;
+            $orders->address=$add;
+            $orders->phone=$phone;
+            $orders->status="1";
+            $orders->date=Carbon::now();
+            $orders->save();
+            //xóa   order_product đã hết hàng trong giỏ hàng
+            order_product::withTrashed()->where(
+            [
             'order_id'=>$orders->id,
-        ])->whereNotNull('deleted_at')->
-        forceDelete();
+            ])->whereNotNull('deleted_at')->
+            forceDelete();
+        }
         
     }
     public function getUpdateCart(Request $request) 
     {
-        
+        $request->session()->put('change','update');
         $a=$request->order_id;
         $b=$request->product_id;
         $c=$request->qty;
+        if($a==""  || $b=="" ||$c=="")
+                return abort('404');
         if($c>10 ||$c<0 ||empty($c))
         $request->session()->put('qty','qty phải từ 0 tới 10 và không được trống');
         else
@@ -78,8 +92,7 @@ class UserCartcontroller extends Controller
         
         else
         { 
-           if($a==""  || $b=="" ||$c=="")
-                return abort('404');
+           
         order_product::where
         ([
             'order_id'=>$a,
@@ -97,11 +110,15 @@ class UserCartcontroller extends Controller
         }
     }
     public function delete(Request $request) {
-     
-       
+        
+        $request->session()->put('change','update');
         $product_id=$request->product_id; 
         $order_id=$request->order_id;
+        if($order_id==""  || $product_id=="")
+            return abort('404');
+      
         $product=Product::withTrashed()->find($product_id);
+       
         if($request->session()->get('cart'))
         {
             $cart=new Cart(session()->get('cart'));
@@ -119,15 +136,15 @@ class UserCartcontroller extends Controller
         else
         {
         //Tìm order trong giỏ hàng hiện tại
-            if($order_id==""  || $product_id=="")
-                return abort('404');
+            
             $p = order_product::withTrashed()->where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
              
             ])->first();
-        //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+         
+             //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
             $c=Order::find($order_id);
             if(!($p->trashed()))
             {   
@@ -138,24 +155,26 @@ class UserCartcontroller extends Controller
             }
              
              //Xóa order trong giỏ hàng hiện tại
-             order_product::where
+            $order_product= order_product::where
              ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
              ])->forceDelete();
-             
+                
             return Response::json(array(
                 'total'=>$c->total,
               
                )); 
+            
         }
        
     }
     public function addCart(Request $request){
        
-       
+        $request->session()->put('change','update');
         $id=$request->product_id;
-        
+        if($id=="")
+            return abort('404');
         $product=Product::find($id);
       
         $user= $request->session()->get('key');
@@ -198,8 +217,7 @@ class UserCartcontroller extends Controller
         else
         {
         $user_id=$user->id;
-        if($id=="")
-            return abort('404');
+        
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
         //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới

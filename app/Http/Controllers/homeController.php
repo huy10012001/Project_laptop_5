@@ -15,6 +15,7 @@ class homeController extends Controller
     public function order(Request $request){
 
         //$request->session()->flush();
+        $request->session()->forget('change');
         $value=$request->session()->get('key');
      
         //check user da dang nhap neu chua quya lai login
@@ -87,7 +88,7 @@ class homeController extends Controller
         $email = $request->input('ct_email');
         $phone = $request->input('ct_phone');
         $title = $request->input('ct_title');
-        $mess=$request->input('ct_content');
+        $mess=$request->input('ct_message');
          $c = new contact_user();
          $c->name=$name;
          $c->email=$email;

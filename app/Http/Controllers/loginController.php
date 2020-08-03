@@ -44,6 +44,26 @@ class loginController extends Controller
       
      
     }
+    public function checkDangNhap(Request $request)
+    {
+        if(empty($request->check))
+        {
+            return abort('404');
+        }
+        $a=$request->session()->get('key');
+        if(!empty($a))
+        {
+            return Response::json(array(
+                'status'=>'Đăng nhập'
+               )); 
+        }
+        else
+        {
+            return Response::json(array(
+                'status'=>'Thoát Đăng nhập'
+               )); 
+        }
+    }
     public function logout(Request $request)
     {
         if(empty($request->logout))
@@ -96,6 +116,7 @@ class loginController extends Controller
             $order_product= Order_product::where([
                 'order_id'=>$order->id,
             ])->forceDelete();
+           
             foreach($cart->items as $item)
             {   
               
@@ -250,10 +271,10 @@ class loginController extends Controller
 
             $request->session()->forget('cart');
          }
-         
+         $url=$request->session()->get('url');
          return Response::json(array(
             'status'=>'Thành công',
-          
+            'url'=>$url
            )); 
          
        }

@@ -104,7 +104,7 @@
                                         </div>
                                         <div class="form-group col-sm-12 col-md-12" >
                                             <label>Nội dung <sup>*</sup></label>
-                                            <textarea class="yourmessage" name="ct_ " style=" border-radius: 5px;"></textarea>
+                                            <textarea class="yourmessage" name="ct_message" style=" border-radius: 5px;"></textarea>
                                             @if($errors->has('ct_content'))
                                             <div class="has-error">
                                                 <p class="help-block">

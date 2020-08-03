@@ -1,8 +1,10 @@
 
 <?php
 
+use App\Http\Controllers\homeController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,8 +93,11 @@ Route::post('postContact', 'homeController@postContact');
 Route::get('/login','loginController@index' );
 Route::get('/logout','loginController@logout' );
 //Order
-Route::get('/order','homeController@order' );
 Route::get('/getOrder','UserCartcontroller@getOrder' );
+Route::get('/order', 'homeController@order' );
+Route::get('/isDangNhap','loginController@checkDangNhap');
+
+
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')

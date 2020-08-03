@@ -23,7 +23,48 @@
     <!-- /fonts -->
 
 </head><!--/head-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
 
+	 $(document).ready(function()
+    {
+        //đăng nhập mua hàng khi user chua đăng nhập
+     
+        $('#login').submit(function(e)
+        {
+            e.preventDefault();
+            $.ajaxSetup(
+                {
+                    headers:
+                    {
+                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                    }
+                }
+            );
+           
+            $.ajax({
+			    method:'post',
+      		    url:	 " {{ asset('/postLoginCheckOut')}}",
+      		    data:$('#login').serialize(),
+			    datatype: 'json',
+			    success:function(data)
+           	    {
+                    if(data.status=="Thành công")
+                    {
+                       window.location.href = data.url; 
+                    }
+                    else
+                    location.reload();
+               // location.reload();
+					//var a=data.status;
+					//alert(a);
+          		//  document.getElementById("total").innerHTML = 123;
+           	    }
+        	});
+           
+        });
+	});
+</script>
 <body>
 
 	<header id="header"><!--header-->
@@ -131,7 +172,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-				<form action="{{ url('/postLogin') }}" method="post">
+				<form id="login" method="post" action="javascrip:void(0)" >
         {{ csrf_field() }}		
             <h5 style="color: white;" >Email:</h5>
             <input type="email" class="form-control" name="email" required><br>

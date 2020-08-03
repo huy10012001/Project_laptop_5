@@ -19,12 +19,12 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head><!--/head-->
-<script >
 
-
-</script>
 <script type="text/javascript">
-
+//load lại trang khi user bấm back
+if(performance.navigation.type == 2){
+   location.reload(true);
+}
 //Ha2m show lai gio hang khi loadlai
 $(document).ready(function(){
 	if (Cookies.get('modal')=="showed") {

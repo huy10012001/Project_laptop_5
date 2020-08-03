@@ -1,12 +1,37 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-if(!!window.performance && window.performance.navigation.type === 2)
-{
-    console.log('Reloading');
-    window.location.reload();
-}
+    if(!!window.performance && window.performance.navigation.type === 2)
+    {
+        console.log('Reloading');
+        window.location.reload();
+    }
+   
 
-
+    function dat()
+    {
+        
+        $.ajax({
+                 type:  "GET",
+      		    url:	 " {{ asset('/isDangNhap')}}",
+      		    data: { check:"true" },
+			    datatype: 'json',
+			    success:function(data)
+           	    {
+                    if(data.status=="Đăng nhập")
+                    {
+                        //$('#myModal').modal('hide');
+                        window.location.href = "http://stackoverflow.com"; 
+                    }
+                    else
+                    {
+                        $('#myModal').modal('show');
+                    }
+                  
+               
+           	    }
+        	});
+           
+    }
     //sbmit form data use ajax
     $(document).ready(function()
     {
@@ -59,7 +84,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
                 }
             );
            
-            $.ajax({
+                $.ajax({
 			    method:'post',
       		    url:	 " {{ asset('/postRegisterCheckOut')}}",
       		    data:$('#register').serialize(),
@@ -99,6 +124,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
     
     function deleteCart(product_id,order_id)
     {
+        
     $.get(
        " {{ asset('cart/delete')}}",
        {
@@ -208,7 +234,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
   <!--Neu user da dang nhap thi redirec toi trang checkout-->
 
 
-  <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">Tiến hành đặt </button>
+  <button type="button" onclick="dat()" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
 <!-- Modal -->
 <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -217,7 +243,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
 
                 </button>
-                 <h4 class="modal-title" id="myModalLabel">vui lòng đăng nhập trước khi thanh toán</h4>
+                   <h4 class="modal-title" id="myModalLabel">vui lòng đăng nhập trước khi thanh toán</h4>
 
             </div>
             <div class="modal-body">
@@ -396,12 +422,85 @@ $('input.input-qty').each(function() {
             <table class="table table-striped">
              <tr>
                 <td> Thành tiền:</td>
+
+
                 <td>{{ $orders->total  }}vnd <br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->
 
-            <button type="button" class="btn btn-primary " onclick="location.href='https://topdev.vn/'">Tiến hành đặt </button>
+            <button type="button" onclick="dat()" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
+<!-- Modal -->
+<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+
+                </button>
+                   <h4 class="modal-title" id="myModalLabel">vui lòng đăng nhập trước khi thanh toán</h4>
+
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
+
+                        </li>
+                        <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
+
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="uploadTab"> 
+                            <form   id="login" method="post" action="javascrip:void(0)" >
+                            {{ csrf_field() }}
+                            <h3  style="text-align: center;">Đăng Nhập</h3>
+                                <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+                                <input type="email" class="form-control" name="email" required><br>
+                                <h5 style="color: rgb(15, 15, 15);">Password:</h5>
+                                <input type="password"   required name="password"  class="form-control" ><br>
+                                <div id="dangnhap"></div>
+                                <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
+                                
+                                <p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
+
+
+
+                            </p>
+
+                            </form></div>
+                        <div role="tabpanel" class="tab-pane" id="browseTab" method="post" action="javascrip:void(0)" >
+                            <form  id="register" action="" method="post">
+                                {{ csrf_field() }}
+                                <h3 style="text-align: center;">Tạo tài khoản</h3>
+                                <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+                                <input type="text" class="form-control" name="name" required placeholder="Họ và tên"><br>
+                                <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+                                <input type="text" class="form-control" name="SĐT" required placeholder="Nhập số điện thoại"><br>
+                                <h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+                                <input type="text" class="form-control" name="address" required><br> 
+                                <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+                                    <input type="email" class="form-control" name="email" required placeholder="email"><br>
+                                    <h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
+                                    <input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"><br>
+                                    <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+                                <p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- end form đăng nhập cart-->
         </div>
         </div>
