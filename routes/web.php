@@ -90,7 +90,9 @@ Route::post('postContact', 'homeController@postContact');
 //login
 Route::get('/login','loginController@index' );
 Route::get('/logout','loginController@logout' );
-
+//Order
+Route::get('/order','homeController@order' );
+Route::get('/getOrder','UserCartcontroller@getOrder' );
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')

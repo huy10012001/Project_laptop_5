@@ -30,21 +30,32 @@ class UserCartcontroller extends Controller
     { 
         return view('checkout');
     }
-    public function order(Request $request)
+    public function getOrder(Request $request)
     { 
+        $name=$request->name;
+        $phone=$request->phone;
+        $add=$request->address;
+        if($name==null || $phone==null||$add==null)
+        {
+            return abort('404');
+        }
         $user_id= $request->session()->get('key');
         //Tìm order đang đặt của user hiện tại
-        $carts=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
+        $orders=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
         //chuyển trạng thái sang đã đặt hàng
-        $carts->status="1";
-        $carts->save();
-        //xóa  order đã hết hàng trong đơn hàng
+        $orders->name=$name;
+        $orders->address=$add;
+        $orders->phone=$phone;
+        $orders->status="1";
+        $orders->date=Carbon::now();
+        $orders->save();
+        //xóa   order_product đã hết hàng trong giỏ hàng
         order_product::withTrashed()->where(
         [
-            'order_id'=>$carts->id,
+            'order_id'=>$orders->id,
         ])->whereNotNull('deleted_at')->
         forceDelete();
-        return redirect()->action('homeController@index');
+        
     }
     public function getUpdateCart(Request $request) 
     {
@@ -200,6 +211,9 @@ class UserCartcontroller extends Controller
             $carts->total=0;
             $carts->status="0";
             $carts->date=Carbon::now();
+            $carts->name=$user->name;
+            $carts->address=$user->address;
+            $carts->phone=$user->phone;
             $carts->save();
         }
          //kiem tra san pham vua them da nam trong cart chua

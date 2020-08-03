@@ -48,7 +48,24 @@ $("#cartModal").on('show.bs.modal', function(){
 	location.reload();
   });
 });
-
+	//logOut
+	function logOut()
+	{
+		$.ajax({
+				type:  "GET",
+      			url:	 " {{ asset('/logout')}}",
+      		 	data:{logout:'true'},
+				datatype: 'json',
+				success:function(data)
+           		{
+				 location.reload();
+					//var a=data.status;
+					//alert(a);
+          		//  document.getElementById("total").innerHTML = 123;
+           		}
+       		}
+    	);
+	}
 	function updateCart(qty,product_id,order_id)
     {
 		
@@ -64,7 +81,7 @@ $("#cartModal").on('show.bs.modal', function(){
           		//  document.getElementById("total").innerHTML = 123;
            		}
        		}
-    		);
+    	);
 	
 		if(qty!="" && qty >0 && qty<=10)
        
@@ -80,7 +97,7 @@ $("#cartModal").on('show.bs.modal', function(){
 				total+=qty*price;
 			}
  			 });
-			$("#total").html(total);
+		
 			
 		}
     }
@@ -88,9 +105,16 @@ $("#cartModal").on('show.bs.modal', function(){
 	{
 		//Nếu nhập bé hơn 1 thì mặc định là 1
 		if($(qty).val()<1)
-			$(qty).val(1);
+		{
+				var error="số lượng phải từ 1 tới 10 và không được trống";
+				$(qty).val(1);
+				
+		}
 		else if($(qty).val()>10)
-			$(qty).val(10);
+		{
+				var error="số lượng phải từ 1 tới 10 và không được trống";
+				$(qty).val(10);
+		}
 	}
 
 		 /*	$.ajax({
@@ -131,7 +155,7 @@ $("#cartModal").on('show.bs.modal', function(){
 			  
            }
        }
-    );
+    	);
 
  	}
  
@@ -193,7 +217,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								<li><button><a href="{{ URL::to('/login') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Nhập</b></a></button></li>
 							@else
 							<li ><button><a href="#" style="background: none; color:black;" ><i class="fa fa-user"></i> <b>{{App\User::find(Session::get('key'))->first()->name}}</b></a></button></li>
-								<li><button><a href="{{ URL::to('/logout') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Xuất</b></a></button></li>
+								<li><button><a  onclick="logOut()" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Xuất</b></a></button></li>
 							@endif
 
 							

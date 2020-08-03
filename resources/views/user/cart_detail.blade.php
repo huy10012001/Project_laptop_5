@@ -6,11 +6,12 @@ if(!!window.performance && window.performance.navigation.type === 2)
     window.location.reload();
 }
 
-        
+
     //sbmit form data use ajax
     $(document).ready(function()
     {
         //đăng nhập mua hàng khi user chua đăng nhập
+     
         $('#login').submit(function(e)
         {
             e.preventDefault();
@@ -43,6 +44,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
           		//  document.getElementById("total").innerHTML = 123;
            	    }
         	});
+           
         });
          //đăng ký  mua hàng khi user chua đăng nhập
         $('#register').submit(function(e)
@@ -85,7 +87,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
         " {{ asset('cart/update')}}",
          {
            qty:qty,order_id:order_id,product_id:product_id,
-         function()
+             function()
            {
              
                location.reload();
@@ -222,7 +224,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
                 <div role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab"">ĐĂng Nhập</a>
+                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
 
                         </li>
                         <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
@@ -232,7 +234,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="uploadTab"> 
-                            <form  id="login" method="post" action="javascrip:void(0)" >
+                            <form   id="login" method="post" action="javascrip:void(0)" >
                             {{ csrf_field() }}
                             <h3  style="text-align: center;">Đăng Nhập</h3>
                                 <h5 style="color: rgb(12, 12, 12);" >Email:</h5>

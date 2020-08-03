@@ -16,12 +16,23 @@ class loginController extends Controller
     //
     public function index(Request $request)
     {
-       
+     
+        
         $value=$request->session()->get('key');
+        //lấy url trước
+        $a=url()->previous();
+        if($a!=url()->current())
+        {
+            // nếu url trước khác  url hiện tại thì lấy url trang trước
+           
+             $request->session()->put('url',url()->previous());
+        }
        
+      
         if(!empty($value))
         {
-            return redirect()->action('homeController@index');
+          
+            return Redirect::to( $request->session()->get('url'));
         }
         else
         { 
@@ -35,8 +46,12 @@ class loginController extends Controller
     }
     public function logout(Request $request)
     {
+        if(empty($request->logout))
+        {
+            return abort('404');
+        }
         $request->session()->forget('key');
-        return Redirect::back();
+       
        
     }
     public function postRegisterCheckOut(Request $request)
@@ -162,18 +177,19 @@ class loginController extends Controller
 
             $request->session()->forget('cart');
          }
-         
-          return redirect()->action('homeController@index');
-         
+        
+        
+            return Redirect::to( $request->session()->get('url'));
+        
        }
        else
        {
-         $request->session()->put('alert','đăng nhập không thành công');
-         return Redirect::back() ;
+      
+        return Redirect::back();
+       
        }
        
-        //if(!empty($employee))
-        //
+        
         
     }
     public function postLoginCheckOut(Request $request)

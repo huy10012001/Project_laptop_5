@@ -41,29 +41,23 @@
                      <div class="card-body">
                         <table class="table table-bordered ">
                             
+                            
                             <tr>
-                                <th>User Id</th>
-                                <td>{{App\Order::find($p->id)->user->id}}</td>
-                            </tr>
-                            <tr>
-                                 <th>User Name</th>
-                                 <td>{{App\Order::find($p->id)->user->name}}</td>
+                                 <th>Tên người nhận</th>
+                                 <td>{{App\Order::find($p->id)->name}}</td>
                             </tr>
                             <tr>   
                                 <th>Email</th> 
                                 <td>{{App\Order::find($p->id)->user->email}}</td>
                             </tr>
+                           
                             <tr>
-                                <th>Age</th>
-                                <td>{{App\Order::find($p->id)->user->age}}</td>
-                             </tr>
-                            <tr>
-                                <th>Address</th>
-                                <td>{{App\Order::find($p->id)->user->address}}</td> 
+                                <th>Địa chỉ</th>
+                                <td>{{App\Order::find($p->id)->address}}</td> 
                             <tr>
                             <tr>
-                                 <th>Phone</th> 
-                                 <td>{{App\Order::find($p->id)->user->phone}}</td>
+                                 <th>Số điện thoại</th> 
+                                 <td>{{App\Order::find($p->id)->phone}}</td>
                                 </tr>
                             </tr>
                             <tr>
