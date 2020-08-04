@@ -21,69 +21,66 @@
     }
     function huy()
     {
-      
+        
         $('#update').hide();
         $('#khach').show();
     }
     function tienhanh(orderId)
     {
        
-            $.ajax({
-                 type:  "GET",
-      		    url:	 " {{ asset('/isDangNhap')}}",
-      		    data: { check:"true",order_id:orderId,status:"login" },
-			    datatype: 'json',
-			    success:function(data)
-           	    {  
-                      
-                       if(data.status=="phiên kết thúc")
-                    {
-                       
-                        alert("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
-                        setTimeout(function () {
-                         window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-                         }, 1000); //will call the function after 2 secs.
-                    }
-                       
-                   else if(data.status=="thoát đăng nhập")
-                    {
-                       
-                        alert("phiên làm việc hết hạn");
-                        setTimeout(function () {
-                         window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-                         }, 1000); //will call the function after 2 secs.
-                    }
-                    
-                    else
+        $.ajax({
+            type:  "GET",
+      		url:	 " {{ asset('/isDangNhap')}}",
+      		data: { check:"true",order_id:orderId,status:"login" },
+			datatype: 'json',
+			success:function(data)
+           	{  
+                 
+                //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
+                if(data.status=="phiên kết thúc")
+                {
+                    alert("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
+                    setTimeout(function () {
+                    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                    }, 1000); //will call the function after 2 secs.
+                }
+                //khi thoát đăng nhập
+                else if(data.status=="thoát đăng nhập")
+                {
+                    alert("phiên làm việc hết hạn");
+                    setTimeout(function () {
+                    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                     }, 1000); //will call the function after 2 secs.
+                }
+                //Nếu chưa cập nhập xong thông báo
+                else if( $('#update').is(":visible"))
+                {
+                    alert("bạn chưa cập nhập xong");
+                }
+                //Order
+                else
                 {
                     $name= $("input[name=name]").val();
                     $phone=$("input[name=phone]").val();
                     $add=$("input[name=address]").val();
-		             $.ajax({
-			        type:  "GET",//type là get
-      		        url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
-      		        data:{ name:$name,phone:$phone,address:$add},//pass tham số vào key
-			        datatype: 'json',
-         	        success:function(data)
-                    {
-                        if(data.status=="change")
-                        alert("giỏ hàng của bạn vừa thay đổi, xin vui lòng load lại trang trước khi thanh toán");
-                        else
-                        location.href = "https://www.w3schools.com";
-                    }   
-                });
-            }
-           	    }
-        	});
-            
-           
-            if( $('#update').is(":visible"))
-            {
-                alert("bạn chưa cập nhập xong");
-            }
-           
-	     
-     }
+		            $.ajax({
+			            type:  "GET",//type là get
+      		            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
+      		            data:{ name:$name,phone:$phone,address:$add},//pass tham số vào key
+			            datatype: 'json',
+         	            success:function(data)
+                        {
+                            //nếu giỏ hàng thay đổi trong lúc order
+                            if(data.status=="change")
+                                alert("giỏ hàng của bạn vừa thay đổi, xin vui lòng load lại trang trước khi thanh toán");
+                            else
+                                location.href = "https://www.w3schools.com";
+                        }
+                    });
+                }
+           	}
+        });
+    }
 </script>
 
 

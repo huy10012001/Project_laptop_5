@@ -16,19 +16,14 @@ class loginController extends Controller
     //
     public function index(Request $request)
     {
-     
-        
         $value=$request->session()->get('key');
         //lấy url trước
         $a=url()->previous();
         if($a!=url()->current())
         {
             // nếu url trước khác  url hiện tại thì lấy url trang trước
-           
-             $request->session()->put('url',url()->previous());
+           $request->session()->put('url',url()->previous());
         }
-       
-      
         if(!empty($value))
         {
           
@@ -39,10 +34,6 @@ class loginController extends Controller
         
              return view('login');
         }
-       
-      
-      
-     
     }
     public function checkDangNhap(Request $request)
     {
@@ -61,7 +52,7 @@ class loginController extends Controller
         //order id tab hiện tại
         $order_id=$request->order_id;
         //lấy order của user hiện tại
-        $current_order=Order::where(['user_id'=>$a->id])->first()->id;
+        $current_order=Order::where(['user_id'=>$a->id,'status'=>'0'])->first()->id;
        
         // so sánh xem user có vừa đăng nhập tài khoản khác không
         if(!empty($order_id) && $order_id !=$current_order)
@@ -164,14 +155,10 @@ class loginController extends Controller
         
         $hash = $request->input('email');
         $Password=$request->input('password');
-    
-        
         $user= User::whereRaw("BINARY `password`= ?", [$Password])->
         whereRaw("BINARY `email`= ?", [$hash])->
         first();    
-  
-       
-       if(!empty($user))
+        if(!empty($user))
        {
         
         $request->session()->put('key',$user);
@@ -243,15 +230,10 @@ class loginController extends Controller
 
         $hash = $request->input('email');
         $Password=$request->input('password');
-    
-        
-        $user= User::whereRaw("BINARY `password`= ?", [$Password])->
+       $user= User::whereRaw("BINARY `password`= ?", [$Password])->
         whereRaw("BINARY `email`= ?", [$hash])->
         first();    
-        
-
-       
-       if(!empty($user))
+        if(!empty($user))
        {
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();

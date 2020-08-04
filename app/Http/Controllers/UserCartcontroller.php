@@ -459,12 +459,6 @@ class UserCartcontroller extends Controller
             $carts->total=$carts->total+=Product::find($id)->price;
             $carts->save();
         }
-       
-       
-       
-            
-        }
+       }
     }
-    
- 
 }

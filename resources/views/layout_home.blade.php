@@ -93,7 +93,7 @@ $("#cartModal").on('show.bs.modal', function(){
 					{ 
 						$(this).find('td.amount').html(qty*price);
 						total+=qty*price;
-						//$('#total').html(total);
+						$('#total').html(total);
 					}
  			 	});
 			}
