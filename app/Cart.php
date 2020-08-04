@@ -98,7 +98,12 @@ class Cart extends Model
       $this->totalPrice-=$this->items[$product->id]['amount'];
       $this->totalQty-=$this->items[$product->id]['qty'];
     }
-    unset($this->items[$product->id]);
+    if($this->items[$product->id]!=null)
+     {
+        unset($this->items[$product->id]);
+     
+     }
+    
     
     
   }

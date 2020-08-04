@@ -71,7 +71,7 @@ class loginController extends Controller
             return abort('404');
         }
         $request->session()->forget('key');
-       
+        $request->session()->forget('cart');
        
     }
     public function postRegisterCheckOut(Request $request)
@@ -107,6 +107,9 @@ class loginController extends Controller
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
             else
             {
+                $order->delete();
+                $order=new Order();
+                $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
                 $order->date=Carbon::now();
@@ -154,6 +157,7 @@ class loginController extends Controller
        
        if(!empty($user))
        {
+        
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
 
@@ -166,15 +170,18 @@ class loginController extends Controller
                 $order=new Order();//cart mới
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
-                $order->status="0";
+                $order->status="2";
                 $order->date=Carbon::now();
                 $order->save();
             }
-            //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
+            //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì xóa giỏ cũ, cập nhập lại tổng giá từ session cart và ngày order hiện tại
             else
             {
+                $order->delete();
+                $order=new Order();
+                $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
-                $order->status="0";
+                $order->status="1";
                 $order->date=Carbon::now();
                 $order->save();
             }
@@ -229,7 +236,7 @@ class loginController extends Controller
        {
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
-
+        
          if($request->session()->get('cart'))
          {
              //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
@@ -245,13 +252,17 @@ class loginController extends Controller
             }
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
             else
-            {
+            { 
+                $order->delete();
+                $order=new Order();
+                $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
                 $order->date=Carbon::now();
                 $order->save();
             }
             //Kiểm tra trong giỏ hiện tại của user nếu có sản phẩm thì xóa đi để lấy dữ liệu từ session cart
+            
             $order_product= Order_product::where([
                 'order_id'=>$order->id,
             ])->forceDelete();

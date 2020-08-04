@@ -69,59 +69,222 @@ class UserCartcontroller extends Controller
         }
         
     }
-    public function getUpdateCart(Request $request) 
+    /*   public function getUpdateCart(Request $request) 
     {
         $request->session()->put('change','update');
-        $a=$request->order_id;
-        $b=$request->product_id;
+        $order_id=$request->order_id;
+        $product_id=$request->product_id;
         $c=$request->qty;
-        if($a==""  || $b=="" ||$c=="")
+        
+        if($product_id=="" )
                 return abort('404');
+        //Khi hủy session cart và chưa đăng nhập
+        if(empty($order_id) && !$request->session()->has('cart'))
+            {
+                 return Response::json(array(
+                     'status'=>'no',
+                   
+            )); 
+        }
         if($c>10 ||$c<0 ||empty($c))
         $request->session()->put('qty','qty phải từ 0 tới 10 và không được trống');
         else
-        {$product=Product::find($b);
-        //tìm order trong giỏ hàng hiện tại
-       if($request->session()->get('cart'))
         {
-            $cart=new Cart(session()->get('cart'));
+            $product=Product::find($product_id);
+        //tìm order trong giỏ hàng hiện tại
+            if($request->session()->get('cart'))
+            {
+                $cart=new Cart(session()->get('cart'));
+                 //nếu item không tồn tại
+                if(!isset($cart->items[$product_id]))
+                return Response::json(array(
+                'status'=>'no',
+           
+            )); 
+            //Khi còn session cart nhưng user vẫn đăng nhập ở tab khác
+                if(!empty($a))
+                {
+                return Response::json(array(
+                 'status'=>'no',
+               
+                )); 
+                }
+                $cart->update1($product,$c);
+                $request->session()->put('cart',$cart);
+           
+            }
+        
+            else
+            { 
+               
+                  
+                 $p = order_product::where
+                ([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id
+             
+                ])->first();
+             //Khi trống sản phẩm hoặc đăng nhập với id khác
+                $user=Order::find($order_id)->user_id;
+                if($request->session()->has('key'))
+                {
+                   
+                    $a=$request->session()->get('key')->id;
+                    //Nếu order mới cập nhập
+                  
+                }
+                else
+                {
+                        $a=null; 
+                         if(empty($p)||$a!=$user )
+                         return Response::json(array(
+                'status'=>'no',
+           
+                 ));
+                } 
+       
+                order_product::where
+                ([
+                 'order_id'=>$order_id,
+                'product_id'=>$product_id
+                ])->update(['qty' => $c,'amount'=>Product::find($product_id)->price*$c]);
+                //Update lại tổng giá của đơn hàng đó
+                $c=Order::find($order_id);
+                $c->total=order_product::where
+                ([
+                    'order_id'=>$order_id
+            
+                ])->sum('amount');
+                 $c->save();
+                 
+               
+            }
+        }
+    }*/
+    public function getUpdateCart(Request $request) 
+    {
+        $request->session()->put('change','update');
+        $order_id=$request->order_id;
+        $product_id=$request->product_id;
+        $c=$request->qty;
+        if(($c>10 ||$c<0 ||empty($c)) )
+        { 
+            return Response::json(array(
+            'soluong'=>'1',
+        )); 
+        }
+        if($product_id=="" )
+                return abort('404');
+        //Khi hủy session cart và chưa đăng nhập(trường hợp giỏ hàng null hủy session)
+        if(empty($order_id) && !$request->session()->has('cart'))
+        {
+            
+                 return Response::json(array(
+                     'status'=>'no',
+           )); 
+        }
+        //đăng xuất bên tab khác và tab hiện tại vẫn mở 
+        if(!empty($order_id) && !$request->session()->has('key'))
+            {
+                 return Response::json(array(
+                     'status'=>'no',
+                     
+           )); 
+        }
+       
+  
+        $product=Product::find($product_id);
+             //tìm order trong giỏ hàng hiện tại
+        if($request->session()->get('cart'))
+        {
+            
+             $cart=new Cart(session()->get('cart'));
+                 //nếu item không tồn tại
+            if(!isset($cart->items[$product_id]))
+            return Response::json(array(
+                'status'=>'no',
+           
+            )); 
+               
             $cart->update1($product,$c);
             $request->session()->put('cart',$cart);
            
         }
         
-        else
+        if($request->session()->has('key'))
         { 
-           
-        order_product::where
-        ([
-            'order_id'=>$a,
-            'product_id'=>$b
-        ])->update(['qty' => $c,'amount'=>Product::find($b)->price*$c]);
-        //Update lại tổng giá của đơn hàng đó
-        $c=Order::find($a);
-        $c->total=order_product::where
-        ([
-            'order_id'=>$a
             
-        ])->sum('amount');
-        $c->save();
-       }
+            $a=  $request->session()->get('key')->id;
+            //Lấy id order mới hoặc id order của user khác
+            $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+            //Nếu order mới cập nhập hoặc user khác đăng nhập
+            if($order_id!=$new_order->id)
+            return Response::json(array(
+            'status'=>'no' ));
+            //Khi sản phẩm cũ bị trống
+            $p = order_product::where
+            ([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id
+            ])->first();
+            //Khi trống sản phẩm 
+            if(empty($p))
+                return Response::json(array(
+                'status'=>'no',
+            ));
+            //update order_product
+             order_product::where
+             ([
+            'order_id'=>$order_id,
+            'product_id'=>$product_id
+             ])->update(['qty' => $c,'amount'=>Product::find($product_id)->price*$c]);
+            //Update lại tổng giá của đơn hàng đó
+            $c=Order::find($order_id);
+            $c->total=order_product::where
+            ([
+            'order_id'=>$order_id
+            
+             ])->sum('amount');
+             $c->save();
         }
     }
+    
     public function delete(Request $request) {
         
         $request->session()->put('change','update');
         $product_id=$request->product_id; 
         $order_id=$request->order_id;
-        if($order_id==""  || $product_id=="")
+       
+        if( $product_id=="")
             return abort('404');
       
         $product=Product::withTrashed()->find($product_id);
-       
-        if($request->session()->get('cart'))
+        //Khi hủy session cart và chưa đăng nhập
+        if(empty($order_id) && !$request->session()->has('cart'))
+        {
+         return Response::json(array(
+             'status'=>'no',
+           
+            )); 
+        }
+        //khi đăng xuất ở tab khác và tab hiện tại chưa đăng xuất
+        if(!empty($order_id) && !$request->session()->has('key'))
+        {
+             return Response::json(array(
+                 'status'=>'no',
+        )); 
+         }
+        if($request->session()->has('cart'))
         {
             $cart=new Cart(session()->get('cart'));
+            //nếu item không tồn tại
+            if(!isset($cart->items[$product_id]))
+                return Response::json(array(
+                'status'=>'no',
+              
+               )); 
+            
+            
             $cart->delete1($product);
             $request->session()->put('cart',$cart);
             
@@ -133,40 +296,52 @@ class UserCartcontroller extends Controller
               
                )); 
         }
-        else
-        {
-        //Tìm order trong giỏ hàng hiện tại
+        if($request->session()->has('key'))
+        { 
             
+            $a=  $request->session()->get('key')->id;
+            //Lấy id order mới hoặc id order của user khác
+            $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+            //Nếu order mới cập nhập hoặc đăng nhập với id khác
+            if($order_id!=$new_order->id)
+            return Response::json(array(
+            'status'=>'no' ));
+            //Khi sản phẩm cũ bị trống
             $p = order_product::withTrashed()->where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
              
             ])->first();
-         
-             //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+             //Khi trống sản phẩm 
+            if(empty($p))
+                return Response::json(array(
+                'status'=>'no   ',
+                ));
+            
+            //delete
+                //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
             $c=Order::find($order_id);
             if(!($p->trashed()))
             {   
-               
                 $c->total=$c->total-$p->amount;
                 $c->save();
-                
+                    
             }
-             
-             //Xóa order trong giỏ hàng hiện tại
+                 
+                 //Xóa order trong giỏ hàng hiện tại
             $order_product= order_product::where
-             ([
+            ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
-             ])->forceDelete();
-                
+            ])->forceDelete();
+               
             return Response::json(array(
-                'total'=>$c->total,
-              
-               )); 
-            
+                    'total'=>$c->total,
+                  
+                )); 
         }
+        
        
     }
     public function addCart(Request $request){

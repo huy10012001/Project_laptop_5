@@ -19,17 +19,14 @@
            	    {
                     if(data.status=="Đăng nhập")
                     {
-                        //$('#myModal').modal('hide');
                         window.location.href = "http://stackoverflow.com"; 
                     }
                     else
                     {
                         $('#myModal').modal('show');
                     }
-                  
-               
-           	    }
-        	});
+                 }
+        	    });
            
     }
     //sbmit form data use ajax
@@ -107,40 +104,66 @@
   
     function onChange(qty,product_id,order_id)
     {
-      
-         $.get(
-        " {{ asset('cart/update')}}",
-         {
-           qty:qty,order_id:order_id,product_id:product_id,
-             function()
-           {
-             
-               location.reload();
+        $.ajax({
+			type:  "GET",//type là get
+      		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
+      		data:{ qty:qty, order_id:order_id,product_id:product_id},//pass tham số vào key
+			datatype: 'json',
+         	success:function(data)
+           {	
+                if(data.soluong=="1")
+                {
+                     alert("số lượng từ 1 tới 10 và ko được trống");
+                }
+              
+                else if(data.status=="no")
+                 {
+                 alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
+                }
+              
+                else
+                {
+                    location.reload();
+                }
+			  
            }
-       }
-    );
+        }
+    	);
+         
        
     }
     
     function deleteCart(product_id,order_id)
     {
-        
-    $.get(
-       " {{ asset('cart/delete')}}",
-       {
-         order_id:order_id,product_id:product_id,
-         function()
-           {
-               location.reload();
+     
+        $.ajax({
+			type:  "GET",//type là get
+      		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
+      		data:{ order_id:order_id,product_id:product_id},//pass tham số vào key
+			datatype: 'json',
+         	success:function(data)
+           {	
+             
+              
+             if(data.status=="no")
+              {
+               alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
+              }
+              
+              else
+              {
+                location.reload();
+              }
+			  
            }
        }
-    );
+    	);
     }
 </script>
 @extends('layout_home')
 @section( 'cart_detail')
 <!-- Phần sửa lại  nếu có session -->
-
+<div id="no"></div>
 @if(Session::has('cart'))
 
 	<section id="cart_items">
@@ -191,7 +214,7 @@
 							    <p class="cart_total_price">{{$product['amount']}}</p>
 						        </td>
 						        <td class="cart_delete">
-						        <a class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></a>
+						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></button>
                                 </td>
                             
                             <!--Trường hợp hết hàng show giá + dòng đã hết hàng-->
@@ -200,7 +223,7 @@
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
-						        <a class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></a>
+						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></button>
                                 </td>        
                             @endif
                         </tr>
@@ -389,8 +412,8 @@ $('input.input-qty').each(function() {
 							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
 						        </td>
 						        <td class="cart_delete">
-						        <a class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
-                                <i class="fas fa-trash"><i class="fa fa-times"></i></a>
+						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+                                <i class="fas fa-trash"><i class="fa fa-times"></i></button>
                                 </td>
                             
                             <!--Trường hợp hết hàng -->
@@ -399,7 +422,7 @@ $('input.input-qty').each(function() {
                                 <td></td>
                                
                                 <td class="cart_delete">
-						        <a class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)"><i class="fa fa-times"></i></a>
+						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)"><i class="fa fa-times"></i></button>
                                 
                             </td>        
                             @endif
