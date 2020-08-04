@@ -175,7 +175,15 @@ class UserCartcontroller extends Controller
         }
         if($product_id=="" )
                 return abort('404');
-        //Khi hủy session cart và chưa đăng nhập(trường hợp giỏ hàng null hủy session)
+        //Khi vừa đăng nhập ở tab khác hoặc cart trống và chưa đăng nhập
+        /* if(empty($order_id) && !$request->session()->has('cart'))
+        {
+            
+                 return Response::json(array(
+                     'status'=>'no',
+           )); 
+        }*/
+        //khi giỏ hàng trống và user chưa đăng nhập hoặc khi vừa đ8ang nhập tab khác
         if(empty($order_id) && !$request->session()->has('cart'))
         {
             
@@ -218,10 +226,14 @@ class UserCartcontroller extends Controller
             //Lấy id order mới hoặc id order của user khác
             $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
             //Nếu order mới cập nhập hoặc user khác đăng nhập
-            if($order_id!=$new_order->id)
+            if($order_id!=$new_order->id && !empty($order_id))
             return Response::json(array(
             'status'=>'no' ));
             //Khi sản phẩm cũ bị trống
+            if(empty($order_id))
+            {
+                $order_id=Order::where(['user_id'=>$a])->first()->id;
+            }
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
@@ -259,7 +271,7 @@ class UserCartcontroller extends Controller
             return abort('404');
       
         $product=Product::withTrashed()->find($product_id);
-        //Khi hủy session cart và chưa đăng nhập
+         //Khi vừa đăng nhập ở tab khác hoặc cart trống và chưa đăng nhập
         if(empty($order_id) && !$request->session()->has('cart'))
         {
          return Response::json(array(
@@ -316,7 +328,7 @@ class UserCartcontroller extends Controller
              //Khi trống sản phẩm 
             if(empty($p))
                 return Response::json(array(
-                'status'=>'no   ',
+                'status'=>'no',
                 ));
             
             //delete

@@ -1,3 +1,4 @@
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     if(!!window.performance && window.performance.navigation.type === 2)
@@ -7,22 +8,24 @@
     }
    
 
-    function dat()
+    function dat(login)
     {
         
         $.ajax({
                  type:  "GET",
       		    url:	 " {{ asset('/isDangNhap')}}",
-      		    data: { check:"true" },
+      		    data: { check:"true" ,status:login},
 			    datatype: 'json',
 			    success:function(data)
            	    {
-                    if(data.status=="Đăng nhập")
+                       alert
+                    if(data.status=="đăng nhập")
                     {
                         window.location.href = "http://stackoverflow.com"; 
                     }
                     else
                     {
+                        
                         $('#myModal').modal('show');
                     }
                  }
@@ -452,7 +455,7 @@ $('input.input-qty').each(function() {
             </table>
             <!-- Button trigger modal -->
 
-            <button type="button" onclick="dat()" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
+            <button type="button" onclick="dat('login')" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
 <!-- Modal -->
 <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

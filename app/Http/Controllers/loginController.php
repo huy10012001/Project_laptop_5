@@ -46,23 +46,39 @@ class loginController extends Controller
     }
     public function checkDangNhap(Request $request)
     {
+        
         if(empty($request->check))
         {
             return abort('404');
         }
         $a=$request->session()->get('key');
-        if(!empty($a))
+           if(empty($a))
         {
             return Response::json(array(
-                'status'=>'Đăng nhập'
+                'status'=>'thoát đăng nhập'
                )); 
         }
-        else
+        //order id tab hiện tại
+        $order_id=$request->order_id;
+        //lấy order của user hiện tại
+        $current_order=Order::where(['user_id'=>$a->id])->first()->id;
+       
+        // so sánh xem user có vừa đăng nhập tài khoản khác không
+        if(!empty($order_id) && $order_id !=$current_order)
         {
             return Response::json(array(
-                'status'=>'Thoát Đăng nhập'
+                'status'=> 'phiên kết thúc'
                )); 
         }
+        $status=$request->status;   
+        
+        if(!empty($a) &&!empty($status))
+        {
+            return Response::json(array(
+                'status'=> 'đăng nhập'
+               )); 
+        }
+     
     }
     public function logout(Request $request)
     {
@@ -222,7 +238,9 @@ class loginController extends Controller
     }
     public function postLoginCheckOut(Request $request)
     { 
-        
+        //Khi user đã đăng nhập ở tab khác
+       
+
         $hash = $request->input('email');
         $Password=$request->input('password');
     
@@ -230,7 +248,8 @@ class loginController extends Controller
         $user= User::whereRaw("BINARY `password`= ?", [$Password])->
         whereRaw("BINARY `email`= ?", [$hash])->
         first();    
-  
+        
+
        
        if(!empty($user))
        {
