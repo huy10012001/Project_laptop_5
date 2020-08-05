@@ -12,6 +12,7 @@ class Cart extends Model
   public $items=[];
   public $totalQty;
   public $totalPrice;
+  
   //public $soldout;
   public function __construct($cart=null)
  
@@ -39,12 +40,16 @@ class Cart extends Model
           'amount'=>0,
           //status 1 là còn hàng
           'status'=>1,
+          //thời gian order sản phẩm
+          'time_at'=>time(),
           'deleted_at'=>null
       ];
       if(!array_key_exists($product->id,$this->items))
       {
           $this->items[$product->id]=$item;
-          $this->totalQty+=1;
+          //$this->items[$product->id]['time_at']= Carbon::now('Asia/Ho_Chi_Minh');
+          //$this->items[$product->id]['time_at']+=1;
+         $this->totalQty+=1;
           $this->totalPrice+=$product->price;
          
       }

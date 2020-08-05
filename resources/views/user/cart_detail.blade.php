@@ -18,7 +18,7 @@
 			    datatype: 'json',
 			    success:function(data)
            	    {
-                       alert
+                      
                     if(data.status=="đăng nhập")
                     {
                         window.location.href = "http://stackoverflow.com"; 
@@ -105,28 +105,32 @@
         });
     });
   
-    function onChange(qty,product_id,order_id)
+    function onChange(qty,product_id,order_id,timecreate)
     {
+        
+       
+        
         $.ajax({
 			type:  "GET",//type là get
       		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
-      		data:{ qty:qty, order_id:order_id,product_id:product_id},//pass tham số vào key
+      		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
          	success:function(data)
            {	
+                
                 if(data.soluong=="1")
                 {
                      alert("số lượng từ 1 tới 10 và ko được trống");
                 }
-              
-                else if(data.status=="no")
+                
+                else if(data.status)
                  {
-                 alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
+                 alert("không tìm thấy item");//dữ liệu từ response
                 }
               
                 else
                 {
-                    location.reload();
+                     location.reload();
                 }
 			  
            }
@@ -136,19 +140,19 @@
        
     }
     
-    function deleteCart(product_id,order_id)
+    function deleteCart(product_id,order_id,timecreate)
     {
      
         $.ajax({
 			type:  "GET",//type là get
       		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
-      		data:{ order_id:order_id,product_id:product_id},//pass tham số vào key
+      		data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
          	success:function(data)
            {	
              
-              
-             if(data.status=="no")
+            alert(data.status)
+            /* if(data.status=="no")
               {
                alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
               }
@@ -157,7 +161,7 @@
               {
                 location.reload();
               }
-			  
+			  */
            }
        }
     	);
@@ -210,14 +214,15 @@
                              <input aria-label="quantity"
                              class="input-qty" max="10" min="1" name="" required  type="number" 
                              value="{{$product['qty']}}"
-                             onChange="onChange(this.value,<?php echo $product['id'] ?>)">
+                             onChange="onChange(this.value,<?php echo $product['id']?>,'',<?php echo $product['time_at'] ?>
+                             )">
                             </div>
 							</td>
 						        <td class="cart_total">
 							    <p class="cart_total_price">{{$product['amount']}}</p>
 						        </td>
 						        <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></button>
+						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
                                 </td>
                             
                             <!--Trường hợp hết hàng show giá + dòng đã hết hàng-->
@@ -226,7 +231,7 @@
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>)"><i class="fa fa-times"></i></button>
+						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"><i class="fa fa-times"></i></button>
                                 </td>        
                             @endif
                         </tr>
@@ -407,7 +412,7 @@ $('input.input-qty').each(function() {
 						        <div class="buttons_added">
                                 <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
                                  value="{{ $p->pivot->qty}}"
-                                 onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}')">
+                                 onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')">
                                 </div>
 						        </td>
 						      
@@ -415,7 +420,7 @@ $('input.input-qty').each(function() {
 							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
 						        </td>
 						        <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)">
+						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')">
                                 <i class="fas fa-trash"><i class="fa fa-times"></i></button>
                                 </td>
                             
@@ -425,7 +430,7 @@ $('input.input-qty').each(function() {
                                 <td></td>
                                
                                 <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}',)"><i class="fa fa-times"></i></button>
+						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')"><i class="fa fa-times"></i></button>
                                 
                             </td>        
                             @endif

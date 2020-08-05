@@ -167,6 +167,11 @@ class UserCartcontroller extends Controller
         $order_id=$request->order_id;
         $product_id=$request->product_id;
         $c=$request->qty;
+        $time_create=$request->timecreate;
+     
+        //nếu item không tồn tại
+       
+    
         if(($c>10 ||$c<0 ||empty($c)) )
         { 
             return Response::json(array(
@@ -175,65 +180,65 @@ class UserCartcontroller extends Controller
         }
         if($product_id=="" )
                 return abort('404');
-        //Khi vừa đăng nhập ở tab khác hoặc cart trống và chưa đăng nhập
-        /* if(empty($order_id) && !$request->session()->has('cart'))
+       //khi giỏ hàng trống và user chưa đăng nhập hoặc khi vừa đăng nhập tab khác
+        if(empty($order_id) && !$request->session()->has('key') && !$request->session()->has('cart'))
         {
             
                  return Response::json(array(
-                     'status'=>'no',
-           )); 
-        }*/
-        //khi giỏ hàng trống và user chưa đăng nhập hoặc khi vừa đ8ang nhập tab khác
-        if(empty($order_id) && !$request->session()->has('cart'))
-        {
-            
-                 return Response::json(array(
-                     'status'=>'no',
+                     'status'=>'no1',
            )); 
         }
         //đăng xuất bên tab khác và tab hiện tại vẫn mở 
         if(!empty($order_id) && !$request->session()->has('key'))
             {
                  return Response::json(array(
-                     'status'=>'no',
+                     'status'=>'no2',
                      
            )); 
         }
-       
-  
         $product=Product::find($product_id);
              //tìm order trong giỏ hàng hiện tại
         if($request->session()->get('cart'))
         {
             
-             $cart=new Cart(session()->get('cart'));
+            $cart=new Cart(session()->get('cart'));
                  //nếu item không tồn tại
             if(!isset($cart->items[$product_id]))
             return Response::json(array(
-                'status'=>'no',
+                'status'=>'no3',
            
             )); 
-               
+            if($time_create!=$cart->items[$product_id]['time_at'])
+            return Response::json(array(
+                 'status'=>'no6'
+            )); 
             $cart->update1($product,$c);
             $request->session()->put('cart',$cart);
            
         }
-        
         if($request->session()->has('key'))
         { 
             
-            $a=  $request->session()->get('key')->id;
+            $a= $request->session()->get('key')->id;
             //Lấy id order mới hoặc id order của user khác
             $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
             //Nếu order mới cập nhập hoặc user khác đăng nhập
-            if($order_id!=$new_order->id && !empty($order_id))
+            if($order_id!=$new_order->id)
             return Response::json(array(
-            'status'=>'no' ));
-            //Khi sản phẩm cũ bị trống
+            'status'=>'no4' ));
+            //khi đăng nhập ở tab khác rồi đăng xuất và đăng nhập lại
+            /*if(empty($cart->items[$product_id]['time_at']))
+            {
+                return Response::json(array(
+                    'status'=>'no8' ));
+            }
             if(empty($order_id))
             {
-                $order_id=Order::where(['user_id'=>$a])->first()->id;
-            }
+                $order_id=Order::where(['user_id'=>$a,'status'=>'0'])->first()->id;
+                $cart->items[$product_id]['time_at']="";
+                $old_order_id="have";
+            }*/
+           
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
@@ -242,8 +247,12 @@ class UserCartcontroller extends Controller
             //Khi trống sản phẩm 
             if(empty($p))
                 return Response::json(array(
-                'status'=>'no',
+                'status'=>'no5',
             ));
+            if($time_create!=$p->created_at )
+            return Response::json(array(
+                 'status'=>'no7'
+            )); 
             //update order_product
              order_product::where
              ([
@@ -258,6 +267,8 @@ class UserCartcontroller extends Controller
             
              ])->sum('amount');
              $c->save();
+            
+            
         }
     }
     
@@ -266,24 +277,24 @@ class UserCartcontroller extends Controller
         $request->session()->put('change','update');
         $product_id=$request->product_id; 
         $order_id=$request->order_id;
-       
+        $time_create=$request->timecreate;
         if( $product_id=="")
             return abort('404');
       
         $product=Product::withTrashed()->find($product_id);
          //Khi vừa đăng nhập ở tab khác hoặc cart trống và chưa đăng nhập
-        if(empty($order_id) && !$request->session()->has('cart'))
+        if(empty($order_id) &&  !$request->session()->has('key') && !$request->session()->has('cart'))
         {
          return Response::json(array(
-             'status'=>'no',
+             'status'=>'no1',
            
             )); 
         }
         //khi đăng xuất ở tab khác và tab hiện tại chưa đăng xuất
-        if(!empty($order_id) && !$request->session()->has('key'))
+        if(!empty($order_id)  && !$request->session()->has('key'))
         {
              return Response::json(array(
-                 'status'=>'no',
+                 'status'=>'no2',
         )); 
          }
         if($request->session()->has('cart'))
@@ -292,10 +303,14 @@ class UserCartcontroller extends Controller
             //nếu item không tồn tại
             if(!isset($cart->items[$product_id]))
                 return Response::json(array(
-                'status'=>'no',
+                'status'=>'no3',
               
                )); 
-            
+            //Trường hợp thời gian order item khác và có session cart
+            if($time_create!=$cart->items[$product_id]['time_at'])
+               return Response::json(array(
+                    'status'=>'no6'
+               )); 
             
             $cart->delete1($product);
             $request->session()->put('cart',$cart);
@@ -317,7 +332,7 @@ class UserCartcontroller extends Controller
             //Nếu order mới cập nhập hoặc đăng nhập với id khác
             if($order_id!=$new_order->id)
             return Response::json(array(
-            'status'=>'no' ));
+            'status'=>'no4' ));
             //Khi sản phẩm cũ bị trống
             $p = order_product::withTrashed()->where
             ([
@@ -328,9 +343,13 @@ class UserCartcontroller extends Controller
              //Khi trống sản phẩm 
             if(empty($p))
                 return Response::json(array(
-                'status'=>'no',
+                'status'=>'no5',
                 ));
-            
+            //Khi thời gian order khác và user đăng nhập
+            if($time_create!=$p->created_at)
+                return Response::json(array(
+                     'status'=>'no7'
+                )); 
             //delete
                 //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
             $c=Order::find($order_id);
@@ -371,10 +390,12 @@ class UserCartcontroller extends Controller
            if($request->session()->get('cart'))
            {
                $cart=new Cart(session()->get('cart'));
+               
            }
            else
            {
               $cart=new Cart();
+
            }
            if(isset($cart->items[$id]))
            { 
@@ -391,10 +412,13 @@ class UserCartcontroller extends Controller
               }
             }
            else
-           {
-            $cart->add($product);
+           {    
+               //Thời gian tạo sản phẩm order mới session
+                
+                $cart->add($product);
            }
             $request->session()->put('cart',$cart);
+            $request->session()->forget('dangnhap');
              //dd($cart);
          // session()->forget('cart');
            
@@ -403,7 +427,7 @@ class UserCartcontroller extends Controller
         }
         else
         {
-        $user_id=$user->id;
+            $user_id=$user->id;
         
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();

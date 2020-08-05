@@ -2,14 +2,22 @@
 <html>
 <body>
 
-<p>Modify the text in the input field, then click outside the field to fire the onchange event.</p>
+<h2>JavaScript getTime()</h2>
 
-Enter some text: <input type="text" name="txt" value="Hello" onchange="myFunction(this.value)">
+<p>The internal clock in JavaScript counts from midnight January 1, 1970.</p>
+<p>The getTime() function returns the number of milliseconds since then:</p>
+
+<p id="demo"></p>
 
 <script>
-function myFunction(val) {
- location.reload();
+  
+  function myFunction(x) {
+  return x;
 }
+ a= <?php use Illuminate\Support\Carbon;
+ echo  time()?>;
+document.getElementById("demo").innerHTML = myFunction(a
+   )
 </script>
 
 </body>

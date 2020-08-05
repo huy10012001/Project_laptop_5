@@ -11,7 +11,7 @@ session_start();
  {
     
     //var userName = document.getElementById("name").value;
-    
+   
     $.ajax({
     type:  "GET",
     url: "{{ asset('Addcart')}}",
