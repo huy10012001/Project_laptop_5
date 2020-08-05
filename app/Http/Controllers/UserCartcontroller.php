@@ -191,7 +191,8 @@ class UserCartcontroller extends Controller
         //đăng xuất bên tab khác và tab hiện tại vẫn mở 
         if(!empty($order_id) && !$request->session()->has('key'))
             {
-                 return Response::json(array(
+                 return Response::json(array
+                 (
                      'status'=>'no2',
                      
            )); 
@@ -223,22 +224,20 @@ class UserCartcontroller extends Controller
             //Lấy id order mới hoặc id order của user khác
             $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
             //Nếu order mới cập nhập hoặc user khác đăng nhập
-            if($order_id!=$new_order->id)
+            if($order_id!=$new_order->id &&!empty($order_id))
             return Response::json(array(
             'status'=>'no4' ));
             //khi đăng nhập ở tab khác rồi đăng xuất và đăng nhập lại
-            /*if(empty($cart->items[$product_id]['time_at']))
-            {
-                return Response::json(array(
-                    'status'=>'no8' ));
-            }
+            
             if(empty($order_id))
             {
                 $order_id=Order::where(['user_id'=>$a,'status'=>'0'])->first()->id;
-                $cart->items[$product_id]['time_at']="";
                 $old_order_id="have";
-            }*/
-           
+            }
+            else
+            {
+                $old_order_id="";
+            }
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
@@ -249,10 +248,23 @@ class UserCartcontroller extends Controller
                 return Response::json(array(
                 'status'=>'no5',
             ));
-            if($time_create!=$p->created_at )
-            return Response::json(array(
-                 'status'=>'no7'
-            )); 
+            //$time=Carbon::createFromTimestampUTC($p->created_at)->secondsSinceMidnight();
+            if($old_order_id)
+            { 
+               if($p->created_at->timestamp!=$time_create )
+                return Response::json(array(
+                 'status'=>'no8'
+                )); 
+            }
+            if($old_order_id=="")
+            {
+                
+                if($p->created_at!=\Carbon\Carbon::parse($time_create) )
+                return Response::json(array(
+                     'status'=>'no7'
+                ));
+            }
+            
             //update order_product
              order_product::where
              ([
@@ -330,10 +342,19 @@ class UserCartcontroller extends Controller
             //Lấy id order mới hoặc id order của user khác
             $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
             //Nếu order mới cập nhập hoặc đăng nhập với id khác
-            if($order_id!=$new_order->id)
+            if($order_id!=$new_order->id &&!empty($order_id))
             return Response::json(array(
             'status'=>'no4' ));
             //Khi sản phẩm cũ bị trống
+            if(empty($order_id))
+            {
+                $order_id=Order::where(['user_id'=>$a,'status'=>'0'])->first()->id;
+                $old_order_id="have";
+            }
+            else
+            {
+                $old_order_id="";
+            }
             $p = order_product::withTrashed()->where
             ([
                 'order_id'=>$order_id,
@@ -341,17 +362,32 @@ class UserCartcontroller extends Controller
              
             ])->first();
              //Khi trống sản phẩm 
+             
             if(empty($p))
                 return Response::json(array(
                 'status'=>'no5',
                 ));
             //Khi thời gian order khác và user đăng nhập
-            if($time_create!=$p->created_at)
+           /* if($time_create!=$p->created_at)
                 return Response::json(array(
-                     'status'=>'no7'
-                )); 
+                     'status'=>$time_create
+                )); */
             //delete
                 //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+            if($old_order_id)
+            { 
+                if($p->created_at->timestamp!=$time_create )
+                return Response::json(array(
+                     'status'=>'no8'
+                    )); 
+            }
+            if($old_order_id=="")
+            {
+                if($p->created_at!=\Carbon\Carbon::parse($time_create) )
+                return Response::json(array(
+                         'status'=>'no7'
+                ));
+            }
             $c=Order::find($order_id);
             if(!($p->trashed()))
             {   

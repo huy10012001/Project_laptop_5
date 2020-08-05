@@ -173,7 +173,7 @@ class loginController extends Controller
                 $order=new Order();//cart mới
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
-                $order->status="2";
+                $order->status="1";
                 $order->date=Carbon::now();
                 $order->save();
             }
@@ -202,6 +202,8 @@ class loginController extends Controller
                 $order_product->price=$item['price'];
                 $order_product->qty=$item['qty'];
                 $order_product->amount=$item['amount'];
+                
+                //$order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
                 $order_product->deleted_at=$item['deleted_at'];
                 $order_product->save();
             }
@@ -277,6 +279,7 @@ class loginController extends Controller
                 $order_product->price=$item['price'];
                 $order_product->qty=$item['qty'];
                 $order_product->amount=$item['amount'];
+                $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
                 $order_product->deleted_at=$item['deleted_at'];
                 $order_product->save();
             }

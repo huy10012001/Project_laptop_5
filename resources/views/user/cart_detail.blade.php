@@ -117,7 +117,8 @@
 			datatype: 'json',
          	success:function(data)
            {	
-                
+
+               
                 if(data.soluong=="1")
                 {
                      alert("số lượng từ 1 tới 10 và ko được trống");
@@ -151,8 +152,8 @@
          	success:function(data)
            {	
              
-            alert(data.status)
-            /* if(data.status=="no")
+          
+             if(data.status)
               {
                alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
               }
@@ -161,7 +162,7 @@
               {
                 location.reload();
               }
-			  */
+			 
            }
        }
     	);
@@ -412,7 +413,7 @@ $('input.input-qty').each(function() {
 						        <div class="buttons_added">
                                 <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
                                  value="{{ $p->pivot->qty}}"
-                                 onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')">
+                                 onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 </div>
 						        </td>
 						      
@@ -420,7 +421,7 @@ $('input.input-qty').each(function() {
 							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
 						        </td>
 						        <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')">
+						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 <i class="fas fa-trash"><i class="fa fa-times"></i></button>
                                 </td>
                             
@@ -430,7 +431,7 @@ $('input.input-qty').each(function() {
                                 <td></td>
                                
                                 <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$orders->created_at}}')"><i class="fa fa-times"></i></button>
+						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')"><i class="fa fa-times"></i></button>
                                 
                             </td>        
                             @endif

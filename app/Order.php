@@ -25,7 +25,7 @@ public function product()
 {
      
 
-    return $this->belongsToMany('App\Product')->withPivot('price', 'qty','amount')-> withTrashed();
+    return $this->belongsToMany('App\Product')->withPivot('price', 'qty','amount','created_at')-> withTrashed();
    
 
 }
