@@ -1,5 +1,11 @@
 
 <?php
-echo \Carbon\Carbon::parse(time())
+use App\category;
+foreach(category::withTrashed()
+->get()
+ as $c)
+{
+    echo $c;
+}
 ?>
 </body>

@@ -29,21 +29,21 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Products
+                            Category
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('product/index') }}" class="nav-link">
+                            <a href="{{ url('admin/category/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Products</p>
+                                <p>View Category</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('product/create') }}" class="nav-link">
+                            <a href="{{ url('admin/category/create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create a Product</p>
+                                <p>Create a Caterogy</p>
                             </a>
                         </li>
                     </ul>
@@ -56,23 +56,118 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Category
+                           Product
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ url('product/index') }}" class="nav-link">
+                            <a href="{{ url('admin/product/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>View Products</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('product/create') }}" class="nav-link">
+                            <a href="{{ url('admin/product/create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create a Product</p>
                             </a>
                         </li>
+                    </ul>
+                </li>
+            </ul>
+          
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Order
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/order/index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View Order</p>
+                            </a>
+                        </li>
+                      
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                           User
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/user/index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View User</p>
+                            </a>
+                        </li>
+                      
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                          Role
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/role/index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View Role</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin/role/create') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Role</p>
+                            </a>
+                        </li>
+                    </ul>
+                    
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Contact_User
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/contact_user/index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View Contact_User</p>
+                            </a>
+                        </li>
+                      
                     </ul>
                 </li>
             </ul>

@@ -25,7 +25,7 @@ Route::get('/home','homeController@home' );
 Route::get('/contact','homeController@contact' );
 Route::get('product/{name}','homeController@product');
 //trang test gio hang(khong nam trong do an)
-Route::get('/testcart', 'homeController123@cart');
+Route::get('/cart', 'UserCartcontroller@cart');
 Route::get('/index', 'homeController@index');
 //category Admin
 Route::get('admin/category/index', 'AdminCategoryController@index');

@@ -3,9 +3,11 @@
       function deleteContact(contact_id)
  {  
 
-      
-    $.get(
-       " {{ asset('admin/contact_user/delete')}}",
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+    {
+        $.get(
+            " {{ asset('admin/contact_user/delete')}}",
        {
          contact_id:contact_id,
          function()
@@ -13,8 +15,9 @@
              
                location.reload();
            }
-       }
-    );
+        }
+        );
+    }
  }
  
 </script>

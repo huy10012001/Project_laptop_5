@@ -3,8 +3,10 @@
       function deleteRole(role_id)
  {  
 
-      
-    $.get(
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+    { 
+        $.get(
        " {{ asset('admin/role/delete')}}",
        {
            role_id:role_id,
@@ -14,7 +16,8 @@
               location.reload();
            }
        }
-    );
+     );
+    }
  }
  
 </script>
@@ -66,9 +69,7 @@
                                     <td>{{$p->id}}</td>
                                     <td>{{$p->name}}</td>
                                     <td class="text-right">
-                                    <a class="btn btn-primary btn-sm" href="#">
-                                        <i class="fas fa-folder"></i> View
-                                    </a>
+                                   
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/role/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>

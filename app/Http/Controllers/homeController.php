@@ -71,8 +71,6 @@ class homeController extends Controller
     }
     public function product($name)
     {
-
-       
         $p = category::withTrashed()->where(['name'=>$name])->first();
         if(!empty($p) and $p->product->count()>0)
       

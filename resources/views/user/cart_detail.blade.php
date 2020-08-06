@@ -21,7 +21,7 @@
                       
                     if(data.status=="đăng nhập")
                     {
-                        window.location.href = "http://stackoverflow.com"; 
+                        window.location.href = "{{ asset('/order')}}"; 
                     }
                     else
                     {
@@ -118,8 +118,8 @@
          	success:function(data)
            {	
 
-               
-                if(data.soluong=="1")
+             
+              if(data.soluong=="1")
                 {
                      alert("số lượng từ 1 tới 10 và ko được trống");
                 }
@@ -153,7 +153,8 @@
            {	
              
           
-             if(data.status)
+           
+            if(data.status)
               {
                alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
               }
@@ -189,7 +190,7 @@
 					<thead>
 						<tr class="cart_menu" style="color: black;">
 							<td class="image">Item</td>
-							<td class="description"></td>
+							<td class="nameproduct">Tên sản phẩm</td>
 							<td class="price">giá</td>
 							<td class="quantity">số lượng</td>
 							<td class="total">tổng tiền</td>
@@ -198,9 +199,9 @@
 					</thead>
 					@foreach(Session::get('cart')->items as $product)
 						<tr>
-                            <td class="cart_product">
-							    <a href=""><img src="" alt=""> </a>
-						    </td>
+                           
+                            <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" /> 
+						    
 						    <td class="cart_name">
 							<h4>{{App\Product::withTrashed()->find($product['id'])->name}}</h4>
                             </td>
@@ -388,8 +389,8 @@ $('input.input-qty').each(function() {
 				<table class="table table-condensed" >
 					<thead>
 						<tr class="cart_menu" style="color: black;">
-							<td class="image">Item</td>
-							<td class="description"></td>
+							<td class="image"></td>
+							<td class="nameproduct">Tên sản phẩm</td>
 							<td class="price">giá</td>
 							<td class="quantity">số lượng</td>
 							<td class="total">tổng tiền</td>
@@ -399,7 +400,7 @@ $('input.input-qty').each(function() {
 					@foreach($orders->product as $p)
 						<tr>
                             <td class="cart_product">
-							    <a href=""><img src="" alt=""> </a>
+							   <img width="100px" height="100px" src="{{ url('images/'.$p->image) }}"/> 
 						    </td>
 						    <td class="cart_name">
 							<h4>{{$p->name}}</h4>

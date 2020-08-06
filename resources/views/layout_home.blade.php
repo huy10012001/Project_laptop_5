@@ -66,18 +66,19 @@ $("#cartModal").on('show.bs.modal', function(){
        		}
     	);
 	}
-	function updateCart(qty,product_id,order_id)
+	
+	function updateCart(qty,product_id,order_id,timecreate)
     {
 		
 		$.ajax({
 				type:  "GET",
       			url:	 " {{ asset('cart/update')}}",
-      		 	data:{qty:qty,order_id:order_id,product_id:product_id},
+      		 	data:{qty:qty,order_id:order_id,product_id:product_id,timecreate:timecreate},
 				datatype: 'json',
 				success:function(data)
            		{
 					   	
-					if(data.status=="no")
+					if(data.status)
 					{
 					$("#total").html("không tìm thấy item");
 			 		}
@@ -140,17 +141,17 @@ $("#cartModal").on('show.bs.modal', function(){
   
     });*/
   
-	function deleteCartModal(product_id,order_id,emn)
+	function deleteCartModal(product_id,order_id,emn,timecreate)
  	{
 		
 		$.ajax({
 			type:  "GET",//type là get
       		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
-      		data:{ order_id:order_id,product_id:product_id},//pass tham số vào key
+      		data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
          	success:function(data)
            {	
-			 if(data.status=="no")
+			 if(data.status)
 			 {
 				$("#total").html("không tìm thấy item");
 			 }
@@ -214,7 +215,7 @@ $("#cartModal").on('show.bs.modal', function(){
 				<div class="row">
 					<div class="col-sm-4" >
 						<div class="logo pull-left">
-							<a href="{{ URL::to('/home')}}"><img src="{{ ('images/logo3.png') }}" alt="" /></a>
+							<a href="{{ URL::to('/home')}}"><img src="{{ ('images/logo3.jpg') }}" height="150px"  width="100px" alt="" /></a>
 						</div>
 
 					</div>
@@ -237,7 +238,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </button>
 
 
-                                <div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
@@ -264,27 +265,26 @@ $("#cartModal").on('show.bs.modal', function(){
                                                 </thead>
                                                 <tbody class="cart-body">
 												<tr>
-                                                    <td >
-                                                      <img src="{{ ('fronend/images/logo3.png') }}" class="img-fluid img-thumbnail" alt="Sheep"  >
-													</td>
+                                
 													@foreach(Session::get('cart')->items as $product)
 												   	
-													   
+														<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
+														</td> 
 														<td class="">{{App\Product::withTrashed()->find($product['id'])->name}}</td>
 												      <!--Trường hợp còn hàng(status là 1)-->
 														@if($product['status']==1)
-														  
+														
            												<td class="price">{{$product['price']}}</td>
                                                    		
                                                         <td class="buttons_added qty ">
 														
                                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
-                                 							onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>)">
+                                 							onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
 
 														</td>
                                                    	 <td class = "amount">{{$product['amount']}}</td>
                                                    	 <td>
-                                                      <a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this)">
+                                                      <a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,'',<?php echo $product['time_at']?>)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -295,11 +295,13 @@ $("#cartModal").on('show.bs.modal', function(){
 													</tr>
 													
 													@else
+													<td class="image"><img  height="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
+														</td> 
 													<td>{{$product['price']}}</td>
                                                     <td class="qty"> </td>
                                                     <td class = "amount"></td>
                                                     <td>
-                                                      <a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>)">
+                                                      <a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -331,27 +333,27 @@ $("#cartModal").on('show.bs.modal', function(){
                                                 </thead>
                                                 <tbody>
                                                   <tr>
-                                                    <td>
-                                                      <img src="{{ ('fronend/images/logo3.png') }}" class="img-fluid img-thumbnail" alt="Sheep"  >
-													</td>
+                                                   
 													@foreach($orders->product as $p)
-												   
 
+													<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
+														</td> 
 													<td>{{$p->name}}</td>
 												      <!--Trường hợp còn hàng(status là 1)-->
             									  
            											<td class="price">{{$p->pivot->price }}</td>
 													   <!--Trường hợp còn hàng(khác trashed)-->
 													@if(!($p->trashed()))
+												
                                                     <td class="qty">
                                                         <div class="buttons_added">
 															<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
-                                 						onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}')">
+                                 						onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
 
                                                         </div></td>
                                                     <td class = "amount">{{$p->pivot->amount }}</td>
                                                     <td>
-                                                      <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this)">
+                                                      <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -364,7 +366,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                                     <td class="qty"> </td>
                                                     <td class = "amount"></td>
                                                     <td>
-                                                      <a href="#"  onclick="deleteModal(this);deleteCartModal('{{$p->id}}','{{$orders->id}}',)">
+                                                      <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -388,7 +390,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                             </div><!--/cart model-->
                                             <div class="modal-footer border-top-0 d-flex justify-content-between">
                                               <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
-                                              <button type="button" class="btn btn-success" ><a href="{{ URL::to('/cart-detail') }}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
+                                              <button type="button" class="btn btn-success" ><a href="{{ URL::to('/cart') }}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
 
                                             </div>
                                           </div>
@@ -430,7 +432,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								<li><a href="{{ URL::to('/home') }}" class="active">Trang Chủ</a></li>
 								<li class="dropdown"><a href="#">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-									@foreach(App\Category::all() as $c)
+									@foreach(App\category::withTrashed()->get() as $c)
 										@if($c->product->count()>0)
 										<li><a href=" {{url('product/'.$c->name)}}">{{$c->name}}</a></li>
 										@endif

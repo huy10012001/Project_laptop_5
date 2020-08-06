@@ -1,10 +1,12 @@
 <!-- Lưu tại resources/views/product/index.blade.php -->
 <script>
-      function deleteCategory(category_id)
- {  
 
-      
-    $.get(
+    function deleteCategory(category_id)
+ {  
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+    {
+         $.get(
        " {{ asset('admin/category/delete')}}",
        {
          category_id:category_id,
@@ -14,6 +16,7 @@
            }
        }
     );
+    }
  }
  
 </script>
@@ -76,13 +79,11 @@
                                 <td>{{ $p->name }}</td>
                               
                                 <td class="text-right">
-                                    <a class="btn btn-primary btn-sm" href="#">
-                                        <i class="fas fa-folder"></i> View
-                                    </a>
+                                   
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/category/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <a class="btn btn-danger btn-sm"   onclick="deleteCategory('{{$p->id}}')">
+                                    <a class="btn btn-danger btn-sm"    onclick="deleteCategory('{{$p->id}}')">
                                         <i class="fas fa-trash"></i> Delete
                                     </a>
                                 </td>

@@ -21,6 +21,46 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
 class UserCartcontroller extends Controller
 {
+    public function cart(Request $request){
+        $value=$request->session()->get('key');
+     
+        //check user da dang nhap neu chua quya lai login
+        if(empty($value))
+        {
+          //  return redirect()->action('loginController@index');
+        
+          return view('user.cart_detail');
+
+        }
+        else
+        {
+            $user_id=$value->id;
+            //lấy giỏ hàng của user_id
+            $orders=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
+          
+            if(!empty($orders))
+            {
+               
+              // $products=Order::find($orders->id)->product;
+               //nếu có sản phẩm khi show sản phẩm trong giỏ hàng của user
+               /// if(count($products)>0)
+                    return view('user.cart_detail')->with(['orders'=>$orders]);
+                //echo $products;
+               // else
+                //return view('user.cart_detail');
+            }
+            else
+            {
+                return view('user.cart_detail');
+            }
+           
+    
+         }
+        
+       
+       // return redirect()->action('Admincontroller@index');
+      
+    }
     public function index( Request $request){
         
         $value=$request->session()->get('key');
@@ -168,10 +208,10 @@ class UserCartcontroller extends Controller
         $product_id=$request->product_id;
         $c=$request->qty;
         $time_create=$request->timecreate;
-     
+        
         //nếu item không tồn tại
        
-    
+       
         if(($c>10 ||$c<0 ||empty($c)) )
         { 
             return Response::json(array(
@@ -188,6 +228,7 @@ class UserCartcontroller extends Controller
                      'status'=>'no1',
            )); 
         }
+        
         //đăng xuất bên tab khác và tab hiện tại vẫn mở 
         if(!empty($order_id) && !$request->session()->has('key'))
             {
@@ -204,19 +245,23 @@ class UserCartcontroller extends Controller
             
             $cart=new Cart(session()->get('cart'));
                  //nếu item không tồn tại
-            if(!isset($cart->items[$product_id]))
+            if(!isset($cart->items[$product_id])||$cart->items[$product_id]['status']==0)
             return Response::json(array(
                 'status'=>'no3',
            
             )); 
+            
             if($time_create!=$cart->items[$product_id]['time_at'])
             return Response::json(array(
                  'status'=>'no6'
             )); 
+           
             $cart->update1($product,$c);
+           
             $request->session()->put('cart',$cart);
            
         }
+        
         if($request->session()->has('key'))
         { 
             
@@ -404,7 +449,7 @@ class UserCartcontroller extends Controller
             ])->forceDelete();
                
             return Response::json(array(
-                    'total'=>$c->total,
+                    'total'=>$c->total  ,
                   
                 )); 
         }
@@ -423,43 +468,44 @@ class UserCartcontroller extends Controller
      
        if(empty($user))
         {
-           if($request->session()->get('cart'))
-           {
-               $cart=new Cart(session()->get('cart'));
-               
-           }
-           else
-           {
-              $cart=new Cart();
-
-           }
-           if(isset($cart->items[$id]))
-           { 
-               if($cart->items[$id]['qty']<10 )
-               {
-                   $cart->add($product);
-               }
-                else
-              {  
-                return Response::json(array(
-                   'status'=>'error',
-                    'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
-                  )); 
-              }
-            }
-           else
-           {    
-               //Thời gian tạo sản phẩm order mới session
+            if($request->session()->get('cart'))
+            {
+                $cart=new Cart(session()->get('cart'));
                 
-                $cart->add($product);
-           }
-            $request->session()->put('cart',$cart);
-            $request->session()->forget('dangnhap');
-             //dd($cart);
-         // session()->forget('cart');
-           
+            }
+            
+            else
+            {
+               $cart=new Cart();
+ 
+            }
+             
+            if(isset($cart->items[$id]))
+            { 
+                if($cart->items[$id]['qty']<10 )
+                {
+                    $cart->add($product);
+                }
+                 else
+               {  
+                 return Response::json(array(
+                    'status'=>'error',
+                     'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
+                   )); 
+               }
+             }
+             
+            else
+            {    
+                //Thời gian tạo sản phẩm order mới session
+                 
+                 $cart->add($product);
+            }
+                $request->session()->put('cart',$cart);
+             
+              //dd($cart);
+          
        
-           return redirect()->action('homeController123@cart');
         }
         else
         {

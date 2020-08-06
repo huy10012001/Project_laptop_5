@@ -17,7 +17,7 @@
         $('#phone').text('SDT:'+ $("input[name=phone]").val());
         $('#add').text('DIA CHI :'+ $("input[name=address]").val());
         $('#update').hide();
-         $('#khach').show();
+        $('#khach').show();
     }
     function huy()
     {
@@ -74,7 +74,12 @@
                             if(data.status=="change")
                                 alert("giỏ hàng của bạn vừa thay đổi, xin vui lòng load lại trang trước khi thanh toán");
                             else
-                                location.href = "https://www.w3schools.com";
+                          {  
+                              alert('Bạn đã đặt hàng thành công');  
+                              setTimeout(function () {
+                             window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                              }, 3000); //will call the function after 2 secs.
+                            }
                         }
                     });
                 }
@@ -113,6 +118,8 @@
  </form>
  </td>         
  <td>
+<!-- Form giỏ hàng -->
+<!-- Nếu user đăng nhập -->
 @if(isset($orders))
  <section id="cart_items">
 		<div class="container-fluid">
@@ -164,8 +171,8 @@
 						       
                                 </td>
                             
-                               
-                            @endif
+                    <!-- end chi tiết giỏ hàng user-->         
+                     @endif
                         </tr>
                     @endforeach
 				</table>
@@ -191,15 +198,18 @@
             <!-- Button trigger modal -->
            <input type="hidden" name="id" value="{{Session::get('key')->id}}">
             <button type="button" class="btn btn-primary " onclick="tienhanh('{{$orders->id}}',)">Tiến hành đặt </button>
-<!-- end form đăng nhập cart-->
+
         </div>
         </div>
 
     </div>
  </td>  
- @endif     
- <!-- end nếu user đăng nhập-->
- @else
+ <!-- end form giỏ hàng của user-->
+@endif     
+
+ 
+ <!--Nếu user chưa đăng nhập truy cập trang order-->
+@else
 <script>
  alert("phiên làm việc hết hạn");
  setTimeout(function () {
@@ -209,6 +219,7 @@
 
  //window.location.href = "{{URL::to('/home')}}"
 </script>
-@endif
                    
  </tr></table>
+ 
+@endif

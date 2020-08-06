@@ -2,8 +2,10 @@
 <script>
       function deleteProduct(product_id)
  {
- 
-    $.get(
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+    {
+        $.get(
        " {{asset('admin/product/delete')}}",
        {
          product_id:product_id,
@@ -12,7 +14,8 @@
                location.reload();
            }
        }
-    );
+     );
+    }
  }
  
 </script>
@@ -76,9 +79,7 @@
                                 
                                 <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
                                 <td class="text-right">
-                                    <a class="btn btn-primary btn-sm" href="#">
-                                        <i class="fas fa-folder"></i> View
-                                    </a>
+                                   
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/product/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>

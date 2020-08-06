@@ -19,14 +19,15 @@ session_start();
     data: { product_id: product_id },
     datatype: 'json',
     success: function (data) {
-        if(data.status=="error")
+       
+       if(data.status=="error")
         {
             alert(data.message);
         }
-       
-        location.reload();
+      
+       location.reload();
 
-    },
+    }
   
     });
     /*$.get(
@@ -48,7 +49,7 @@ session_start();
 <div class="container">
     <!--tìm theo chi tiết sản phẩm trang home-->
 
-
+<div class="row">
 <div class="col-sm-3">
     <div class="left-sidebar">
         <h2>loại sản phẩm</h2>
@@ -143,7 +144,7 @@ session_start();
          
         <div class="single-products">
                 <div class="productinfo text-center">
-                    <img src="{{ url('fronend/images/slide1.jpg') }}" alt="" />
+                    <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
                     <h2>{{number_format($p->price)}}</h2>
                     <p>{{$p->name}}</p>
                     <a onclick="AddCart('{{$p->id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
@@ -177,5 +178,5 @@ session_start();
 
 
 </div>
-
+</div>
 @endsection

@@ -15,7 +15,9 @@ class AdminOrderController extends Controller
     public function view($id) {
         
         $p = Order::find($id);
-    
+        if(empty($p))
+        return abort('404');
+       
        return view('admin.order.view', ['p'=>$p]);
    }
     public function update($id,Request $request) 

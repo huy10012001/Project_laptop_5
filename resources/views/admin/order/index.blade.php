@@ -2,9 +2,11 @@
 <script>
       function deleteOrder(order_id)
  {  
-
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+    {
       
-    $.get(
+        $.get(
        " {{ asset('admin/order/delete')}}",
        {
            order_id:order_id,
@@ -15,6 +17,7 @@
            }
        }
     );
+    }
  }
  
 </script>

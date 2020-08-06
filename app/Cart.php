@@ -64,7 +64,7 @@ class Cart extends Model
   }
   public function update1($product,$qty)
   {
-     
+    
       $this->items[$product->id]['qty']=$qty;
       $this->items[$product->id]['amount']= $this->items[$product->id]['qty']* $this->items[$product->id]['price'];
       $sum=0;

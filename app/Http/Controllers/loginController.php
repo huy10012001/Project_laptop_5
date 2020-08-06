@@ -178,16 +178,7 @@ class loginController extends Controller
                 $order->save();
             }
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì xóa giỏ cũ, cập nhập lại tổng giá từ session cart và ngày order hiện tại
-            else
-            {
-                $order->delete();
-                $order=new Order();
-                $order->user_id=$user->id;
-                $order->total=$cart->totalPrice;
-                $order->status="1";
-                $order->date=Carbon::now();
-                $order->save();
-            }
+          
             //Kiểm tra trong giỏ hiện tại của user nếu có sản phẩm thì xóa đi để lấy dữ liệu từ session cart
             $order_product= Order_product::where([
                 'order_id'=>$order->id,
@@ -256,8 +247,8 @@ class loginController extends Controller
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
             else
             { 
-                $order->delete();
-                $order=new Order();
+                //$order->delete();
+                //$order=new Order();
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
