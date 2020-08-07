@@ -15,7 +15,7 @@ class homeController extends Controller
     public function order(Request $request){
 
         //$request->session()->flush();
-        $request->session()->forget('change');
+        //$request->session()->forget('change');
         $value=$request->session()->get('key');
      
         //check user da dang nhap neu chua quya lai login
@@ -24,9 +24,7 @@ class homeController extends Controller
          
           
            //lấy url trang trước
-        
-          
-           return view('user.order');
+            return view('user.order');
         }
         else
         {

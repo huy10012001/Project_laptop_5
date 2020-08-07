@@ -73,40 +73,99 @@ class UserCartcontroller extends Controller
     public function getOrder(Request $request)
     { 
         //Nếu user thay đổi giỏ hàng thì return status ở json
-        if($request->session()->has('change'))
-        {
-            return Response::json(array(
-                'status'=>'change',
-              
-               )); 
-        }
         
-        else
-        {
             $name=$request->name;
             $phone=$request->phone;
             $add=$request->address;
+            $product_update=$request->product_update;
             if($name==null || $phone==null||$add==null)
             {
-            return abort('404');
-             }
+                return abort('404');
+            }
             $user_id= $request->session()->get('key');
+            
             //Tìm order đang đặt của user hiện tại
+         
             $orders=Order::where(['user_id'=>$user_id->id,'status'=>'0'])->first();
+           
+            if(empty($orders))
+            {
+                return Response::json(array(
+                        'status'=>'giỏ hàng của bạn trống',
+                      
+               )); 
+            }
             //chuyển trạng thái sang đã đặt hàng
-            $orders->name=$name;
-            $orders->address=$add;
-            $orders->phone=$phone;
-            $orders->status="1";
-            $orders->date=Carbon::now();
-            $orders->save();
-            //xóa   order_product đã hết hàng trong giỏ hàng
-            order_product::withTrashed()->where(
-            [
-            'order_id'=>$orders->id,
-            ])->whereNotNull('deleted_at')->
-            forceDelete();
-        }
+            $orders_product=array();
+            if(!empty($orders))
+           {
+                
+                foreach($orders->product as $products)
+                {
+                    if(!($products->trashed()))
+                    array_push( $orders_product,$products->pivot->updated_at->toDateTimeString());
+                }
+                if(!empty($orders_product))
+                {   
+                   if($product_update=="")
+                   {
+                    return Response::json(array(
+                        'status'=> 'thay đổi'
+                        )); 
+                   }
+                    $a=array_diff($product_update,$orders_product);
+                    if(!empty($a))
+                        return Response::json(array(
+                        'status'=> 'thay đổi'
+                    )); 
+                    
+                }
+                if(empty($orders_product))
+                {
+                    if($product_update!="")
+                   { 
+                        return Response::json(array(
+                        'status'=>   'thay đổi',
+                        )); 
+                    }
+                    else
+                    {
+                        return Response::json(array(
+                            'status'=>   'giỏ hàng của bạn trống',
+                            )); 
+                    }
+                }
+               
+                $orders->name=$name;
+                $orders->address=$add;
+                $orders->phone=$phone;
+                $orders->status="1";
+                $orders->date=Carbon::now();
+                $orders->save();
+                
+                //xóa   order_product đã hết hàng trong giỏ hàng
+                order_product::withTrashed()->where(
+                [
+               'order_id'=>$orders->id,
+                ])->whereNotNull('deleted_at')->
+                forceDelete();
+            
+                
+            }
+            
+          
+            
+           
+   
+            /* if(!empty(array_diff($product_update,$orders_product)))
+            return Response::json(array(
+            'status'=>   'thay đổi',
+  
+            ));*/
+         
+          
+            
+         
         
     }
     /*   public function getUpdateCart(Request $request) 
@@ -203,7 +262,7 @@ class UserCartcontroller extends Controller
     }*/
     public function getUpdateCart(Request $request) 
     {
-        $request->session()->put('change','update');
+        
         $order_id=$request->order_id;
         $product_id=$request->product_id;
         $c=$request->qty;
@@ -218,6 +277,7 @@ class UserCartcontroller extends Controller
             'soluong'=>'1',
         )); 
         }
+       // $request->session()->put('change','update');
         if($product_id=="" )
                 return abort('404');
        //khi giỏ hàng trống và user chưa đăng nhập hoặc khi vừa đăng nhập tab khác
@@ -279,7 +339,7 @@ class UserCartcontroller extends Controller
             }
           
             //khi đăng nhập ở tab khác rồi đăng xuất và đăng nhập lại
-            
+            //Trường hợp thứ 8
             if(empty($order_id))
             {
                
@@ -296,15 +356,23 @@ class UserCartcontroller extends Controller
             {
                 $old_order_id="";
             }
+            //Hết trường hợp 8
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
             ])->first();
             //Khi trống sản phẩm 
+                
             if(empty($p))
                 return Response::json(array(
                 'status'=>'no5',
+            ));
+            $order_status=Order::find($order_id)->status;
+            //Trường hợp 9 khi đã đặt hàng và tab hiện tại trong giỏ
+            if( $order_status!=0)
+            return Response::json(array(
+                'status'=>'no9'
             ));
             //$time=Carbon::createFromTimestampUTC($p->created_at)->secondsSinceMidnight();
             if($old_order_id)
@@ -344,7 +412,7 @@ class UserCartcontroller extends Controller
     
     public function delete(Request $request) {
         
-        $request->session()->put('change','update');
+        //$request->session()->put('change','update');
         $product_id=$request->product_id; 
         $order_id=$request->order_id;
         $time_create=$request->timecreate;
@@ -433,7 +501,7 @@ class UserCartcontroller extends Controller
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
-             
+               
             ])->first();
              //Khi trống sản phẩm 
              
@@ -441,13 +509,13 @@ class UserCartcontroller extends Controller
                 return Response::json(array(
                 'status'=>'no5',
                 ));
-            //Khi thời gian order khác và user đăng nhập
-           /* if($time_create!=$p->created_at)
-                return Response::json(array(
-                     'status'=>$time_create
-                )); */
-            //delete
-                //Trừ đi tổng giá đơn hàng order vừa xóa nếu order đó chưa hết hàng
+            $order_status=Order::find($order_id)->status;
+            //Trường hợp 9 khi đã đặt hàng và tab hiện tại trong giỏ
+             if( $order_status!=0)
+            return Response::json(array(
+                    'status'=>'no9'
+             ));
+          
             if($old_order_id)
             { 
                 if($p->created_at->timestamp!=$time_create )
@@ -463,6 +531,7 @@ class UserCartcontroller extends Controller
                 ));
             }
             $c=Order::find($order_id);
+            //sản phẩm chưa hết hàng hoặc còn hoạt động thì trừ đi giá sản phẩm đó
             if(!($p->trashed()))
             {   
                 $c->total=$c->total-$p->amount;
@@ -487,7 +556,7 @@ class UserCartcontroller extends Controller
     }
     public function addCart(Request $request){
        
-        $request->session()->put('change','update');
+       //  $request->session()->put('change','update');
         $id=$request->product_id;
         if($id=="")
             return abort('404');

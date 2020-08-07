@@ -26,164 +26,6 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head><!--/head-->
 
-<script type="text/javascript">
-//load lại trang khi user bấm back
-if(performance.navigation.type == 2){
-   location.reload(true);
-}
-//Ha2m show lai gio hang khi loadlai
-$(document).ready(function(){
-	if (Cookies.get('modal')=="showed") {
-    // show dialog...
-	$("#cartModal").modal("show");
-}
-
-
-$("#cartModal").on('show.bs.modal', function(){
-
-	Cookies.set('modal', 'showed');
-	//$.cookie('modal', 'showed');
-	//$.cookie("test", 1);
-});
-
-  $("#cartModal").on('hide.bs.modal', function(){
-	//$.removeCookie('showDialog');
-//	$.removeCookie("test");
-	//$.removeCookie('modal');
-	Cookies.remove('modal');
-	location.reload();
-  });
-});
-	//logOut
-	function logOut()
-	{
-		$.ajax({
-				type:  "GET",
-      			url:	 " {{ asset('/logout')}}",
-      		 	data:{logout:'true'},
-				datatype: 'json',
-				success:function(data)
-           		{
-				 location.reload();
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           		}
-       		}
-    	);
-	}
-
-	function updateCart(qty,product_id,order_id,timecreate)
-    {
-
-		$.ajax({
-				type:  "GET",
-      			url:	 " {{ asset('cart/update')}}",
-      		 	data:{qty:qty,order_id:order_id,product_id:product_id,timecreate:timecreate},
-				datatype: 'json',
-				success:function(data)
-           		{
-
-					if(data.status)
-					{
-					$("#total").html("không tìm thấy item");
-			 		}
-
-					else if(qty!="" && qty >0 && qty<=10)
-       				{
-					//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
-					var total=0;
-					$("tbody").find("tr").each(function() {
-					var qty = $(this).find('td .input-qty').val();
-					var price= $(this).find('td.price').text();
-					if(!!qty)
-					{
-						$(this).find('td.amount').html(qty*price);
-						total+=qty*price;
-						$('#total').html(total);
-					}
- 			 	});
-			}
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           		}
-       		}
-    	);
-
-
-    }
-	function updateModal(qty)
-	{
-		//Nếu nhập bé hơn 1 thì mặc định là 1
-		if($(qty).val()<1)
-		{
-				var error="số lượng phải từ 1 tới 10 và không được trống";
-				$(qty).val(1);
-
-		}
-		else if($(qty).val()>10)
-		{
-				var error="số lượng phải từ 1 tới 10 và không được trống";
-				$(qty).val(10);
-		}
-	}
-
-		 /*	$.ajax({
-    		type:  "GET",
-    	url: "{{ asset('Addcart')}}",
-
-    data: { product_id: product_id },
-    datatype: 'json',
-    success: function (data) {
-        if(data.status=="error")
-        {
-            alert(data.message);
-        }
-
-        location.reload();
-
-    },
-
-    });*/
-
-	function deleteCartModal(product_id,order_id,emn,timecreate)
- 	{
-
-		$.ajax({
-			type:  "GET",//type là get
-      		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
-      		data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
-			datatype: 'json',
-         	success:function(data)
-           {
-			 if(data.status)
-			 {
-				$("#total").html("không tìm thấy item");
-			 }
-			 else
-			 {
-				$("#total").html(data.total);//dữ liệu từ response
-				$(emn).closest( "tr" ).hide();
-			 }
-
-
-
-           }
-       }
-    	);
-
- 	}
-
-</script>
-
-<style>
-
-.img-fluid {
-    width: 100px;
-    height: 70px;
-}
-</style>
 
 <body>
 
@@ -193,7 +35,10 @@ $("#cartModal").on('show.bs.modal', function(){
 				<div class="row">
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-
+//load lại trang khi user bấm back
+if(performance.navigation.type == 2){
+   location.reload(true);
+}
     function Update()
 
     {
@@ -216,17 +61,29 @@ $("#cartModal").on('show.bs.modal', function(){
         $('#update').hide();
         $('#khach').show();
     }
-    function tienhanh(orderId)
+    function tienhanh()
     {
+       
+        var product_update =[];
+        $(".product_update").each(function() {
+        product_update.push($(this).val());
+        });
 
+        var user_id =$("input[name=id]").val();
         $.ajax({
             type:  "GET",
       		url:	 " {{ asset('/isDangNhap')}}",
-      		data: { check:"true",order_id:orderId,status:"login" },
+      		data: { check:"true",user_id:user_id,status:"login" },
 			datatype: 'json',
+            error:function(data)
+            {
+                alert('lỗi rồi bạn');
+            }
+            ,
 			success:function(data)
            	{
-
+               
+              
                 //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
                 if(data.status=="phiên kết thúc")
                 {
@@ -235,7 +92,7 @@ $("#cartModal").on('show.bs.modal', function(){
                     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                     }, 1000); //will call the function after 2 secs.
                 }
-                //khi thoát đăng nhập
+                //khi thoát đăng phienhập
                 else if(data.status=="thoát đăng nhập")
                 {
                     alert("phiên làm việc hết hạn");
@@ -249,22 +106,34 @@ $("#cartModal").on('show.bs.modal', function(){
                     alert("bạn chưa cập nhập xong");
                 }
                 //Order
-                else
+                else if(data.status=="đăng nhập")
                 {
                     $name= $("input[name=name]").val();
                     $phone=$("input[name=phone]").val();
                     $add=$("input[name=address]").val();
+
 		            $.ajax({
 			            type:  "GET",//type là get
       		            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
-      		            data:{ name:$name,phone:$phone,address:$add},//pass tham số vào key
-			            datatype: 'json',
+      		            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
+			          
+                        datatype: 'json',
+                        error:function(data)
+                        {
+                            alert('lỗi rồi')
+                        },
          	            success:function(data)
                         {
+						
+                          
                             //nếu giỏ hàng thay đổi trong lúc order
-                            if(data.status=="change")
-                                alert("giỏ hàng của bạn vừa thay đổi, xin vui lòng load lại trang trước khi thanh toán");
-                            else
+                            if(data.status=="thay đổi")
+                                alert("Bạn vừa thay đổi giỏ hàng, vui lòng load lại trang");
+						   else if(data.status=="giỏ hàng của bạn trống")
+                                alert("giỏ hàng của bạn trống");
+
+                          
+                            else 
                           {
                               alert('Bạn đã đặt hàng thành công');
                               setTimeout(function () {
@@ -286,16 +155,29 @@ $("#cartModal").on('show.bs.modal', function(){
 <td>
 <!-- Form giỏ hàng -->
 <!-- Nếu user đăng nhập -->
-@if(isset($orders))
+
  <section id="cart_items">
 		<div class="container">
             <div class="row">
                 <div class="col-sm-12">
 			<div class="breadcrumbs">
 				<ol class="breadcrumb">
-				 <h3>2.Kiểm tra Thông tin và thanh toán</h3>
-				</ol>
-			</div>
+                 <h3>2.Kiểm tra Thông tin và thanh toán</h3>
+                 @if(isset($orders))
+                     @if($orders->total==0)
+                     <div class="alert alert-danger">
+                     <strong>Giỏ hàng của bạn đang trống!</strong> 
+                    </div>
+                     @endif
+                @else
+                    <div class="alert alert-danger">
+                     <strong>Giỏ hàng của bạn đang trống!</strong> 
+                     </div>
+                @endif
+                </ol>
+                
+            </div>
+          
 			<div class="table-responsive cart_info" style="margin-top: -40px;">
 				<table class="table table-condensed" >
 					<thead>
@@ -307,7 +189,9 @@ $("#cartModal").on('show.bs.modal', function(){
 							<td class="total">tổng tiền</td>
 							<td></td>
 						</tr>
-					</thead>
+                    </thead>
+                    
+					@if(isset($orders))
 					@foreach($orders->product as $p)
                     @if(!($p->trashed()))
 						<tr>
@@ -320,6 +204,7 @@ $("#cartModal").on('show.bs.modal', function(){
                             <td class="cart_price">
 						    <p> {{$p->pivot->price }}</p>
                             </td>
+                            <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
                             <!--Trường hợp còn hàng(khác trashed)-->
 
                             <td class="">
@@ -339,7 +224,9 @@ $("#cartModal").on('show.bs.modal', function(){
                     <!-- end chi tiết giỏ hàng user-->
                      @endif
                         </tr>
-                    @endforeach
+					@endforeach
+					@endif
+					
 				</table>
             </div>
         </div>
@@ -359,8 +246,8 @@ $("#cartModal").on('show.bs.modal', function(){
         <div class="col-sm-8" style="margin-top: 80px;">
     <div id="dialog" hidden>Your non-modal dialog</div>
 <form  id="khach" action="">
-   Họ và tên: <input   value="{{Session::get('key')->name}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
-    Số điện thoại<input   value=" {{Session::get('key')->phone}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
+   Họ và tên: <input   value="{{Session::get('key')->name}}"   type="text" class="form-control" name="name" required placeholder="Nhập số điện thoại" disabled><br>
+    Số điện thoại<input   value=" {{Session::get('key')->phone}}"   type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại" disabled><br>
 
     địa chỉ:<input   value="{{Session::get('key')->address}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
@@ -389,23 +276,44 @@ $("#cartModal").on('show.bs.modal', function(){
     <table class="table table-striped" style="margin-top:110px;" >
         <tr>
             <td>tạm tính: </td>
-            <td>{{ $orders->total  }}vnd
-
-            </td>
+			@if(isset($orders) ) 
+			<td>{{ $orders->total }}vnd
+			</td>
+			@else
+			<td>0 vnd
+			</td>
+			@endif
 
         </tr>
 
-    </table >
+	</table >
+	@if(isset($orders)) 
     <table class="table table-striped">
      <tr>
-        <td> Thành tiền:</td>
-        <td>{{ $orders->total  }}vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+		<td> Thành tiền:</td>
+	
+        <td>{{ $orders->total  }}
+		vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+		
     </tr>
     </table>
     <!-- Button trigger modal -->
    <input type="hidden" name="id" value="{{Session::get('key')->id}}">
-    <button type="button" class="btn btn-primary " onclick="tienhanh('{{$orders->id}}',)">Tiến hành đặt </button>
-
+    <button type="button" class="btn btn-primary " onclick="tienhanh()">Tiến hành đặt </button>
+	@else
+	<table class="table table-striped">
+     <tr>
+		<td> Thành tiền:</td>
+	
+        <td>0 vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+		
+    </tr>
+    </table>
+    <!-- Button trigger modal -->
+   <input type="hidden" name="id" value="{{Session::get('key')->id}}">
+    <button type="button" class="btn btn-primary " onclick="tienhanh()">Tiến hành đặt </button>
+	@endif
+	
 </div>
 
 </div>
@@ -417,9 +325,10 @@ $("#cartModal").on('show.bs.modal', function(){
 
 
 </section>
-@endif
+
+
  <!--Nếu user chưa đăng nhập truy cập trang order-->
- @else
+ @else 
 <script>
  alert("phiên làm việc hết hạn");
  setTimeout(function () {

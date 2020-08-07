@@ -10,24 +10,39 @@
 
     function dat(login)
     {
-        
+        var user_id =$("input[name=id]").val();
         $.ajax({
                  type:  "GET",
       		    url:	 " {{ asset('/isDangNhap')}}",
-      		    data: { check:"true" ,status:login},
+      		    data: { check:"true" ,user_id:user_id,status:login},
 			    datatype: 'json',
 			    success:function(data)
            	    {
-                      
-                    if(data.status=="đăng nhập")
+                   
+                 
+                  //đăng nhập user khác
+                     if(data.status=="phiên kết thúc")
+                    {
+                        alert("phiên làm việc không đúng hoặc hết hạn, mời bạn đăng nhập lại")
+                        window.location.href = "{{ asset('/home')}}"; 
+                    }
+                    //Khi giỏ hàng trống
+                    else if(data.status=="giỏ hàng bạn đang trống")
+                    {
+                        alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
+                        location.reload();
+                    }
+                    else if(data.status=="đăng nhập")
                     {
                         window.location.href = "{{ asset('/order')}}"; 
+                      
                     }
-                    else
+                    //Thoát đăng nhập tab khác
+                    else if(data.status=="thoát đăng nhập")
                     {
-                        
                         $('#myModal').modal('show');
                     }
+                   
                  }
         	    });
            
@@ -55,8 +70,13 @@
       		    data:$('#login').serialize(),
 			    datatype: 'json',
 			    success:function(data)
-           	    {
-                    if(data.status=="Thành công")
+           	    {   
+                    if(data.status=="giỏ hàng bạn đang trống")
+                    {
+                        alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
+                        location.reload();
+                    }
+                    else if(data.status=="Thành công")
                     {
                        window.location.href = "{{asset('/order')}}"; 
                     }
@@ -117,8 +137,8 @@
 			datatype: 'json',
          	success:function(data)
            {	
-
-                alert(data.status);
+               
+              
                 if(data.soluong=="1")
                 {
                      alert("số lượng từ 1 tới 10 và ko được trống");
@@ -171,6 +191,9 @@
 @section( 'cart_detail')
 <!-- Phần sửa lại  nếu có session -->
 <div id="no"></div>
+@if(Session::has('key'))
+<input type="hidden" name="id" value="{{Session::get('key')->id}}">
+@endif
 @if(Session::has('cart'))
 
 	<section id="cart_items">

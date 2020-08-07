@@ -49,26 +49,46 @@ class loginController extends Controller
                 'status'=>'thoát đăng nhập'
                )); 
         }
+        
         //order id tab hiện tại
-        $order_id=$request->order_id;
+        $user_id=$request->user_id;
         //lấy order của user hiện tại
-        $current_order=Order::where(['user_id'=>$a->id,'status'=>'0'])->first()->id;
+       // $current_order=Order::where(['user_id'=>$a->id,'status'=>'0'])->first()->id;
        
         // so sánh xem user có vừa đăng nhập tài khoản khác không
-        if(!empty($order_id) && $order_id !=$current_order)
+        if($a->id!=$user_id && !empty($user_id))
         {
             return Response::json(array(
                 'status'=> 'phiên kết thúc'
                )); 
         }
         $status=$request->status;   
-        
+        $orders=Order::where(['user_id'=>$a->id,'status'=>'0'])->first();
+        if(empty($orders))
+         return Response::json(array(
+            'status'=> 'giỏ hàng bạn đang trống'
+           )); 
+        else if($orders->total==0)
+        {
+            return Response::json(array(
+                'status'=> 'giỏ hàng bạn đang trống'
+               )); 
+        }
         if(!empty($a) &&!empty($status))
         {
             return Response::json(array(
                 'status'=> 'đăng nhập'
                )); 
         }
+       
+        if(!empty($a) &&empty($status))
+        {
+            return Response::json(array(
+                'status'=> 'Phiên kết thúc'
+               )); 
+        }
+        
+        
      
     }
     public function logout(Request $request)
@@ -100,7 +120,7 @@ class loginController extends Controller
 
         if($request->session()->get('cart'))
         {
-             //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
+             //Trường hợp user mua lần đầu hoặc user order mới thì tạo order mới
             $cart=new Cart(session()->get('cart'));//cart trong session
             if(empty($order))
             {
@@ -111,11 +131,10 @@ class loginController extends Controller
                 $order->date=Carbon::now();
                 $order->save();
             }
-            //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
             else
             {
-                $order->delete();
-                $order=new Order();
+                //$order->delete();
+                //$order=new Order();
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
@@ -160,7 +179,7 @@ class loginController extends Controller
         first();    
         if(!empty($user))
        {
-        
+     
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
 
@@ -223,13 +242,25 @@ class loginController extends Controller
 
         $hash = $request->input('email');
         $Password=$request->input('password');
-       $user= User::whereRaw("BINARY `password`= ?", [$Password])->
+        $user= User::whereRaw("BINARY `password`= ?", [$Password])->
         whereRaw("BINARY `email`= ?", [$hash])->
         first();    
         if(!empty($user))
        {
+      
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
+          
+        if(empty($order))
+         return Response::json(array(
+            'status'=> 'giỏ hàng bạn đang trống'
+           )); 
+        else if($order->total==0)
+        {
+            return Response::json(array(
+                'status'=> 'giỏ hàng bạn đang trống'
+               )); 
+        }   
         
          if($request->session()->get('cart'))
          {
