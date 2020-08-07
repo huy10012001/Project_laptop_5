@@ -83,7 +83,7 @@ if(performance.navigation.type == 2){
 			success:function(data)
            	{
                
-              
+             
                 //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
                 if(data.status=="phiên kết thúc")
                 {
@@ -106,7 +106,8 @@ if(performance.navigation.type == 2){
                     alert("bạn chưa cập nhập xong");
                 }
                 //Order
-                else if(data.status=="đăng nhập")
+             
+                else 
                 {
                     $name= $("input[name=name]").val();
                     $phone=$("input[name=phone]").val();
@@ -120,12 +121,13 @@ if(performance.navigation.type == 2){
                         datatype: 'json',
                         error:function(data)
                         {
-                            alert('lỗi rồi')
+                            alert('lỗi rồi');
+                            
                         },
          	            success:function(data)
                         {
-						
                           
+                        
                             //nếu giỏ hàng thay đổi trong lúc order
                             if(data.status=="thay đổi")
                                 alert("Bạn vừa thay đổi giỏ hàng, vui lòng load lại trang");

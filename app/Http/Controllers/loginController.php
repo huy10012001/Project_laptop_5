@@ -116,36 +116,19 @@ class loginController extends Controller
         $user->address=$address;
         $user->save();
         $request->session()->put('key',$user);
-        $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
+       
 
         if($request->session()->get('cart'))
         {
              //Trường hợp user mua lần đầu hoặc user order mới thì tạo order mới
             $cart=new Cart(session()->get('cart'));//cart trong session
-            if(empty($order))
-            {
+            
                 $order=new Order();//cart mới
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
                 $order->date=Carbon::now();
-                $order->save();
-            }
-            else
-            {
-                //$order->delete();
-                //$order=new Order();
-                $order->user_id=$user->id;
-                $order->total=$cart->totalPrice;
-                $order->status="0";
-                $order->date=Carbon::now();
-                $order->save();
-            }
-            //Kiểm tra trong giỏ hiện tại của user nếu có sản phẩm thì xóa đi để lấy dữ liệu từ session cart
-            $order_product= Order_product::where([
-                'order_id'=>$order->id,
-            ])->forceDelete();
-           
+            
             foreach($cart->items as $item)
             {   
               
@@ -162,7 +145,13 @@ class loginController extends Controller
 
             $request->session()->forget('cart');
         }
-         
+        else
+        {
+            return Response::json(array(
+                'status'=>'Giỏ hàng trống',
+              
+            )); 
+        }
          return Response::json(array(
             'status'=>'Thành công',
           

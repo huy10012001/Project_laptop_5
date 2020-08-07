@@ -73,7 +73,7 @@ class UserCartcontroller extends Controller
     public function getOrder(Request $request)
     { 
         //Nếu user thay đổi giỏ hàng thì return status ở json
-        
+           
             $name=$request->name;
             $phone=$request->phone;
             $add=$request->address;
@@ -95,18 +95,24 @@ class UserCartcontroller extends Controller
                       
                )); 
             }
+           
             //chuyển trạng thái sang đã đặt hàng
             $orders_product=array();
             if(!empty($orders))
-           {
+           { 
+               
                 
                 foreach($orders->product as $products)
                 {
                     if(!($products->trashed()))
-                    array_push( $orders_product,$products->pivot->updated_at->toDateTimeString());
+                  
+                    array_push($orders_product,$products->pivot->updated_at->toDateTimeString());
+                
                 }
+                
                 if(!empty($orders_product))
                 {   
+                    
                    if($product_update=="")
                    {
                     return Response::json(array(
@@ -122,6 +128,7 @@ class UserCartcontroller extends Controller
                 }
                 if(empty($orders_product))
                 {
+                    
                     if($product_update!="")
                    { 
                         return Response::json(array(
