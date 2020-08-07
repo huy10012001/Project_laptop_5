@@ -48,10 +48,12 @@ if(performance.navigation.type == 2){
     }
     function getUpdate()
     {
+        
         //khi bấm xác nhận sẽ lấy value từ input form update thay thế cho text form khach
-        $('#ten').text('Họ và tên'+ $("input[name=name]").val());
-        $('#phone').text('SDT:'+ $("input[name=phone]").val());
-        $('#add').text('DIA CHI :'+ $("input[name=address]").val());
+        $("#khach input[name=name]").val($("#update input[name=name]").val()) ;
+        $("#khach input[name=phone]").val($("#update input[name=phone]").val()) ;
+        $("#khach input[name=address]").val($("#update input[name=address]").val()) ;
+       
         $('#update').hide();
         $('#khach').show();
     }
@@ -83,7 +85,7 @@ if(performance.navigation.type == 2){
 			success:function(data)
            	{
                
-             
+              
                 //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
                 if(data.status=="phiên kết thúc")
                 {
@@ -106,14 +108,16 @@ if(performance.navigation.type == 2){
                     alert("bạn chưa cập nhập xong");
                 }
                 //Order
-             
+                
                 else 
                 {
-                    $name= $("input[name=name]").val();
-                    $phone=$("input[name=phone]").val();
-                    $add=$("input[name=address]").val();
-
+                    
+                    $name= $("#khach  input[name=name]").val();
+                    $phone=$("#khach input[name=phone]").val();
+                    $add=$("#khach input[name=address]").val();
+                 
 		            $.ajax({
+
 			            type:  "GET",//type là get
       		            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
       		            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
@@ -248,14 +252,12 @@ if(performance.navigation.type == 2){
         <div class="col-sm-8" style="margin-top: 80px;">
     <div id="dialog" hidden>Your non-modal dialog</div>
 <form  id="khach" action="">
-  <h5  id="ten" style="color: rgb(12, 12, 12);" >Họ và tên: {{Session::get('key')->name}}</h5>
-    <h5  id="phone"style="color: rgb(12, 12, 12);" >SĐT:  {{Session::get('key')->phone}}</h5>
+   Họ và tên: <input   value="{{Session::get('key')->name}}"   type="text" class="form-control" name="name" required placeholder="Nhập số điện thoại" disabled><br>
+    Số điện thoại<input   value=" {{Session::get('key')->phone}}"   type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại" disabled><br>
 
-    <h5  id="add"  style="color: rgb(12, 12, 12);" >Địa chỉ: {{Session::get('key')->address}}</h5> 
+    địa chỉ:<input   value="{{Session::get('key')->address}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
-       
      
-      
 
                 <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 
@@ -386,12 +388,15 @@ if(performance.navigation.type == 2){
     <div class="row">
         <div class="col-sm-8" style="margin-top: 80px;">
     <div id="dialog" hidden>Your non-modal dialog</div>
-<form  id="khach"  action="">
-   Họ và tên:  
-    Số điện thoại:
+<form  id="khach" action="">
+   Họ và tên: <input    type="text" class="form-control" name="name" required placeholder="Nhập số điện thoại" disabled><br>
+    Số điện thoại<input    type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại" disabled><br>
 
-    địa chỉ:
-    <button id="updateX" type="button"  class="btn btn-primary ">Sửa</button>
+    địa chỉ:<input    type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
+
+     
+
+                <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 
  </form>
 
