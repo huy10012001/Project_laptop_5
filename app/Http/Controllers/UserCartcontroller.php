@@ -248,7 +248,7 @@ class UserCartcontroller extends Controller
             if(!isset($cart->items[$product_id])||$cart->items[$product_id]['status']==0)
             return Response::json(array(
                 'status'=>'no3',
-           
+   
             )); 
             
             if($time_create!=$cart->items[$product_id]['time_at'])
@@ -266,18 +266,31 @@ class UserCartcontroller extends Controller
         { 
             
             $a= $request->session()->get('key')->id;
+            
             //Lấy id order mới hoặc id order của user khác
-            $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
-            //Nếu order mới cập nhập hoặc user khác đăng nhập
-            if($order_id!=$new_order->id &&!empty($order_id))
-            return Response::json(array(
-            'status'=>'no4' ));
+            if(!empty($order_id))
+            
+            {
+                $user_id=Order::where(['id'=>$order_id])->first()->user_id;
+                //Nếu order mới cập nhập hoặc đăng nhập với id khác
+                if($user_id!=$a )
+                return Response::json(array(
+                'status'=>'no4' ));
+            }
+          
             //khi đăng nhập ở tab khác rồi đăng xuất và đăng nhập lại
             
             if(empty($order_id))
             {
-                $order_id=Order::where(['user_id'=>$a,'status'=>'0'])->first()->id;
+               
+                $order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+                if(!empty($order))
+                {
+                    $order_id= $order->id;
+                    
+                }
                 $old_order_id="have";
+                
             }
             else
             {
@@ -347,6 +360,7 @@ class UserCartcontroller extends Controller
            
             )); 
         }
+        
         //khi đăng xuất ở tab khác và tab hiện tại chưa đăng xuất
         if(!empty($order_id)  && !$request->session()->has('key'))
         {
@@ -385,15 +399,30 @@ class UserCartcontroller extends Controller
             
             $a=  $request->session()->get('key')->id;
             //Lấy id order mới hoặc id order của user khác
-            $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
-            //Nếu order mới cập nhập hoặc đăng nhập với id khác
-            if($order_id!=$new_order->id &&!empty($order_id))
-            return Response::json(array(
-            'status'=>'no4' ));
+           // $new_order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+          
+           
+           
+           if(!empty($order_id))
+            {
+                
+               $user_id=Order::where(['id'=>$order_id])->first()->user_id;
+               //Nếu order mới cập nhập hoặc đăng nhập với id khác
+               if($user_id!=$a )
+               return Response::json(array(
+               'status'=>'no4' ));
+               
+            }
+            
             //Khi sản phẩm cũ bị trống
             if(empty($order_id))
             {
-                $order_id=Order::where(['user_id'=>$a,'status'=>'0'])->first()->id;
+                $order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+                if(!empty($order))
+                {
+                    $order_id= $order->id;
+                    
+                }
                 $old_order_id="have";
             }
             else

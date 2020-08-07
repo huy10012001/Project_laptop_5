@@ -58,7 +58,7 @@
            	    {
                     if(data.status=="Thành công")
                     {
-                       window.location.href = "http://stackoverflow.com"; 
+                       window.location.href = "{{asset('/order')}}"; 
                     }
                     else
                     $("#dangnhap").html(data.status)
@@ -118,8 +118,8 @@
          	success:function(data)
            {	
 
-             
-              if(data.soluong=="1")
+                alert(data.status);
+                if(data.soluong=="1")
                 {
                      alert("số lượng từ 1 tới 10 và ko được trống");
                 }
@@ -153,7 +153,6 @@
            {	
              
           
-           
             if(data.status)
               {
                alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
@@ -163,7 +162,6 @@
               {
                 location.reload();
               }
-			 
            }
        }
     	);
