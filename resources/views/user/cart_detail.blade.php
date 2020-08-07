@@ -16,10 +16,15 @@
       		    url:	 " {{ asset('/isDangNhap')}}",
       		    data: { check:"true" ,user_id:user_id,status:login},
 			    datatype: 'json',
+                error:function(data)
+                {
+                    alert('có lỗi')
+                }
+                ,
 			    success:function(data)
            	    {
                    
-                 
+                   
                   //đăng nhập user khác
                      if(data.status=="phiên kết thúc")
                     {
@@ -27,11 +32,11 @@
                         window.location.href = "{{ asset('/home')}}"; 
                     }
                     //Khi giỏ hàng trống
-                    else if(data.status=="giỏ hàng bạn đang trống")
+                   /* else if(data.status=="giỏ hàng bạn đang trống")
                     {
                         alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
                         location.reload();
-                    }
+                    }*/
                     else if(data.status=="đăng nhập")
                     {
                         window.location.href = "{{ asset('/order')}}"; 
@@ -71,12 +76,12 @@
 			    datatype: 'json',
 			    success:function(data)
            	    {   
-                    if(data.status=="giỏ hàng bạn đang trống")
+                   /* if(data.status=="giỏ hàng bạn đang trống")
                     {
                         alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
                         location.reload();
-                    }
-                    else if(data.status=="Thành công")
+                    }*/
+                    if(data.status=="Thành công")
                     {
                        window.location.href = "{{asset('/order')}}"; 
                     }
@@ -191,6 +196,9 @@
 @section( 'cart_detail')
 <!-- Phần sửa lại  nếu có session -->
 <div id="no"></div>
+
+
+
 @if(Session::has('key'))
 <input type="hidden" name="id" value="{{Session::get('key')->id}}">
 @endif
@@ -391,11 +399,8 @@ $('input.input-qty').each(function() {
 
     </section> <!--/#cart_items-->
 <!--Trường hợp user đã đăng nhập thao tác với datbase-->
-@elseif(isset($orders))
-@if(Session::has('qty'))
-    {{Session::get('qty')}}
-    {{ Session::forget('qty')}}
-@endif
+@elseif(isset($orders) &&  $orders->total >0  )
+
 	<section id="cart_items">
 		<div class="container-fluid">
             <div class="row">
@@ -585,6 +590,18 @@ $('input.input-qty').each(function() {
 //]]></script>
 
     </section> <!--/#cart_items-->
+@else
+
+<input type="text" class="form-control" id="validationDefault03" required disabled value="giỏ hàng trống vui lòng thực hiện lại">
+<h3>Giỏ Hàng </h3><p>(0 sản phẩm)</p>
+    <div class="container" style="background:rgb(219, 242, 248);" >
+        <img src="https://salt.tikicdn.com/desktop/img/mascot@2x.png" alt="" class="empty__img" style="width:250px; height:250px; margin-left:400px;margin-top: 40px;" ><br>
+        <p style="text-align: center;"><h6  style="text-align: center;">Không có sản phẩm nào trong giỏ hàng của bạn.</h6></p><br>
+        <button type="button" onclick=""  class="btn btn-primary" style="margin-left: 500px;"><a href="{{ asset('/home')}}" style="background:none; color:black; ">Tiếp Tục mua sắm</a></button>
+        <div class="clear" style="width:1000px;height:50px;"></div>
+
+    </div>
+</br>
 @endif
 @endsection
 

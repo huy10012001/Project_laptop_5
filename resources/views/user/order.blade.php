@@ -253,9 +253,6 @@ if(performance.navigation.type == 2){
 
     địa chỉ:<input   value="{{Session::get('key')->address}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
-       <h5  id="ten" style="color: rgb(12, 12, 12);" >Họ và tên:{{Session::get('key')->name}}</h5>
-      <h5  id="phone"style="color: rgb(12, 12, 12);" >SĐT: {{Session::get('key')->phone}}</h5>
-       <h5  id="add"  style="color: rgb(12, 12, 12);" >Địa chỉ:{{Session::get('key')->address}}</h5> 
 
                 <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 
@@ -386,15 +383,12 @@ if(performance.navigation.type == 2){
     <div class="row">
         <div class="col-sm-8" style="margin-top: 80px;">
     <div id="dialog" hidden>Your non-modal dialog</div>
-<form  id="khach" action="">
+<form  id="khach"  action="">
    Họ và tên: <input    type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
     Số điện thoại<input    type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
     địa chỉ:<input    type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
-       <h5  id="ten" style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
-      <h5  id="phone"style="color: rgb(12, 12, 12);" >SĐT: </h5>
-       <h5  id="add"  style="color: rgb(12, 12, 12);" >Địa chỉ:</h5> 
 
                 <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 

@@ -63,7 +63,7 @@ class loginController extends Controller
                )); 
         }
         $status=$request->status;   
-        $orders=Order::where(['user_id'=>$a->id,'status'=>'0'])->first();
+       /* $orders=Order::where(['user_id'=>$a->id,'status'=>'0'])->first();
         if(empty($orders))
          return Response::json(array(
             'status'=> 'giỏ hàng bạn đang trống'
@@ -73,7 +73,7 @@ class loginController extends Controller
             return Response::json(array(
                 'status'=> 'giỏ hàng bạn đang trống'
                )); 
-        }
+        }*/
         if(!empty($a) &&!empty($status))
         {
             return Response::json(array(
@@ -84,7 +84,7 @@ class loginController extends Controller
         if(!empty($a) &&empty($status))
         {
             return Response::json(array(
-                'status'=> 'Phiên kết thúc'
+                'status'=> 'phiên kết thúc'
                )); 
         }
         
@@ -145,13 +145,7 @@ class loginController extends Controller
 
             $request->session()->forget('cart');
         }
-        else
-        {
-            return Response::json(array(
-                'status'=>'Giỏ hàng trống',
-              
-            )); 
-        }
+        
          return Response::json(array(
             'status'=>'Thành công',
           
@@ -239,7 +233,7 @@ class loginController extends Controller
       
         $request->session()->put('key',$user);
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
-          
+          /*
         if(empty($order))
          return Response::json(array(
             'status'=> 'giỏ hàng bạn đang trống'
@@ -250,7 +244,7 @@ class loginController extends Controller
                 'status'=> 'giỏ hàng bạn đang trống'
                )); 
         }   
-        
+        */
          if($request->session()->get('cart'))
          {
              //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
