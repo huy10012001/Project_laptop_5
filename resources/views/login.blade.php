@@ -47,8 +47,13 @@
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
+				error:function(data)
+				{
+					alert('loi roi')
+				},
 			    success:function(data)
            	    {
+					  alert(data.status)
                     if(data.status=="Thành công")
                     {
                        window.location.href = data.url; 

@@ -32,7 +32,11 @@ $(document).ready(function(){
 	$("#cartModal").modal("show");
 }
 
-   
+$("#AlertModal").on('hide.bs.modal', function(){
+	
+	location.reload();
+  });
+
 $("#cartModal").on('show.bs.modal', function(){
 	
 	Cookies.set('modal', 'showed');
@@ -48,7 +52,18 @@ $("#cartModal").on('show.bs.modal', function(){
 	location.reload();
   });
 });
+	//Khi bấm kiểm tra thì tắt modal cart
+	function checkOut()
+	{
+	
+		Cookies.remove('modal');
+		$("#cartModal").modal("hide");
+		
+		window.location.href = "{{asset('/cart')}}"; 
+
+	}
 	//logOut
+	
 	function logOut()
 	{
 		$.ajax({
@@ -69,7 +84,7 @@ $("#cartModal").on('show.bs.modal', function(){
 	
 	function updateCart(qty,product_id,order_id,timecreate)
     {
-		
+	
 		$.ajax({
 				type:  "GET",
       			url:	 " {{ asset('cart/update')}}",
@@ -77,10 +92,13 @@ $("#cartModal").on('show.bs.modal', function(){
 				datatype: 'json',
 				success:function(data)
            		{
-					   	
+				
+					
 					if(data.status)
-					{
-					$("#total").html("không tìm thấy item");
+					{	
+						if($("#noFindItem").text().length<80)
+						$("#noFindItem").append("không tìm thấy item ");
+					
 			 		}
                 	
 					else if(qty!="" && qty >0 && qty<=10)
@@ -153,17 +171,16 @@ $("#cartModal").on('show.bs.modal', function(){
            {	
 			 if(data.status)
 			 {
-				$("#total").html("không tìm thấy item");
+				if($("#noFindItem").text().length<80)
+						$("#noFindItem").append("không tìm thấy item ");
+			
 			 }
 			 else
 			 {
 				$("#total").html(data.total);//dữ liệu từ response
 				$(emn).closest( "tr" ).hide();   
 			 }
-			
-				
-			  
-           }
+			 }
        }
     	);
 
@@ -179,14 +196,15 @@ $("#cartModal").on('show.bs.modal', function(){
 }
 </style>
 
+
 <body>
 
 
 
-	<header id="header"><!--header-->
-		<div class="header_top"><!--header_top-->
+	<header id="header" ><!--header-->
+		<div class="header_top" ><!--header_top-->
 			<div class="container">
-				<div class="row">
+				<div class="row" >
 					<div class="col-sm-6">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
@@ -208,218 +226,71 @@ $("#cartModal").on('show.bs.modal', function(){
 					</div>
 				</div>
 			</div>
-		</div><!--/header_top-->
-
-		<div class="header-middle"><!--header-middle-->
-			<div class="container" >
-				<div class="row">
-					<div class="col-sm-4" >
-						<div class="logo pull-left">
-							<a href="{{ URL::to('/home')}}"><img src="{{ ('images/logo3.jpg') }}" height="150px"  width="100px" alt="" /></a>
-						</div>
-
-					</div>
-					<div class="col-sm-8">
-						<div class="shop-menu pull-right">
-							<ul class="nav navbar-nav">
-							@if(!Session::has('key'))
-								<li ><button><a href="#" style="background: none; color:black;" ><i class="fa fa-user"></i> <b>tài khoản</b></a></button></li>
-								<li><button><a href="{{ URL::to('/login') }}" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Nhập</b></a></button></li>
-							@else
-							<li ><button><a href="#" style="background: none; color:black;" ><i class="fa fa-user"></i> <b>{{App\User::find(Session::get('key'))->first()->name}}</b></a></button></li>
-								<li><button><a  onclick="logOut()" style="background: none; color:black;"><i class="fa fa-lock"></i> <b>Đăng Xuất</b></a></button></li>
-							@endif
-
-							
-                                <li>
-
-                                        <button type="button"data-toggle="modal" data-target="#cartModal"><i class="fa fa-shopping-cart"></i>
-                                        <b>  giỏ hàng   </b>
-                                        </button>
-
-
-                                <div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header border-bottom-0">
-                                              <h5 class="modal-title" id="exampleModalLabel">
-                                                Your Shopping Cart
-                                              </h5>
-                                              <button type="button" onclick="javascript:window.location.reload()"  class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button>
-                                            </div>
-                                            <div class="modal-body">
-												 <!--Trường hợp user chưa đăng nhập thao tác với session-->
-											@if(Session::has('cart'))
-                                              <table class="table table-image">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">sản phẩm</th>
-                                                    <th scope="col">Giá</th>
-                                                    <th scope="col">Số lượng</th>
-                                                    <th scope="col">Tổng cộng</th>
-                                                    <th scope="col">Xóa</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody class="cart-body">
-												<tr>
-                                
-													@foreach(Session::get('cart')->items as $product)
-												   	
-														<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
-														</td> 
-														<td class="">{{App\Product::withTrashed()->find($product['id'])->name}}</td>
-												      <!--Trường hợp còn hàng(status là 1)-->
-														@if($product['status']==1)
-														
-           												<td class="price">{{$product['price']}}</td>
-                                                   		
-                                                        <td class="buttons_added qty ">
-														
-                                                            <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
-                                 							onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
-
-														</td>
-                                                   	 <td class = "amount">{{$product['amount']}}</td>
-                                                   	 <td>
-                                                      <a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,'',<?php echo $product['time_at']?>)">
-                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                                          </svg>
-                                                      </a>
-													</td>
-													
-													</tr>
-													
-													@else
-													<td class="image"><img  height="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
-														</td> 
-													<td>{{$product['price']}}</td>
-                                                    <td class="qty"> </td>
-                                                    <td class = "amount"></td>
-                                                    <td>
-                                                      <a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
-                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                                          </svg>
-                                                      </a>
-													</td>
-													
-												  	</tr>
-													@endif
-												  @endforeach	
-                                                </tbody>
-                                            </table>
-                                            <div class="d-flex justify-content-end">
-                                                <h5>Total: <span class="price text-success" id="total" >
-												{{Session::get('cart')->totalPrice}}</span></h5>
-											</div>
-											 <!--Trường hợp user  đăng nhập thao tác với database-->
-											@elseif(isset($orders))
-											<table class="table table-image">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">sản phẩm</th>
-                                                    <th scope="col">Giá</th>
-                                                    <th scope="col">Số lượng</th>
-                                                    <th scope="col">Tổng cộng</th>
-                                                    <th scope="col">Xóa</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  <tr>
-                                                   
-													@foreach($orders->product as $p)
-
-													<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
-														</td> 
-													<td>{{$p->name}}</td>
-												      <!--Trường hợp còn hàng(status là 1)-->
-            									  
-           											<td class="price">{{$p->pivot->price }}</td>
-													   <!--Trường hợp còn hàng(khác trashed)-->
-													@if(!($p->trashed()))
-												
-                                                    <td class="qty">
-                                                        <div class="buttons_added">
-															<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
-                                 						onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
-
-                                                        </div></td>
-                                                    <td class = "amount">{{$p->pivot->amount }}</td>
-                                                    <td>
-                                                      <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
-                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                                          </svg>
-                                                      </a>
-													</td>
-													</tr>
-													@else
-													
-                                                    <td class="qty"> </td>
-                                                    <td class = "amount"></td>
-                                                    <td>
-                                                      <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
-                                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                                          </svg>
-                                                      </a>
-													</td>
-													
-													
-												  	</tr>
-													@endif
-												  @endforeach	
-                                                </tbody>
-                                            </table>
-                                            <div class="d-flex justify-content-end">
-                                                <h5>Total: <span class="price text-success" id="total" >
-												{{ $orders->total }}</span></h5>
-											</div>
-								@endif
-
-													
-                                            </div><!--/cart model-->
-                                            <div class="modal-footer border-top-0 d-flex justify-content-between">
-                                              <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
-                                              <button type="button" class="btn btn-success" ><a href="{{ URL::to('/cart') }}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
-
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
-
-
-
-                                </li>
-
-
-
-
-
-							
-							</ul>
-						</div>
-                    </div>
-                    <!---->
+			<!--Search-->
+			<div class="container-fluid"   style="background:  #0099ff;padding-top:10px;">
+            <div class="row ">
+				<div class="col-sm-2">
+                    <a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
+                </div>
+                <div class="col-sm-6"  >
+                    <div  class="search-container "  >
+                        <form action="/action_page.php" >
+                          <input style="float:left;width:80%;height:40px" type="text" placeholder="tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
+                          <button   style="float:left;width:10%;height:40px" type="submit" class="search"><i class="fa fa-search"></i></button>
+                        </form>
+                      </div>
 				</div>
+				@if(!Session::has('key'))
+                <div class="col-sm-2">
+                    <div class="users" >
+                        <div class="dropdown">
+                            <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>Đăng Nhập</b> </button>
+                            <div class="dropdown-content">
+                              <a href="#">Link 1</a>
+                              <a href="#">Link 2</a>
+                              <a href="#">Link 3</a>
+                              <a href="#">Link 3</a>
+                              <a href="#">Link 3</a>
+                            </div>
+                        </div>
+					</div>
+				</div>
+                <div class="col-sm-2">
+                    <div class="cart1">
+                       	<button type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; "><i class="fa fa-shopping-cart" style="color:white;"></i>
+                        <b style="color: white;">  giỏ hàng   </b>
+                        </button>
+					</div>
+				</div>	
+				@else
+				<div class="col-sm-2">
+                   
+                       <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>{{Session::get('key')->name}}</b> </button>
+					   <a class="btn btn-primary btn-sm"   onclick="logOut()">
+                                        <i class="fas fa-folder"></i> Đăng xuất
+                                    </a> 
+				</div>
+				
+				<div class="col-sm-2">
+                    <div class="cart1">
+                       	<button type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; "><i class="fa fa-shopping-cart" style="color:white;"></i>
+                        <b style="color: white;">  giỏ hàng   </b>
+                        </button>
+					</div>
+				</div>	
+				@endif
 			</div>
-		</div><!--/header-middle-->
+			</div>
+			<!--end Search-->
+        </div><!--/header_top-->
+       
+          
 
-		<div class="header-bottom"><!--header-bottom-->
+		<div class="header-bottom"    style="background:  #0099ff;margin-bottom:20px"><!--header-bottom-->
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-9">
-						<div class="navbar-header">
+                        <div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 								<span class="sr-only">Toggle navigation</span>
 								<span class="icon-bar"></span>
@@ -429,8 +300,8 @@ $("#cartModal").on('show.bs.modal', function(){
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="{{ URL::to('/home') }}" class="active">Trang Chủ</a></li>
-								<li class="dropdown"><a href="#">Sản Phẩm<i class="fa fa-angle-down"></i></a>
+								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);">Trang Chủ</a></li>
+								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
 									@foreach(App\category::withTrashed()->get() as $c)
 										@if($c->product->count()>0)
@@ -439,26 +310,27 @@ $("#cartModal").on('show.bs.modal', function(){
 									@endforeach
                                     </ul>
                                 </li>
-								<li class="dropdown"><a href="#">Về Chúng Tôi<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#" style="color: rgb(250, 245, 245);">Về Chúng Tôi<i class="fa fa-angle-down"></i></a>
 										<ul role="menu" class="sub-menu">
-											<li><a href="blog.html">thông tin về shop</a></li>
-											<li><a href="blog-single.html">thông tin LapTop-shop</a></li>
+											<li><a href="blog.html" style="color: rgb(250, 245, 245);">thông tin về shop</a></li>
+											<li><a href="blog-single.html" style="color: rgb(250, 245, 245);">thông tin LapTop-shop</a></li>
 										</ul>
 									</li>
 
-									<li><a href="{{ URL::to('/contact') }}">liên hệ</a></li>
+									<li><a href="{{ URL::to('/contact') }}" style="color: rgb(250, 245, 245);">liên hệ</a></li>
 								</ul>
 							</div>
 						</div>
-						<div class="col-sm-3">
-							<div class="search_box pull-right">
-								<input type="text" placeholder="Search"/>
-							</div>
-						</div>
+
 					</div>
 				</div>
 			</div><!--/header-bottom-->
-		</header><!--/header-->
+        </header><!--/header-->
+
+
+
+
+
 	<!--slider-->
 	@yield('slide')
 	<!--/slider-->
@@ -490,17 +362,170 @@ $("#cartModal").on('show.bs.modal', function(){
 					<!--cart_detail-->
 					@yield('cart_detail')
 					<!--end cart detail-->
-
-
-
-
-
-
-
 				</div>
 			</div>
 		</section>
-
+		<!--modal alert-->
+		<div class="modal fade" id="AlertModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+	</div>
+		<div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                                Your Shopping Cart
+                        </h5>
+                        <button type="button" onclick="javascript:window.location.reload()"  class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+							</button>
+							<div id="noFindItem" style="color:red;"></div>
+                    </div>
+                    <div class="modal-body">
+                     <!--Trường hợp user chưa đăng nhập thao tác với session-->
+                    @if(Session::has('cart'))
+						<div class="table table-responsive">
+							<table class="table table-image"> 
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">sản phẩm</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Tổng cộng</th>
+                                    <th scope="col">Xóa</th>
+                                </tr>
+                                </thead>
+                                <tbody class="cart-body">
+                                	@foreach(Session::get('cart')->items as $product)
+										<tr>		
+											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
+                                    		</td>
+                                    		<td class="" style="word-break: break-all;">{{App\Product::withTrashed()->find($product['id'])->name}}</td>
+                                      		<!--Trường hợp còn hàng(status là 1)-->
+                                    		@if($product['status']==1)
+											<td class="price">{{$product['price']}}</td>
+											<td class="buttons_added qty ">
+											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
+                                             onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
+											</td>
+                                    		<td class = "amount">{{$product['amount']}}</td>
+                                    		<td>
+                                    		<a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
+                                        	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        	</svg>
+                                    		</a>
+                                    		</td>
+											@else
+                                			<td class="image"><img  height="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
+                                			</td>
+                                			<td>{{$product['price']}}</td>
+                                			<td class="qty"> </td>
+                               		 		<td class = "amount"></td>
+                                	 		<td>
+                                    		<a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
+                                    		<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    		<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    		<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    		</svg>
+                                    		</a>
+                                			</td>
+											@endif
+										</tr>	 
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+                        <div class="d-flex justify-content-end">
+                                <h5>Total: <span class="price text-success" id="total" >
+                                {{Session::get('cart')->totalPrice}}</span></h5>
+                        </div>
+                            <!--Trường hợp user  đăng nhập thao tác với database-->
+					@elseif(isset($orders))
+					<div class="table table-responsive">
+						<table class="table table-image">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng cộng</th>
+                                <th scope="col">Xóa</th>
+                            </tr>
+                            </thead>
+                                <tbody>
+                                  	@foreach($orders->product as $p)
+									<tr>
+										<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
+                                        </td>
+                                    	<td style="word-break: break-all;">{{$p->name}}</td>
+                                      	<!--Trường hợp còn hàng(status là 1)-->
+										<td class="price">{{$p->pivot->price }}</td>
+                                       <!--Trường hợp còn hàng(khác trashed)-->
+                                    	@if(!($p->trashed()))
+										<td class="qty">
+                                        <div class="buttons_added">
+                                            <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
+                                         onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
+										</div></td>
+                                    	<td class = "amount">{{$p->pivot->amount }}</td>
+                                    	<td>
+                                        <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
+                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                          </svg>
+                                       </a>
+                                       </td>
+                                   		@else
+										<td class="qty"> </td>
+                                    	<td class = "amount"></td>
+                                    	<td>
+                                      	<a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
+                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                      	</a>
+                                   		</td>
+										@endif
+									</tr>
+								  	@endforeach
+								</tbody>
+							</table>
+							</div>
+                            <div class="d-flex justify-content-end">
+                                <h5>Total: <span class="price text-success" id="total" >
+                                {{ $orders->total }}</span></h5>
+							</div>
+							<!--end cart body-->
+                			@endif
+							</div><!--/cart model-->
+                            <div class="modal-footer border-top-0 d-flex justify-content-between">
+                              <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
+                              <button type="button" onclick="checkOut()" class="btn btn-success" ><a href="" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
+							</div>
+                </div>
+            </div>
+        </div>
 		<footer id="footer"><!--Footer-->
 
 
@@ -578,7 +603,7 @@ $("#cartModal").on('show.bs.modal', function(){
 
 				</div>
 			</div>
-        </div>
+
         <div class="footer-bottom">
 			<div class="container">
 				<div class="row">

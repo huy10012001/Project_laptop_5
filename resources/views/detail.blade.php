@@ -1,29 +1,32 @@
+
 @extends('layout_home')
 @section( 'detail')
 <style>
-.detail{
-  border-style: solid  ;
-  border-color: gray ;
-  text-align: center;
-  padding:15px;
-  word-break:break-all;
-  display: table-cell;
-
+  .detail {
+    border-style: solid;
+    border-color: gray;
+    text-align: center;
+    padding: 15px;
+    width: 24%;
+    word-break: break-all;
+    height:500px;
+  }
+  .detail img
+  {
+    height: 200px;
+  }
+ div p{
+  margin: auto;
+  width: 90%;
+  
+  padding: 10px;
+ }
+  .item1 {
+    display: table;
+    width: 100%;
+  }
  
-}
-
-.col-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-.detail img
-{
- width:100%;
-  height: 200px;
-}
 </style>
-
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
     <div class="row">
@@ -43,7 +46,7 @@
                     <div class="img-slide">
                       <div class="panel panel-default text-center">
                         <div id="links">
-                          <a href="images/hinh1.jpg" title="" data-gallery >
+                          <a href="images/hinh1.jpg" title="" data-gallery>
                             <img src="images/hinh.jpg" alt="" width="50%" height="20%">
                           </a>
                         </div>
@@ -399,12 +402,11 @@
               <a href="#slider-carousel" data-slide="prev" data-toggle="popover" style="width: 10px;font-size: 30px;">prev </a>
               <a href="#slider-carousel" data-slide="next" data-toggle="popover" style="width: 10px;font-size: 30px;border: red"> next</a>
             </div><br><br><br>
-            <div class="carousel-inner" style="max-width:900px; max-height:600px !important;">
-              <div class="item active">
-                 <div class="col-container">
-                <div class="col-sm-3 detail " >
+            <div class="carousel-inner">
+              <div class="item active item1 " style="height: 350px;">
+                <div class="col-sm-3 detail ">
                   <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>lap12312312333123312331233123312331233123312333333333333333333333top</p>
+                  <p>lapaaaaaaaaaaaaasdasdaddddasdadtop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get"><a href="detail"> xem sản phẩm</a></button>
                 </div>
@@ -414,41 +416,44 @@
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
-                <div class="col-sm-3 detail" >
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                <div class="col-sm-3 detail">
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
                 <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
-                 </div>
               </div>
               <div class="item">
-              <div class="col-container">
                 <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get"><a href="detail"> xem sản phẩm</a></button>
                 </div>
                 <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
                 <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
                 <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto"><p>laptop</p>
+                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
+                  <p>laptop</p>
                   <p>giá</p>
                   <button type="button" class="btn btn-default get">xem sản phẩm</button>
                 </div>
-              </div>
               </div>
             </div>
             <br><br><br>

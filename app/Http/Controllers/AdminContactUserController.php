@@ -6,14 +6,24 @@ use App\category;
 use App\contact_user;
 use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 
 class AdminContactUserController extends Controller
 {
-    public function index() {
-        $contact = contact_user::all();
-        return view('admin.contact_user.index')->with(['contact_user'=>$contact]);
+    public function index(Request $request) {
+        $user=$request->session()->get('key');
+        if(!empty($user))
+        $user=User::find($user->id);
+        
+        if (!empty($user)&& $user->can('do')) {
+            $contact = contact_user::all();
+            return view('admin.contact_user.index')->with(['contact_user'=>$contact]);
+        }
+        else
+        return \abort('403');
+      
     }
    
   

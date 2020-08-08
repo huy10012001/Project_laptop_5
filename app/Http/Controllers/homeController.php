@@ -9,15 +9,20 @@ use App\product;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 USE Illuminate\Support\Facades\Redirect;  
-   
+
 class homeController extends Controller
 {
+    public function detail(Request $request){
+        return view('detail');
+    }
+  
+
     public function order(Request $request){
 
         //$request->session()->flush();
         //$request->session()->forget('change');
         $value=$request->session()->get('key');
-     
+        
         //check user da dang nhap neu chua quya lai login
         if(empty($value))
         {
@@ -57,8 +62,8 @@ class homeController extends Controller
         return view('user.home');
     }
     public function index(Request $request){
-
-        //$request->session()->flush();
+        
+        $request->session()->flush();
         return view('index');
     }
     public function checkout(){

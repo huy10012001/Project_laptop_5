@@ -9,29 +9,24 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\order_product;
 use App\role;
-
+use App\User;
 class user_rolecontroller extends Controller
 {
-    public function index() {
-        $orders=role::all();
+    public function index(Request $request) {
+        $user=$request->session()->get('key');
+        $user=User::find($user->id);
+        if (!empty($user)&& $user->can('do')) 
+        {
+            $orders=role::all();
         
-        return view('admin.user_role.index')->with(['role'=>$orders]);
+            return view('admin.user_role.index')->with(['role'=>$orders]);
+        }
+        else
+        return \abort('403');
+        
     }
-    public function create() {
-        //$image = $request->input('image');
-       
-        return view('order.create');
-    }
-    public function postCreate(Request $request) {
-        // nhận tất cả tham số vào mảng product
-        $order = $request->all();
-        // xử lý upload hình vào thư mục
-       
-        $p = new Order($order);
-       
-        $p->save();
-          return redirect()->action('OrderControlr@index')->with(['flash_message'=>'Add product completed']);
-    }
+   
+  
     public function delete($user_id,$role_id) {
        
        $p = Order_product::where([

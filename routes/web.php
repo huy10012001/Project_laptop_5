@@ -96,8 +96,8 @@ Route::get('/logout','loginController@logout' );
 Route::get('/getOrder','UserCartcontroller@getOrder' );
 Route::get('/order', 'homeController@order' );
 Route::get('/isDangNhap','loginController@checkDangNhap');
-
-
+//detail
+Route::get('/detail','homeController@detail');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')

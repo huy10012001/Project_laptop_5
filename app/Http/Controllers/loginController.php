@@ -222,18 +222,22 @@ class loginController extends Controller
     { 
         //Khi user đã đăng nhập ở tab khác
        
-
+      
         $hash = $request->input('email');
         $Password=$request->input('password');
+        
         $user= User::whereRaw("BINARY `password`= ?", [$Password])->
         whereRaw("BINARY `email`= ?", [$hash])->
-        first();    
+        first();   
+        
         if(!empty($user))
        {
       
         $request->session()->put('key',$user);
+        
         $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
-          /*
+         
+        /*
         if(empty($order))
          return Response::json(array(
             'status'=> 'giỏ hàng bạn đang trống'
@@ -291,6 +295,7 @@ class loginController extends Controller
 
             $request->session()->forget('cart');
          }
+      
          $url=$request->session()->get('url');
          return Response::json(array(
             'status'=>'Thành công',

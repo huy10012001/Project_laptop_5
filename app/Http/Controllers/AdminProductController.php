@@ -10,30 +10,50 @@ use Illuminate\Http\Request;
 
 use App\Cart;
 use App\Order;
-
+use App\User;
 class AdminProductController extends Controller
 {
   
-    public function index() 
+    public function index(Request $request) 
     {
-        $products = Product::all();
-        return view('admin.product.index')->with(['products'=>$products]);
-    }
-    public function create()
-    {
-        return view('admin.product.create');
-        if(!empty($p))
-            return view('admin.category.update', ['p'=>$p]);
-        else
-        {
-            return abort('404');
+        $user=$request->session()->get('key');
+            if(!empty($user))
+        $user=User::find($user->id);
+        
+        if (!empty($user)&& $user->can('do')) {
+            $products = Product::all();
+            return view('admin.product.index')->with(['products'=>$products]);
         }
+        else
+        return \abort('403');
+        
     }
-    public function postCreate(Request $request) 
+    public function create(Request $request)
+    {  
+       
+      
+            $user=$request->session()->get('key');
+            if(!empty($user))
+            $user=User::find($user->id);
+            if (!empty($user)&& $user->can('do')) 
+            {
+          
+            return view('admin.product.create');
+            }
+            else
+            return \abort('403');
+        
+    }
+    public function postCreate(ProductRequest $request) 
     {
         // nhận tất cả tham số vào mảng product
+        $attributes = request()->validate([
+            'image' => 'required|file|image|mimes:jpeg,png,jpg|max:10240'
+        ]);
+    
         $product = $request->all();
         // xử lý upload hình vào thư mục
+        
         if($request->hasFile('image'))
         {
             $file=$request->file('image');
@@ -63,13 +83,23 @@ class AdminProductController extends Controller
         $p = Product::find($id);
         if(!empty($p))
         { 
+            $user=$request->session()->get('key');
+            if(!empty($user))
+            $user=User::find($user->id);
+            
+            if (!empty($user)&& $user->can('do')) 
+            {
+               
+                return view('admin.product.update', ['p'=>$p]);
+            }
+            else
+            return \abort('403');
            
-            return view('admin.product.update', ['p'=>$p]);
         }
         else
             return abort('404');
     }
-    public function postUpdate(Request $request, $id) 
+    public function postUpdate(ProductRequest $request, $id) 
     {
         $name=$request->input('name');
         $price=$request->input('price');
@@ -93,7 +123,6 @@ class AdminProductController extends Controller
         }
         $p = Product::find($id);
         $p->name=$name;
-       
         $p->category_id=$category;
         $p->image = $imageName;
        

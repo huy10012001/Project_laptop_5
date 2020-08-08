@@ -10,17 +10,34 @@ use App\role_user;
 use Illuminate\Support\Facades\Redirect;
 class Adminusercontroller extends Controller
 {
-    public function index() {
-        $orders=User::all();
+    public function index(Request $request) {
+        $user=$request->session()->get('key');
+        if(!empty($user))
+        $user=User::find($user->id);
+        if (!empty($user)&& $user->can('do')) 
+        {
+            $orders=User::all();
         return view('admin.user.index')->with(['user'=>$orders]);
+        }
+        else
+        return \abort('403');
+       
     }
     public function update($id,Request $request) {
         $p = User::find($id);
         
         if(!empty($p))
         { 
-          
+            $user=$request->session()->get('key');
+            if(!empty($user))
+              $user=User::find($user->id);
+        if (!empty($user)&& $user->can('do')) 
+        {
             return view('admin.user.view', ['p'=>$p]);
+        }
+        else
+        return \abort('403');
+            
         }
         else
             return abort('404');
@@ -58,6 +75,7 @@ class Adminusercontroller extends Controller
     }*/
     public function postAddRole(Request $request,$id)
     {
+        
         $role= $_POST['roleUser'];
         $p = role_user::where(["user_id"=>$id,"role_id"=>$role])->first();
          if(empty($p))
@@ -80,9 +98,17 @@ class Adminusercontroller extends Controller
         $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->first();
        
         if(!empty($p))
-        { 
-          
+        {  $user=$request->session()->get('key');
+            if(!empty($user))
+              $user=User::find($user->id);
+             if (!empty($user)&& $user->can('do')) 
+            {
             return view('admin.user.editrole', ['p'=>$p]);
+            }
+            else
+            return \abort('403');
+          
+            
         }
         else
           return abort('404');

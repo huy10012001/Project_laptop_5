@@ -1,6 +1,7 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+
     if(!!window.performance && window.performance.navigation.type === 2)
     {
         console.log('Reloading');
@@ -25,10 +26,12 @@
            	    {
                    
                    
-                  //đăng nhập user khác
+                  //đăng nhập user khácal
                      if(data.status=="phiên kết thúc")
                     {
-                        alert("phiên làm việc không đúng hoặc hết hạn, mời bạn đăng nhập lại")
+                        $("#AlertModal .modal-body").html("phiên làm việc không đúng hoặc hết hạn, mời bạn đăng nhập lại");
+                        $("#AlertModal").modal("show");
+                       
                         window.location.href = "{{ asset('/home')}}"; 
                     }
                     //Khi giỏ hàng trống
@@ -146,17 +149,22 @@
               
                 if(data.soluong=="1")
                 {
-                     alert("số lượng từ 1 tới 10 và ko được trống");
+                    $("#AlertModal .modal-body").html("Số lượng phải từ 1 tới 10");
+                    $("#AlertModal").modal("show");
+                  
+                     
                 }
                 
                 else if(data.status)
                  {
-                 alert("không tìm thấy item");//dữ liệu từ response
+               
+                    $("#AlertModal .modal-body").html("khô ng tìm thấy item");
+                    $("#AlertModal").modal("show");
                 }
               
                 else
                 {
-                     location.reload();
+                    location.reload();
                 }
 			  
            }
@@ -179,8 +187,10 @@
              
           
             if(data.status)
-              {
-               alert("không tìm thấy item ,vui lòng tải lại trang");//dữ liệu từ response
+                {
+                $("#AlertModal .modal-body").html("không tìm thấy item");
+                $("#AlertModal").modal("show");
+              
               }
               
               else
@@ -422,14 +432,15 @@ $('input.input-qty').each(function() {
 							<td class="total">tổng tiền</td>
 							<td></td>
 						</tr>
-					</thead>
+                    </thead>
+                    <tbody class="cart-body" tyle="word-break:break-all;">
 					@foreach($orders->product as $p)
 						<tr>
                             <td class="cart_product">
-							   <img width="100px" height="100px" src="{{ url('images/'.$p->image) }}"/> 
+							   <img width="100px"  style=" margin-right:5em; height:100px" src="{{ url('images/'.$p->image) }}"/> 
 						    </td>
-						    <td class="cart_name">
-							<h4>{{$p->name}}</h4>
+						    <td class="cart_name" s>
+							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
 						    <p> {{$p->pivot->price }}</p>
@@ -464,6 +475,7 @@ $('input.input-qty').each(function() {
                             @endif
                         </tr>
                     @endforeach
+                    </tbody>
 				</table>
             </div>
         </div>

@@ -89,7 +89,10 @@ if(performance.navigation.type == 2){
                 //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
                 if(data.status=="phiên kết thúc")
                 {
-                    alert("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
+                    $("#AlertModal .modal-body").html("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
+                        $("#AlertModal").modal("show");
+                       
+                
                     setTimeout(function () {
                     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                     }, 1000); //will call the function after 2 secs.
@@ -97,7 +100,9 @@ if(performance.navigation.type == 2){
                 //khi thoát đăng phienhập
                 else if(data.status=="thoát đăng nhập")
                 {
-                    alert("phiên làm việc hết hạn");
+                    $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
+                        $("#AlertModal").modal("show");
+                       
                     setTimeout(function () {
                     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                      }, 1000); //will call the function after 2 secs.
@@ -105,7 +110,8 @@ if(performance.navigation.type == 2){
                 //Nếu chưa cập nhập xong thông báo
                 else if( $('#update').is(":visible"))
                 {
-                    alert("bạn chưa cập nhập xong");
+                    $("#AlertModal .modal-body").html("bạn chưa cập nhập xong");
+                        $("#AlertModal").modal("show");
                 }
                 //Order
                 
@@ -188,8 +194,8 @@ if(performance.navigation.type == 2){
 				<table class="table table-condensed" >
 					<thead>
 						<tr class="cart_menu" style="color: black;">
-							<td class="image">Item</td>
-							<td class="description"></td>
+							<td class="image"></td>
+							<td class="description">Tên sản phẩm</td>
 							<td class="price">giá</td>
 							<td class="quantity">số lượng</td>
 							<td class="total">tổng tiền</td>
@@ -201,11 +207,11 @@ if(performance.navigation.type == 2){
 					@foreach($orders->product as $p)
                     @if(!($p->trashed()))
 						<tr>
-                            <td class="cart_product">
-							    <a href=""><img src="" alt=""> </a>
-						    </td>
+                            <td class="cart_product" >
+                            <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$p->image) }}"/> 
+                      
 						    <td class="cart_name">
-							<h4>{{$p->name}}</h4>
+							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
 						    <p> {{$p->pivot->price }}</p>
@@ -334,7 +340,8 @@ if(performance.navigation.type == 2){
  <!--Nếu user chưa đăng nhập truy cập trang order-->
  @else 
 <script>
- alert("phiên làm việc hết hạn");
+$("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
+ $("#AlertModal").modal("show");
  setTimeout(function () {
     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
     }, 1000); //will call the function after 2 secs.
@@ -534,6 +541,22 @@ if(performance.navigation.type == 2){
 	<script src="{{ asset('fronend/js/price-range.js') }}"></script>
     <script src="{{ asset('fronend/js/jquery.prettyPhoto.js') }}"></script>
     <script src="{{ asset('fronend/js/main.js') }}"></script>
+    <div class="modal fade" id="AlertModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 </body>
 </html>
 
