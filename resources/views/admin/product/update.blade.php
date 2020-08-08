@@ -1,5 +1,10 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
+<script>
 
+var input = document.getElementById("your_input");
+alert(input);
+
+</script>
 @extends('layout.layout')
 @section('title', 'product - create new')
 @section('content')
@@ -73,11 +78,11 @@
 
                                     <label for="image">Image</label>   
                                     <br/> 
-                                    <input type="hidden" name="hinhanh" value="{{$p->image}}">
+
                                     <img class="img-fluid"  id="output" src="{{ url('images/'.$p->image) }}"/>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
+                                            <input id="your_input"  type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
                                             <label class="custom-file-label" for="image">Choose Image</label>
                                         </div>
                                     </div>

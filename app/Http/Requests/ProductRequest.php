@@ -34,7 +34,7 @@ class ProductRequest extends FormRequest
             'price' => 'required|integer|min:1000000|max:300000000',
             
             'image' => 'file|image|mimes:jpeg,png,jpg|max:10240,image',
-            'hinhanh' => "required",
+            
 
         ];
        
@@ -51,7 +51,7 @@ class ProductRequest extends FormRequest
             'price.integer' => 'Giá phải là số!',
             'price.min' => 'Giá phải từ 1 triệu tới 300 triệu!',
             'price.max' => 'Giá phải từ 1 triệu tới 300 triệu!',
-            'hinhanh.required' => 'Hình ảnh cần được yêu cầu',
+            
             'image.image' => 'phải là file ảnh',
             'image.mimes' => 'phần mở rộng đuôi file là jpg, jpeg, png',
             'image.max' => ' size lớn nhất của ảnh là 10Mb'

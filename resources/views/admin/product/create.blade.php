@@ -69,10 +69,12 @@
                                 <div class="form-group">
                                     <label for="image">Image</label>   
                                     <br/> 
+
                                     <img  class="img-fluid" id="output"/>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
+                                          
                                             <label class="custom-file-label" for="image">Choose Image</label>
                                         </div>
                                     </div>
