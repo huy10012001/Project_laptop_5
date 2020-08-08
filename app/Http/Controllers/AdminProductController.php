@@ -7,7 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Product;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Response;
 use App\Cart;
 use App\Order;
 use App\User;
@@ -47,13 +47,8 @@ class AdminProductController extends Controller
     public function postCreate(ProductRequest $request) 
     {
         // nhận tất cả tham số vào mảng product
-        $attributes = request()->validate([
-            'image' => 'required|file|image|mimes:jpeg,png,jpg|max:10240'
-        ]);
-    
         $product = $request->all();
         // xử lý upload hình vào thư mục
-        
         if($request->hasFile('image'))
         {
             $file=$request->file('image');
@@ -69,9 +64,15 @@ class AdminProductController extends Controller
         {
             $imageName = null;
         }
+        if(empty($imageName))
+        {
+            $request->session()->put(['message'=>'Thiếu ảnh','alert-class'=>'alert-danger']);
+            return Redirect::back();
+        }
         $p = new Product($product);
         $category= $_POST['category'];
         $p->category_id = $category;
+       
         $p->image=$imageName;
         $p->save();
         $request->session()->put(['message'=>'Thêm mới thành công','alert-class'=>'alert-success']);
@@ -99,6 +100,7 @@ class AdminProductController extends Controller
         else
             return abort('404');
     }
+
     public function postUpdate(ProductRequest $request, $id) 
     {
         $name=$request->input('name');
@@ -123,6 +125,7 @@ class AdminProductController extends Controller
         }
         $p = Product::find($id);
         $p->name=$name;
+       
         $p->category_id=$category;
         $p->image = $imageName;
        

@@ -14,6 +14,10 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
+                        @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        {{Session::forget('message')}}
+                          @endif
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>

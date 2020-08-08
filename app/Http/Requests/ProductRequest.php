@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ProductRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+         return true;;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {   
+        $id = $this->route('id');
+      
+        return [
+            
+            //            'email' => 'required|email|unique:users',
+           
+            'name' => "unique:product,name,{$id},id",
+            'name' => 'required|string|min:3|max:180',
+            'price' => 'required|integer|min:1000000|max:300000000',
+            
+            'image' => 'file|image|mimes:jpeg,png,jpg|max:10240,image',
+            'hinhanh' => "required",
+
+        ];
+       
+    }
+    public function messages()
+    {
+        return [
+//            'email.required' => 'Email is required!',
+            'name.unique'=> 'Tên sản phẩm đã tồn tại!',
+            'name.required' => 'Tên sản phẩm cần được yêu cầu!',
+            'name.min' => 'Tên sản phẩm phải từ 180 ký tự',
+            'name.max' => 'Tên sản phẩm không vượt quá 180 ký tự',
+            'price.required' => 'Bạn chưa nhập giá!',
+            'price.integer' => 'Giá phải là số!',
+            'price.min' => 'Giá phải từ 1 triệu tới 300 triệu!',
+            'price.max' => 'Giá phải từ 1 triệu tới 300 triệu!',
+            'hinhanh.required' => 'Hình ảnh cần được yêu cầu',
+            'image.image' => 'phải là file ảnh',
+            'image.mimes' => 'phần mở rộng đuôi file là jpg, jpeg, png',
+            'image.max' => ' size lớn nhất của ảnh là 10Mb'
+        ];
+    }
+}

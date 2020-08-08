@@ -98,6 +98,7 @@ Route::get('/order', 'homeController@order' );
 Route::get('/isDangNhap','loginController@checkDangNhap');
 //detail
 Route::get('/detail','homeController@detail');
+
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
@@ -108,7 +109,8 @@ Route::post('/postRegisterCheckOut', 'loginController@postRegisterCheckOut');
 //Route::get('/cart/{id}','Admincontroller@addCart' );
 
 
-
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('/postUpdateProduct', 'AdminProductController@postUpdateProduct');
 
 
 

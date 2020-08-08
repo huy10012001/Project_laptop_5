@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 class loginController extends Controller
 {
     //
+
     public function index(Request $request)
     {
         $value=$request->session()->get('key');

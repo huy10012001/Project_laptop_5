@@ -14,6 +14,10 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
+                        @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        {{Session::forget('message')}}
+                         @endif
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -66,13 +70,14 @@
                                 </div>
                               
                                 <div class="form-group">
-                                
+
                                     <label for="image">Image</label>   
                                     <br/> 
+                                    <input type="hidden" name="hinhanh" value="{{$p->image}}">
                                     <img class="img-fluid"  id="output" src="{{ url('images/'.$p->image) }}"/>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                         <input type="file"  class="custom-file-input"   name="image" onchange="loadFile(event)">
+                                            <input type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
                                             <label class="custom-file-label" for="image">Choose Image</label>
                                         </div>
                                     </div>
