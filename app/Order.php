@@ -29,6 +29,10 @@ public function product()
    
 
 }
+public function detail()
+{
+    return $this->hasOne('App\DetailProduct');
+}
 /*public function productB()
 {
      

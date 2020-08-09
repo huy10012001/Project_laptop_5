@@ -3,6 +3,7 @@
 <script type="text/javascript">
 
 //load lại trang khi user bấm back
+/*
 $(document).ready(function()
 {
 
@@ -49,7 +50,7 @@ $(document).ready(function()
             }
         	});
     });
-});
+});*/
 </script>
 @extends('layout.layout')
 @section('title', 'product - create new')

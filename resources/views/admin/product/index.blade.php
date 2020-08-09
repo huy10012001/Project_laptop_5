@@ -79,10 +79,13 @@
                                 
                                 <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
                                 <td class="text-right">
-                                   
+                                <a class="btn btn-info btn-sm" href="{{ url('admin/product/detail/'.$p->id) }}">
+                                        <i class="fas fa-pencil-alt"></i> View Detail
+                                    </a>
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/product/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
+                                   
                                     <a class="btn btn-danger btn-sm"  
                                   onclick="deleteProduct('{{$p->id}}')">
                                         <i class="fas fa-trash"></i> Delete

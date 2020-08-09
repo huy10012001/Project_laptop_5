@@ -19,6 +19,10 @@ class Product extends Model
     {
         return $this->belongsTo('App\category')->withTrashed();
     }
+    public function detail()
+    {
+        return $this->hasOne('App\DetailProduct');
+    }
   
     public function order()
     {

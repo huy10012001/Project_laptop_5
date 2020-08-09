@@ -37,6 +37,7 @@ Route::get('admin/category/delete', 'AdminCategoryController@delete');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('admin/category/postUpdate/{id}', 'AdminCategoryController@postUpdate');
 //Product Admin
+Route::get('admin/product/detail/{id}', 'AdminProductController@DetailProduct');
 Route::get('admin/product/index', 'AdminProductController@index');
 Route::get('admin/product/create', 'AdminProductController@create');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST');
@@ -117,6 +118,7 @@ Route::post('/postDiaChiCheckOut', 'UserCartcontroller@postDiaChiCheckOut');
 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
+
 
 
 

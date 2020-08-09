@@ -11,18 +11,44 @@ use Illuminate\Support\Facades\Response;
 use App\Cart;
 use App\Order;
 use App\User;
+use App\DetailProduct;
 class AdminProductController extends Controller
 {
     public function postDetailProduct(Request $request)
     {
-        $d1=$request->except('_token');
-        $request->session()->put('detail',json_encode($d1));
+        $d1=$request->except('_token','product');
+        $d2=json_encode($d1);
+        $product=$request->input('product');
+        $detail_products=DetailProduct::where(['product_id'=>$product])->first();
+        if(empty($detail_products))
+        $detail_products=new DetailProduct();
        
+        $detail_products->product_id=$product;
+        $detail_products->description=$d2;
+        $detail_products->save();
         return Response::json(array(
-            'name'=>$d1,
-           
+            'name'=>$d2
+            
           
          )); 
+    }
+    public function DetailProduct($id,Request $request)
+    { 
+        $products = Product::find($id);
+        if(empty($products))
+        
+           return \abort('404');
+         $user=$request->session()->get('key');
+            if(!empty($user))
+        $user=User::find($user->id);
+        
+        if (!empty($user)&& $user->can('do')) {
+            $detail_products=DetailProduct::where(['product_id'=>$id])->first(); 
+          return view('admin.product.detail')->with(['p'=>$products,'detail'=>$detail_products]);
+        }
+        else
+        return \abort('403');
+       
     }
     public function index(Request $request) 
     {
