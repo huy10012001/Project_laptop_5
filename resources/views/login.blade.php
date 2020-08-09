@@ -53,7 +53,7 @@
 				},
 			    success:function(data)
            	    {
-					  alert(data.status)
+					
                     if(data.status=="Thành công")
                     {
                        window.location.href = data.url; 

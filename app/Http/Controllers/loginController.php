@@ -94,6 +94,7 @@ class loginController extends Controller
     }
     public function logout(Request $request)
     {
+        
         if(empty($request->logout))
         {
             return abort('404');

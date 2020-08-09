@@ -13,6 +13,7 @@ USE Illuminate\Support\Facades\Redirect;
 class homeController extends Controller
 {
     public function detail(Request $request){
+       
         return view('detail');
     }
   

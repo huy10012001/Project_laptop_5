@@ -372,7 +372,7 @@ $("#cartModal").on('show.bs.modal', function(){
       <!-- Modal content-->
       <div class="modal-content">
         
-        <div class="modal-body">
+        <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
         <div class="modal-footer">

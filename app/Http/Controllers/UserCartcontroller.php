@@ -82,6 +82,7 @@ class UserCartcontroller extends Controller
             {
                 return abort('404');
             }
+            
             $user_id= $request->session()->get('key');
             
             //Tìm order đang đặt của user hiện tại

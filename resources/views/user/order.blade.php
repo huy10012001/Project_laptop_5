@@ -30,10 +30,10 @@
 <body>
 
 
-		<section>
+<section>
 			<div class="container">
 				<div class="row">
-                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 //load lại trang khi user bấm back
 if(performance.navigation.type == 2){
@@ -140,14 +140,22 @@ if(performance.navigation.type == 2){
                         
                             //nếu giỏ hàng thay đổi trong lúc order
                             if(data.status=="thay đổi")
-                                alert("Bạn vừa thay đổi giỏ hàng, vui lòng load lại trang");
+                            {
+                                $("#AlertModal .modal-body").html("Giỏ hàng của bạn có sự thay đổi");
+                                $("#AlertModal").modal("show");
+                            }
+
 						   else if(data.status=="giỏ hàng của bạn trống")
-                                alert("giỏ hàng của bạn trống");
+                            {
+                                $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
+                                $("#AlertModal").modal("show");
+                            }
 
                           
                             else 
                           {
-                              alert('Bạn đã đặt hàng thành công');
+                                $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
+                                $("#AlertModal").modal("show");
                               setTimeout(function () {
                              window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                               }, 3000); //will call the function after 2 secs.
@@ -339,16 +347,7 @@ if(performance.navigation.type == 2){
 
  <!--Nếu user chưa đăng nhập truy cập trang order-->
  @else 
-<script>
-$("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
- $("#AlertModal").modal("show");
- setTimeout(function () {
-    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-    }, 1000); //will call the function after 2 secs.
 
-
- //window.location.href = "{{URL::to('/home')}}"
-</script> 
 <table>
 <tr>
 <td>
@@ -441,7 +440,22 @@ $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
 
 
 </section>
- 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+    $("#AlertModal .modal-body").html("Trang chỉ dành cho thành viên đăng ký");
+ $("#AlertModal").modal("show");
+});
+
+
+ setTimeout(function () {
+    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+    }, 1000); //will call the function after 2 secs.
+
+
+ //window.location.href = "{{URL::to('/home')}}"
+</script> 
 @endif
 		
 			<footer id="footer"><!--Footer-->
@@ -547,7 +561,7 @@ $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
       <!-- Modal content-->
       <div class="modal-content">
         
-        <div class="modal-body">
+        <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
         <div class="modal-footer">
