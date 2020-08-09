@@ -36,6 +36,42 @@
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 //load lại trang khi user bấm back
+$(document).ready(function()
+{
+        
+    $( "#update" ).submit(function(e ) {
+        e.preventDefault();
+            $.ajaxSetup(
+                {
+                    headers:
+                    {
+                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                    }
+                }
+            );
+           
+            $.ajax({
+			    method:'post',
+      		    url:	 " {{ asset('/postDiaChiCheckOut')}}",
+      		    data:$('#update').serialize(),
+			    datatype: 'json',
+				error:function(data)
+				{
+					alert('loi roi')
+				},
+			    success:function(data)
+           	    {
+                  
+                    $("#update").hide();
+                    $("#khach").show();
+                    $("#khach input[name=name]").val(data.name) ;
+                    $("#khach input[name=phone]").val(data.phone) ;
+                    $("#khach input[name=address]").val(data.address) ;
+              
+           	    }
+        	});
+    });
+});
 if(performance.navigation.type == 2){
    location.reload(true);
 }
@@ -46,17 +82,8 @@ if(performance.navigation.type == 2){
       $('#khach').hide();
       $('#update').show();
     }
-    function getUpdate()
-    {
-        
-        //khi bấm xác nhận sẽ lấy value từ input form update thay thế cho text form khach
-        $("#khach input[name=name]").val($("#update input[name=name]").val()) ;
-        $("#khach input[name=phone]").val($("#update input[name=phone]").val()) ;
-        $("#khach input[name=address]").val($("#update input[name=address]").val()) ;
-       
-        $('#update').hide();
-        $('#khach').show();
-    }
+   
+
     function huy()
     {
 
@@ -270,24 +297,21 @@ if(performance.navigation.type == 2){
     Số điện thoại<input   value=" {{Session::get('key')->phone}}"   type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại" disabled><br>
 
     địa chỉ:<input   value="{{Session::get('key')->address}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
-
-     
-
-                <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
+     <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 
  </form>
 
-<form  id="update" hidden action="">
-
-
-                                <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
-                                <input   value="{{Session::get('key')->name}}"  type="text" class="form-control" name="name" required ><br>
-                                <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
-                                <input    value="{{Session::get('key')->phone}}"   type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại"><br>
-                                <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
-                                <input   value="{{Session::get('key')->address}}"   type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại"><br>
-                <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Huy</button>
-                <button  id="oK" onclick="getUpdate()"    type="button"   class="btn btn-primary ">xác nhận</button>
+<form  id="update"  hidden method="post" action="javascrip:void(0)">
+        {{csrf_field()}}
+            <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+            <input   value="{{Session::get('key')->name}}"  required type="text" class="form-control" name="name" required ><br>
+            <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+            <input    value="{{Session::get('key')->phone}}"  required type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại"><br>
+             <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+            <input   value="{{Session::get('key')->address}}"  required  type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại"><br>
+            <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Huy</button>
+            <input type="submit"    id="oK" value="xác nhận"   class="btn btn-primary "/>
+        
  </form>
 </div>
  <div class="col-sm-4">

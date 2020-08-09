@@ -109,12 +109,14 @@ Route::post('/postRegisterCheckOut', 'loginController@postRegisterCheckOut');
 //Route::get('/cart/{id}','Admincontroller@addCart' );
 
 
+
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
-Route::post('/postUpdateProduct', 'AdminProductController@postUpdateProduct');
+Route::post('/postDiaChiCheckOut', 'UserCartcontroller@postDiaChiCheckOut');
 
 
 
-
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 
 
 

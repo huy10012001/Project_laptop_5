@@ -64,7 +64,7 @@ class homeController extends Controller
     }
     public function index(Request $request){
         
-        $request->session()->flush();
+      
         return view('index');
     }
     public function checkout(){

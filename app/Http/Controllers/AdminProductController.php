@@ -13,7 +13,17 @@ use App\Order;
 use App\User;
 class AdminProductController extends Controller
 {
-  
+    public function postDetailProduct(Request $request)
+    {
+        $d1=$request->except('_token');
+        $request->session()->put('detail',json_encode($d1));
+       
+        return Response::json(array(
+            'name'=>$d1,
+           
+          
+         )); 
+    }
     public function index(Request $request) 
     {
         $user=$request->session()->get('key');
@@ -105,6 +115,7 @@ class AdminProductController extends Controller
     {
         $name=$request->input('name');
         $price=$request->input('price');
+        $description=$request->input('description');
         $category= $_POST['category'];
         // xử lý upload hình vào thư mục
         if($request->hasFile('image'))
@@ -128,7 +139,7 @@ class AdminProductController extends Controller
        
         $p->category_id=$category;
         $p->image = $imageName;
-       
+        $p->description= $description;
         //trường hợp user đã đăng nhập
         //update lại tổng  giá sản phẩm trong giỏ hàng
         if( $p->price!=$price)

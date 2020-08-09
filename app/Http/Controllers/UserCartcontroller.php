@@ -21,6 +21,18 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
 class UserCartcontroller extends Controller
 {
+    public function postDiaChiCheckOut(Request $request)
+    {
+        $name=$request->name;
+        $phone=$request->phone;
+        $add=$request->address;
+        return Response::json(array(
+            'name'=>$name,
+            'phone'=>$phone,
+            'address'=>$add
+          
+         )); 
+    }
     public function cart(Request $request){
         $value=$request->session()->get('key');
      
