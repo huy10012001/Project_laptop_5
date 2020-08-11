@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     // khai báo table ứng với model
-    use SoftDeletes;
+   
     protected $table = "product";
     // khai báo trường khóa chính
     protected $primaryKey = 'id';
@@ -17,7 +17,7 @@ class Product extends Model
     protected $fillable = ['id','category_id' ,'name', 'price', 'description', 'image','deleted_at', 'updated_at', 'created_at'];
     public function category()
     {
-        return $this->belongsTo('App\category')->withTrashed();
+        return $this->belongsTo('App\category');
     }
     public function detail()
     {

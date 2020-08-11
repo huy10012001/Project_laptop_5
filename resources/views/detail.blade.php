@@ -487,8 +487,31 @@
   <br>
 </div>
 
-@else
+@elseif(isset($noactive))
+<style>
+  #khongtontai .image
+  {
+  
+    text-align: center;
+  
+  }
+  #khongtontai
+  {
+    
+    height: 350px;
+  }
+</style>
+<br>
+    <div class="container" id="khongtontai" style="background:rgb(219, 242, 248);" >
+        <div class="image">
+          <img src="images/khongtontai.png"  alt=""  style="  margin-top: 40px;" ><br>
+         <h6 >Sản phẩm này không tồn tại,...</h6>
+        </div>
+        <div class="clear" style="width:1000px;height:50px;"></div>
 
+    </div>
+</br>
+@else
 <input type="text" class="form-control" id="validationDefault03" required disabled value="Sản phẩm đang cập nhập,vui lòng thực hiện lại">
 <br>
     <div class="container" style="background:rgb(219, 242, 248);" >

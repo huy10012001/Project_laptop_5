@@ -88,8 +88,18 @@ class AdminCategoryController extends Controller
         if($id=="")
             return abort('404');
         $c=category::find($id);
-        $c->delete();
-        $request->session()->put(['message'=>'Xóa thành công','alert-class'=>'alert-success']);
+        $p=Product::where(['category_id'=>$c->id])->first();
+        if(!empty($p))
+        { 
+            $request->session()->put(['message'=>'không thể xóa danh mục này vì có sản phẩm nằm trong danh mục','alert-class'=>'alert-danger']);
+           
+        }
+        else
+        {
+            $c->delete();
+            $request->session()->put(['message'=>'Xóa thành công','alert-class'=>'alert-success']);
+        }
+      
       
    
       

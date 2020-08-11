@@ -87,7 +87,7 @@
                                 @foreach($p->product as $p)
                                 <tr> 
                                     <td>{{$p->pivot->	order_id}}</td>
-                                    <td>{{ App\Product::withTrashed()->
+                                    <td>{{ App\Product::
                                      find($p->pivot->product_id)->name}}</td>
                                     <td>{{$p->pivot->	price}}</td>
                                     <td>{{$p->pivot->	qty}}</td>
@@ -97,11 +97,11 @@
                                 @endforeach
                             @else
                                 @foreach($p->product as $p)
-                                @if(!$p->trashed())
+                                @if($p->status=="1")
                                 <tr> 
                               
                                     <td>{{$p->pivot->	order_id}}</td>
-                                    <td>{{ App\Product::withTrashed()->
+                                    <td>{{ App\Product::
                                      find($p->pivot->product_id)->name}}</td>
                                     <td>{{$p->pivot->	price}}</td>
                                     <td>{{$p->pivot->	qty}}</td>

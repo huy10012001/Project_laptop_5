@@ -239,8 +239,9 @@ if(performance.navigation.type == 2){
                     </thead>
                     
 					@if(isset($orders))
-					@foreach($orders->product as $p)
-                    @if(!($p->trashed()))
+                    @foreach($orders->product as $p)
+                     <!--Trường hợp còn hàng(status là 1)-->
+                    @if($p->status=="1")
 						<tr>
                             <td class="cart_product" >
                             <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$p->image) }}"/> 
@@ -252,7 +253,7 @@ if(performance.navigation.type == 2){
 						    <p> {{$p->pivot->price }}</p>
                             </td>
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
-                            <!--Trường hợp còn hàng(khác trashed)-->
+                           
 
                             <td class="">
 						        <div class="buttons_added">

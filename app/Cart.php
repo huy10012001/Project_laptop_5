@@ -80,20 +80,21 @@ class Cart extends Model
       $this->totalPrice=$sum;
       $this->totalQty=$qty;
   }
-  public function Adminupdate($product,$price)
+  public function Adminupdate($product,$price,$status)
   {
+    $this->items[$product->id]['status']=$status;
+
+    $this->items[$product->id]['price']=$price;
+    $this->items[$product->id]['amount']= $this->items[$product->id]['qty']* $this->items[$product->id]['price'];
+    $sum=0;
+    
+    foreach( $this->items as $item)
+    { 
+      if($item['status']==1)
+       $sum+=  $item['amount'];
      
-      $this->items[$product->id]['price']=$price;
-      $this->items[$product->id]['amount']= $this->items[$product->id]['qty']* $this->items[$product->id]['price'];
-      $sum=0;
-      
-      foreach( $this->items as $item)
-      { 
-        if($item['status']==1)
-         $sum+=  $item['amount'];
-       
-      }
-      $this->totalPrice=$sum;
+    }
+    $this->totalPrice=$sum;
       
   }
   public function delete1($product)

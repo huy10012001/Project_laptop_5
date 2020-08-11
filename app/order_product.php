@@ -17,7 +17,7 @@ class order_product extends Model
      *
      * @var array
      */
-     use SoftDeletes;
+     
     protected $table = "order_product";
     // khai báo trường khóa chính
     protected $primaryKey = array('order_id', 'product_id');

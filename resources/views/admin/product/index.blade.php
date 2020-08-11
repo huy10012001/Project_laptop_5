@@ -63,6 +63,7 @@
                                 <th>Price</th>
                                
                                 <th>Image</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -76,7 +77,15 @@
                                 <td>{{ $p->name }}</td>
                               
                                 <td>{{ $p->price }}</td>
-                                
+                                @if( $p->status=="1")
+                                <td><div class="alert alert-primary" role="alert">
+                                 Sản phẩm  hoạt động!
+                                </div></td>
+                                @else
+                                <td><div class="alert alert-danger" role="alert">
+                                 Sản phẩm không hoạt động!
+                                </div></td>
+                                @endif
                                 <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
                                 <td class="text-right">
                                 <a class="btn btn-info btn-sm" href="{{ url('admin/product/detail/'.$p->id) }}">

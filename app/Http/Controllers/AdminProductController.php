@@ -51,6 +51,7 @@ class AdminProductController extends Controller
     }
     public function index(Request $request) 
     {
+       
         $user=$request->session()->get('key');
             if(!empty($user))
         $user=User::find($user->id);
@@ -61,12 +62,11 @@ class AdminProductController extends Controller
         }
         else
         return \abort('403');
-        
+       
     }
     public function create(Request $request)
     {  
-       
-        $user=$request->session()->get('key');
+            $user=$request->session()->get('key');
             if(!empty($user))
             $user=User::find($user->id);
             if (!empty($user)&& $user->can('do')) 
@@ -108,14 +108,16 @@ class AdminProductController extends Controller
         $p->category_id = $category;
        
         $p->image=$imageName;
+        $p->status="1";
         $p->save();
         $request->session()->put(['message'=>'Thêm mới thành công','alert-class'=>'alert-success']);
         return redirect()->action('AdminProductController@index');
     }
     public function update($id,Request $request)
     {
-        
-        $p = Product::find($id);
+     
+        $p=Product::find($id);
+       
         if(!empty($p))
         { 
             $user=$request->session()->get('key');
@@ -139,7 +141,7 @@ class AdminProductController extends Controller
     {
         $name=$request->input('name');
         $price=$request->input('price');
-
+        $status= $_POST['status'];
         $category= $_POST['category'];
         // xử lý upload hình vào thư mục
         if($request->hasFile('image'))
@@ -160,49 +162,48 @@ class AdminProductController extends Controller
         }
         $p = Product::find($id);
         $p->name=$name;
-       
+        
         $p->category_id=$category;
         $p->image = $imageName;
             
-        //trường hợp user đã đăng nhập
+        //update lại status
+       
         //update lại tổng  giá sản phẩm trong giỏ hàng
-        if( $p->price!=$price)
-        {
-
+        if( $p->price!=$price||$p->status!=$status)
+        { 
+            $p->status=$status;
             $p->price=$price;
             $p->save();
             //Trường hợp user chưa đăng nhập
             if($request->session()->get('cart'))
             {
                 $cart=new Cart(session()->get('cart'));
-                $cart->Adminupdate($p,$price);
-                $request->session()->put('cart',$cart);
+
+               if(isset($cart->items[$id]))
+                {
+                   $cart->Adminupdate($p,$price,$status);
+                    $request->session()->put('cart',$cart);
+                   
+                }
             }
-            
             order_product::join('product', 'order_product.product_id', '=', 'product.id')
             ->join('order','order_product.order_id','=','order.id')
             ->where(
                 ['product.id'=>$id
                 ,'order.status'=>'0']
             )
-            ->update(['order_product.price' => Product::find($id)->price,'order_product.amount'=>DB::raw('product.price*order_product.qty' )]);
+            ->update(['order_product.status' => Product::find($id)->status,'order_product.price' => Product::find($id)->price,'order_product.amount'=>DB::raw('product.price*order_product.qty' )]);
             //update lại tổng thành tiền
-                //query 
-            $carts= DB::table('order')
-            ->leftJoin(DB::raw('(Select order_product.order_id,SUM(order_product.amount) as count
-            FROM order_product,`order`
-            WHERE `order`.id=order_product.order_id  and deleted_at is null 
-            GROUP BY (order_product.order_id)
-            ) as T'), function ($join) 
+            $cart_users=Order::where(['status'=>"0"])->get();
+            foreach($cart_users as $cart_user)
             {
-                $join->on ( 'T.order_id', '=', 'order.id' );
-            })
-            ->where(['order.status'=>'0'])
-            ->whereNotNull('T.count')
-            ->update(['total'=>DB::raw('T.count' )]);
+                $total=order_product::where(['status'=>"1",'order_id'=>$cart_user->id])->sum('amount');
+                Order::where(['status'=>"0",'id'=>$cart_user->id])->update(['total'=>$total]);
+            }
         }
         else
         {
+            $p->status=$status;
             $p->price=$price;
             $p->save();
         }
@@ -216,39 +217,19 @@ class AdminProductController extends Controller
         if($id=="")
             return abort('404');
         $p = Product::find($id);
+        $order=order_product::where(['product_id'=>$p->id])->first();
+        if(!empty($order))
+        { 
+            $request->session()->put(['message'=>'không thể xóa sản phẩm này','alert-class'=>'alert-danger']);
+           
+        }
+        else
+        {
         $p->delete();
         $request->session()->put(['message'=>'xóa thành công','alert-class'=>'alert-success']);
-        //Trường hợp user chưa đăng nhập
-        if($request->session()->get('cart'))
-        {
-            $cart=new Cart(session()->get('cart'));
-            $cart->Admindelete($p);
-            $request->session()->put('cart',$cart);
         }
+        //Trường hợp user chưa đăng nhập
         
-        //Cập nhập tình trạng đã hết hàng của user
-        $carts=order_product::join('product', 'order_product.product_id', '=', 'product.id')
-        ->join('order','order_product.order_id','=','order.id')
-        ->where(
-        ['product.id'=>$id
-        ,'order.status'=>'0']
-        );
-        $carts->delete();
-        //Cập nhập lại tổng tiền giỏ hàng sau khí xóa sản phẩm
-        $carts= DB::table('order')->setBindings([$id])
-         ->leftJoin(DB::raw('(
-        SELECT total-(price*qty)  AS Decreamount,order_product.order_id
-        from order_product,`order`
-        WHERE order_product.order_id=`order`.id AND product_id=?
-        ) as T'), function ($join) {
-            $join->on ( 'T.order_id', '=', 'order.id' );
-        })
-        ->where(['order.status'=>'0'])
-        ->whereNotNull('T.Decreamount')
-        ->update(['total'=>DB::raw('T.Decreamount' )]);
-         return redirect()->action('AdminProductController@index');
-        
-       // }
     }
 }
 

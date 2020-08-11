@@ -279,7 +279,8 @@ class loginController extends Controller
             
             $order_product= Order_product::where([
                 'order_id'=>$order->id,
-            ])->forceDelete();
+            ])->delete();
+           
             foreach($cart->items as $item)
             {   
               
@@ -291,7 +292,10 @@ class loginController extends Controller
                 $order_product->qty=$item['qty'];
                 $order_product->amount=$item['amount'];
                 $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
-                $order_product->deleted_at=$item['deleted_at'];
+                if($item['status']==1)
+                $order_product->status="1";
+                else
+                $order_product->status="0";
                 $order_product->save();
             }
 

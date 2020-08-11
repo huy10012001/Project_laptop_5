@@ -64,9 +64,13 @@ class homeController extends Controller
         return view('user.home');
     }
     public function index(Request $request){
-        
-      
-        return view('index');
+        foreach(category::all() as $c)
+        {
+           
+          $product=$c->product;
+          echo $product->where('status','1')->count()." ";
+        }
+        //return view('index');
     }
     public function checkout(){
         return view('user.contact');
@@ -78,17 +82,19 @@ class homeController extends Controller
     public function product ($name)
     { 
         $name=str_replace("-", " ", $name);
-        $category = category::withTrashed()->where(['name'=>$name])->first();
+        $category = category::where(['name'=>$name])->first();
+      
         if(!empty($category))
-        $product=Product::where(['category_id'=>$category->id]);
-        if(!empty($category)&& $product->count()>0)
+            $product=Product::where(['category_id'=>$category->id,'status'=>"1"]);
+        if(!empty($category)&&$product->count()>0)
         { 
             $product=$product->paginate(6);
+            
             return view('user.product', ['c'=>$category,'product'=>$product]);
         }
         else
         {
-            $product=Product::where(['name'=>$name])->first();
+            $product=Product::where(['name'=>$name,'status'=>"1"])->first();
             if(!empty($product))
             {    
                 $detail_product=DetailProduct::where(['product_id'=>$product->id])->first();
@@ -103,9 +109,14 @@ class homeController extends Controller
                     
                 }
             }
-            else
-           
+            else 
+            {
+                $product_noactive=Product::where(['name'=>$name,'status'=>"0"])->first();
+                if(!empty($product_noactive))
+                    return view('detail')->with(['noactive'=>$product_noactive]);
+                else
                 return \abort('404');
+            }
         }
         
     }

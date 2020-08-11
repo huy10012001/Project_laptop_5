@@ -120,7 +120,7 @@ class UserCartcontroller extends Controller
                 
                 foreach($orders->product as $products)
                 {
-                    if(!($products->trashed()))
+                    if($products->status=="1")
                   
                     array_push($orders_product,$products->pivot->updated_at->toDateTimeString());
                 
@@ -167,12 +167,7 @@ class UserCartcontroller extends Controller
                 $orders->save();
                 
                 //xóa   order_product đã hết hàng trong giỏ hàng
-                order_product::withTrashed()->where(
-                [
-               'order_id'=>$orders->id,
-                ])->whereNotNull('deleted_at')->
-                forceDelete();
-            
+              
                 
             }
             
@@ -380,14 +375,15 @@ class UserCartcontroller extends Controller
                 $old_order_id="";
             }
             //Hết trường hợp 8
+             //Khi trống sản phẩm hoặc ản phẩm không hoạt động
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
             ])->first();
-            //Khi trống sản phẩm 
-                
-            if(empty($p))
+           
+            
+            if(empty($p) || Product::find($product_id)->status=="0")
                 return Response::json(array(
                 'status'=>'no5',
             ));
@@ -424,7 +420,8 @@ class UserCartcontroller extends Controller
             $c=Order::find($order_id);
             $c->total=order_product::where
             ([
-            'order_id'=>$order_id
+             'order_id'=>$order_id
+                ,'status'=>"1"
             
              ])->sum('amount');
              $c->save();
@@ -442,7 +439,7 @@ class UserCartcontroller extends Controller
         if( $product_id=="")
             return abort('404');
       
-        $product=Product::withTrashed()->find($product_id);
+        $product=Product::find($product_id);
          //Khi vừa đăng nhập ở tab khác hoặc cart trống và chưa đăng nhập
         if(empty($order_id) &&  !$request->session()->has('key') && !$request->session()->has('cart'))
         {
@@ -457,10 +454,11 @@ class UserCartcontroller extends Controller
         {
              return Response::json(array(
                  'status'=>'no2',
-        )); 
-         }
+          )); 
+        }
         if($request->session()->has('cart'))
         {
+            
             $cart=new Cart(session()->get('cart'));
             //nếu item không tồn tại
             if(!isset($cart->items[$product_id]))
@@ -468,6 +466,7 @@ class UserCartcontroller extends Controller
                 'status'=>'no3',
               
                )); 
+               
             //Trường hợp thời gian order item khác và có session cart
             if($time_create!=$cart->items[$product_id]['time_at'])
                return Response::json(array(
@@ -485,6 +484,7 @@ class UserCartcontroller extends Controller
               
                )); 
         }
+        
         if($request->session()->has('key'))
         { 
             
@@ -520,7 +520,7 @@ class UserCartcontroller extends Controller
             {
                 $old_order_id="";
             }
-            $p = order_product::withTrashed()->where
+            $p = order_product::where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
@@ -553,21 +553,24 @@ class UserCartcontroller extends Controller
                          'status'=>'no7'
                 ));
             }
-            $c=Order::find($order_id);
+            $c=Order::where(['id'=>$order_id,'status'=>"0"])->first();
+           
             //sản phẩm chưa hết hàng hoặc còn hoạt động thì trừ đi giá sản phẩm đó
-            if(!($p->trashed()))
+            if($p->status=="1")
             {   
                 $c->total=$c->total-$p->amount;
+                
                 $c->save();
                     
             }
+          
                  
                  //Xóa order trong giỏ hàng hiện tại
             $order_product= order_product::where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
-            ])->forceDelete();
+            ])->delete();
                
             return Response::json(array(
                     'total'=>$c->total  ,
@@ -635,8 +638,7 @@ class UserCartcontroller extends Controller
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
         //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
-            
-        if(empty($carts))
+       if(empty($carts))
         {
             $carts=new Order();
             $carts->user_id=$user_id;
@@ -663,6 +665,7 @@ class UserCartcontroller extends Controller
             $order_product->price=Product::find($id)->price;
             $order_product->qty=1;
             $order_product->amount=$order_product->price;
+            $order_product->status="1";
             $order_product->save();
             $carts->total=$carts->total+=Product::find($id)->price;
             $carts->save();

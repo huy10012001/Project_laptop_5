@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class category extends Model
 {
     // khai báo table ứng với model
-    use SoftDeletes;
+   
     protected $table = "category";
     // khai báo trường khóa chính
     protected $primaryKey = 'id';

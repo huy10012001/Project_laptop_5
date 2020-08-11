@@ -120,6 +120,18 @@ $(document).ready(function()
                                     <input type="text" class="form-control" id="txt-name" name="price" value="{{$p->price}}"
                                            placeholder="Input Product Name">
                                 </div>
+                                <div class="form-group">
+                                <label for="txt-name">Status</label>
+                                    <select name="status">
+                                    <option value="{{$p->status}}"
+                                     selected  hidden> 
+                                         {{$p->status}}
+                                     </option> 
+                                     <option value="0">0</option>
+                                        <option value="1">1</option>
+                                       </select>
+
+                                </div>
                                 
                                 <div class="form-group">
 

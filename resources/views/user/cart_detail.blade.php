@@ -1,6 +1,10 @@
 
+<style>
+
+</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+
 //Hàm update item ở giỏ hàng
 function onChange(qty,product_id,order_id,timecreate)
 {
@@ -39,9 +43,15 @@ function deleteCart(product_id,order_id,timecreate)
       	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
       	data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 		datatype: 'json',
+        error:function(data)
+        {
+            alert('lỗi');
+        },
         success:function(data)
         {	
+           
             //khi không tìm thấy item
+           
             if(data.status)
             {
                 $("#AlertModal .modal-body").html("không tìm thấy item");
@@ -110,8 +120,13 @@ function dat(login)
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
+                error:function(data)
+                {
+                    alert('loi');
+                },
 			    success:function(data)
            	    { 
+                    alert(data.status);
                     if(data.status=="Thành công")
                     {
                        window.location.href = "{{asset('/order')}}"; 
@@ -190,10 +205,10 @@ function dat(login)
 					@foreach(Session::get('cart')->items as $product)
 						<tr>
                            
-                            <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" /> 
+                            <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
 						    
 						    <td class="cart_name">
-							<h4>{{App\Product::withTrashed()->find($product['id'])->name}}</h4>
+							<h4>{{App\Product::find($product['id'])->name}}</h4>
                             </td>
                             <td class="cart_price">
 						    <p> {{$product['price']}}</p>
@@ -385,19 +400,21 @@ $('input.input-qty').each(function() {
 						</tr>
                     </thead>
                     <tbody class="cart-body" tyle="word-break:break-all;">
-					@foreach($orders->product as $p)
+                    @foreach($orders->product as $p)
+                 
+                    @if($p->status=="1")
 						<tr>
                             <td class="cart_product">
 							   <img width="100px"  style=" margin-right:5em; height:100px" src="{{ url('images/'.$p->image) }}"/> 
 						    </td>
-						    <td class="cart_name" s>
+						    <td class="cart_name" >
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
 						    <p> {{$p->pivot->price }}</p>
                             </td>
                             <!--Trường hợp còn hàng(khác trashed)-->
-                            @if(!($p->trashed()))
+                            
                             <td class="">
 						        <div class="buttons_added">
                                 <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
@@ -413,9 +430,24 @@ $('input.input-qty').each(function() {
 						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 <i class="fas fa-trash"><i class="fa fa-times"></i></button>
                                 </td>
-                            
+                            </tr>
                             <!--Trường hợp hết hàng -->
                             @else
+                      
+                            <tr class="khonghoatdong">
+                            <td class="cart_product">
+                            
+                            <span class="badge">Hết hàng</span>
+             
+                            <img width="100px"  style=" margin-right:5em; height:100px" src="{{ url('images/'.$p->image) }}"/> 
+                          
+                            </td>
+						    <td class="cart_name" s>
+							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
+                            </td>
+                            <td class="cart_price">
+						    <p> {{$p->pivot->price }}</p>
+                            </td>
                                 <td ></td>
                                 <td></td>
                                
@@ -423,8 +455,9 @@ $('input.input-qty').each(function() {
 						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')"><i class="fa fa-times"></i></button>
                                 
                             </td>        
+                            </tr>
                             @endif
-                        </tr>
+                        
                     @endforeach
                     </tbody>
 				</table>

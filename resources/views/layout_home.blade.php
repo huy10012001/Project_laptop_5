@@ -19,6 +19,29 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <style>
+	.khonghoatdong {
+    opacity: 0.7;
+    background-color: #ccc;
+
+}
+
+.cart_product {
+    position: relative;
+ 
+  
+}
+.cart_product .badge
+{
+    position: absolute;
+    top:-10px;
+    width: 100px;
+    color:black;
+    background-color: red;
+}
+.cart_product img
+{
+    margin-top:10px;
+}
 #loginModal
 {
 	z-index: 5000;
@@ -186,7 +209,7 @@ function AddCart(product_id)
 	}});
 }
 
-$(document).ready(function(){
+/*$(document).ready(function(){
 	//loalad lại trang khi modal đóng
 	
  	$("#AlertModal").on('hide.bs.modal', function(){
@@ -369,9 +392,11 @@ $("#cartModal").on('show.bs.modal', function(){
 								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);">Trang Chủ</a></li>
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-									@foreach(App\category::withTrashed()->get() as $c)
-										@if($c->product->count()>0)
-								<li><a  href="{{ URL::to('/'.$c->name) }}" >{{$c->name}}</a></li>
+									
+									@foreach(App\category::all() as $c)
+									
+										@if($c->product->where('status','1')->count()>0)
+										<li><a  href="{{ URL::to('/'.$c->name) }}" >{{$c->name}}</a></li>
 										@endif
 									@endforeach
                                     </ul>
@@ -469,8 +494,9 @@ $("#cartModal").on('show.bs.modal', function(){
 							<table class="table table-image"> 
                                 <thead>
                                 <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">sản phẩm</th>
+                                   
+									<th scope="col">sản phẩm</th>
+									<th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
                                     <th scope="col">Số lượng</th>
                                     <th scope="col">Tổng cộng</th>
@@ -478,13 +504,14 @@ $("#cartModal").on('show.bs.modal', function(){
                                 </tr>
                                 </thead>
                                 <tbody class="cart-body">
-                                	@foreach(Session::get('cart')->items as $product)
-										<tr>		
-											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
+									@foreach(Session::get('cart')->items as $product)
+											@if($product['status']==1)
+											<tr>		
+											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     		</td>
-                                    		<td class="" style="word-break: break-all;">{{App\Product::withTrashed()->find($product['id'])->name}}</td>
+                                    		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
-                                    		@if($product['status']==1)
+                                    	
 											<td class="price">{{$product['price']}}</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
@@ -498,23 +525,29 @@ $("#cartModal").on('show.bs.modal', function(){
                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                                         	</svg>
                                     		</a>
-                                    		</td>
+											</td>
+											</tr>
 											@else
-                                			<td class="image"><img  height="100px" src="{{ url('images/'.App\Product::withTrashed()->find($product['id'])->image) }}" alt="" />
-                                			</td>
-                                			<td>{{$product['price']}}</td>
-                                			<td class="qty"> </td>
-                               		 		<td class = "amount"></td>
-                                	 		<td>
-                                    		<a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
-                                    		<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    		<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                    		<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                    		</svg>
+											<tr class="khonghoatdong" >
+												<td  class="cart_product">
+													<span class="badge">Hết hàng</span>
+													<img  width="100px"  height="80px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
+												</td>
+												<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
+                                				<td>{{$product['price']}}</td>
+                                				<td class="qty"> </td>
+                               		 			<td class = "amount"></td>
+                                	 			<td>
+                                    			<a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
+                                    			<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    			<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    			<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    			</svg>
                                     		</a>
-                                			</td>
+											</td>
+											</tr>	
 											@endif
-										</tr>	 
+										 
 									@endforeach
 								</tbody>
 							</table>
@@ -538,15 +571,17 @@ $("#cartModal").on('show.bs.modal', function(){
                             </tr>
                             </thead>
                                 <tbody>
-                                  	@foreach($orders->product as $p)
+									 @foreach($orders->product as $p)
+									
+									  @if($p->status=="1")
 									<tr>
+									
 										<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
 										<td class="price">{{$p->pivot->price }}</td>
-                                       <!--Trường hợp còn hàng(khác trashed)-->
-                                    	@if(!($p->trashed()))
+                                      
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
@@ -560,9 +595,19 @@ $("#cartModal").on('show.bs.modal', function(){
                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                                           </svg>
                                        </a>
-                                       </td>
-                                   		@else
-										<td class="qty"> </td>
+									   </td>
+									</tr>
+									 @else
+									   <tr class="khonghoatdong" >
+									 
+										<td class="cart_product">
+											  <span class="badge">Hết hàng</span>
+										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
+                                        </td>
+                                    	<td style="word-break: break-all;">{{$p->name}}</td>
+                                      
+										<td class="price">{{$p->pivot->price }}</td>
+                                      	<td class="qty"> </td>
                                     	<td class = "amount"></td>
                                     	<td>
                                       	<a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
@@ -571,9 +616,10 @@ $("#cartModal").on('show.bs.modal', function(){
                                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                                         </svg>
                                       	</a>
-                                   		</td>
+										   </td>
+										 </tr>
 										@endif
-									</tr>
+									
 								  	@endforeach
 								</tbody>
 							</table>
