@@ -43,11 +43,17 @@ class AuthServiceProvider extends ServiceProvider
             }
             
         });
-        Gate::define('editThisUser', function ($user,$user_eited) {
+        Gate::define('adminEditYourSelf', function ($user,$user_eited) 
+        {
+            if($user->id==$user_eited->id)
+            return true;
+        });
+      
+        Gate::define('editThisAdmin', function ($user,$user_eited) {
            
             //dd($user->id);
-           if($user->id==$user_eited->id)
-                return true;
+           /*if($user->id==$user_eited->id)
+                return true;*/
             $caneditAdmin=false;
            
             foreach($user->role as $role)

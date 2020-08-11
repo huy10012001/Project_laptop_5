@@ -35,9 +35,10 @@ class Adminusercontroller extends Controller
             if (!empty($user)&& $user->can('do')) 
             {
                
-                if($user->can('editThisUser',  $user_edited ))
-                 
-                    return view('admin.user.view', ['p'=>$user_edited ]);
+                if($user->can('adminEditYourSelf',  $user_edited ))
+                    return view('admin.user.view', ['editAminYourself'=>$user_edited ]);
+                else if($user->can('editThisAdmin',  $user_edited ))
+                    return view('admin.user.view', ['editAdmin'=>$user_edited ]);
                 else
                 {
                     $request->session()->put(['message'=>"bạn không có quyền chỉnh sửa user này",'alert-class'=>'alert-danger']);
@@ -104,7 +105,7 @@ class Adminusercontroller extends Controller
             
             $request->session()->put(['message'=>"thêm không thành công do user đã có role này",'alert-class'=>'alert-danger']);
         }
-        if(!empty($user)&&$user->can('editThisUser', $user_edited))
+        if(!empty($user)&&($user->can('adminEditYourSelf', $user_edited)||$user->can('editThisAdmin', $user_edited)))
         {
             return Redirect("admin/user/viewRole/$id");
         }

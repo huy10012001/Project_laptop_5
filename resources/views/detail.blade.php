@@ -389,10 +389,16 @@
       <div class="alert alert-warning" role="alert">
  Sản phẩm cùng danh mục
 </div>
-  @if($c->product->count()>4)
-  <div class="row">
+@php
 
-  </div>
+  $lienquan=$c->product->where('id','!=', "$p->id");
+ 
+@endphp
+
+
+
+@if($lienquan->count()>4)
+
     <div class="row">
         <div class="col-sm-12">
           <div id="slider-carousel" class="carousel slide" data-ride="carousel">
@@ -407,7 +413,7 @@
             <div class="carousel-inner">
             <div class="item active item1 " style="height: 350px;">
           
-             @foreach($c->product->take(4) as $product)
+             @foreach($lienquan->take(4) as $product)
              
                   <div class="col-sm-3 detail">
                   <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
@@ -421,7 +427,7 @@
               @endforeach
               </div>
               <div class="item">
-              @foreach($c->product->skip(4)->take(4) as $product)
+              @foreach($lienquan->skip(4)->take(4) as $product)
             
                  <div class="col-sm-3 detail">
                   <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
@@ -439,20 +445,23 @@
       </div>
     </div>
   </div>
-  @else
+  @elseif($lienquan->count()>0)
 
   <div class="item" style="margin-top:20px">
-     @foreach($c->product as $product)
+     @foreach($lienquan as $product)
        
            <div class="col-sm-3 detail">
             <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
             <p>{{$product->name}}</p>
             <p>{{number_format($product->price)}}</p>
-              <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($p->name)) }}" > xem sản phẩm</a></button>
+              <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
             </div>
        
       @endforeach
+  @else
+    không
   @endif
+
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
       <h2> Hỏi đáp và thắc mắc</h2>

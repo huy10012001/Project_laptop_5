@@ -39,7 +39,7 @@
 $(document).ready(function()
 {
         
-    $( "#update" ).submit(function(e ) {
+    $( "#update" ).submit(function(e) {
         e.preventDefault();
             $.ajaxSetup(
                 {

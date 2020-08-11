@@ -587,9 +587,10 @@ $("#cartModal").on('show.bs.modal', function(){
 							</div><!--/cart model-->
                             <div class="modal-footer border-top-0 d-flex justify-content-between">
                               <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
-                              <button type="button" onclick="checkOut()" class="btn btn-success" ><a href="{{url('/cart')}}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
+							  <a href="{{url('/cart')}}" style="background: none; color:black;"> <button type="button"  class="btn btn-success" ><b>kiểm tra</b> </button></a>
+
 							</div>
-                </div>
+                </div> 
             </div>
         </div>
 		<footer id="footer"><!--Footer-->
