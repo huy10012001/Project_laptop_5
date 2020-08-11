@@ -33,7 +33,9 @@ class UserCartcontroller extends Controller
           
          )); 
     }
-    public function cart(Request $request){
+    public function cart(Request $request)
+    {
+        
         $value=$request->session()->get('key');
      
         //check user da dang nhap neu chua quya lai login
@@ -319,7 +321,7 @@ class UserCartcontroller extends Controller
            )); 
         }
         $product=Product::find($product_id);
-             //tìm order trong giỏ hàng hiện tại
+        //tìm order trong giỏ hàng hiện tại
         if($request->session()->get('cart'))
         {
             

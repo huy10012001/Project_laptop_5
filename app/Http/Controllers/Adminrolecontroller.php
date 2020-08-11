@@ -50,8 +50,8 @@ class Adminrolecontroller extends Controller
     }
     public function update($id,Request $request) {
         $p = role::find($id);
-        if($p->name=="admin")
-        {$request->session()->put(['message'=>'không thể sửa role admin','alert-class'=>'alert-danger']);
+        if($p->name=="admin" ||$p->name=="super admin")
+        {$request->session()->put(['message'=>'không thể sửa role này','alert-class'=>'alert-danger']);
         return redirect()->action('Adminrolecontroller@index');
         }
        
@@ -94,9 +94,9 @@ class Adminrolecontroller extends Controller
          if($id=="")
             return abort('404');
         $p = role::find($id);
-        if($p->name=="admin")
+        if($p->name=="admin" ||$p->name=="super admin")
         {
-            $request->session()->put(['message'=>'không thể xóa role admin','alert-class'=>'alert-danger']);
+            $request->session()->put(['message'=>'không thể xóa role này','alert-class'=>'alert-danger']);
             return redirect()->action('Adminrolecontroller@index');
         }
         $p1=$p->user;

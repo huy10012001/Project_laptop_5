@@ -75,10 +75,11 @@ class homeController extends Controller
     }
     public function product($name)
     {
-        $p = category::withTrashed()->where(['name'=>$name])->first();
-        if(!empty($p) and $p->product->count()>0)
+        $category = category::withTrashed()->where(['name'=>$name])->first();
+        $product=Product::where(['category_id'=>$category->id])->paginate(6);
+        if(!empty($category) and $product->count()>0)
       
-           return view('user.product', ['c'=>$p]);
+           return view('user.product', ['c'=>$category,'product'=>$product]);
         else
          {
              abort(404);

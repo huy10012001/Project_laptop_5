@@ -120,17 +120,7 @@ $(document).ready(function()
                                     <input type="text" class="form-control" id="txt-name" name="price" value="{{$p->price}}"
                                            placeholder="Input Product Name">
                                 </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <input  id="textDescription"  value="{{$p->description}}" class="form-control" type="hidden" name="description" />
-                                    <textarea id="description" class="form-control" rows="3" readonly>
-                                    
-                                    </textarea>
-                                    <button type="button"   class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                        Cập nhập
-                                    </button>
-                                    
-                                </div>
+                                
                                 <div class="form-group">
 
                                     <label for="image">Image</label>   

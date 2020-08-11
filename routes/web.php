@@ -40,7 +40,7 @@ Route::post('admin/category/postUpdate/{id}', 'AdminCategoryController@postUpdat
 Route::get('admin/product/detail/{id}', 'AdminProductController@DetailProduct');
 Route::get('admin/product/index', 'AdminProductController@index');
 Route::get('admin/product/create', 'AdminProductController@create');
-if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST');
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('admin/product/postCreate', 'AdminProductController@postCreate');
 Route::get('admin/product/delete', 'AdminProductController@delete');
 Route::get('admin/product/update/{id}', 'AdminProductController@update');
@@ -61,7 +61,7 @@ Route::get('admin/role/index', 'Adminrolecontroller@index');
 Route::get('admin/role/create', 'Adminrolecontroller@create');
 Route::get('admin/role/delete/', 'Adminrolecontroller@delete');
 Route::get('admin/role/update/{id}', 'Adminrolecontroller@update');
-if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST');
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('admin/role/postCreate', 'Adminrolecontroller@postCreate');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 route::post('admin/role/postUpdate/{id}', 'Adminrolecontroller@postUpdate');    

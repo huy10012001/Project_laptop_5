@@ -131,13 +131,15 @@ session_start();
 
     </div>
 </div>
+
 <div class="col-sm-9 padding-right">
 
     <div class="features_items"><!--features_items-->
         <h2 class="title text-center">sản phẩm Laptop {{$c->name}}</h2>
         <!--sản phẩm-->
+<div class="row">
+ @foreach($product as $p)
 
- @foreach($c->product as $p)
 <div class="col-sm-4">
 
     <div class="product-image-wrapper">
@@ -170,7 +172,9 @@ session_start();
 </div>
 
 @endforeach 
-
+</div>
+<div class="row">{{$product->links()}}</div>
+    </div>
 </div><!--features_items-->
 
 </div>

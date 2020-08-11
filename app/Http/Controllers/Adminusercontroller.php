@@ -7,6 +7,7 @@ use App\Order;
 use App\User;
 use App\role;
 use App\role_user;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 class Adminusercontroller extends Controller
 {
@@ -23,24 +24,31 @@ class Adminusercontroller extends Controller
         return \abort('403');
        
     }
-    public function update($id,Request $request) {
-        $p = User::find($id);
-        
-        if(!empty($p))
-        { 
+    public function update($id,Request $request) 
+    {
+        $user_edited = User::find($id);
             $user=$request->session()->get('key');
-            if(!empty($user))
-              $user=User::find($user->id);
-        if (!empty($user)&& $user->can('do')) 
-        {
-            return view('admin.user.view', ['p'=>$p]);
-        }
+        if(!empty($user))
+            $user=User::find($user->id);
+        if(!empty($user_edited))
+        { 
+            if (!empty($user)&& $user->can('do')) 
+            {
+               
+                if($user->can('editThisUser',  $user_edited ))
+                 
+                    return view('admin.user.view', ['p'=>$user_edited ]);
+                else
+                {
+                    $request->session()->put(['message'=>"bạn không có quyền chỉnh sửa user này",'alert-class'=>'alert-danger']);
+                    return Redirect("admin/user/index");
+                }
+            }
+            else
+                return \abort('403');
+        }    
         else
-        return \abort('403');
-            
-        }
-        else
-            return abort('404');
+           return abort('404');
       
         
     }
@@ -75,35 +83,53 @@ class Adminusercontroller extends Controller
     }*/
     public function postAddRole(Request $request,$id)
     {
-        
+        $user_edited = User::find($id);
+        $user=$request->session()->get('key');
+        if(!empty($user))
+            $user=User::find($user->id);
+       
         $role= $_POST['roleUser'];
         $p = role_user::where(["user_id"=>$id,"role_id"=>$role])->first();
-         if(empty($p))
-        { 
+        if(empty($p))
+        {   
             $a=new role_user();
             $a->user_id=$id;
             $a->role_id=$role;
             $a->save(); 
             $request->session()->put(['message'=>"thêm thành công",'alert-class'=>'alert-success']);
+            
         }
         else
         {  
             
             $request->session()->put(['message'=>"thêm không thành công do user đã có role này",'alert-class'=>'alert-danger']);
         }
-        return Redirect("admin/user/viewRole/$id");
+        if(!empty($user)&&$user->can('editThisUser', $user_edited))
+        {
+            return Redirect("admin/user/viewRole/$id");
+        }
+          
+        else
+        {   
+            $request->session()->forget('message');
+            return Redirect("admin/user/index");
+        }
+        
     }
     public function updateRole($user_id,$role_id,Request $request)
     {
+       
         $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->first();
        
         if(!empty($p))
-        {  $user=$request->session()->get('key');
+        { 
+            $user=$request->session()->get('key');
             if(!empty($user))
-              $user=User::find($user->id);
-             if (!empty($user)&& $user->can('do')) 
+            $user=User::find($user->id);
+            if (!empty($user)&& $user->can('do')) 
             {
-            return view('admin.user.editrole', ['p'=>$p]);
+                
+                return view('admin.user.editrole', ['p'=>$p]);
             }
             else
             return \abort('403');
@@ -137,8 +163,8 @@ class Adminusercontroller extends Controller
          if($user_id=="")
          return abort('404');
         $p = role_user::where(["user_id"=>$user_id,"role_id"=>$role_id])->delete();
+           $request->session()->put(['message'=>'Xoá thành công','alert-class'=>'alert-success']);
         
-     $request->session()->put(['message'=>'Xoá thành công','alert-class'=>'alert-success']);
          
         
             

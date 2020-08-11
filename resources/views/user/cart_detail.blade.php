@@ -2,12 +2,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-    if(!!window.performance && window.performance.navigation.type === 2)
-    {
-        console.log('Reloading');
-        window.location.reload();
-    }
-   
+ 
 
     function dat(login)
     {
@@ -305,7 +300,7 @@
   <!--form đăng nhập cart-->
   <!--Neu user da dang nhap thi redirec toi trang checkout-->
 
-
+  
   <button type="button" onclick="dat()" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
 <!-- Modal -->
 <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -45,9 +45,13 @@
                                      selected  hidden> 
                                          {{App\role::find($p->role_id)->name}}
                                      </option> 
+                                      
                                         @foreach(App\role::all() as  $category)
+                                         @if($category->name!="super admin")
                                         <option value="{{$category->id}}">{{$category->name}}</option>
-                                         @endforeach
+                                        @endif
+                                        @endforeach
+                                        
                                       </select>
                                      
                                        

@@ -67,8 +67,7 @@ class AdminProductController extends Controller
     public function create(Request $request)
     {  
        
-      
-            $user=$request->session()->get('key');
+        $user=$request->session()->get('key');
             if(!empty($user))
             $user=User::find($user->id);
             if (!empty($user)&& $user->can('do')) 

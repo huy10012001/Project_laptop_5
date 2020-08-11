@@ -38,8 +38,38 @@ class AuthServiceProvider extends ServiceProvider
             //dd($user->id);
             foreach($user->role as $role)
             {
-                
-                 return $role->name=="admin";
+                 if($role->name=="admin"||$role->name=="super admin")
+                 return true;
+            }
+            
+        });
+        Gate::define('editThisUser', function ($user,$user_eited) {
+           
+            //dd($user->id);
+           if($user->id==$user_eited->id)
+                return true;
+            $caneditAdmin=false;
+           
+            foreach($user->role as $role)
+            {
+                if($role->name=="super admin")
+                {
+                    $caneditAdmin=true;
+                    return true;
+                }
+            }
+          
+           if($caneditAdmin==false)
+            {
+                foreach($user_eited->role as $role)
+                {
+                    if($role->name=="admin" || $role->name=="super admin")
+                    {
+                        
+                        return false;
+                    }
+                }
+                return true;
             }
             
         });

@@ -18,24 +18,73 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<style>
+
+.dropbtn {
+    background-color: #3c9add;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {background-color: #ddd;}
+
+  .dropdown:hover .dropdown-content {display: block;}
+
+  .dropdown:hover .dropbtn {background-color: #61a2d0;}
+/*drowdown*/
+</style>
 </head><!--/head-->
 
 <script type="text/javascript">
 //load lại trang khi user bấm back
-if(performance.navigation.type == 2){
-   location.reload(true);
-}
+
+	function  menuDangNhap()
+	{
+		$('.users .dropdown-content').css('display','block');
+		$('.users .dropdown-content').css('position','static');
+	}
+    if(!!window.performance && window.performance.navigation.type === 2)
+    {
+        console.log('Reloading');
+        window.location.reload();
+    }
+   
 //Ha2m show lai gio hang khi loadlai
-$(document).ready(function(){
-	if (Cookies.get('modal')=="showed") {
-    // show dialog...
-	$("#cartModal").modal("show");
-}
 
 $("#AlertModal").on('hide.bs.modal', function(){
 	
 	location.reload();
   });
+
+$(document).ready(function(){
+	
+	if (Cookies.get('modal')=="showed") {
+    // show dialog...
+	$("#cartModal").modal("show");
+}
 
 $("#cartModal").on('show.bs.modal', function(){
 	
@@ -49,7 +98,7 @@ $("#cartModal").on('show.bs.modal', function(){
 //	$.removeCookie("test");
 	//$.removeCookie('modal'); 
 	Cookies.remove('modal');
-	location.reload();
+	//location.reload();
   });
 });
 	//Khi bấm kiểm tra thì tắt modal cart
@@ -57,10 +106,8 @@ $("#cartModal").on('show.bs.modal', function(){
 	{
 	
 		Cookies.remove('modal');
-		$("#cartModal").modal("hide");
+	//	$("#cartModal").modal("hide");
 		
-		window.location.href = "{{asset('/cart')}}"; 
-
 	}
 	//logOut
 	
@@ -241,21 +288,64 @@ $("#cartModal").on('show.bs.modal', function(){
                       </div>
 				</div>
 				@if(!Session::has('key'))
+				
                 <div class="col-sm-2">
                     <div class="users" >
                         <div class="dropdown">
-                            <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>Đăng Nhập</b> </button>
+                            <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>Tài khoản </b> </button>
                             <div class="dropdown-content">
-                              <a href="#">Link 1</a>
-                              <a href="#">Link 2</a>
+									<!--modal-->
+									<!-- Button trigger modal -->
+<button type="button"  onclick="menuDangNhap()" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+
+                </button>
+                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">Upload</a>
+
+                        </li>
+                        <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">Browse</a>
+
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="uploadTab">upload Tab</div>
+                        <div role="tabpanel" class="tab-pane" id="browseTab">browseTab</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+									<!--end modal-->
+                              <a href="#">tạo tài khoản</a>
                               <a href="#">Link 3</a>
-                              <a href="#">Link 3</a>
-                              <a href="#">Link 3</a>
+
                             </div>
                         </div>
 					</div>
 				</div>
+
+
+
                 <div class="col-sm-2">
+				
                     <div class="cart1">
                        	<button type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; "><i class="fa fa-shopping-cart" style="color:white;"></i>
                         <b style="color: white;">  giỏ hàng   </b>
@@ -521,7 +611,7 @@ $("#cartModal").on('show.bs.modal', function(){
 							</div><!--/cart model-->
                             <div class="modal-footer border-top-0 d-flex justify-content-between">
                               <button onclick="javascript:window.location.reload()"yyyyyyyyyyyy type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right:400px;">Close</button>
-                              <button type="button" onclick="checkOut()" class="btn btn-success" ><a href="" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
+                              <button type="button" onclick="checkOut()" class="btn btn-success" ><a href="{{url('/cart')}}" style="background: none; color:black;"><b>kiểm tra</b></a> </button>
 							</div>
                 </div>
             </div>

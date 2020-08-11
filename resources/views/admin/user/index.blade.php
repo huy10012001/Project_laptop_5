@@ -21,13 +21,17 @@
 
     <!-- Main content -->
     <section class="content">
+        
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">DataTable with minimal features & hover style</h3>
                     </div>
-
+                    @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
+                        {{Session::forget('message')}}
+                    @endif
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="product" class="table table-bordered table-hover">

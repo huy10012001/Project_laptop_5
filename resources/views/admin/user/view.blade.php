@@ -96,20 +96,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                           
-                                @foreach($p->role as $p1)
+                                 @foreach($p->role as $p1)
                                 <tr> 
                                     <td>{{$p1->id}}</td>
                                     <td>{{$p1->name}}</td>
                                    
                                     <td class="text-right">
-                                    <a class ="btn btn-info btn-sm" href="{{ url('admin/user/updateRole/'.$p->id.'/'.$p1->id) }}">
-                                        <i class="fas fa-pencil-alt"></i> Edit
-                                    </a>
+                                    @if($p1->name!="super admin")
                                     <a class="btn btn-danger btn-sm" 
                                    onclick="deleteRole('{{$p->id}}','{{$p1->id}}')">
                                          <i class="fas fa-trash"></i> Delete
                                     </a>
+                                    @endif
                                     </td>
                                 </tr>
                            
@@ -144,9 +142,12 @@
                 <label for="txt-name">Role</label>
                     <select name="roleUser">
                         @foreach(App\role::all() as  $category)
+                        
+                        @if($category->name!="super admin" )
                         <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endif
                         @endforeach
-                    </select>
+                    </select>                                       
                     <br/></br>
                     <button type="submit"  name="submit" class="btn btn-primary">Add</button>
                     <br/> <br/>
