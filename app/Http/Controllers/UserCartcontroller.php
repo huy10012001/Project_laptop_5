@@ -84,7 +84,7 @@ class UserCartcontroller extends Controller
     { 
         return view('checkout');
     }
-    public function getOrder(Request $request)
+    public function getOrder(Request $request,$name)
     { 
         //Nếu user thay đổi giỏ hàng thì return status ở json
            

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\category;
 use App\contact_user;
+use App\DetailProduct;
 use App\Order;
 use App\product;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 USE Illuminate\Support\Facades\Redirect;  
-
+use Illuminate\Support\Facades\Response;
 class homeController extends Controller
 {
     public function detail(Request $request){
@@ -73,17 +74,40 @@ class homeController extends Controller
     public function contact(){
         return view('user.contact');
     }
-    public function product($name)
-    {
+   
+    public function product ($name)
+    { 
+        $name=str_replace("-", " ", $name);
         $category = category::withTrashed()->where(['name'=>$name])->first();
-        $product=Product::where(['category_id'=>$category->id])->paginate(6);
-        if(!empty($category) and $product->count()>0)
-      
-           return view('user.product', ['c'=>$category,'product'=>$product]);
-        else
-         {
-             abort(404);
+        if(!empty($category))
+        $product=Product::where(['category_id'=>$category->id]);
+        if(!empty($category)&& $product->count()>0)
+        { 
+            $product=$product->paginate(6);
+            return view('user.product', ['c'=>$category,'product'=>$product]);
         }
+        else
+        {
+            $product=Product::where(['name'=>$name])->first();
+            if(!empty($product))
+            {    
+                $detail_product=DetailProduct::where(['product_id'=>$product->id])->first();
+                $category=category::find($product->category_id);
+                if(!empty($detail_product))
+                {
+                    return view('detail')->with(['p'=>$product,'c'=>$category]);
+                }
+                else
+                {
+                    return view('detail');
+                    
+                }
+            }
+            else
+           
+                return \abort('404');
+        }
+        
     }
     public function postContact(Request $request) 
     {

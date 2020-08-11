@@ -19,8 +19,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <style>
+#loginModal
+{
+	z-index: 5000;
+}
+.img-fluid {
+    width: 100px;
+    height: 70px;
+}
 
-.dropbtn {
+.users .dropbtn {
     background-color: #3c9add;
     color: white;
     padding: 16px;
@@ -28,59 +36,165 @@
     border: none;
   }
 
-  .dropdown {
+  .users .dropdown {
     position: relative;
     display: inline-block;
   }
 
-  .dropdown-content {
+  .users .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+ 	 z-index: 1;
+	
   }
 
-  .dropdown-content a {
+  .users .dropdown-content a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
   }
 
-  .dropdown-content a:hover {background-color: #ddd;}
+  .users .dropdown-content a:hover {background-color: #ddd;}
 
-  .dropdown:hover .dropdown-content {display: block;}
+  .users .dropdown:hover .dropdown-content {display: block;}
 
-  .dropdown:hover .dropbtn {background-color: #61a2d0;}
+  .users .dropdown:hover .dropbtn {background-color: #61a2d0;}
 /*drowdown*/
 </style>
 </head><!--/head-->
 
 <script type="text/javascript">
 //load lại trang khi user bấm back
-
-	function  menuDangNhap()
-	{
-		$('.users .dropdown-content').css('display','block');
-		$('.users .dropdown-content').css('position','static');
-	}
-    if(!!window.performance && window.performance.navigation.type === 2)
-    {
-        console.log('Reloading');
-        window.location.reload();
-    }
-   
-//Ha2m show lai gio hang khi loadlai
-
-$("#AlertModal").on('hide.bs.modal', function(){
+if(!!window.performance && window.performance.navigation.type === 2)
+{
+        
+    window.location.reload();
+}
+//Show phần modal đăng nhập
+function  menuDangNhap()
+{
+	//$('.users .dropdown-content').css('display','block');
 	
-	location.reload();
-  });
+}
+//Hàm log out
+function logOut()
+{
+	$.ajax({
+			type:  "GET",
+      		url:	 " {{ asset('/logout')}}",
+      		data:{logout:'true'},
+			datatype: 'json',
+			success:function(data)
+           	{
+				 location.reload();
+				
+           	}
+       	}
+    );
+}
+//hàm update số lượng item ở modal
+function updateCart(qty,product_id,order_id,timecreate)
+{
+	$.ajax({
+		type:  "GET",
+    	url:	 " {{ asset('cart/update')}}",
+      	data:{qty:qty,order_id:order_id,product_id:product_id,timecreate:timecreate},
+		datatype: 'json',
+		success:function(data)
+        {
+			if(data.status)
+			{	
+				if($("#noFindItem").text().length<80)
+				$("#noFindItem").append("không tìm thấy item ");
+			}
+            else if(qty!="" && qty >0 && qty<=10)
+       		{
+					//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
+				var total=0;
+				$("tbody").find("tr").each(function() {
+				var qty = $(this).find('td .input-qty').val();
+				var price= $(this).find('td.price').text();
+				if(!!qty)
+				{ 
+					$(this).find('td.amount').html(qty*price);
+					total+=qty*price;
+					$('#total').html(total);
+				}
+ 			});
+		}}
+    });
+}
+//Hàm xóa số lượng item ở modal
+function deleteCartModal(product_id,order_id,emn,timecreate)
+{
+	$.ajax({
+		type:  "GET",//type là get
+      	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
+      	data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
+		datatype: 'json',
+        success:function(data)
+        {	
+			if(data.status)
+			{
+				if($("#noFindItem").text().length<80)
+				$("#noFindItem").append("không tìm thấy item ");
+			}
+			else
+			{
+				$("#total").html(data.total);//dữ liệu từ response
+				$(emn).closest( "tr" ).hide();   
+			}
+		}
+    });
+}
+ 
+//Khi nhập số lượng bé hơn 1 hoặc lớn 10 ở modl
+function updateModal(qty)
+{
+		//Nếu nhập bé hơn 1 thì mặc định là 1
+	if($(qty).val()<1)
+	{
+		var error="số lượng phải từ 1 tới 10 và không được trống";
+		$(qty).val(1);
+	}
+	else if($(qty).val()>10)
+	{
+		var error="số lượng phải từ 1 tới 10 và không được trống";
+		$(qty).val(10);
+	}
+}
+
+//Hàm add giỏ hàng
+function AddCart(product_id)
+{
+    $.ajax({
+    type:  "GET",
+    url: "{{ asset('Addcart')}}",
+    data: { product_id: product_id },
+    datatype: 'json',
+    success: function (data) 
+	{
+       	if(data.status=="error")
+        {
+            alert(data.message);
+        }
+      	location.reload();
+	}});
+}
 
 $(document).ready(function(){
+	//loalad lại trang khi modal đóng
 	
+ 	$("#AlertModal").on('hide.bs.modal', function(){
+		location.reload();
+ 	});
+});
+
+ /*
 	if (Cookies.get('modal')=="showed") {
     // show dialog...
 	$("#cartModal").modal("show");
@@ -89,165 +203,28 @@ $(document).ready(function(){
 $("#cartModal").on('show.bs.modal', function(){
 	
 	Cookies.set('modal', 'showed');
-	//$.cookie('modal', 'showed');
-	//$.cookie("test", 1);
+	
 });
  
   $("#cartModal").on('hide.bs.modal', function(){
-	//$.removeCookie('showDialog');
-//	$.removeCookie("test");
-	//$.removeCookie('modal'); 
+
 	Cookies.remove('modal');
-	//location.reload();
+
   });
-});
-	//Khi bấm kiểm tra thì tắt modal cart
-	function checkOut()
+  function checkOut()
 	{
 	
 		Cookies.remove('modal');
-	//	$("#cartModal").modal("hide");
-		
-	}
+	
+	}*/
+
+
+	
 	//logOut
-	
-	function logOut()
-	{
-		$.ajax({
-				type:  "GET",
-      			url:	 " {{ asset('/logout')}}",
-      		 	data:{logout:'true'},
-				datatype: 'json',
-				success:function(data)
-           		{
-				 location.reload();
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           		}
-       		}
-    	);
-	}
-	
-	function updateCart(qty,product_id,order_id,timecreate)
-    {
-	
-		$.ajax({
-				type:  "GET",
-      			url:	 " {{ asset('cart/update')}}",
-      		 	data:{qty:qty,order_id:order_id,product_id:product_id,timecreate:timecreate},
-				datatype: 'json',
-				success:function(data)
-           		{
-				
-					
-					if(data.status)
-					{	
-						if($("#noFindItem").text().length<80)
-						$("#noFindItem").append("không tìm thấy item ");
-					
-			 		}
-                	
-					else if(qty!="" && qty >0 && qty<=10)
-       				{
-					//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
-					var total=0;
-					$("tbody").find("tr").each(function() {
-					var qty = $(this).find('td .input-qty').val();
-					var price= $(this).find('td.price').text();
-					if(!!qty)
-					{ 
-						$(this).find('td.amount').html(qty*price);
-						total+=qty*price;
-						$('#total').html(total);
-					}
- 			 	});
-			}
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           		}
-       		}
-    	);
-	
-		
-    }
-	function updateModal(qty)
-	{
-		//Nếu nhập bé hơn 1 thì mặc định là 1
-		if($(qty).val()<1)
-		{
-				var error="số lượng phải từ 1 tới 10 và không được trống";
-				$(qty).val(1);
-				
-		}
-		else if($(qty).val()>10)
-		{
-				var error="số lượng phải từ 1 tới 10 và không được trống";
-				$(qty).val(10);
-		}
-	}
 
-		 /*	$.ajax({
-    		type:  "GET",
-    	url: "{{ asset('Addcart')}}",
-    
-    data: { product_id: product_id },
-    datatype: 'json',
-    success: function (data) {
-        if(data.status=="error")
-        {
-            alert(data.message);
-        }
-       
-        location.reload();
 
-    },
-  
-    });*/
-  
-	function deleteCartModal(product_id,order_id,emn,timecreate)
- 	{
-		
-		$.ajax({
-			type:  "GET",//type là get
-      		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
-      		data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
-			datatype: 'json',
-         	success:function(data)
-           {	
-			 if(data.status)
-			 {
-				if($("#noFindItem").text().length<80)
-						$("#noFindItem").append("không tìm thấy item ");
-			
-			 }
-			 else
-			 {
-				$("#total").html(data.total);//dữ liệu từ response
-				$(emn).closest( "tr" ).hide();   
-			 }
-			 }
-       }
-    	);
-
- 	}
- 
 </script>
- 
-<style>
-
-.img-fluid {
-    width: 100px;
-    height: 70px;
-}
-</style>
-
-
 <body>
-
-
-
 	<header id="header" ><!--header-->
 		<div class="header_top" ><!--header_top-->
 			<div class="container">
@@ -288,20 +265,19 @@ $("#cartModal").on('show.bs.modal', function(){
                       </div>
 				</div>
 				@if(!Session::has('key'))
-				
-                <div class="col-sm-2">
+				<div class="col-sm-2">
                     <div class="users" >
                         <div class="dropdown">
                             <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>Tài khoản </b> </button>
                             <div class="dropdown-content">
 									<!--modal-->
 									<!-- Button trigger modal -->
-<button type="button"  onclick="menuDangNhap()" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+							<button type="button" id="target"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">Launch demo modal</button>
+						<!-- Modal -->
+						<div class="modal fade" id="loginModal" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   						 <div class="modal-dialog">
+        				<div class="modal-content">
+            			<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
 
                 </button>
@@ -332,8 +308,8 @@ $("#cartModal").on('show.bs.modal', function(){
             </div>
         </div>
     </div>
-</div>
-									<!--end modal-->
+		</div>
+					<!--end modal-->
                               <a href="#">tạo tài khoản</a>
                               <a href="#">Link 3</a>
 
@@ -395,7 +371,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                     <ul role="menu" class="sub-menu">
 									@foreach(App\category::withTrashed()->get() as $c)
 										@if($c->product->count()>0)
-										<li><a href=" {{url('product/'.$c->name)}}">{{$c->name}}</a></li>
+								<li><a  href="{{ URL::to('/'.$c->name) }}" >{{$c->name}}</a></li>
 										@endif
 									@endforeach
                                     </ul>
@@ -640,7 +616,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								<ul class="nav nav-pills nav-stacked">
 								@foreach(App\Category::all() as $c)
 								@if($c->product->count()>0)
-									<li><a href=" {{url('product/'.$c->name)}}">{{$c->name}}</a></li>
+									<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
 								@endif
 								@endforeach
 								</ul>

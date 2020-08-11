@@ -1,49 +1,7 @@
-
-@php
-session_start();
-@endphp
 @extends('layout_home')
-
 @section( 'dell')
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function AddCart(product_id)
- {
-    
-    //var userName = document.getElementById("name").value;
-   
-    $.ajax({
-    type:  "GET",
-    url: "{{ asset('Addcart')}}",
-    
-    data: { product_id: product_id },
-    datatype: 'json',
-    success: function (data) {
-       
-       if(data.status=="error")
-        {
-            alert(data.message);
-        }
-      
-       location.reload();
-
-    }
-  
-    });
-    /*$.get(
-       
-       " {{ asset('Addcart')}}",
-       {
-        product_id:product_id,
-         
-           function()
-           {
-             location.reload();
-           }
-       }
-    )*/
-   
- }
 </script>
 
 <div class="container">
@@ -139,7 +97,6 @@ session_start();
         <!--sản phẩm-->
 <div class="row">
  @foreach($product as $p)
-
 <div class="col-sm-4">
 
     <div class="product-image-wrapper">
@@ -164,7 +121,7 @@ session_start();
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
-                <li><a href="#"><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+                <li><a href="{{ URL::to('/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
             </ul>
         </div>
     </div>

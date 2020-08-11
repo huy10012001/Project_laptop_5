@@ -1,84 +1,117 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-
- 
-
-    function dat(login)
-    {
-        var user_id =$("input[name=id]").val();
-        $.ajax({
-                 type:  "GET",
-      		    url:	 " {{ asset('/isDangNhap')}}",
-      		    data: { check:"true" ,user_id:user_id,status:login},
-			    datatype: 'json',
-                error:function(data)
+//Hàm update item ở giỏ hàng
+function onChange(qty,product_id,order_id,timecreate)
+{
+   $.ajax({
+			type:  "GET",//type là get
+      		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
+      		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
+			datatype: 'json',
+         	success:function(data)
+            {	
+                //khi số lượng bé hơn 1 và lớn hơn 10
+                if(data.soluong=="1")
                 {
-                    alert('có lỗi')
+                    $("#AlertModal .modal-body").html("Số lượng phải từ 1 tới 10");
+                    $("#AlertModal").modal("show");
                 }
-                ,
-			    success:function(data)
-           	    {
-                   
-                   
-                  //đăng nhập user khácal
-                     if(data.status=="phiên kết thúc")
-                    {
-                        $("#AlertModal .modal-body").html("phiên làm việc không đúng hoặc hết hạn, mời bạn đăng nhập lại");
-                        $("#AlertModal").modal("show");
-                       
-                        window.location.href = "{{ asset('/home')}}"; 
-                    }
-                    //Khi giỏ hàng trống
-                   /* else if(data.status=="giỏ hàng bạn đang trống")
-                    {
-                        alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
-                        location.reload();
-                    }*/
-                    else if(data.status=="đăng nhập")
-                    {
-                        window.location.href = "{{ asset('/order')}}"; 
-                      
-                    }
-                    //Thoát đăng nhập tab khác
-                    else if(data.status=="thoát đăng nhập")
-                    {
-                        $('#myModal').modal('show');
-                    }
-                   
-                 }
-        	    });
-           
-    }
-    //sbmit form data use ajax
-    $(document).ready(function()
-    {
-        //đăng nhập mua hàng khi user chua đăng nhập
-     
-        $('#login').submit(function(e)
+                //khi không tìm thấy item
+                else if(data.status)
+                 {
+               
+                    $("#AlertModal .modal-body").html("khô ng tìm thấy item");
+                    $("#AlertModal").modal("show");
+                }
+                else
+                {
+                    location.reload();
+                }
+			 }
+    });
+}
+//Hàm xóa item ở giỏ hàng
+function deleteCart(product_id,order_id,timecreate)
+{
+    $.ajax({
+		type:  "GET",//type là get
+      	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
+      	data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
+		datatype: 'json',
+        success:function(data)
+        {	
+            //khi không tìm thấy item
+            if(data.status)
+            {
+                $("#AlertModal .modal-body").html("không tìm thấy item");
+                $("#AlertModal").modal("show");
+            }
+            else
+            {
+                location.reload();
+            }
+        }
+    });
+}
+//hàm tiến hành đặt
+function dat(login)
+{
+    var user_id =$("input[name=id]").val();
+    $.ajax({
+        type:  "GET",
+      	url:	 " {{ asset('/isDangNhap')}}",
+      	data: { check:"true" ,user_id:user_id,status:login},
+		datatype: 'json',
+        error:function(data)
         {
-            e.preventDefault();
-            $.ajaxSetup(
-                {
-                    headers:
-                    {
-                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-                    }
-                }
-            );
+            alert('có lỗi')
+        }
+        ,
+		success:function(data)
+        {
+            //khi đăng nhập  bằng tài khoản khác  hoặc vừa đăng nhập ở bên tab khác
+            if(data.status=="phiên kết thúc")
+            {
+                $("#AlertModal .modal-body").html("phiên làm việc không đúng hoặc hết hạn, mời bạn đăng nhập lại");
+                $("#AlertModal").modal("show");
+                window.location.href = "{{ asset('/home')}}"; 
+            }
+            else if(data.status=="đăng nhập")
+            {
+                window.location.href = "{{ asset('/order')}}"; 
+                      
+            }
+            //Thoát đăng nhập tab khác
+            else if(data.status=="thoát đăng nhập")
+            {
+                $('#modalCheckOut').modal('show');
+            }
+        }
+    });
            
-            $.ajax({
+}
+    //sbmit form data use ajax
+ $(document).ready(function()
+{
+    //đăng nhập mua hàng khi user chua đăng nhập
+    $('#login').submit(function(e)
+    {
+        e.preventDefault();
+        $.ajaxSetup(
+        {
+            headers:
+            {
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
 			    method:'post',
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
 			    success:function(data)
-           	    {   
-                   /* if(data.status=="giỏ hàng bạn đang trống")
-                    {
-                        alert("Giỏ hàng bạn đang trống, vui lòng quay lại mua");
-                        location.reload();
-                    }*/
+           	    { 
                     if(data.status=="Thành công")
                     {
                        window.location.href = "{{asset('/order')}}"; 
@@ -86,123 +119,46 @@
                     else
                     $("#dangnhap").html(data.status)
                     $("#dangnhap").css('color','red');
-               // location.reload();
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
+              
            	    }
         	});
            
-        });
+    });
          //đăng ký  mua hàng khi user chua đăng nhập
-        $('#register').submit(function(e)
+    $('#register').submit(function(e)
+    {
+        e.preventDefault();
+        $.ajaxSetup(
         {
-            e.preventDefault();
-            $.ajaxSetup(
+             headers:
+            {
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+            }
+        );
+        $.ajax({
+			method:'post',
+      		url:	 " {{ asset('/postRegisterCheckOut')}}",
+      		data:$('#register').serialize(),
+			datatype: 'json',
+			success:function(data)
+           	{
+                if(data.status=="Thành công")
                 {
-                    headers:
-                    {
-                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-                    }
-                }
-            );
-           
-                $.ajax({
-			    method:'post',
-      		    url:	 " {{ asset('/postRegisterCheckOut')}}",
-      		    data:$('#register').serialize(),
-			    datatype: 'json',
-			    success:function(data)
-           	    {
-                    if(data.status=="Thành công")
-                    {
                        window.location.href = "http://stackoverflow.com"; 
-                    }
+                }
                    
-               // location.reload();
-					//var a=data.status;
-					//alert(a);
-          		//  document.getElementById("total").innerHTML = 123;
-           	    }
-        	});
+             
+           	}
         });
     });
-  
-    function onChange(qty,product_id,order_id,timecreate)
-    {
-        
-       
-        
-        $.ajax({
-			type:  "GET",//type là get
-      		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
-      		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
-			datatype: 'json',
-         	success:function(data)
-           {	
-               
-              
-                if(data.soluong=="1")
-                {
-                    $("#AlertModal .modal-body").html("Số lượng phải từ 1 tới 10");
-                    $("#AlertModal").modal("show");
-                  
-                     
-                }
-                
-                else if(data.status)
-                 {
-               
-                    $("#AlertModal .modal-body").html("khô ng tìm thấy item");
-                    $("#AlertModal").modal("show");
-                }
-              
-                else
-                {
-                    location.reload();
-                }
-			  
-           }
-        }
-    	);
-         
-       
-    }
-    
-    function deleteCart(product_id,order_id,timecreate)
-    {
-     
-        $.ajax({
-			type:  "GET",//type là get
-      		url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
-      		data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
-			datatype: 'json',
-         	success:function(data)
-           {	
-             
-          
-            if(data.status)
-                {
-                $("#AlertModal .modal-body").html("không tìm thấy item");
-                $("#AlertModal").modal("show");
-              
-              }
-              
-              else
-              {
-                location.reload();
-              }
-           }
-       }
-    	);
-    }
+});
+
 </script>
 @extends('layout_home')
 @section( 'cart_detail')
 <!-- Phần sửa lại  nếu có session -->
 <div id="no"></div>
-
-
 
 @if(Session::has('key'))
 <input type="hidden" name="id" value="{{Session::get('key')->id}}">
@@ -301,9 +257,9 @@
   <!--Neu user da dang nhap thi redirec toi trang checkout-->
 
   
-  <button type="button" onclick="dat()" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
+  <button type="button" onclick="dat()" class="btn btn-primary "   data-target="#modalCheckOut">Tiến hành đặt </button>
 <!-- Modal -->
-<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCheckOut"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -317,16 +273,16 @@
                 <div role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
+                        <li role="presentation" class="active"><a href="#uploadTabCheckOut" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
 
                         </li>
-                        <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
+                        <li role="presentation"><a href="#browseTabCheckOut" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
 
                         </li>
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="uploadTab"> 
+                        <div role="tabpanel" class="tab-pane active" id="uploadTabCheckOut"> 
                             <form   id="login" method="post" action="javascrip:void(0)" >
                             {{ csrf_field() }}
                             <h3  style="text-align: center;">Đăng Nhập</h3>
@@ -344,7 +300,7 @@
                             </p>
 
                             </form></div>
-                        <div role="tabpanel" class="tab-pane" id="browseTab" method="post" action="javascrip:void(0)" >
+                        <div role="tabpanel" class="tab-pane" id="browseTabCheckOut" method="post" action="javascrip:void(0)" >
                             <form  id="register" action="" method="post">
                                 {{ csrf_field() }}
                                 <h3 style="text-align: center;">Tạo tài khoản</h3>
@@ -495,10 +451,10 @@ $('input.input-qty').each(function() {
             </table>
             <!-- Button trigger modal -->
 
-            <button type="button" onclick="dat('login')" class="btn btn-primary " id="modalCheckOut"  data-target="#myModal">Tiến hành đặt </button>
+            <button type="button" onclick="dat('login')" class="btn btn-primary "   data-target="#modalCheckOut">Tiến hành đặt </button>
 <!-- Modal -->
-<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal fade" id="modalCheckOut"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
@@ -610,5 +566,6 @@ $('input.input-qty').each(function() {
     </div>
 </br>
 @endif
+
 @endsection
 

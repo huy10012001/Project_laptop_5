@@ -22,7 +22,6 @@ class AdminProductController extends Controller
         $detail_products=DetailProduct::where(['product_id'=>$product])->first();
         if(empty($detail_products))
         $detail_products=new DetailProduct();
-       
         $detail_products->product_id=$product;
         $detail_products->description=$d2;
         $detail_products->save();
@@ -140,7 +139,7 @@ class AdminProductController extends Controller
     {
         $name=$request->input('name');
         $price=$request->input('price');
-        $description=$request->input('description');
+
         $category= $_POST['category'];
         // xử lý upload hình vào thư mục
         if($request->hasFile('image'))
@@ -164,7 +163,7 @@ class AdminProductController extends Controller
        
         $p->category_id=$category;
         $p->image = $imageName;
-        $p->description= $description;
+            
         //trường hợp user đã đăng nhập
         //update lại tổng  giá sản phẩm trong giỏ hàng
         if( $p->price!=$price)

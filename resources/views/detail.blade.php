@@ -1,6 +1,8 @@
 
 @extends('layout_home')
 @section( 'detail')
+@if(isset($p))
+
 <style>
   .detail {
     border-style: solid;
@@ -36,23 +38,14 @@
             <div class="row">
               <!-- hot new content -->
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
-                <td class="pro-detail-title"><a href="#" title="">laptop</a></td>
+                <td class="pro-detail-title">Sản phẩm {{$p->name}}</td>
                 <hr>
                 <div class="row">
                   <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-                    <div class="img-box">
-                      <img class="img-responsive" src="images/hinh.jpg" alt="img responsive">
+                    <div class="img-box"  style="margin-bottom:20px">
+                      <img class="img-responsive"  width="100%" src="{{ url('images/'.$p->image) }}" alt="img responsive">
                     </div>
-                    <div class="img-slide">
-                      <div class="panel panel-default text-center">
-                        <div id="links">
-                          <a href="images/hinh1.jpg" title="" data-gallery>
-                            <img src="images/hinh.jpg" alt="" width="50%" height="20%">
-                          </a>
-                        </div>
-
-                      </div>
-                    </div>
+                   
                     <label class="btn btn-large btn-block btn-warning">xem</label>
                   </div>
                   <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
@@ -78,8 +71,8 @@
                       </div>
                     </div>
                     <div class="price">
-                      <span class="btn btn-info btn-block "><strong>12000</strong> Vnd</span>
-                      <a href="" class="btn btn-success btn-block">Thêm vào giỏ</a>
+                      <span class="btn btn-info btn-block "><strong>{{number_format($p->price)}}</strong> Vnd</span>
+                      <a href="" onclick="AddCart('{{$p->id}}')" class="btn btn-success btn-block">Thêm vào giỏ</a>
                     </div>
 
                   </div>
@@ -103,31 +96,31 @@
                   </tr>
                 </thead>
                 <tbody class="panel-body">
-                  <tr>
-                    <td>Model Series: </td>
-                    <td>aa</td>
-                  </tr>
-                  <td style="color: red">Bộ xử lí</td>
-                  <tr>
+                <tr>
+                <td>Model Series: </td>
+                <td><?php  echo json_decode($p->detail->description,true)['1'] ?></td>
+                </tr>
+                <tr style="color: red" ><td >Bộ xử lý</td></tr>
+                <tr>
                     <td>Hãng CPU :</td>
-                    <td> aa</td>
+                    <td> <?php  echo json_decode($p->detail->description,true)['2'] ?></td>
+                </tr>
+                <tr>
+                  <td>Công nghệ CPU :</td>
+                  <td><?php  echo json_decode($p->detail->description,true)['3'] ?></td>
                   </tr>
-                  <tr>
-                    <td>Công nghệ CPU :</td>
-                    <td>aa</td>
+                <tr>
+                <td>Loại CPU :</td>
+                <td><?php  echo json_decode($p->detail->description,true)['4'] ?></td>
+                </tr>
+                    <tr>
+                  <td>Tốc độ CPU :</td>
+                      <td> <?php  echo json_decode($p->detail->description,true)['5'] ?></td>
                   </tr>
-                  <tr>
-                    <td>Loại CPU :</td>
-                    <td>aa</td>
-                  </tr>
-                  <tr>
-                    <td>Tốc độ CPU :</td>
-                    <td> aa </td>
-                  </tr>
-                  <tr>
-                    <td>Bộ nhớ đệm :</td>
-                    <td>aa</td>
-                  </tr>
+                          <tr>
+                            <td>Bộ nhớ đệm :</td>
+                            <td><?php  echo json_decode($p->detail->description,true)['6'] ?></td>
+                          </tr>
                 </tbody>
 
               </table>
@@ -136,11 +129,11 @@
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
               <div class="accordion-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DetailModal">
                   Xem thông tin chi tiết
                 </button>
                 <!-- The Modal -->
-                <div class="modal" id="myModal">
+                <div class="modal" id="DetailModal">
                   <div class="modal-dialog">
                     <div class="modal-content">
 
@@ -152,230 +145,231 @@
                       <!-- Modal body -->
                       <div class="modal-body">
                         <table class="table table-hover">
-                          <td style="color: red">Thông tin dòng sản phẩm</td>
-                          <tr>
-                            <td>Model Series: </td>
-                            <td>aa</td>
-                          </tr>
-                          <td style="color: red">Bộ xử lí</td>
-                          <tr>
-                            <td>Hãng CPU :</td>
-                            <td> aa</td>
-                          </tr>
-                          <tr>
-                            <td>Công nghệ CPU :</td>
-                            <td>aa</td>
-                          </tr>
-                          <tr>
-                            <td>Loại CPU :</td>
-                            <td>aa</td>
-                          </tr>
+                        <tr><td style="color: red">Thông tin dòng sản phẩm</td></tr>
+                        <tr>
+                          <td>Model Series: </td>
+                        <td><?php  echo json_decode($p->detail->description,true)['1'] ?></td>
+                      </tr>
+                      <tr style="color: red" ><td >Bộ xử lý</td></tr>
+                      <tr>
+                        <td>Hãng CPU :</td>
+                        <td> <?php  echo json_decode($p->detail->description,true)['2'] ?></td>
+                      </tr>
+                      <tr>
+                      <td>Công nghệ CPU :</td>
+                      <td><?php  echo json_decode($p->detail->description,true)['3'] ?></td>
+                      </tr>
+                      <tr>
+                      <td>Loại CPU :</td>
+                      <td><?php  echo json_decode($p->detail->description,true)['4'] ?></td>
+                      </tr>
                           <tr>
                             <td>Tốc độ CPU :</td>
-                            <td> aa </td>
+                            <td> <?php  echo json_decode($p->detail->description,true)['5'] ?></td>
                           </tr>
                           <tr>
                             <td>Bộ nhớ đệm :</td>
-                            <td>aa</td>
+                            <td><?php  echo json_decode($p->detail->description,true)['6'] ?></td>
                           </tr>
                           <tr>
                             <td>Tốc độ tối đa :</td>
-                            <td>aa</td>
+                            <td><?php  echo json_decode($p->detail->description,true)['7'] ?></td>
                           </tr>
                           <td style="color: red">Bo mạch</td>
                           <tr>
                             <td>Chipset :</td>
-                            <td>aa </td>
+                            <td> <?php  echo json_decode($p->detail->description,true)['8'] ?></td>
                           </tr>
                           <tr>
                             <td>Tốc độ Bus :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['9'] ?> </td>
                           </tr>
                           <tr>
                             <td>Hỗ trợ RAM tối đa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['10'] ?></td>
                           </tr>
                           <td style="color: red">Ram</td>
                           <tr>
                             <td>Dung lượng RAM :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['11'] ?></td>
                           </tr>
                           <tr>
                             <td>Loại RAM :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['12'] ?></td>
                           </tr>
                           <tr>
                             <td>Tốc độ BUS RAM :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['13'] ?></td>
                           </tr>
                           <tr>
                             <td>Số lượng khe RAM :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['14'] ?></td>
                           </tr>
                           <td style="color: red">Đĩa cứng</td>
                           <tr>
                             <td>Loại ổ đĩa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['15'] ?></td>
                           </tr>
                           <tr>
                             <td>Dung lượng ổ đĩa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['16'] ?></td>
                           </tr>
                           <tr>
                             <td>Khe cắm ổ SSD :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['17'] ?></td>
                           </tr>
                           <td style="color: red">Đồ họa</td>
                           <tr>
                             <td>Chipset đồ họa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['18'] ?></td>
                           </tr>
                           <tr>
                             <td>Bộ nhớ đồ họa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['19'] ?></td>
                           </tr>
                           <tr>
                             <td>Kiểu thiết kế đồ họa :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['20'] ?></td>
                           </tr>
                           <td style="color: red">Màn hình</td>
                           <tr>
                             <td>Kích thước màn hình :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['21'] ?></td>
                           </tr>
                           <tr>
                             <td>Độ phân giải (W x H) :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['22'] ?></td>
                           </tr>
                           <tr>
                             <td>Công nghệ màn hình :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['23'] ?></td>
                           </tr>
                           <tr>
                             <td>Cảm ứng :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['24'] ?></td>
                           </tr>
                           <td style="color: red">Âm thanh</td>
                           <tr>
                             <td>Kênh âm thanh :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['25'] ?></td>
                           </tr>
                           <tr>
                             <td>Thông tin thêm :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['26'] ?></td>
                           </tr>
                           <td style="color: red">Đĩa quang</td>
                           <tr>
                             <td>Có sẵn đĩa quang :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['27'] ?></td>
                           </tr>
                           <td style="color: red">Tính năng mở rộng & cổng giao tiếp</td>
                           <tr>
                             <td>Cổng giao tiếp :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['28'] ?></td>
                           </tr>
                           <tr>
                             <td>Tính năng mở rộng :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['29'] ?></td>
                           </tr>
                           <td style="color: red">Giao tiếp mạng</td>
                           <tr>
                             <td>LAN :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['30'] ?></td>
                           </tr>
                           <tr>
                             <td>Công nghệ màn hình :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['31'] ?></td>
                           </tr>
                           <tr>
                             <td>Chuẩn Wi-Fi :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['32'] ?></td>
                           </tr>
-                          <tr>
+                         <tr>
                             <td>Kết nối không dây khác :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['33'] ?></td>
                           </tr>
                           <td style="color: red">Card Reader</td>
                           <tr>
                             <td>Đọc thẻ nhớ :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['34'] ?></td>
                           </tr>
                           <tr>
                             <td>Khe đọc thẻ nhớ :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['35'] ?></td>
                           </tr>
                           <td style="color: red">Webcam</td>
                           <tr>
                             <td>Độ phân giải :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['36'] ?></td>
                           </tr>
                           <tr>
                             <td>Thông tin thêm :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['37'] ?></td>
                           </tr>
                           <td style="color: red">Hệ điều hành, phầm mềm có sẵn</td>
                           <tr>
                             <td>Hệ điều hành :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['38'] ?></td>
                           </tr>
                           <tr>
                             <td>Phần mềm có sẵn :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['39'] ?></td>
                           </tr>
                           <td style="color: red">PIN/Battery</td>
                           <tr>
                             <td>Loại pin :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['40'] ?></td>
                           </tr>
                           <tr>
                             <td>Kiểu pin :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['41'] ?></td>
                           </tr>
-                          <td style="color: red">Thông tin khác</td>
                           <tr>
                             <td>Cảm biến vân tay :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['42'] ?></td>
                           </tr>
                           <tr>
                             <td>Đèn bàn phím :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['43'] ?></td>
                           </tr>
                           <tr>
                             <td>Bàn phím số :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['44'] ?></td>
                           </tr>
                           <tr>
                             <td>Phụ kiện kèm theo :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['45'] ?></td>
                           </tr>
                           <td style="color: red">Kích thước & trọng lượng</td>
                           <tr>
                             <td>Kích Thước :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['46'] ?></td>
                           </tr>
+ 
                           <tr>
                             <td>Trọng lượng :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['47'] ?></td>
                           </tr>
                           <tr>
                             <td>Chất liệu :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['48'] ?></td>
                           </tr>
                           <td style="color: red">Bảo hành</td>
                           <tr>
                             <td>Thời gian bảo hành :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['49'] ?></td>
                           </tr>
-                          <td style="color: red">Thông tin hàng hóa</td>
+                         <td style="color: red">Thông tin hàng hóa</td>
                           <tr>
                           <tr>
                             <td>Xuất xứ :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['50'] ?></td>
                           </tr>
                           <tr>
                             <td>Năm sản xuất :</td>
-                            <td>aa </td>
+                            <td><?php  echo json_decode($p->detail->description,true)['51'] ?></td>
                           </tr>
+                         
 
                         </table>
                       </div>
@@ -390,8 +384,16 @@
             </div>
           </div>
         </div>
+        
       </div>
-      <div class="row">
+      <div class="alert alert-warning" role="alert">
+ Sản phẩm cùng danh mục
+</div>
+  @if($c->product->count()>4)
+  <div class="row">
+
+  </div>
+    <div class="row">
         <div class="col-sm-12">
           <div id="slider-carousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -403,57 +405,32 @@
               <a href="#slider-carousel" data-slide="next" data-toggle="popover" style="width: 10px;font-size: 30px;border: red"> next</a>
             </div><br><br><br>
             <div class="carousel-inner">
-              <div class="item active item1 " style="height: 350px;">
-                <div class="col-sm-3 detail ">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>lapaaaaaaaaaaaaasdasdaddddasdadtop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get"><a href="detail"> xem sản phẩm</a></button>
+            <div class="item active item1 " style="height: 350px;">
+          
+             @foreach($c->product->take(4) as $product)
+             
+                  <div class="col-sm-3 detail">
+                  <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
+                  <p>{{$product->name}}</p>
+                  <p>{{number_format($product->price)}}</p>
+                  <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
                 </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
+           
+                   
+                 
+              @endforeach
               </div>
               <div class="item">
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get"><a href="detail"> xem sản phẩm</a></button>
+              @foreach($c->product->skip(4)->take(4) as $product)
+            
+                 <div class="col-sm-3 detail">
+                  <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
+                  <p>{{$p->name}}</p>
+                  <p>{{number_format($p->price)}}</p>
+                  <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
                 </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
-                <div class="col-sm-3 detail">
-                  <img src="images/hinh.jpg" alt="" width="100%" height="100%" style="margin: auto">
-                  <p>laptop</p>
-                  <p>giá</p>
-                  <button type="button" class="btn btn-default get">xem sản phẩm</button>
-                </div>
+              
+              @endforeach
               </div>
             </div>
             <br><br><br>
@@ -462,6 +439,20 @@
       </div>
     </div>
   </div>
+  @else
+
+  <div class="item" style="margin-top:20px">
+     @foreach($c->product as $product)
+       
+           <div class="col-sm-3 detail">
+            <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
+            <p>{{$product->name}}</p>
+            <p>{{number_format($product->price)}}</p>
+              <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($p->name)) }}" > xem sản phẩm</a></button>
+            </div>
+       
+      @endforeach
+  @endif
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
       <h2> Hỏi đáp và thắc mắc</h2>
@@ -487,4 +478,17 @@
   <br>
 </div>
 
+@else
+
+<input type="text" class="form-control" id="validationDefault03" required disabled value="Sản phẩm đang cập nhập,vui lòng thực hiện lại">
+<br>
+    <div class="container" style="background:rgb(219, 242, 248);" >
+        <img src="images/update.jpg" alt="" class="empty__img" style="width:100%; height:350px; margin-top: 40px;" ><br>
+        <p style="text-align: center;"><h6  style="text-align: center;">Sản phẩm đang cập nhập,...</h6></p><br>
+        <button type="button" onclick=""  class="btn btn-primary" style="margin-left: 500px;"><a href="{{ asset('/home')}}" style="background:none; color:black; ">Tiếp Tục mua sắm</a></button>
+        <div class="clear" style="width:1000px;height:50px;"></div>
+
+    </div>
+</br>
+@endif
 @endsection

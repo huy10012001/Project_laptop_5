@@ -23,7 +23,9 @@ Route::get('/', function () {
 Route::get('/checkout','homeController@checkout');
 Route::get('/home','homeController@home' );
 Route::get('/contact','homeController@contact' );
-Route::get('product/{name}','homeController@product');
+
+
+
 //trang test gio hang(khong nam trong do an)
 Route::get('/cart', 'UserCartcontroller@cart');
 Route::get('/index', 'homeController@index');
@@ -118,6 +120,7 @@ Route::post('/postDiaChiCheckOut', 'UserCartcontroller@postDiaChiCheckOut');
 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
+Route::get('{name}','homeController@product');
 
 
 

@@ -22,7 +22,7 @@ class CreateUserTable extends Migration
             $table->string('phone');
             $table->string('address');
             $table->string('image')->nullable();
-            $table->string('password');
+            $table->string('password')->collation('utf8_bin');
             $table->timestamps();
    
         });
