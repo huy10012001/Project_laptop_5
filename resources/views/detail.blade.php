@@ -391,7 +391,7 @@
 </div>
 @php
 
-  $lienquan=$c->product->where('id','!=', "$p->id");
+  $lienquan=$c->product->where('status','1')->where('id','!=', "$p->id");
  
 @endphp
 

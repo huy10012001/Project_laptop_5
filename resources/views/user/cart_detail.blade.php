@@ -105,7 +105,7 @@ function dat(login)
  $(document).ready(function()
 {
     //đăng nhập mua hàng khi user chua đăng nhập
-    $('#login').submit(function(e)
+    $('#loginCheckOut').submit(function(e)
     {
         e.preventDefault();
         $.ajaxSetup(
@@ -118,7 +118,7 @@ function dat(login)
         $.ajax({
 			    method:'post',
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
-      		    data:$('#login').serialize(),
+      		    data:$('#loginCheckOut').serialize(),
 			    datatype: 'json',
                 error:function(data)
                 {
@@ -140,7 +140,7 @@ function dat(login)
            
     });
          //đăng ký  mua hàng khi user chua đăng nhập
-    $('#register').submit(function(e)
+    $('#registerCheckOut').submit(function(e)
     {
         e.preventDefault();
         $.ajaxSetup(
@@ -154,7 +154,7 @@ function dat(login)
         $.ajax({
 			method:'post',
       		url:	 " {{ asset('/postRegisterCheckOut')}}",
-      		data:$('#register').serialize(),
+      		data:$('#registerCheckOut').serialize(),
 			datatype: 'json',
 			success:function(data)
            	{
@@ -198,25 +198,23 @@ function dat(login)
 							<td class="image">Item</td>
 							<td class="nameproduct">Tên sản phẩm</td>
 							<td class="price">giá</td>
-							<td class="quantity">số lượng</td>
+							<td class="quantity">số  lượng</td>
 							<td class="total">tổng tiền</td>
-							<td></td>
+							<td><p style="width:30px"></p></td>
 						</tr>
 					</thead>
 					@foreach(Session::get('cart')->items as $product)
-						<tr>
-                           
-                            <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
 						    
-						    <td class="cart_name">
-							<h4>{{App\Product::find($product['id'])->name}}</h4>
-                            </td>
-                            <td class="cart_price">
-						    <p> {{$product['price']}}</p>
-                            </td>
                             <!--Trường hợp còn hàng(status là 1)-->
                             @if($product['status']==1)
-                                
+                            <tr>
+                            <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
+                            <td class="cart_name">
+                           <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
+                           </td>
+                           <td class="cart_price">
+                           <p> {{$product['price']}}</p>
+                           </td> 
                             <td class="">
 							<div class="buttons_added">
                              <input aria-label="quantity"
@@ -225,24 +223,31 @@ function dat(login)
                              onChange="onChange(this.value,<?php echo $product['id']?>,'',<?php echo $product['time_at'] ?>
                              )">
                             </div>
-							</td>
-						        <td class="cart_total">
-							    <p class="cart_total_price">{{$product['amount']}}</p>
-						        </td>
-						        <td class="cart_delete">
+                            </td>
+                            <td class="cart_amount">
+                           <p> {{$product['amount']}}</p>
+                           </td> 
+						    <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
-                                </td>
-                            
+                              </td>
                             <!--Trường hợp hết hàng show giá + dòng đã hết hàng-->
                             @else
-                               
+                            <tr class="khonghoatdong">
+                                <td class="cart_product">
+                                <span class="badge">Không hoạt động</span>
+                                    <img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
+                                <td class="cart_name">
+                                <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
+                                </td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"><i class="fa fa-times"></i></button>
-                                </td>        
+						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
+                                </td>   
+                                </tr>
                             @endif
-                        </tr>
+                      
                     @endforeach
 				</table>
             </div>
@@ -299,7 +304,7 @@ function dat(login)
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="uploadTabCheckOut"> 
-                            <form   id="login" method="post" action="javascrip:void(0)" >
+                            <form   id="loginCheckOut" method="post" action="javascrip:void(0)" >
                             {{ csrf_field() }}
                             <h3  style="text-align: center;">Đăng Nhập</h3>
                                 <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
@@ -317,7 +322,7 @@ function dat(login)
 
                             </form></div>
                         <div role="tabpanel" class="tab-pane" id="browseTabCheckOut" method="post" action="javascrip:void(0)" >
-                            <form  id="register" action="" method="post">
+                            <form  id="registerCheckOut" action="" method="post">
                                 {{ csrf_field() }}
                                 <h3 style="text-align: center;">Tạo tài khoản</h3>
                                 <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
@@ -397,14 +402,14 @@ $('input.input-qty').each(function() {
 							<td class="price">giá</td>
 							<td class="quantity">số lượng</td>
 							<td class="total">tổng tiền</td>
-							<td></td>
+                            <td><p style="width:30px"></p></td>
 						</tr>
                     </thead>
                     <tbody class="cart-body" tyle="word-break:break-all;">
                     @foreach($orders->product as $p)
                  
                     @if($p->status=="1")
-						<tr>
+						<tr >
                             <td class="cart_product">
 							   <img width="100px"  style=" margin-right:5em; height:100px" src="{{ url('images/'.$p->image) }}"/> 
 						    </td>
@@ -438,7 +443,7 @@ $('input.input-qty').each(function() {
                             <tr class="khonghoatdong">
                             <td class="cart_product">
                             
-                            <span class="badge">Hết hàng</span>
+                            <span class="badge">Không hoạt động</span>
              
                             <img width="100px"  style=" margin-right:5em; height:100px" src="{{ url('images/'.$p->image) }}"/> 
                           

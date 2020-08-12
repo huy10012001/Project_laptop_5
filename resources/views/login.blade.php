@@ -61,7 +61,7 @@
                     
                     else
 					{
-						$("#AlertModal .modal-body").html("tài khoảng không có trong hệ thống");
+						$("#AlertModal .modal-body").html("tài khoản không có trong hệ thống");
                     	$("#AlertModal").modal("show");
 					}
                    

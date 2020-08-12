@@ -25,16 +25,23 @@ class loginController extends Controller
             // nếu url trước khác  url hiện tại thì lấy url trang trước
          //  $request->session()->put('url',url()->previous());
         //}
-        if(!empty($value))
+        if(!empty($value) )
         {
-          
-            return Redirect::back();
+            $user=User::find($value->id);
+            
+            foreach($user->role as $role)
+            {
+               //nếu có role admin hoặc super admin quay lại trang admin
+               if($role->name=="admin" ||$role->name=="super admin")
+               
+                return Redirect::back();
+            }
+            return view('login');
+         
         }
         else
-        { 
+            return view('login');
         
-             return view('login');
-        }
     }
 
     public function checkDangNhap(Request $request)
@@ -101,7 +108,7 @@ class loginController extends Controller
             return abort('404');
         }
         $request->session()->forget('key');
-        $request->session()->forget('cart');
+       // $request->session()->forget('cart');
        
     }
     public function postRegisterCheckOut(Request $request)

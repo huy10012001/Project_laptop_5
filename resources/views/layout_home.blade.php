@@ -19,6 +19,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <style>
+	
+	.shoppingcart button
+	{
+		border: 2px solid white !important;
+  		padding: 14px 28px;
+  		font-size: 16px;
+  		cursor: pointer;
+	}
 	.khonghoatdong {
     opacity: 0.7;
     background-color: #ccc;
@@ -52,9 +60,10 @@
 }
 
 .users .dropbtn {
+	width: 150px;
     background-color: #3c9add;
     color: white;
-    padding: 16px;
+    padding: 10px;
     font-size: 16px;
     border: none;
   }
@@ -65,13 +74,13 @@
   }
 
   .users .dropdown-content {
-    display: none;
-    position: absolute;
+	display: none;
+	position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
  	 z-index: 1;
-	
+	padding-bottom: 10px;
   }
 
   .users .dropdown-content a {
@@ -97,12 +106,23 @@ if(!!window.performance && window.performance.navigation.type === 2)
         
     window.location.reload();
 }
+//tạo tài khoản
+
 //Show phần modal đăng nhập
-function  menuDangNhap()
-{
-	//$('.users .dropdown-content').css('display','block');
-	
-}
+	function dangnhap()
+	{
+		$('#uploadTabLogin').addClass('active');
+		$('#liLogin').addClass('active');
+	}
+
+	function  dangky()
+	{
+		
+		$('#browseTabLogin').addClass('active');
+		$('#liRegister').addClass('active');
+		//$('.users .dropdown-content').css('display','block');
+		
+	}
 //Hàm log out
 function logOut()
 {
@@ -209,14 +229,80 @@ function AddCart(product_id)
 	}});
 }
 
-/*$(document).ready(function(){
-	//loalad lại trang khi modal đóng
-	
- 	$("#AlertModal").on('hide.bs.modal', function(){
-		location.reload();
- 	});
-});
 
+$(document).ready(function()
+{
+	$("#loginModal").on('hide.bs.modal', function(){
+		$('#uploadTabLogin').removeClass('active');
+		$('#browseTabLogin').removeClass('active');
+		$('#liLogin').removeClass('active');
+		$('#liRegister').removeClass('active');
+ 	});
+    //đăng nhập và đăng ký
+    $('#login').submit(function(e)
+    {
+        e.preventDefault();
+        $.ajaxSetup(
+        {
+            headers:
+            {
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+			    method:'post',
+      		    url:	 " {{ asset('/postLoginCheckOut')}}",
+      		    data:$('#login').serialize(),
+			    datatype: 'json',
+                error:function(data)
+                {
+                    alert('loi');
+                },
+			    success:function(data)
+           	    { 
+                    
+                    if(data.status=="Thành công" ||data.status=="admin")
+                    {
+                      location.reload();
+                    }
+                    else
+                    $("#dangnhap").html(data.status)
+                    $("#dangnhap").css('color','red');
+              
+           	    }
+        	});
+           
+    });
+         //đăng ký  mua hàng khi user chua đăng nhập
+    $('#register').submit(function(e)
+    {
+        e.preventDefault();
+        $.ajaxSetup(
+        {
+             headers:
+            {
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+            }
+        );
+        $.ajax({
+			method:'post',
+      		url:	 " {{ asset('/postRegisterCheckOut')}}",
+      		data:$('#register').serialize(),
+			datatype: 'json',
+			success:function(data)
+           	{
+                 
+                if(data.status=="Thành công")
+                {
+					location.reload(); 
+                }
+                   
+             
+           	}
+        });
+    });
+});
  /*
 	if (Cookies.get('modal')=="showed") {
     // show dialog...
@@ -273,105 +359,81 @@ $("#cartModal").on('show.bs.modal', function(){
 					</div>
 				</div>
 			</div>
+		</div>
 			<!--Search-->
-			<div class="container-fluid"   style="background:  #0099ff;padding-top:10px;">
-            <div class="row ">
-				<div class="col-sm-2">
-                    <a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
-                </div>
-                <div class="col-sm-6"  >
-                    <div  class="search-container "  >
-                        <form action="/action_page.php" >
-                          <input style="float:left;width:80%;height:40px" type="text" placeholder="tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
-                          <button   style="float:left;width:10%;height:40px" type="submit" class="search"><i class="fa fa-search"></i></button>
-                        </form>
-                      </div>
-				</div>
-				@if(!Session::has('key'))
-				<div class="col-sm-2">
-                    <div class="users" >
-                        <div class="dropdown">
-                            <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>Tài khoản </b> </button>
-                            <div class="dropdown-content">
+		<div class="header-middle"   style="background:#0099ff">
+            <div class="container">
+				<div class="row" >	
+					<div class="col-sm-2">
+                    		<a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
+                	</div>
+                	<div class="col-sm-6" >
+                    		<div  class="search">
+                        		<form action="/action_page.php" >
+                         	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
+                          		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
+								
+							</form>
+                      		</div>
+					</div>
+					@if(!Session::has('key'))
+					<div class="col-sm-2" >
+							<div class="users"  >
+								
+                        		<div class="dropdown" >
+								
+									  <button class="dropbtn" style="text-align: center">
+									  
+									   <b>Đăng Nhập</b> <br> <small>tài khoản</small> </button>
+                          			<div class="dropdown-content">
 									<!--modal-->
 									<!-- Button trigger modal -->
-							<button type="button" id="target"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">Launch demo modal</button>
-						<!-- Modal -->
-						<div class="modal fade" id="loginModal" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-   						 <div class="modal-dialog">
-        				<div class="modal-content">
-            			<div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-
-                </button>
-                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-
-            </div>
-            <div class="modal-body">
-                <div role="tabpanel">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">Upload</a>
-
-                        </li>
-                        <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">Browse</a>
-
-                        </li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="uploadTab">upload Tab</div>
-                        <div role="tabpanel" class="tab-pane" id="browseTab">browseTab</div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary save">Save changes</button>
-            </div>
-        </div>
-    </div>
-		</div>
-					<!--end modal-->
-                              <a href="#">tạo tài khoản</a>
-                              <a href="#">Link 3</a>
-
-                            </div>
-                        </div>
+										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Đăng nhập    </button>
+										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Tạo tài khoản    </button>
+									</div>
+                        		</div>
+							</div>
+							
 					</div>
-				</div>
-
-
-
-                <div class="col-sm-2">
-				
-                    <div class="cart1">
-                       	<button type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; "><i class="fa fa-shopping-cart" style="color:white;"></i>
-                        <b style="color: white;">  giỏ hàng   </b>
-                        </button>
+					@else
+					<div class="col-sm-2" >
+							<div class="users"  >
+								
+                        		<div class="dropdown" >
+								
+									  <button class="dropbtn" style="text-align: center">
+									  
+									   <b>Chào {{Session::get('key')->name}}</b> <br> <small>tài khoản</small> </button>
+                          			<div class="dropdown-content">
+									<!--modal-->
+									<!-- Button trigger modal -->
+										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%;">Đăng xuất   </button>
+										
+									</div>
+                        		</div>
+							</div>
+							
 					</div>
-				</div>	
-				@else
-				<div class="col-sm-2">
                    
-                       <button class="dropbtn"> <i class="fa fa-user" aria-hidden="true"></i>	&nbsp;  <b>{{Session::get('key')->name}}</b> </button>
-					   <a class="btn btn-primary btn-sm"   onclick="logOut()">
-                                        <i class="fas fa-folder"></i> Đăng xuất
-                                    </a> 
-				</div>
-				
-				<div class="col-sm-2">
-                    <div class="cart1">
-                       	<button type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; "><i class="fa fa-shopping-cart" style="color:white;"></i>
-                        <b style="color: white;">  giỏ hàng   </b>
-                        </button>
+                     
+					@endif
+
+					<div class="col-sm-2 shoppingcart">
+							
+                       		<button  type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; ">
+							   <div classs>
+							   <i class="fa fa-shopping-cart" style="color:white;"></i>
+							   <b style="color: white;">  giỏ hàng   </b>
+							   <div>
+                        	</button>
+						
 					</div>
-				</div>	
-				@endif
+					<div class="clear" style="clear: both;"></div>
+				</div>
 			</div>
-			</div>
+		</div>
 			<!--end Search-->
-        </div><!--/header_top-->
+        <!--/header_top-->
        
           
 
@@ -390,6 +452,18 @@ $("#cartModal").on('show.bs.modal', function(){
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);">Trang Chủ</a></li>
+								@php
+									$count=0;
+									foreach(App\category::all() as $c)
+									{
+										if($c->product->where('status','1')->count()>0)
+										{
+											$count=1;
+											break;
+										}
+									}
+								@endphp
+								@if($count>0)
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
 									
@@ -400,7 +474,8 @@ $("#cartModal").on('show.bs.modal', function(){
 										@endif
 									@endforeach
                                     </ul>
-                                </li>
+								</li>
+								@endif
 								<li class="dropdown"><a href="#" style="color: rgb(250, 245, 245);">Về Chúng Tôi<i class="fa fa-angle-down"></i></a>
 										<ul role="menu" class="sub-menu">
 											<li><a href="blog.html" style="color: rgb(250, 245, 245);">thông tin về shop</a></li>
@@ -417,8 +492,6 @@ $("#cartModal").on('show.bs.modal', function(){
 				</div>
 			</div><!--/header-bottom-->
         </header><!--/header-->
-
-
 
 
 
@@ -456,7 +529,82 @@ $("#cartModal").on('show.bs.modal', function(){
 				</div>
 			</div>
 		</section>
-		<!--modal alert-->
+<!-- Modal  login-->
+<div class="modal fade" id="loginModal" data-backdrop="static"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							
+							<div class="modal-dialog">
+							<div class="modal-content">
+							<div class="modal-header">
+					<button type="button" class="close"  data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+	
+					</button>
+					 
+	
+				</div>
+				<div class="modal-body" style="display: block; z-index:1;">
+					<div role="tabpanel">
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" id="liLogin" ><a href="#uploadTabLogin" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
+	
+							</li>
+							<li role="presentation" id="liRegister" ><a href="#browseTabLogin" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
+	
+							</li>
+						</ul>
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane " id="uploadTabLogin">
+								<form   id="login" method="post" action="javascrip:void(0)" >
+								{{ csrf_field() }}
+								<h3  style="text-align: center;">Đăng Nhập</h3>
+									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+									<input type="email" class="form-control" name="email" required><br>
+									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
+									<input type="password"   required name="password"  class="form-control" ><br>
+									<div id="dangnhap"></div>
+									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
+	
+									<p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
+	
+	
+	
+								</p>
+	
+								</form></div>
+							<div role="tabpanel" class="tab-pane" id="browseTabLogin" method="post" action="javascrip:void(0)" >
+								<form  id="register" method="post" action="javascrip:void(0)">
+									{{ csrf_field() }}
+									<h3 style="text-align: center;">Tạo tài khoản</h3>
+									<h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+									<input type="text" class="form-control" name="name" required placeholder="Họ và tên"><br>
+									<h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+									<input type="text" class="form-control" name="SĐT" required placeholder="Nhập số điện thoại"><br>
+									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+									<input type="text" class="form-control" name="address" required><br>
+									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+										<input type="email" class="form-control" name="email" required placeholder="email"><br>
+										<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
+										<input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"><br>
+										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
+									</form>
+							</div>
+						</div>
+	
+	
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  
+				</div>
+			</div>
+		</div>
+			</div>
+
+
+<!--modal alert-->
 		<div class="modal fade" id="AlertModal" role="dialog">
     <div class="modal-dialog">
     
@@ -475,7 +623,8 @@ $("#cartModal").on('show.bs.modal', function(){
   </div>
   
 	</div>
-		<div class="modal fade" id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	
+		<div class="modal fade"  id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
@@ -498,7 +647,7 @@ $("#cartModal").on('show.bs.modal', function(){
 									<th scope="col">sản phẩm</th>
 									<th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
-                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Số lượng </th>
                                     <th scope="col">Tổng cộng</th>
                                     <th scope="col">Xóa</th>
                                 </tr>
@@ -529,12 +678,14 @@ $("#cartModal").on('show.bs.modal', function(){
 											</tr>
 											@else
 											<tr class="khonghoatdong" >
-												<td  class="cart_product">
-													<span class="badge">Hết hàng</span>
-													<img  width="100px"  height="80px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
-												</td>
-												<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
-                                				<td>{{$product['price']}}</td>
+												<td class="image">
+													<span class="badge" style="margin-bottom:10px">Không hoạt động</span>
+													<img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
+                                    			</td>
+                                    			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
+                                      			<!--Trường hợp còn hàng(status là 1)-->
+                                    	
+												<td class="price">{{$product['price']}}</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
                                 	 			<td>
@@ -600,8 +751,8 @@ $("#cartModal").on('show.bs.modal', function(){
 									 @else
 									   <tr class="khonghoatdong" >
 									 
-										<td class="cart_product">
-											  <span class="badge">Hết hàng</span>
+										<td class="image">
+											  <span class="badge" style="margin-bottom: 10px;">Không hoạt động</span>
 										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
