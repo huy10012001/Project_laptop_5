@@ -376,7 +376,7 @@ $('input.input-qty').each(function() {
 
     </section> <!--/#cart_items-->
 <!--Trường hợp user đã đăng nhập thao tác với datbase-->
-@elseif(isset($orders) &&  $orders->total >0  )
+@elseif(isset($orders) && $orders->product->count()>0 )
 
 	<section id="cart_items">
 		<div class="container-fluid">

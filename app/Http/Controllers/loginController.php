@@ -141,8 +141,6 @@ class loginController extends Controller
            
             foreach($cart->items as $item)
             {   
-              
-              
                 $order_product=new order_product();
                 $order_product->order_id=$order->id;
                 $order_product->product_id=$item['id'];
