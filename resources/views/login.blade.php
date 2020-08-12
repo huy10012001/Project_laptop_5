@@ -53,13 +53,18 @@
 				},
 			    success:function(data)
            	    {
-					
-                    if(data.status=="Thành công")
-                    {
-                       window.location.href = data.url; 
-                    }
+					 
+					if(data.status=="admin")
+					{
+						window.location.href ="{{ asset('/admin/product/index')}}"
+					}					
+                    
                     else
-                    location.reload();
+					{
+						$("#AlertModal .modal-body").html("tài khoảng không có trong hệ thống");
+                    	$("#AlertModal").modal("show");
+					}
+                   
                // location.reload();
 					//var a=data.status;
 					//alert(a);
@@ -71,6 +76,22 @@
 	});
 </script>
 <body>
+<div class="modal fade" id="AlertModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body" style=" text-align: center;">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->

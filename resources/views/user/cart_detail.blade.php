@@ -126,8 +126,8 @@ function dat(login)
                 },
 			    success:function(data)
            	    { 
-                    alert(data.status);
-                    if(data.status=="Thành công")
+                    
+                    if(data.status=="Thành công" ||data.status=="admin")
                     {
                        window.location.href = "{{asset('/order')}}"; 
                     }
@@ -158,9 +158,10 @@ function dat(login)
 			datatype: 'json',
 			success:function(data)
            	{
+                 
                 if(data.status=="Thành công")
                 {
-                       window.location.href = "http://stackoverflow.com"; 
+                       window.location.href = "{{asset('/order')}}"; 
                 }
                    
              
@@ -274,7 +275,7 @@ function dat(login)
   
   <button type="button" onclick="dat()" class="btn btn-primary "   data-target="#modalCheckOut">Tiến hành đặt </button>
 <!-- Modal -->
-<div class="modal fade" id="modalCheckOut"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCheckOut"  data-backdrop="static"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -486,7 +487,7 @@ $('input.input-qty').each(function() {
 
             <button type="button" onclick="dat('login')" class="btn btn-primary "   data-target="#modalCheckOut">Tiến hành đặt </button>
 <!-- Modal -->
-        <div class="modal fade" id="modalCheckOut"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalCheckOut" data-backdrop="static"   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

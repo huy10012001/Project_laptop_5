@@ -19,16 +19,16 @@ class loginController extends Controller
     {
         $value=$request->session()->get('key');
         //lấy url trước
-        $a=url()->previous();
-        if($a!=url()->current())
-        {
+       // $a=url()->previous();
+        //if($a!=url()->current())
+       // {
             // nếu url trước khác  url hiện tại thì lấy url trang trước
-           $request->session()->put('url',url()->previous());
-        }
+         //  $request->session()->put('url',url()->previous());
+        //}
         if(!empty($value))
         {
           
-            return Redirect::to( $request->session()->get('url'));
+            return Redirect::back();
         }
         else
         { 
@@ -36,6 +36,7 @@ class loginController extends Controller
              return view('login');
         }
     }
+
     public function checkDangNhap(Request $request)
     {
         
@@ -105,32 +106,39 @@ class loginController extends Controller
     }
     public function postRegisterCheckOut(Request $request)
     {
+         
+       
         $name = $request->input('name');
         $phone=$request->input('SĐT');
         $email = $request->input('email');
         $Password=$request->input('password');
         $address=$request->input('address');
         $user=new User();
+        
         $user->name=$name;
         $user->email=$email;
         $user->password=$Password;
         $user->phone=$phone;
         $user->address=$address;
         $user->save();
+ 
         $request->session()->put('key',$user);
-       
+      
 
         if($request->session()->get('cart'))
-        {
+        {      
              //Trường hợp user mua lần đầu hoặc user order mới thì tạo order mới
             $cart=new Cart(session()->get('cart'));//cart trong session
             
-                $order=new Order();//cart mới
-                $order->user_id=$user->id;
-                $order->total=$cart->totalPrice;
-                $order->status="0";
-                $order->date=Carbon::now();
+            $order=new Order();//cart mới
+           
+            $order->user_id=$user->id;
+            $order->total=$cart->totalPrice;
+            $order->status="0";
+            $order->date=Carbon::now();
             
+            $order->save();
+           
             foreach($cart->items as $item)
             {   
               
@@ -141,7 +149,11 @@ class loginController extends Controller
                 $order_product->price=$item['price'];
                 $order_product->qty=$item['qty'];
                 $order_product->amount=$item['amount'];
-                $order_product->deleted_at=$item['deleted_at'];
+                $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
+                if($item['status']==1)
+                $order_product->status="1";
+                else
+                $order_product->status="0";
                 $order_product->save();
             }
 
@@ -177,7 +189,7 @@ class loginController extends Controller
                 $order=new Order();//cart mới
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
-                $order->status="1";
+                $order->status="0";
                 $order->date=Carbon::now();
                 $order->save();
             }
@@ -225,11 +237,10 @@ class loginController extends Controller
         //Khi user đã đăng nhập ở tab khác
        
       
-        $hash = $request->input('email');
-        $Password=$request->input('password');
-        
-        $user= User::whereRaw("BINARY `password`= ?", [$Password])->
-        whereRaw("BINARY `email`= ?", [$hash])->
+        $email = $request->input('email');
+        $password=$request->input('password');
+    
+        $user= User::where(["email"=>$email,"password"=>$password])->
         first();   
         
         if(!empty($user))
@@ -302,15 +313,22 @@ class loginController extends Controller
             $request->session()->forget('cart');
          }
       
-         $url=$request->session()->get('url');
+        // $url=$request->session()->get('url');
+        
+        if ($user->can('do')) 
+            return Response::json(array(
+                'status'=>'admin',
+            )); 
+        
+        else
          return Response::json(array(
             'status'=>'Thành công',
-            'url'=>$url
+           
            )); 
          
-       }
-       else
-       {
+        }
+        else
+        {
         return Response::json(array(
             'status'=>'Đăng nhập không thành công',
           

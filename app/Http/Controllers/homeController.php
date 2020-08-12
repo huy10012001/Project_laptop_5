@@ -7,6 +7,7 @@ use App\contact_user;
 use App\DetailProduct;
 use App\Order;
 use App\product;
+use App\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 USE Illuminate\Support\Facades\Redirect;  
@@ -64,12 +65,14 @@ class homeController extends Controller
         return view('user.home');
     }
     public function index(Request $request){
-        foreach(category::all() as $c)
-        {
-           
-          $product=$c->product;
-          echo $product->where('status','1')->count()." ";
-        }
+        $user=new User();
+        $user->name="dat";
+        $user->email="dat";
+        $user->password="dat";
+        $user->phone="123";
+        $user->address="dat";
+      
+        $user->save();
         //return view('index');
     }
     public function checkout(){
