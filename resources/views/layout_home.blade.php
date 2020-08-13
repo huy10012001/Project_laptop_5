@@ -23,7 +23,7 @@
 	.shoppingcart button
 	{
 		border: 2px solid white !important;
-  		padding: 14px 28px;
+  		padding: 14px 20px;
   		font-size: 16px;
   		cursor: pointer;
 	}
@@ -424,7 +424,12 @@ $("#cartModal").on('show.bs.modal', function(){
                        		<button  type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; ">
 							   <div classs>
 							   <i class="fa fa-shopping-cart" style="color:white;"></i>
-							   <b style="color: white;">  giỏ hàng   </b>
+							   <b style="color: white;">  giỏ hàng</b>
+							   
+							   @if(isset($totalQty))
+							   <span class="label label-warning">{{$totalQty}}</span>
+							   @endif  
+								
 							   <div>
                         	</button>
 						

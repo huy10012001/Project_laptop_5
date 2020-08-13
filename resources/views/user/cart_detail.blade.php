@@ -208,7 +208,7 @@ function dat(login)
 							<td><p style="width:30px"></p></td>
 						</tr>
                     </thead>
-                    @php $sum=0; @endphp
+                    @php $sum=0;$totalqty=0 @endphp
 					@foreach(Session::get('cart')->items as $product)
 						    
                             <!--Trường hợp còn hàng(status là 1)-->
@@ -234,7 +234,8 @@ function dat(login)
                             <td class="cart_amount">
                            <p> {{App\Product::find($product['id'])->price*$product['qty']}} </p>
                              @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
-                           </td> 
+                             @php $totalqty+=$product['qty']; @endphp
+                            </td> 
 						    <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
                               </td>
@@ -261,7 +262,17 @@ function dat(login)
             </div>
         </div>
         <div class="col-sm-3">
-            <table class="table table-striped" style="margin-top:110px;" >
+        <table class="table table-striped" style="margin-top:110px;" >
+                <tr>
+                    <td>tổng số lượng : </td>
+                    <td> {{$totalqty}}</td>
+
+                    
+
+                </tr>
+
+            </table >
+            <table class="table table-striped"  >
                 <tr>
                     <td>tạm tính: </td>
                     <td> {{$sum}}
@@ -414,6 +425,7 @@ $('input.input-qty').each(function() {
 						</tr>
                     </thead>
                     <tbody class="cart-body" tyle="word-break:break-all;">
+                        @php $totalqty=0 @endphp
                     @foreach($orders->product as $p)
 
                     @if($p->status=="1")
@@ -436,7 +448,7 @@ $('input.input-qty').each(function() {
                                  onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 </div>
 						        </td>
-						      
+                                @php $totalqty+=$p->pivot->qty @endphp
 						        <td class="cart_total">
 							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
 						        </td>
@@ -478,7 +490,15 @@ $('input.input-qty').each(function() {
             </div>
         </div>
         <div class="col-sm-3">
-            <table class="table table-striped" style="margin-top:110px;" >
+        <table class="table table-striped" style="margin-top:110px;" >
+                <tr>
+                    <td>tổng số lượng : </td>
+                    <td> {{$totalqty}}</td>
+
+               </tr>
+
+            </table >
+            <table class="table table-striped">
                 <tr>
                     <td>tạm tính: </td>
                     <td>{{ $orders->total  }} vnd
