@@ -11,6 +11,8 @@ use App\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 USE Illuminate\Support\Facades\Redirect;  
+use App\Mail\DemoEmail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 class homeController extends Controller
 {
@@ -18,7 +20,17 @@ class homeController extends Controller
         
         return view('detail');
     }
-  
+    public function index(Request $request){
+        $orders=Order::find(286);
+        $user=User::find($orders->user_id);
+  // return view('mails.demo')->with(['order'=>$orders,'user'=>$user]);
+        $objDemo = new \stdClass();
+        $objDemo->order=  $orders;
+       $objDemo->user =  $user;
+      $objDemo->sender = 'SenderUserName';
+       $objDemo->receiver = 'ReceiverUserName';
+     Mail::to("kimdat1999@gmail.com")->send(new DemoEmail($objDemo));
+    }
 
     public function order(Request $request){
 
@@ -64,17 +76,7 @@ class homeController extends Controller
         //$request->session()->flush();
         return view('user.home');
     }
-    public function index(Request $request){
-        $user=new User();
-        $user->name="dat";
-        $user->email="dat";
-        $user->password="dat";
-        $user->phone="123";
-        $user->address="dat";
-      
-        $user->save();
-        //return view('index');
-    }
+   
     public function checkout(){
         return view('user.contact');
     }

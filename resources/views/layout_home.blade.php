@@ -19,7 +19,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <style>
-	
+
 	.shoppingcart button
 	{
 		border: 2px solid white !important;
@@ -465,7 +465,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								@endphp
 								@if($count>0)
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
+                                    <ul role="menu"  style="word-break: break-all;" class="sub-menu">
 									
 									@foreach(App\category::all() as $c)
 									

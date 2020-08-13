@@ -156,6 +156,11 @@ if(performance.navigation.type == 2){
       		            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
 			          
                         datatype: 'json',
+                        beforeSend: function(){
+ 
+                            $("#AlertModal .modal-body").html("Bạn chờ tí nhé,..");
+                            $("#AlertModal").modal("show");
+                        },
                         error:function(data)
                         {
                             alert('lỗi rồi');
@@ -177,10 +182,11 @@ if(performance.navigation.type == 2){
                                 $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
                                 $("#AlertModal").modal("show");
                             }
-
+                            
                           
                             else 
                           {
+                              
                                 $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
                                 $("#AlertModal").modal("show");
                               setTimeout(function () {
@@ -255,13 +261,9 @@ if(performance.navigation.type == 2){
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
                            
 
-                            <td class="">
-						        <div class="buttons_added">
-                                <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number"
-                                 value="{{ $p->pivot->qty}}"
-                                readonly>
-                                </div>
-						        </td>
+                            <td class="" style="text-align: center;">
+						             {{$p->pivot->qty}}
+						     </td>
 
 						        <td class="cart_total">
 							    <p class="cart_total_price">{{$p->pivot->amount }}</p>

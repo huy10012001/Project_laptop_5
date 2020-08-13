@@ -19,7 +19,11 @@ use PhpParser\Node\Stmt\Else_;
 use SebastianBergmann\Environment\Console;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
+use App\Mail\DemoEmail;
+use Illuminate\Support\Facades\Mail;
+use App\User;
 class UserCartcontroller extends Controller
+
 {
     public function postDiaChiCheckOut(Request $request)
     {
@@ -164,8 +168,13 @@ class UserCartcontroller extends Controller
                 $orders->phone=$phone;
                 $orders->status="1";
                 $orders->date=Carbon::now();
-                $orders->save();
+                 $orders->save();
+                $objDemo = new \stdClass();
+                $objDemo->order =  $orders;
+                $user=User::find($orders->user_id);
+                $objDemo->user =  $user;
                 
+                 Mail::to($user->email)->send(new DemoEmail($objDemo));
                 //xóa   order_product đã hết hàng trong giỏ hàng
               
                 
