@@ -167,8 +167,8 @@ class UserCartcontroller extends Controller
                 $orders->address=$add;
                 $orders->phone=$phone;
                 $orders->status="1";
-                $orders->date=Carbon::now();
-                 $orders->save();
+                $orders->date=Carbon::now('Asia/Ho_Chi_Minh'); 
+                $orders->save();
                 $objDemo = new \stdClass();
                 $objDemo->order =  $orders;
                 $user=User::find($orders->user_id);
@@ -653,7 +653,7 @@ class UserCartcontroller extends Controller
             $carts->user_id=$user_id;
             $carts->total=0;
             $carts->status="0";
-            $carts->date=Carbon::now();
+            $carts->date=Carbon::now('Asia/Ho_Chi_Minh'); 
             $carts->name=$user->name;
             $carts->address=$user->address;
             $carts->phone=$user->phone;

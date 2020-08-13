@@ -142,7 +142,7 @@ class loginController extends Controller
             $order->user_id=$user->id;
             $order->total=$cart->totalPrice;
             $order->status="0";
-            $order->date=Carbon::now();
+            $order->date=Carbon::now('Asia/Ho_Chi_Minh'); 
             
             $order->save();
            
@@ -195,7 +195,7 @@ class loginController extends Controller
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
-                $order->date=Carbon::now();
+                $order->date=Carbon::now('Asia/Ho_Chi_Minh'); 
                 $order->save();
             }
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì xóa giỏ cũ, cập nhập lại tổng giá từ session cart và ngày order hiện tại
@@ -277,7 +277,7 @@ class loginController extends Controller
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
-                $order->date=Carbon::now();
+                $order->date=Carbon::now('Asia/Ho_Chi_Minh'); 
                 $order->save();
             }
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
@@ -288,7 +288,7 @@ class loginController extends Controller
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
-                $order->date=Carbon::now();
+                $order->date=Carbon::now('Asia/Ho_Chi_Minh'); 
                 $order->save();
             }
             //Kiểm tra trong giỏ hiện tại của user nếu có sản phẩm thì xóa đi để lấy dữ liệu từ session cart

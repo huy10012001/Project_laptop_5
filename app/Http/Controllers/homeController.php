@@ -21,15 +21,8 @@ class homeController extends Controller
         return view('detail');
     }
     public function index(Request $request){
-        $orders=Order::find(286);
-        $user=User::find($orders->user_id);
-  // return view('mails.demo')->with(['order'=>$orders,'user'=>$user]);
-        $objDemo = new \stdClass();
-        $objDemo->order=  $orders;
-       $objDemo->user =  $user;
-      $objDemo->sender = 'SenderUserName';
-       $objDemo->receiver = 'ReceiverUserName';
-     Mail::to("kimdat1999@gmail.com")->send(new DemoEmail($objDemo));
+     $cart=$request->session()->get('cart');
+        dd($cart);
     }
 
     public function order(Request $request){
