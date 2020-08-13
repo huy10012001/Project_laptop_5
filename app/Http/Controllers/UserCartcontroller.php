@@ -167,7 +167,7 @@ class UserCartcontroller extends Controller
                 $orders->address=$add;
                 $orders->phone=$phone;
                 $orders->status="1";
-                $orders->date=Carbon::now('Asia/Ho_Chi_Minh'); 
+                $orders->date=Carbon::now(); 
                 $orders->save();
                 $objDemo = new \stdClass();
                 $objDemo->order =  $orders;
@@ -294,10 +294,10 @@ class UserCartcontroller extends Controller
         $product_id=$request->product_id;
         $c=$request->qty;
         $time_create=$request->timecreate;
-        
+      
         //nếu item không tồn tại
        
-       
+      
         if(($c>10 ||$c<0 ||empty($c)) )
         { 
             return Response::json(array(
@@ -332,7 +332,8 @@ class UserCartcontroller extends Controller
             
             $cart=new Cart(session()->get('cart'));
                  //nếu item không tồn tại
-            if(!isset($cart->items[$product_id])||$cart->items[$product_id]['status']==0)
+            $status=Product::find($cart->items[$product_id]['id'])->status;
+            if(!isset($cart->items[$product_id])||$status=="0")
             return Response::json(array(
                 'status'=>'no3',
    
@@ -346,6 +347,18 @@ class UserCartcontroller extends Controller
             $cart->update1($product,$c);
            
             $request->session()->put('cart',$cart);
+            $sum=0;
+            foreach($cart->items as $item)
+            {
+                if(Product::find($item['id'])->status=="1")
+                {
+                    $sum+=Product::find($item['id'])->price*$item['qty'];
+                }
+            }
+            return Response::json(array(
+                'total'=> $sum ,
+              
+            )); 
            
         }
         
@@ -405,7 +418,7 @@ class UserCartcontroller extends Controller
             //$time=Carbon::createFromTimestampUTC($p->created_at)->secondsSinceMidnight();
             if($old_order_id)
             { 
-               if($p->created_at->timestamp!=$time_create )
+               if(($p->created_at->timestamp+3600*7)!=$time_create )
                 return Response::json(array(
                  'status'=>'no8'
                 )); 
@@ -434,7 +447,10 @@ class UserCartcontroller extends Controller
             
              ])->sum('amount');
              $c->save();
-            
+             return Response::json(array(
+                'total'=>$c->total  ,
+              
+            )); 
             
         }
     }
@@ -481,17 +497,27 @@ class UserCartcontroller extends Controller
                return Response::json(array(
                     'status'=>'no6'
                )); 
-            
+             
             $cart->delete1($product);
             $request->session()->put('cart',$cart);
             
             //Nếu user đã xóa hết sản phẩm trong giỏ hàng thì hủy session cart
             if(empty($cart->items))
             $request->session()->forget('cart');
-            return Response::json(array(
-                'total'=>$cart->totalPrice,
+
+            $sum=0;
+            foreach($cart->items as $item)
+            {
               
-               )); 
+                if(Product::find($item['id'])->status=="1")
+                {
+                    $sum+=Product::find($item['id'])->price*$item['qty'];
+                }
+            }
+            return Response::json(array(
+                'total'=> $sum ,
+              
+            )); 
         }
         
         if($request->session()->has('key'))
@@ -550,7 +576,7 @@ class UserCartcontroller extends Controller
           
             if($old_order_id)
             { 
-                if($p->created_at->timestamp!=$time_create )
+                if(($p->created_at->timestamp+3600*7)!=$time_create )
                 return Response::json(array(
                      'status'=>'no8'
                     )); 
@@ -653,7 +679,7 @@ class UserCartcontroller extends Controller
             $carts->user_id=$user_id;
             $carts->total=0;
             $carts->status="0";
-            $carts->date=Carbon::now('Asia/Ho_Chi_Minh'); 
+            $carts->date=Carbon::now(); 
             $carts->name=$user->name;
             $carts->address=$user->address;
             $carts->phone=$user->phone;

@@ -175,17 +175,7 @@ class AdminProductController extends Controller
             $p->price=$price;
             $p->save();
             //Trường hợp user chưa đăng nhập
-            if($request->session()->get('cart'))
-            {
-                $cart=new Cart(session()->get('cart'));
-
-               if(isset($cart->items[$id]))
-                {
-                   $cart->Adminupdate($p,$price,$status);
-                    $request->session()->put('cart',$cart);
-                   
-                }
-            }
+          
             order_product::join('product', 'order_product.product_id', '=', 'product.id')
             ->join('order','order_product.order_id','=','order.id')
             ->where(

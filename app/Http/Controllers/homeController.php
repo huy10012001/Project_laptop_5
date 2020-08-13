@@ -12,8 +12,12 @@ use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 USE Illuminate\Support\Facades\Redirect;  
 use App\Mail\DemoEmail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
+use App\Cart;
+use App\order_product;
+
 class homeController extends Controller
 {
     public function detail(Request $request){
@@ -21,8 +25,10 @@ class homeController extends Controller
         return view('detail');
     }
     public function index(Request $request){
+    
      $cart=$request->session()->get('cart');
-        dd($cart);
+     dd($cart);
+   //  $request->session()->forget('cart');
     }
 
     public function order(Request $request){

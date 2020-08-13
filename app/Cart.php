@@ -10,8 +10,7 @@ class Cart extends Model
 {
     // khai báo table ứng với model
   public $items=[];
-  public $totalQty;
-  public $totalPrice;
+ 
   
   //public $soldout;
   public function __construct($cart=null)
@@ -35,50 +34,32 @@ class Cart extends Model
   {
       $item=[
           'id'=>$product->id,
-          'price'=>$product->price,
+   
           'qty'=>0,
-          'amount'=>0,
+          
           //status 1 là còn hàng
-          'status'=>1,
+          
           //thời gian order sản phẩm
-          'time_at'=>time(),
-          'deleted_at'=>null
+          'time_at'=>time()+3600*7,
+          
       ];
       if(!array_key_exists($product->id,$this->items))
       {
           $this->items[$product->id]=$item;
           //$this->items[$product->id]['time_at']= Carbon::now('Asia/Ho_Chi_Minh');
           //$this->items[$product->id]['time_at']+=1;
-         $this->totalQty+=1;
-          $this->totalPrice+=$product->price;
+       
          
       }
-      else
-      {
-          $this->totalQty+=1;
-          $this->totalPrice+=$product->price;
-
-      }
+     
       $this->items[$product->id]['qty']+=1;
-      $this->items[$product->id]['amount']= $this->items[$product->id]['qty']* $this->items[$product->id]['price'];
+     
   }
   public function update1($product,$qty)
   {
     
       $this->items[$product->id]['qty']=$qty;
-      $this->items[$product->id]['amount']= $this->items[$product->id]['qty']* $this->items[$product->id]['price'];
-      $sum=0;
-      $qty=0;
-      foreach( $this->items as $item)
-      { 
-        if($item['status']==1)
-       { 
-         $sum+=   $item['amount'];
-          $qty+=$item['qty'];
-       }
-      }
-      $this->totalPrice=$sum;
-      $this->totalQty=$qty;
+    
   }
   public function Adminupdate($product,$price,$status)
   {
@@ -99,11 +80,7 @@ class Cart extends Model
   }
   public function delete1($product)
   {
-    if($this->items[$product->id]['status']==1)
-    {
-      $this->totalPrice-=$this->items[$product->id]['amount'];
-      $this->totalQty-=$this->items[$product->id]['qty'];
-    }
+  
     if($this->items[$product->id]!=null)
      {
         unset($this->items[$product->id]);

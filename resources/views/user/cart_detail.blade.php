@@ -13,8 +13,9 @@ function onChange(qty,product_id,order_id,timecreate)
       		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
       		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
+           
          	success:function(data)
-            {	
+            {
                 //khi số lượng bé hơn 1 và lớn hơn 10
                 if(data.soluong=="1")
                 {
@@ -25,12 +26,12 @@ function onChange(qty,product_id,order_id,timecreate)
                 else if(data.status)
                  {
                
-                    $("#AlertModal .modal-body").html("khô ng tìm thấy item");
+                    $("#AlertModal .modal-body").html("không tìm thấy item");
                     $("#AlertModal").modal("show");
                 }
                 else
                 {
-                    location.reload();
+                  location.reload();
                 }
 			 }
     });
@@ -202,18 +203,20 @@ function dat(login)
 							<td class="total">tổng tiền</td>
 							<td><p style="width:30px"></p></td>
 						</tr>
-					</thead>
+                    </thead>
+                    @php $sum=0; @endphp
 					@foreach(Session::get('cart')->items as $product)
 						    
                             <!--Trường hợp còn hàng(status là 1)-->
-                            @if($product['status']==1)
+                          
+                            @if(App\Product::find($product['id'])->status=="1")
                             <tr>
                             <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
                             <td class="cart_name">
                            <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                            </td>
                            <td class="cart_price">
-                           <p> {{$product['price']}}</p>
+                           <p> {{App\Product::find($product['id'])->price}}</p>
                            </td> 
                             <td class="">
 							<div class="buttons_added">
@@ -225,7 +228,8 @@ function dat(login)
                             </div>
                             </td>
                             <td class="cart_amount">
-                           <p> {{$product['amount']}}</p>
+                           <p> {{App\Product::find($product['id'])->price*$product['qty']}} </p>
+                             @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
                            </td> 
 						    <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
@@ -239,7 +243,7 @@ function dat(login)
                                 <td class="cart_name">
                                 <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                                 </td>
-                                <td></td>
+                                <td>{{App\Product::find($product['id'])->price}}</td>
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
@@ -256,7 +260,7 @@ function dat(login)
             <table class="table table-striped" style="margin-top:110px;" >
                 <tr>
                     <td>tạm tính: </td>
-                    <td> {{Session::get('cart')->totalPrice}}
+                    <td> {{$sum}}
 
                     </td>
 
@@ -266,7 +270,7 @@ function dat(login)
             <table class="table table-striped">
              <tr>
                 <td> Thành tiền:</td>
-                <td> {{Session::get('cart')->totalPrice}} <br><p>đã bao gồm thuế (VAT)</p></td>
+                <td> {{$sum}} <br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->
@@ -407,7 +411,7 @@ $('input.input-qty').each(function() {
                     </thead>
                     <tbody class="cart-body" tyle="word-break:break-all;">
                     @foreach($orders->product as $p)
-                 
+
                     @if($p->status=="1")
 						<tr >
                             <td class="cart_product">
@@ -473,7 +477,7 @@ $('input.input-qty').each(function() {
             <table class="table table-striped" style="margin-top:110px;" >
                 <tr>
                     <td>tạm tính: </td>
-                    <td>{{ $orders->total  }}vnd
+                    <td>{{ $orders->total  }} vnd
 
                     </td>
 
@@ -485,7 +489,7 @@ $('input.input-qty').each(function() {
                 <td> Thành tiền:</td>
 
 
-                <td>{{ $orders->total  }}vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+                <td>{{ $orders->total  }} vnd <br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->

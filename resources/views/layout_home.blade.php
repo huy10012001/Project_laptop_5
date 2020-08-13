@@ -164,8 +164,8 @@ function updateCart(qty,product_id,order_id,timecreate)
 				if(!!qty)
 				{ 
 					$(this).find('td.amount').html(qty*price);
-					total+=qty*price;
-					$('#total').html(total);
+					
+					$('#total').html(data.total);
 				}
  			});
 		}}
@@ -174,6 +174,7 @@ function updateCart(qty,product_id,order_id,timecreate)
 //Hàm xóa số lượng item ở modal
 function deleteCartModal(product_id,order_id,emn,timecreate)
 {
+	
 	$.ajax({
 		type:  "GET",//type là get
       	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
@@ -653,21 +654,23 @@ $("#cartModal").on('show.bs.modal', function(){
                                 </tr>
                                 </thead>
                                 <tbody class="cart-body">
+									@php  $sum=0 @endphp
 									@foreach(Session::get('cart')->items as $product)
-											@if($product['status']==1)
+											@if(App\Product::find($product['id'])->status=="1")
 											<tr>		
 											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     		</td>
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
                                     	
-											<td class="price">{{$product['price']}}</td>
+											<td class="price">{{App\Product::find($product['id'])->price}}</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
 											</td>
-                                    		<td class = "amount">{{$product['amount']}}</td>
+                                    		<td class = "amount">{{App\Product::find($product['id'])->price*$product['qty']}}</td>
                                     		<td>
+												@php $sum+=App\Product::find($product['id'])->price*$product['qty'] @endphp
                                     		<a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
                                         	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -685,15 +688,15 @@ $("#cartModal").on('show.bs.modal', function(){
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
                                     	
-												<td class="price">{{$product['price']}}</td>
+												  <td class="price">{{App\Product::find($product['id'])->price}}</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
                                 	 			<td>
-                                    			<a href="#" onclick="deleteModal(this);deleteCartModal(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)">
-                                    			<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    			<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                    			<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                    			</svg>
+												 <a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
+                                        	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        	</svg>
                                     		</a>
 											</td>
 											</tr>	
@@ -705,7 +708,7 @@ $("#cartModal").on('show.bs.modal', function(){
 						</div>
                         <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-                                {{Session::get('cart')->totalPrice}}</span></h5>
+                                {{$sum}}</span></h5>
                         </div>
                             <!--Trường hợp user  đăng nhập thao tác với database-->
 					@elseif(isset($orders))
