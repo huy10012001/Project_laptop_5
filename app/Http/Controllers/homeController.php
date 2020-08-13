@@ -26,8 +26,9 @@ class homeController extends Controller
     }
     public function index(Request $request){
     
-     $cart=$request->session()->get('cart');
-     dd($cart);
+        
+     
+  
    //  $request->session()->forget('cart');
     }
 

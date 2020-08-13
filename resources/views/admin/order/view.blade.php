@@ -74,6 +74,7 @@
                             <thead>
                             <tr>
                                 <th>Order Id</th>
+                                <th></th>
                                 <th>Product Name</th>
                                 <th>Price</th>
                                 <th>qty</th>
@@ -84,29 +85,29 @@
                            
                             <tbody>
                             @if($p->status=="1")
-                                @foreach($p->product as $p)
+                                @foreach($p->product as $o_p)
                                 <tr> 
-                                    <td>{{$p->pivot->	order_id}}</td>
+                                    <td>{{$o_p->pivot->	order_id}}</td>
+                                    <td>  <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$o_p->image) }}"/> </td>
                                     <td>{{ App\Product::
-                                     find($p->pivot->product_id)->name}}</td>
-                                    <td>{{$p->pivot->	price}}</td>
-                                    <td>{{$p->pivot->	qty}}</td>
-                                    <td>{{$p->pivot->	amount}}</td>
+                                     find($o_p->pivot->product_id)->name}}</td>
+                                    <td>{{$o_p->pivot->	price}}</td>
+                                    <td>{{$o_p->pivot->	qty}}</td>
+                                    <td>{{$o_p->pivot->	amount}}</td>
                                    
                                 </tr>
                                 @endforeach
                             @else
-                                @foreach($p->product as $p)
-                                @if($p->status=="1")
+                                @foreach($p->product as $o_p)
+                                @if($o_p->status=="1")
                                 <tr> 
                               
-                                    <td>{{$p->pivot->	order_id}}</td>
+                                <td>  <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$o_p->image) }}"/> </td>
                                     <td>{{ App\Product::
-                                     find($p->pivot->product_id)->name}}</td>
-                                    <td>{{$p->pivot->	price}}</td>
-                                    <td>{{$p->pivot->	qty}}</td>
-                                    <td>{{$p->pivot->	amount}}</td>
-                                
+                                     find($o_p->pivot->product_id)->name}}</td>
+                                    <td>{{$o_p->pivot->	price}}</td>
+                                    <td>{{$o_p->pivot->	qty}}</td>
+                                    <td>{{$o_p->pivot->	amount}}</td>   
                                 </tr>
                                 @endif
                                 @endforeach

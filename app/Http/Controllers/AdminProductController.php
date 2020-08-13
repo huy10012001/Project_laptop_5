@@ -174,8 +174,31 @@ class AdminProductController extends Controller
             $p->status=$status;
             $p->price=$price;
             $p->save();
-            //Trường hợp user chưa đăng nhập
+           
+            $orders=Order::where(['status'=>'0'])->get();
+            foreach($orders as $order)
+            {
+                foreach($order->product as $o_product)
+                {   
+                    if( $o_product->pivot->product_id==$id)
+                   
+                        $o_product->pivot->update(['price'=>$price,'amount'=>$price* $o_product->pivot->qty]);
+
+                }
+            }
+            $cart_users=Order::where(['status'=>"0"])->get();
+            foreach($cart_users as $cart_user)
+            {
           
+                $total=order_product::where(['order_id'=>$cart_user->id])
+                ->join('product','order_product.product_id','=','product.id')
+                ->where(['product.status'=>"1"])
+                ->sum('amount');
+                Order::where(['status'=>"0",'id'=>$cart_user->id])->update(['total'=>$total]);
+            }
+            //Trường hợp user chưa đăng nhập
+            /*
+            
             order_product::join('product', 'order_product.product_id', '=', 'product.id')
             ->join('order','order_product.order_id','=','order.id')
             ->where(
@@ -189,7 +212,7 @@ class AdminProductController extends Controller
             {
                 $total=order_product::where(['status'=>"1",'order_id'=>$cart_user->id])->sum('amount');
                 Order::where(['status'=>"0",'id'=>$cart_user->id])->update(['total'=>$total]);
-            }
+            }*/
         }
         else
         {
