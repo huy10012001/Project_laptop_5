@@ -154,7 +154,7 @@ class loginController extends Controller
                  $order_product->qty=$item['qty'];
                  $order_product->amount=Product::find($item['id'])->price*$item['qty'];
                  $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
-                 $order_product->status=Product::find($item['id'])->status;
+                 //$order_product->status=Product::find($item['id'])->status;
                  $order_product->save();
              }
              $order->date=\Carbon\Carbon::parse(array_values($cart->items)[0]['time_at']); 
@@ -240,7 +240,7 @@ class loginController extends Controller
                  $order_product->qty=$item['qty'];
                  $order_product->amount=Product::find($item['id'])->price*$item['qty'];
                  $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
-                 $order_product->status=Product::find($item['id'])->status;
+                
                  $order_product->save();
             }
             $order->date=\Carbon\Carbon::parse(array_values($cart->items)[0]['time_at']); 

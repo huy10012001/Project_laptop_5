@@ -162,7 +162,11 @@ class UserCartcontroller extends Controller
                             )); 
                     }
                 }
-               
+                order_product::where
+                (['order_id'=>$orders->id ])->
+                 join('product','order_product.product_id','=','product.id')
+                 ->where(['product.status'=>"0"])
+                 ->delete();
                 $orders->name=$name;
                 $orders->address=$add;
                 $orders->phone=$phone;
@@ -404,7 +408,7 @@ class UserCartcontroller extends Controller
                 'product_id'=>$product_id
             ])->first();
            
-            
+         
             if(empty($p) || Product::find($product_id)->status=="0")
                 return Response::json(array(
                 'status'=>'no5',
@@ -440,12 +444,19 @@ class UserCartcontroller extends Controller
              ])->update(['qty' => $c,'amount'=>Product::find($product_id)->price*$c]);
             //Update lại tổng giá của đơn hàng đó
             $c=Order::find($order_id);
+            /*
             $c->total=order_product::where
             ([
              'order_id'=>$order_id
                 ,'status'=>"1"
             
-             ])->sum('amount');
+             ])->sum('amount');*/
+             $total=order_product::where
+             (['order_id'=>$order_id ])->
+             join('product','order_product.product_id','=','product.id')
+             ->where(['product.status'=>"1"])
+             ->sum('amount');
+             $c->total=$total;
              $c->save();
              return Response::json(array(
                 'total'=>$c->total  ,
@@ -591,15 +602,21 @@ class UserCartcontroller extends Controller
             $c=Order::where(['id'=>$order_id,'status'=>"0"])->first();
            
             //sản phẩm chưa hết hàng hoặc còn hoạt động thì trừ đi giá sản phẩm đó
-            if($p->status=="1")
+           /* if($p->status=="1")
             {   
                 $c->total=$c->total-$p->amount;
                 
                 $c->save();
                     
             }
-          
-                 
+          */
+          if(Product::find($p->product_id)->status=="1")
+          { $c->total=$c->total-$p->amount;
+                
+          $c->save();
+              
+            } 
+           
                  //Xóa order trong giỏ hàng hiện tại
             $order_product= order_product::where
             ([
@@ -700,7 +717,7 @@ class UserCartcontroller extends Controller
             $order_product->price=Product::find($id)->price;
             $order_product->qty=1;
             $order_product->amount=$order_product->price;
-            $order_product->status="1";
+        
             $order_product->save();
             $carts->total=$carts->total+=Product::find($id)->price;
             $carts->save();

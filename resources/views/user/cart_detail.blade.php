@@ -13,9 +13,13 @@ function onChange(qty,product_id,order_id,timecreate)
       		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
       		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
-           
+           error:function(data)
+           {
+               alert('co loi');
+           },
          	success:function(data)
             {
+               
                 //khi số lượng bé hơn 1 và lớn hơn 10
                 if(data.soluong=="1")
                 {
