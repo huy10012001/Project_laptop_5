@@ -459,7 +459,11 @@
        
       @endforeach
   @else
-    không
+  <div style="text-align: center;padding:120px"  >
+    <p style="color:black;font-size:50px">
+không có sản phẩm cùng danh mục với sản phẩm bạn đang xem !
+    </p>
+</div>
   @endif
 
   <div class="row">
