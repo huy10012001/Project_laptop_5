@@ -49,12 +49,14 @@ class AppServiceProvider extends ServiceProvider
                 //lấy giỏ hàng của user_id
                     $orders=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
                      $totalQty=0;
-                     foreach($orders->product as $item)
+                     if(!empty($orders))
+                    {foreach($orders->product as $item)
                      {  
                          if($item->status=="1")
                          $totalQty+=$item->pivot->qty;
                      }
                      $view->with(['totalQty'=>$totalQty]);
+                    }
                 $view->with(['orders'=>$orders]);
                 }
            
