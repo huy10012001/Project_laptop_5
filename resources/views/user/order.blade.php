@@ -38,7 +38,7 @@
 //load lại trang khi user bấm back
 $(document).ready(function()
 {
-        
+
     $( "#update" ).submit(function(e) {
         e.preventDefault();
             $.ajaxSetup(
@@ -49,7 +49,7 @@ $(document).ready(function()
                     }
                 }
             );
-           
+
             $.ajax({
 			    method:'post',
       		    url:	 " {{ asset('/postDiaChiCheckOut')}}",
@@ -61,13 +61,13 @@ $(document).ready(function()
 				},
 			    success:function(data)
            	    {
-                  
+
                     $("#update").hide();
                     $("#khach").show();
                     $("#khach input[name=name]").val(data.name) ;
                     $("#khach input[name=phone]").val(data.phone) ;
                     $("#khach input[name=address]").val(data.address) ;
-              
+
            	    }
         	});
     });
@@ -82,7 +82,7 @@ if(performance.navigation.type == 2){
       $('#khach').hide();
       $('#update').show();
     }
-   
+
 
     function huy()
     {
@@ -92,7 +92,7 @@ if(performance.navigation.type == 2){
     }
     function tienhanh()
     {
-       
+
         var product_update =[];
         $(".product_update").each(function() {
         product_update.push($(this).val());
@@ -111,15 +111,15 @@ if(performance.navigation.type == 2){
             ,
 			success:function(data)
            	{
-               
-              
+
+
                 //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
                 if(data.status=="phiên kết thúc")
                 {
                     $("#AlertModal .modal-body").html("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
                         $("#AlertModal").modal("show");
-                       
-                
+
+
                     setTimeout(function () {
                     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                     }, 1000); //will call the function after 2 secs.
@@ -129,7 +129,7 @@ if(performance.navigation.type == 2){
                 {
                     $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
                         $("#AlertModal").modal("show");
-                       
+
                     setTimeout(function () {
                     window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
                      }, 1000); //will call the function after 2 secs.
@@ -141,35 +141,37 @@ if(performance.navigation.type == 2){
                         $("#AlertModal").modal("show");
                 }
                 //Order
-                
-                else 
+
+                else
                 {
-                    
+
                     $name= $("#khach  input[name=name]").val();
                     $phone=$("#khach input[name=phone]").val();
                     $add=$("#khach input[name=address]").val();
-                 
+
 		            $.ajax({
 
 			            type:  "GET",//type là get
       		            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
       		            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
-			          
+
                         datatype: 'json',
                         beforeSend: function(){
- 
+
                             $("#AlertModal .modal-body").html("Bạn chờ tí nhé,..");
                             $("#AlertModal").modal("show");
                         },
-                        error:function(data)
+                        error:function(xhr)
                         {
-                            alert('lỗi rồi');
-                            
+                            var x=xhr.responseText;
+                            x=$.parseJSON(x);
+                           console.log(x.message);
+
                         },
          	            success:function(data)
                         {
-                          
-                        
+
+
                             //nếu giỏ hàng thay đổi trong lúc order
                             if(data.status=="thay đổi")
                             {
@@ -182,11 +184,11 @@ if(performance.navigation.type == 2){
                                 $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
                                 $("#AlertModal").modal("show");
                             }
-                            
-                          
-                            else 
+
+
+                            else
                           {
-                              
+
                                 $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
                                 $("#AlertModal").modal("show");
                               setTimeout(function () {
@@ -219,18 +221,18 @@ if(performance.navigation.type == 2){
                  @if(isset($orders))
                      @if($orders->total==0)
                      <div class="alert alert-danger">
-                     <strong>Giỏ hàng của bạn đang trống!</strong> 
+                     <strong>Giỏ hàng của bạn đang trống!</strong>
                     </div>
                      @endif
                 @else
                     <div class="alert alert-danger">
-                     <strong>Giỏ hàng của bạn đang trống!</strong> 
+                     <strong>Giỏ hàng của bạn đang trống!</strong>
                      </div>
                 @endif
                 </ol>
-                
+
             </div>
-          
+
 			<div class="table-responsive cart_info" style="margin-top: -40px;">
 				<table class="table table-condensed" >
 					<thead>
@@ -243,15 +245,15 @@ if(performance.navigation.type == 2){
 							<td></td>
 						</tr>
                     </thead>
-                    
+
 					@if(isset($orders))
                     @foreach($orders->product as $p)
                      <!--Trường hợp còn hàng(status là 1)-->
                     @if($p->status=="1")
 						<tr>
                             <td class="cart_product" >
-                            <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$p->image) }}"/> 
-                      
+                            <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$p->image) }}"/>
+
 						    <td class="cart_name">
 							<h4 >{{$p->name}}</h4>
                             </td>
@@ -259,7 +261,7 @@ if(performance.navigation.type == 2){
 						    <p> {{$p->pivot->price }}</p>
                             </td>
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
-                           
+
 
                             <td class="" style="text-align: center;">
 						             {{$p->pivot->qty}}
@@ -276,7 +278,7 @@ if(performance.navigation.type == 2){
                         </tr>
 					@endforeach
 					@endif
-					
+
 				</table>
             </div>
         </div>
@@ -314,14 +316,14 @@ if(performance.navigation.type == 2){
             <input   value="{{Session::get('key')->address}}"  required  type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại"><br>
             <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Huy</button>
             <input type="submit"    id="oK" value="xác nhận"   class="btn btn-primary "/>
-        
+
  </form>
 </div>
  <div class="col-sm-4">
     <table class="table table-striped" style="margin-top:110px;" >
         <tr>
             <td>tạm tính: </td>
-			@if(isset($orders) ) 
+			@if(isset($orders) )
 			<td>{{ $orders->total }}vnd
 			</td>
 			@else
@@ -332,14 +334,14 @@ if(performance.navigation.type == 2){
         </tr>
 
 	</table >
-	@if(isset($orders)) 
+	@if(isset($orders))
     <table class="table table-striped">
      <tr>
 		<td> Thành tiền:</td>
-	
+
         <td>{{ $orders->total  }}
 		vnd <br><p>đã bao gồm thuế (VAT)</p></td>
-		
+
     </tr>
     </table>
     <!-- Button trigger modal -->
@@ -349,16 +351,16 @@ if(performance.navigation.type == 2){
 	<table class="table table-striped">
      <tr>
 		<td> Thành tiền:</td>
-	
+
         <td>0 vnd <br><p>đã bao gồm thuế (VAT)</p></td>
-		
+
     </tr>
     </table>
     <!-- Button trigger modal -->
    <input type="hidden" name="id" value="{{Session::get('key')->id}}">
     <button type="button" class="btn btn-primary " onclick="tienhanh()">Tiến hành đặt </button>
 	@endif
-	
+
 </div>
 
 </div>
@@ -373,7 +375,7 @@ if(performance.navigation.type == 2){
 
 
  <!--Nếu user chưa đăng nhập truy cập trang order-->
- @else 
+ @else
 
 <table>
 <tr>
@@ -402,7 +404,7 @@ if(performance.navigation.type == 2){
 							<td></td>
 						</tr>
 					</thead>
-					
+
 				</table>
             </div>
         </div>
@@ -427,7 +429,7 @@ if(performance.navigation.type == 2){
 
     địa chỉ:<input    type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại" disabled><br>
 
-     
+
 
                 <button id="updateX" type="button" onclick="Update()"  class="btn btn-primary ">Sửa</button>
 
@@ -482,9 +484,9 @@ $( document ).ready(function() {
 
 
  //window.location.href = "{{URL::to('/home')}}"
-</script> 
+</script>
 @endif
-		
+
 			<footer id="footer"><!--Footer-->
 
 
@@ -558,7 +560,7 @@ $( document ).ready(function() {
                                 </ul>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
 				</div>
 			</div>
@@ -584,10 +586,10 @@ $( document ).ready(function() {
     <script src="{{ asset('fronend/js/main.js') }}"></script>
     <div class="modal fade" id="AlertModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
-        
+
         <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
@@ -595,7 +597,7 @@ $( document ).ready(function() {
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
 </body>

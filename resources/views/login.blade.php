@@ -29,7 +29,7 @@
 	 $(document).ready(function()
     {
         //đăng nhập mua hàng khi user chua đăng nhập
-     
+
         $('#login').submit(function(e)
         {
             e.preventDefault();
@@ -41,7 +41,7 @@
                     }
                 }
             );
-           
+
             $.ajax({
 			    method:'post',
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
@@ -53,35 +53,35 @@
 				},
 			    success:function(data)
            	    {
-					 
+
 					if(data.status=="admin")
 					{
 						window.location.href ="{{ asset('/admin/product/index')}}"
-					}					
-                    
+					}
+
                     else
 					{
 						$("#AlertModal .modal-body").html("tài khoản không có trong hệ thống");
                     	$("#AlertModal").modal("show");
 					}
-                   
+
                // location.reload();
 					//var a=data.status;
 					//alert(a);
           		//  document.getElementById("total").innerHTML = 123;
            	    }
         	});
-           
+
         });
 	});
 </script>
 <body>
 <div class="modal fade" id="AlertModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
-        
+
         <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
@@ -89,7 +89,7 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -199,7 +199,7 @@
             <div class="row">
                 <div class="col-sm-4">
 				<form id="login" method="post" action="javascrip:void(0)" >
-        {{ csrf_field() }}		
+        {{ csrf_field() }}
             <h5 style="color: white;" >Email:</h5>
             <input type="email" class="form-control" name="email" required><br>
             <h5 style="color: white;">Password:</h5>
