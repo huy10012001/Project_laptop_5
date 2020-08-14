@@ -27,7 +27,8 @@ class homeController extends Controller
     public function index(Request $request){
     
         
-     
+     $product=product::find('112')->status;
+     echo $product;
   
    //  $request->session()->forget('cart');
     }

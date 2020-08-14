@@ -19,7 +19,7 @@ function onChange(qty,product_id,order_id,timecreate)
            },
          	success:function(data)
             {
-               
+                 
                 //khi số lượng bé hơn 1 và lớn hơn 10
                 if(data.soluong=="1")
                 {

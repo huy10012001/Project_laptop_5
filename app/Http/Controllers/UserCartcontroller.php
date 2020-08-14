@@ -169,10 +169,13 @@ class UserCartcontroller extends Controller
                  ->delete();
                 $orders->name=$name;
                 $orders->address=$add;
+                
                 $orders->phone=$phone;
                 $orders->status="1";
                 $orders->date=Carbon::now(); 
+                
                 $orders->save();
+                
                 $objDemo = new \stdClass();
                 $objDemo->order =  $orders;
                 $user=User::find($orders->user_id);
@@ -329,6 +332,7 @@ class UserCartcontroller extends Controller
                      
            )); 
         }
+       
         $product=Product::find($product_id);
         //tìm order trong giỏ hàng hiện tại
         if($request->session()->get('cart'))
@@ -336,12 +340,15 @@ class UserCartcontroller extends Controller
             
             $cart=new Cart(session()->get('cart'));
                  //nếu item không tồn tại
+                 
+            if(isset($cart->items[$product_id]))    
             $status=Product::find($cart->items[$product_id]['id'])->status;
-            if(!isset($cart->items[$product_id])||$status=="0")
+           if(!isset($cart->items[$product_id])||$status=="0")
             return Response::json(array(
                 'status'=>'no3',
    
             )); 
+            
             
             if($time_create!=$cart->items[$product_id]['time_at'])
             return Response::json(array(
