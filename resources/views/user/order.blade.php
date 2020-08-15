@@ -273,7 +273,7 @@ if(performance.navigation.type == 2){
 							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }}</p>
+						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
 
@@ -283,7 +283,7 @@ if(performance.navigation.type == 2){
 						     </td>
 
 						        <td class="cart_total">
-							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
+							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
 						        </td>
 
                                 </td>
@@ -339,10 +339,10 @@ if(performance.navigation.type == 2){
         <tr>
             <td>tạm tính: </td>
 			@if(isset($orders) )
-			<td>{{ $orders->total }}vnd
+			<td>{{ $orders->total }} đ
 			</td>
 			@else
-			<td>0 vnd
+			<td>0 đ
 			</td>
 			@endif
 
@@ -355,13 +355,13 @@ if(performance.navigation.type == 2){
 		<td> Thành tiền:</td>
 
         <td>{{ $orders->total  }}
-		vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+        đ<br><p>đã bao gồm thuế (VAT)</p></td>
 
     </tr>
     </table>
     <!-- Button trigger modal -->
    <input type="hidden" name="id" value="{{Session::get('key')->id}}">
-    <button type="button" class="btn btn-primary " onclick="tienhanh()">Tiến hành đặt </button>
+    <button type="button" class="btn btn-primary " onclick="tienhanh()">Thanh toán </button>
 	@else
 	<table class="table table-striped">
      <tr>

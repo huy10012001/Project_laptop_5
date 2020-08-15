@@ -7,7 +7,7 @@ use App\category;
 use Illuminate\Support\ServiceProvider;
 use  Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use App\Order;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('layout_home', function($view)
         {
+              //lấy danh mục có ít nhất 1 sản phẩm cập nhập đầy đủ chi tiết và đang hoạt động
+            $category= DB::table('category')->select('category.name')->distinct()
+            -> join('product','product.category_id','=','category.id')
+            ->join('detail_product','detail_product.product_id','=','product.id')->
+            where('product.status','1')->get();
+           
                 if(Session::has('cart'))
                 {
                     $cart=Session::get('cart');
@@ -57,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
                      }
                      $view->with(['totalQty'=>$totalQty]);
                     }
-                $view->with(['orders'=>$orders]);
+                $view->with(['orders'=>$orders,'category'=>$category]);
                 }
            
 

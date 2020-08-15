@@ -164,10 +164,6 @@ $(document).ready(function()
             </div>
         </div>
     </section>
-<<<<<<< HEAD
-      
-=======
->>>>>>> origin/master
 @endsection
 @section('script-section')
     <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>

@@ -220,7 +220,7 @@ function dat(login)
                            <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                            </td>
                            <td class="cart_price">
-                           <p> {{App\Product::find($product['id'])->price}}</p>
+                           <p> {{App\Product::find($product['id'])->price}} đ</p>
                            </td> 
                             <td class="">
 							<div class="buttons_added">
@@ -232,7 +232,7 @@ function dat(login)
                             </div>
                             </td>
                             <td class="cart_amount">
-                           <p> {{App\Product::find($product['id'])->price*$product['qty']}} </p>
+                           <p> {{App\Product::find($product['id'])->price*$product['qty']}} đ </p>
                              @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
                              @php $totalqty+=$product['qty']; @endphp
                             </td> 
@@ -248,7 +248,7 @@ function dat(login)
                                 <td class="cart_name">
                                 <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                                 </td>
-                                <td>{{App\Product::find($product['id'])->price}}</td>
+                                <td>{{App\Product::find($product['id'])->price}} đ</td>
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
@@ -275,7 +275,7 @@ function dat(login)
             <table class="table table-striped"  >
                 <tr>
                     <td>tạm tính: </td>
-                    <td> {{$sum}}
+                    <td> {{$sum}} đ
 
                     </td>
 
@@ -285,7 +285,7 @@ function dat(login)
             <table class="table table-striped">
              <tr>
                 <td> Thành tiền:</td>
-                <td> {{$sum}} <br><p>đã bao gồm thuế (VAT)</p></td>
+                <td> {{$sum}} đ<br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->
@@ -437,7 +437,7 @@ $('input.input-qty').each(function() {
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }}</p>
+						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                             <!--Trường hợp còn hàng(khác trashed)-->
                             
@@ -450,7 +450,7 @@ $('input.input-qty').each(function() {
 						        </td>
                                 @php $totalqty+=$p->pivot->qty @endphp
 						        <td class="cart_total">
-							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
+							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
 						        </td>
 						        <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
@@ -472,7 +472,7 @@ $('input.input-qty').each(function() {
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }}</p>
+						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                                 <td ></td>
                                 <td></td>
@@ -501,7 +501,7 @@ $('input.input-qty').each(function() {
             <table class="table table-striped">
                 <tr>
                     <td>tạm tính: </td>
-                    <td>{{ $orders->total  }} vnd
+                    <td>{{ $orders->total  }} đ
 
                     </td>
 
@@ -513,7 +513,7 @@ $('input.input-qty').each(function() {
                 <td> Thành tiền:</td>
 
 
-                <td>{{ $orders->total  }} vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+                <td>{{ $orders->total  }} đ <br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->

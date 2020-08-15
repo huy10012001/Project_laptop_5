@@ -11,9 +11,10 @@
     <section class="content">
         <div class="row">
         <div class="col-12">
-            @if(Session::has('flash_message'))
+            @if(Session::has('message'))
                  <div class="alert alert-success">
-                      {{ Session::get('flash_message')}}     
+                      {{ Session::get('message')}}    
+                      {{Session::forget('message')}} 
                  </div>
             @endif
          </h1>

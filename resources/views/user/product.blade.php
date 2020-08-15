@@ -104,13 +104,13 @@
         <div class="single-products">
                 <div class="productinfo text-center">
                     <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
-                    <h2>{{number_format($p->price)}}</h2>
+                    <h2>{{number_format($p->price)}} đ</h2>
                     <p style="word-break: break-all;" >{{$p->name}}</p>
                     <a onclick="AddCart('{{$p->id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                 </div>
                 <div class="product-overlay">
                     <div class="overlay-content">
-                        <h2>{{number_format($p->price)}}</h2>
+                        <h2>{{number_format($p->price)}} đ</h2>
                         <p  style="word-break: break-all;" >{{$p->name}}</p>
                         <a   onclick="AddCart('{{$p->id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>

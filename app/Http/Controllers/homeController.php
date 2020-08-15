@@ -27,9 +27,11 @@ class homeController extends Controller
     public function index(Request $request){
     
         
-     $product=product::find('112')->status;
-     echo $product;
-  
+
+       $category= category::join('product','product.category_id','=','category.id')
+       ->join('detail_product','detail_product.product_id','=','product.id')->
+      where('product.status','1');
+       echo $category->get();
    //  $request->session()->forget('cart');
     }
 
@@ -88,44 +90,55 @@ class homeController extends Controller
     public function product ($name)
     { 
         $name=str_replace("-", " ", $name);
+        //Tìm tên danh mục trước
         $category = category::where(['name'=>$name])->first();
-      
+        
         if(!empty($category))
-            $product=Product::where(['category_id'=>$category->id,'status'=>"1"]);
+           $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
+            ->join('detail_product','detail_product.product_id','=','product.id') ;
+           
+           
+       //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
         if(!empty($category)&&$product->count()>0)
         { 
             $product=$product->paginate(6);
-            
             return view('user.product', ['c'=>$category,'product'=>$product]);
         }
         else
         {
-            $product=Product::where(['name'=>$name,'status'=>"1"])->first();
-            if(!empty($product))
+            //Sản phẩm active và đã cập nhập xong detail
+            $product_active_id=Product::where(['name'=>$name,'status'=>"1"])
+           -> join('detail_product','detail_product.product_id','=','product.id')->
+            select('product.id')->get();
+            $product_active=product::find($product_active_id)->first(); 
+           
+             //Sản phẩm không active và đã cập nhập xong detail
+            $product_noactive_id=Product::where(['name'=>$name,'status'=>"0"])
+            -> join('detail_product','detail_product.product_id','=','product.id')->
+             select('product.id')->get();
+             $product_noactive=product::find($product_noactive_id)->first(); ;
+            if(!empty($product_active))
             {    
-                $detail_product=DetailProduct::where(['product_id'=>$product->id])->first();
-                $category=category::find($product->category_id);
-                if(!empty($detail_product))
-                {
-                    return view('detail')->with(['p'=>$product,'c'=>$category]);
-                }
-                else
-                {
-                    return view('detail');
-                    
-                }
+              
+                $category=category::find($product_active->category_id);
+                $lienquan= category::join('product','product.category_id','=','category.id')
+                ->join('detail_product','detail_product.product_id','=','product.id')->
+                where('product.status','1')->where('category.id',$category->id);
+                
+                return view('detail')->with(['p'=>$product_active,'c'=>$category,'lq'=>$lienquan]);
+              
             }
+            else  if(!empty($product_noactive))
+                  return view('detail')->with(['noactive'=>$product_noactive]);
             else 
             {
-                $product_noactive=Product::where(['name'=>$name,'status'=>"0"])->first();
-                if(!empty($product_noactive))
-                    return view('detail')->with(['noactive'=>$product_noactive]);
-                else
                 return \abort('404');
             }
         }
         
     }
+        
+    
     public function postContact(Request $request) 
     {
         $name = $request->input('ct_name');

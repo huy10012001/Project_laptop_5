@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\User;
 use App\order_product;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminOrderController extends Controller
 {
@@ -90,8 +91,8 @@ class AdminOrderController extends Controller
         $c=  Order::find($id);
         $c->status=$status;
         $c->save();
-    
-       return redirect()->action('AdminOrderController@index');
+        $request->session()->put(['message'=>'cập nhập thành công','alert-class'=>'alert-success']);
+       return Redirect::back();
        
    }
    /*

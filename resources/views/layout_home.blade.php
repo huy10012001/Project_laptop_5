@@ -340,6 +340,7 @@ $("#cartModal").on('show.bs.modal', function(){
 
 </script>
 <body>
+
 	<header id="header" ><!--header-->
 		<div class="header_top" ><!--header_top-->
 			<div class="container">
@@ -463,26 +464,15 @@ $("#cartModal").on('show.bs.modal', function(){
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);">Trang Chủ</a></li>
-								@php
-									$count=0;
-									foreach(App\category::all() as $c)
-									{
-										if($c->product->where('status','1')->count()>0)
-										{
-											$count=1;
-											break;
-										}
-									}
-								@endphp
-								@if($count>0)
+								
+								@if(isset($category) && $category->count()>0)
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu"  style="word-break: break-all;" class="sub-menu">
+									@foreach($category as $c)
+								
+										<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
 									
-									@foreach(App\category::all() as $c)
-									
-										@if($c->product->where('status','1')->count()>0)
-										<li><a  href="{{ URL::to('/'.$c->name) }}" >{{$c->name}}</a></li>
-										@endif
+								
 									@endforeach
                                     </ul>
 								</li>
@@ -673,12 +663,12 @@ $("#cartModal").on('show.bs.modal', function(){
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
                                     	
-											<td class="price">{{App\Product::find($product['id'])->price}}</td>
+											<td class="price">{{App\Product::find($product['id'])->price}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
 											</td>
-                                    		<td class = "amount">{{App\Product::find($product['id'])->price*$product['qty']}}</td>
+                                    		<td class = "amount">{{App\Product::find($product['id'])->price*$product['qty']}} đ</td>
                                     		<td>
 												@php $sum+=App\Product::find($product['id'])->price*$product['qty'] @endphp
                                     		<a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
@@ -692,13 +682,13 @@ $("#cartModal").on('show.bs.modal', function(){
 											@else
 											<tr class="khonghoatdong" >
 												<td class="image">
-													<span class="badge" style="margin-bottom:10px">Không hoạt động</span>
+												
 													<img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     			</td>
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
                                     	
-												  <td class="price">{{App\Product::find($product['id'])->price}}</td>
+												  <td class="price">{{App\Product::find($product['id'])->price}} đ</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
                                 	 			<td>
@@ -710,6 +700,9 @@ $("#cartModal").on('show.bs.modal', function(){
                                     		</a>
 											</td>
 											</tr>	
+											<tr class="khonghoatdong"><td colspan="6">
+										 <span class="badge" >Không hoạt động</span>
+										 </td>
 											@endif
 										 
 									@endforeach
@@ -718,7 +711,7 @@ $("#cartModal").on('show.bs.modal', function(){
 						</div>
                         <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-                                {{$sum}}</span></h5>
+                                {{$sum}} đ</span></h5>
                         </div>
                             <!--Trường hợp user  đăng nhập thao tác với database-->
 					@elseif(isset($orders))
@@ -744,14 +737,14 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
-										<td class="price">{{$p->pivot->price }}</td>
+										<td class="price"  >{{$p->pivot->price }} đ</td>
                                       
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
                                          onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
 										</div></td>
-                                    	<td class = "amount">{{$p->pivot->amount }}</td>
+                                    	<td class = "amount">{{$p->pivot->amount }}  đ </td>
                                     	<td>
                                         <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -762,15 +755,16 @@ $("#cartModal").on('show.bs.modal', function(){
 									   </td>
 									</tr>
 									 @else
+									
 									   <tr class="khonghoatdong" >
 									 
 										<td class="image">
-											  <span class="badge" style="margin-bottom: 10px;">Không hoạt động</span>
+											
 										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       
-										<td class="price">{{$p->pivot->price }}</td>
+										<td class="price">{{$p->pivot->price }}  đ</td>
                                       	<td class="qty"> </td>
                                     	<td class = "amount"></td>
                                     	<td>
@@ -782,6 +776,11 @@ $("#cartModal").on('show.bs.modal', function(){
                                       	</a>
 										   </td>
 										 </tr>
+										 <tr class="khonghoatdong"><td colspan="6">
+										 <span class="badge" >Không hoạt động</span>
+										 </td>
+										</tr>
+										</div>
 										@endif
 									
 								  	@endforeach
@@ -790,7 +789,7 @@ $("#cartModal").on('show.bs.modal', function(){
 							</div>
                             <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-                                {{ $orders->total }}</span></h5>
+                                {{ $orders->total }} đ</span></h5>
 							</div>
 							<!--end cart body-->
                 			@endif
@@ -824,13 +823,19 @@ $("#cartModal").on('show.bs.modal', function(){
 						<div class="col-sm-3">
 							<div class="single-widget">
 								<h2>Hãng Laptop </h2>
+								@if(isset($category) && $category->count()>0)
 								<ul class="nav nav-pills nav-stacked">
-								@foreach(App\Category::all() as $c)
-								@if($c->product->count()>0)
-									<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
-								@endif
-								@endforeach
+								
+							
+									@foreach($category as $c)
+								
+										<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
+									
+								
+									@endforeach
+                                   
 								</ul>
+								@endif
 							</div>
 						</div>
 						<div class="col-sm-3">

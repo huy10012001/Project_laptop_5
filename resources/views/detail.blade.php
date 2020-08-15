@@ -389,15 +389,15 @@
       <div class="alert alert-warning" role="alert">
  Sản phẩm cùng danh mục
 </div>
-@php
+<!--$lq là những sản phẩm đang hoạt động và đã cập nhập chi tiết thuộc cùng danh mục -->
+@if(isset($lq))
+@php 
 
-  $lienquan=$c->product->where('status','1')->where('id','!=', "$p->id");
- 
+$lienquan=$lq->where('product.id','!=', "$p->id")->get();
 @endphp
 
-
-
-@if($lienquan->count()>4)
+{{$p->id}}
+ @if($lienquan->count()>4)
 
     <div class="row">
         <div class="col-sm-12">
@@ -445,7 +445,7 @@
       </div>
     </div>
   </div>
-  @elseif($lienquan->count()>0)
+@elseif($lienquan->count()>0)
 
   <div class="item" style="margin-top:20px">
      @foreach($lienquan as $product)
@@ -457,7 +457,7 @@
               <button type="button" class="btn btn-default get"><a href="{{ URL::to('/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
             </div>
        
-      @endforeach
+  @endforeach
   @else
   <div style="text-align: center;padding:120px"  >
     <p style="color:black;font-size:50px">
@@ -465,6 +465,9 @@ không có sản phẩm cùng danh mục với sản phẩm bạn đang xem !
     </p>
 </div>
   @endif
+
+@endif
+
 
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
