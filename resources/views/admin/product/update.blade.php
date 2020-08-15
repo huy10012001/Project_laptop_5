@@ -124,7 +124,7 @@ $(document).ready(function()
                                 <label for="txt-name">Trạng thái:</label>
                                     <select name="status">
                                     <option value="{{$p->status}}"
-<<<<<<< HEAD
+
                                      selected  hidden> 
                                      @if($p->status=="0")
                                          Không hoạt động
@@ -134,13 +134,7 @@ $(document).ready(function()
                                      </option> 
                                      <option value="0">Không hoạt động</option>
                                         <option value="1">Hoạt động</option>
-=======
-                                     selected  hidden>
-                                         {{$p->status}}
-                                     </option>
-                                     <option value="0">0</option>
-                                        <option value="1">1</option>
->>>>>>> origin/master
+
                                        </select>
 
                                 </div>
