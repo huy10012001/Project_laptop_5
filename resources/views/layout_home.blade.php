@@ -106,6 +106,8 @@ if(!!window.performance && window.performance.navigation.type === 2)
         
     window.location.reload();
 }
+//search
+
 //tạo tài khoản
 
 //Show phần modal đăng nhập
@@ -246,12 +248,55 @@ function AddCart(product_id)
 
 $(document).ready(function()
 {
+	 $('.textsearch').on('keyup',function(){
+	 
+                $value = $(this).val();
+				
+                $.ajax({
+                    type: 'get',
+                    url:  " {{ asset('/livesearch')}}",
+                    data: {
+                        'search': $value
+                    },
+					error:function(xhr)
+            {
+                var x=xhr.responseText;
+                 x=$.parseJSON(x);
+                     console.log(x.message);
+
+             },
+                    success:function(data){
+						console.log(data);
+						if(data.status!="")
+						{$('.resultsearch').show();
+						$('.resultsearch tbody').html(data.status);
+						}
+                    }
+                });
+            })
+    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+	
 	$("#loginModal").on('hide.bs.modal', function(){
 		$('#uploadTabLogin').removeClass('active');
 		$('#browseTabLogin').removeClass('active');
 		$('#liLogin').removeClass('active');
 		$('#liRegister').removeClass('active');
  	});
+	 //search
+	 $('#search').submit(function(e)
+    {
+		var x=$('.textsearch').val();
+		e.preventDefault();
+        $.ajaxSetup(
+        {
+            headers:
+            {
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+		window.location.href = "/search?keyword="+x;
+           
+    });
     //đăng nhập và đăng ký
     $('#login').submit(function(e)
     {
@@ -394,11 +439,30 @@ $("#cartModal").on('show.bs.modal', function(){
                 	</div>
                 	<div class="col-sm-6" >
                     		<div  class="search">
-                        		<form action="/action_page.php" >
+							<form id="search"   method="get" >
+							{{csrf_field()}}
                          	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
 								
 							</form>
+						
+							<table hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
+                                <thead>
+                                    <tr>
+
+										<th></th>
+                                        <th>ID</th>
+                                        <th>Tên sản phẩn</th>
+                                       
+                                        <th>Gía</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+								
+                                   
+                               
+                                </tbody>
+                            </table>
                       		</div>
 					</div>
 					@if(!Session::has('key'))

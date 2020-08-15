@@ -202,7 +202,7 @@ function dat(login)
 			<div class="table-responsive cart_info">
 				<table class="table table-condensed" >
 					<thead>
-						<tr class="cart_menu" style="color: black;">
+						    <tr class="cart_menu" style="color: black;">
 							<td class="image">Item</td>
 							<td class="nameproduct">Tên sản phẩm</td>
 							<td class="price">giá</td>

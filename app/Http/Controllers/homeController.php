@@ -95,7 +95,8 @@ class homeController extends Controller
         $category = category::where(['name'=>$name])->first();
         
         if(!empty($category))
-           { $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
+           { 
+               $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
             ->join('detail_product','detail_product.product_id','=','product.id') ;
             
            }

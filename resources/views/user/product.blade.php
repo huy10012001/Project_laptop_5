@@ -1,5 +1,8 @@
 @extends('layout_home')
 @section( 'dell')
+<style>
+   
+</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 </script>
@@ -93,8 +96,10 @@
 <div class="col-sm-9 padding-right">
 
     <div class="features_items"><!--features_items-->
+    @if(isset($c))
         <h2 class="title text-center">sản phẩm Laptop {{$c->name}}</h2>
         <!--sản phẩm-->
+    @endif
 <div class="row">
 
  @foreach($product as $p)

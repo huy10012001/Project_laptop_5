@@ -25,6 +25,53 @@ use App\User;
 class UserCartcontroller extends Controller
 
 {
+    public function index1()
+    {
+      
+        $products = DB::table('product')->get();
+
+        return view('index', compact('products'));
+    }
+    public function search(Request $request)
+    {
+         $search= $request->query('keyword');
+         if($search=="")
+         return \abort('404');
+        $products=Product::where(['status'=>"1"])
+        ->join('detail_product','detail_product.product_id','=','product.id') ;
+        $products = $products->where('name', 'LIKE', '%' . $search . '%');
+        $product=$products->paginate(6);
+        return view('user.product', ['product'=>$product]);
+    }
+
+    public function livesearch(Request $request)
+    {
+       
+           
+           $output = '';
+           $products=Product::where(['status'=>"1"])
+           ->join('detail_product','detail_product.product_id','=','product.id') ;
+           $products = $products->where('name', 'LIKE', '%' . $request->search . '%')->get();
+           
+           if ($products) {
+                foreach ($products as $key => $product) {
+                    $output .= '<tr>
+                    <td  >
+                    <img  height="50px" width="50px" src="images/'.$product->image.'"/>
+                    </td> 
+                    <td >' . $product->id . '</td>
+                  <td>' . $product->name . '</td>
+                  
+                   <td>' . $product->price . 'đ </td>
+                   </tr>';
+              }
+           
+              return Response::json(array(
+                'status'=>$output
+              
+       )); 
+        }
+    }
     public function postDiaChiCheckOut(Request $request)
     {
         $name=$request->name;
