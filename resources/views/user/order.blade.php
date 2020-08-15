@@ -144,7 +144,7 @@ if(performance.navigation.type == 2){
 
                 else
                 {
-
+                    $("#waitModal").modal("hide");
                     $name= $("#khach  input[name=name]").val();
                     $phone=$("#khach input[name=phone]").val();
                     $add=$("#khach input[name=address]").val();
@@ -188,7 +188,7 @@ if(performance.navigation.type == 2){
 
                             else
                           {
-
+                           
                                 $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
                                 $("#AlertModal").modal("show");
                               setTimeout(function () {
