@@ -106,7 +106,7 @@
                                     @if($p1->name!="admin"  && $p1->name!="super admin" )
                                     <a class="btn btn-danger btn-sm" 
                                    onclick="deleteRole('{{$editAminYourself->id}}','{{$p1->id}}')">
-                                         <i class="fas fa-trash"></i> Delete
+                                         <i class="fas fa-trash"></i>Xóa
                                     </a>
                                     @endif
                                     </td>
