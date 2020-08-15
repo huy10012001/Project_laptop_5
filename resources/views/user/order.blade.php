@@ -158,19 +158,15 @@ if(performance.navigation.type == 2){
                         datatype: 'json',
                         beforeSend: function(){
 
-                            $("#AlertModal .modal-body").html("Bạn chờ tí nhé,..");
-                            $("#AlertModal").modal("show");
+                            $("#waitModal .modal-body").html("Bạn chờ tí nhé,..");
+                            $("#waitModal").modal("show");
                         },
                         error:function(xhr)
                         {
                             var x=xhr.responseText;
                             x=$.parseJSON(x);
                            console.log(x.message);
-<<<<<<< HEAD
-                            
-=======
 
->>>>>>> origin/master
                         },
          	            success:function(data)
                         {
@@ -214,7 +210,22 @@ if(performance.navigation.type == 2){
 <td>
 <!-- Form giỏ hàng -->
 <!-- Nếu user đăng nhập -->
-
+<div class="modal fade" id="waitModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body" style=" text-align: center;">
+          <p>Bạn chờ tí nhé</p>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+	</div>
  <section id="cart_items">
 		<div class="container">
             <div class="row">
