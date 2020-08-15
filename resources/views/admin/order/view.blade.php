@@ -74,7 +74,7 @@
                             </thead>
                            
                             <tbody>
-                            @if($p->status=="2" ||$p->status=="1")
+                      
                                 @foreach($p->product as $o_p)
                                 <tr> 
                                    
@@ -87,21 +87,8 @@
                                    
                                 </tr>
                                 @endforeach
-                            @elseif($p->status=="0")
-                                @foreach($p->product as $o_p)
-                                @if($o_p->status=="1")
-                                <tr> 
-                              
-                                <td>  <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$o_p->image) }}"/> </td>
-                                    <td>{{ App\Product::
-                                     find($o_p->pivot->product_id)->name}}</td>
-                                    <td>{{$o_p->pivot->	price}}</td>
-                                    <td>{{$o_p->pivot->	qty}}</td>
-                                    <td>{{$o_p->pivot->	amount}}</td>   
-                                </tr>
-                                @endif
-                                @endforeach
-                            @endif
+                          
+                           
                             </tbody>
                             <tfoot>
                             <tr>
@@ -125,6 +112,46 @@
         </div>
         <!-- /.row -->
     </section>
+    <form role="form" action="{{ url('admin/order/postUpdate/'.$p->id) }}"  method="post"
+                              enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            <div class="card-body">
+                            <label for="txt-name">Trạng thái đơn hàng:</label>
+                            @if($p->status=="1")
+                            <div class="form-group">
+                                  
+                                    <select name="status">
+                                    
+                                    <option value="{{$p->status}}"
+                                     selected  hidden> 
+                                 
+                                     @if($p->status=="1")
+                                     đang xử lý
+                                     @else
+                                     đã hoàn thành
+                                      @endif
+                                     </option> 
+                                        <option value="1">đang  xử lý</option>
+                                        <option value="2">đã hoàn thành</option>
+                                       
+  
+  
+                                       
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Cập nhập</button>
+                                </div>
+                                @else
+                                <div class="form-group">
+                                            Đã hòan thành
+                                </div>
+                               @endif
+                            
+                            </div>
+                            <!-- /.card-body -->
+                           
+                               
+                          
+                        </form>
 @endsection
 @section('script-section')
     <script>

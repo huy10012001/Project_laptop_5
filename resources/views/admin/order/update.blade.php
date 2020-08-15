@@ -48,7 +48,7 @@
                                      đã hoàn thành
                                       @endif
                                      </option> 
-                                        <option value="1">đã xác nhận</option>
+                                        <option value="1">đang  xử lý</option>
                                         <option value="2">đã hoàn thành</option>
                                        
   

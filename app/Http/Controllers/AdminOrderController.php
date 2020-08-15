@@ -54,7 +54,7 @@ class AdminOrderController extends Controller
      $request->session()->put(['message'=>'cập nhập thành công','alert-class'=>'alert-success']);
    }
    
-   /* public function update($id,Request $request) 
+   public function update($id,Request $request) 
     {
         
         $p = Order::find($id);
@@ -93,7 +93,7 @@ class AdminOrderController extends Controller
     
        return redirect()->action('AdminOrderController@index');
        
-   }*/
+   }
    /*
    public function delete(Request $request) {
         $id=$request->order_id; 
