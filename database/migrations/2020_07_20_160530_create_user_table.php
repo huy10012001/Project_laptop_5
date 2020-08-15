@@ -18,10 +18,10 @@ class CreateUserTable extends Migration
           
             $table->string('name');
             $table->string('email')->unique()->collation('utf8_bin');
-            $table->string('age');
+           
             $table->string('phone');
             $table->string('address');
-            $table->string('image')->nullable();
+      
             $table->string('password')->collation('utf8_bin');
             $table->timestamps();
    

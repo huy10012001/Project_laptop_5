@@ -1,6 +1,6 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
 @extends('layout.layout')
-@section('title', 'product - create new')
+@section('title', 'Cập nhập vai trò')
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -36,9 +36,9 @@
                             <div class="card-body">
                               
                                 <div class="form-group">
-                                    <label for="txt-name">Category Name</label>
+                                    <label for="txt-name">Tên vai trò</label>
                                     <input type="text" class="form-control" id="txt-name" name="name" value="{{$p->name}}"
-                                           placeholder="Input Product Name">
+                                           placeholder="nhập tên">
                                 </div>
                               
                             </div>

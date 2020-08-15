@@ -20,24 +20,12 @@
  
 </script>
 @extends('layout.layout')
-@section('title', 'product index')
+@section('title', 'Danh sách sản phẩm')
 @section('content')
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>DataTables</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
+       
     </section>
 
     <!-- Main content -->
@@ -45,9 +33,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
-                    </div>
+                   
                     @if(Session::has('message'))
                         <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
                         {{Session::forget('message')}}
@@ -57,14 +43,14 @@
                         <table id="product" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Product Id</th>
-                                <th>Product Category</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
+                                <th>Mã sản phẩm</th>
+                                <th>Thương hiệu</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
                                
-                                <th>Image</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Ảnh</th>
+                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -77,6 +63,8 @@
                                 <td>{{ $p->name }}</td>
                               
                                 <td>{{ $p->price }}</td>
+                                <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
+                               
                                 @if( $p->status=="1")
                                 <td><div class="alert alert-primary" role="alert">
                                  Sản phẩm  hoạt động!
@@ -86,18 +74,17 @@
                                  Sản phẩm không hoạt động!
                                 </div></td>
                                 @endif
-                                <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
                                 <td class="text-right">
                                 <a class="btn btn-info btn-sm" href="{{ url('admin/product/detail/'.$p->id) }}">
-                                        <i class="fas fa-pencil-alt"></i> View Detail
+                                        <i class="fas fa-pencil-alt"></i> Xem chi tiết
                                     </a>
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/product/update/'.$p->id) }}">
-                                        <i class="fas fa-pencil-alt"></i> Edit
+                                        <i class="fas fa-pencil-alt"></i> Sửa
                                     </a>
                                    
                                     <a class="btn btn-danger btn-sm"  
                                   onclick="deleteProduct('{{$p->id}}')">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> Xóa
                                     </a>
                                 </td>
                             </tr>
@@ -105,12 +92,13 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                            <th>Product Id</th>
-                                <th>Product Category</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
+                            <th>Mã sản phẩm</th>
+                                <th>Thương hiệu</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
                                
-                                <th>Image</th>
+                                <th>Ảnh</th>
+                                <th>Trạng thái</th>
                                 <th></th>
                             </tr>
                             </tfoot>

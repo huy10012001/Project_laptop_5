@@ -54,10 +54,13 @@ Route::get('admin/contact_user/delete', 'AdminContactUserController@delete');
 //Order Admin
 Route::get('admin/order/index', 'AdminOrderController@index');
 route::get('admin/order/view/{id}', 'AdminOrderController@view');
-Route::get('admin/order/delete', 'AdminOrderController@delete');
-Route::get('admin/order/update/{id}', 'AdminOrderController@update');
+
+Route::get('admin/order/edit', 'AdminOrderController@edit');
+/*
+Route::get('admin/category/update/{id}', 'AdminCategoryController@update');
+Route::get('admin/category/delete', 'AdminCategoryController@delete');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
-route::post('admin/order/postUpdate/{id}', 'AdminOrderController@postUpdate');
+Route::post('admin/category/postUpdate/{id}', 'AdminCategoryController@postUpdate');*/
 //Role Admin
 Route::get('admin/role/index', 'Adminrolecontroller@index');
 Route::get('admin/role/create', 'Adminrolecontroller@create');
@@ -100,7 +103,7 @@ Route::get('/getOrder','UserCartcontroller@getOrder' );
 Route::get('/order', 'homeController@order' );
 Route::get('/isDangNhap','loginController@checkDangNhap');
 //detail
-Route::get('/detail','homeController@detail');
+
 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLogin', 'loginController@postLogin');

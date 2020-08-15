@@ -1,6 +1,6 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
 @extends('layout.layout')
-@section('title', 'product - create new')
+@section('title', 'Cập nhập thương hiệu')
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -9,7 +9,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Cập nhập danh mục  {{$p->name}}</h3>
+                            <h3 class="card-title">Cập nhập thương hiệu  {{$p->name}}</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -36,15 +36,15 @@
                             <div class="card-body">
                               
                                 <div class="form-group">
-                                    <label for="txt-name">Category Name</label>
+                                    <label for="txt-name">Tên thương hiệu</label>
                                     <input type="text" class="form-control" id="txt-name" name="name" value="{{$p->name}}"
-                                           placeholder="Input Product Name">
+                                           placeholder="Nhập tên thương hiệu">
                                 </div>
                               
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Xác nhận</button>
                             </div>
                         </form>
                     </div>

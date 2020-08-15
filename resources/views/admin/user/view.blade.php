@@ -41,7 +41,7 @@
  }
 </script>
 @extends('layout.layout')
-@section('title', 'product index')
+@section('title', 'Vai trò người dùng')
 @section('content')
   <!--  sửa vai trò của mình -->
 @if(isset($editAminYourself))
@@ -76,8 +76,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
-                        <br/>
+                 
                         <h3 class="card-title">vai trò của  bạn</h3>
                        
                     </div>
@@ -90,11 +89,11 @@
                         <table id="product" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Role Id</th>
-                                <th>Role</th>
+                            <th>Id vai trò</th>
+                                <th>Vai trò</th>
                                
-                               
-                                <th>Action</th>
+                                
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -117,8 +116,8 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                 <th>Role Id</th>
-                                <th>Role </th>
+                                 <th>Id vai trò</th>
+                                <th>Vai trò</th>
                                
                                 
                                 <th></th>
@@ -162,19 +161,7 @@
 @elseif(isset($editAdmin))
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>DataTables</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
+      
     </section>
 
     <!-- Main content -->
@@ -191,7 +178,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                       
                         <br/>
                         <h3 class="card-title">vai trò của người dùng {{$editAdmin->name}}</h3>
                        
@@ -205,11 +192,13 @@
                         <table id="product" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Role Id</th>
-                                <th>Role</th>
+                            <th>Id vai trò</th>
+                                <th>Vai trò</th>
+                               
+                                
+                                <th></th>
                                
                                
-                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -232,8 +221,8 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                 <th>Role Id</th>
-                                <th>Role </th>
+                            <th>Id vai trò</th>
+                                <th>Vai trò</th>
                                
                                 
                                 <th></th>

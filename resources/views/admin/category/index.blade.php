@@ -22,7 +22,7 @@
 </script>
 
 @extends('layout.layout')
-@section('title', 'product index')
+@section('title', 'Danh sách thương hiệu')
 
 @section('content')
 
@@ -31,19 +31,7 @@
   
   
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>DataTables</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
+       
     </section>
 
     <!-- Main content -->
@@ -51,9 +39,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">DataTable with minimal features & hover style</h3>
-                    </div>
+                   
                     
                     @if(Session::has('message'))
                         <p class="alert {{ Session::get('alert-class') }}">{{ Session::get('message') }}</p>
@@ -65,9 +51,9 @@
                         <table id="product" class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Product Id</th>
-                                <th>Product Category</th>
-                                <th>Action</th>
+                                <th>Mã thương hiệu</th>
+                                <th>tên thương hiệu</th>
+                                <th></th>
                                
                             </tr>
                             </thead>
@@ -81,10 +67,10 @@
                                 <td class="text-right">
                                    
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/category/update/'.$p->id) }}">
-                                        <i class="fas fa-pencil-alt"></i> Edit
+                                        <i class="fas fa-pencil-alt"></i> Sửa
                                     </a>
                                     <a class="btn btn-danger btn-sm"    onclick="deleteCategory('{{$p->id}}')">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> Xóa
                                     </a>
                                 </td>
                             </tbody>
@@ -94,8 +80,8 @@
                           
                             <tfoot>
                             <tr>
-                                <th>Product Id</th>
-                                <th>Product Category</th>
+                            <th>Mã thương hiệu</th>
+                                <th>tên thương hiệu</th>
                                 <th></th>
                                 
                             </tr>

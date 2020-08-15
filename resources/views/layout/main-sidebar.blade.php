@@ -5,7 +5,7 @@
              alt="Product Demo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">Laptop shop</span>
+        <span class="brand-text font-weight-light">cửa hàng laptop </span>
     </a>
 
     <!-- Sidebar -->
@@ -29,7 +29,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Category
+                            Thương hiệu
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -37,13 +37,13 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/category/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Category</p>
+                                <p>Xem thương hiệu</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin/category/create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create a Caterogy</p>
+                                <p>Tạo thương hiệu</p>
                             </a>
                         </li>
                     </ul>
@@ -56,7 +56,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                           Product
+                           Sản phẩm
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -64,13 +64,13 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/product/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Products</p>
+                                <p>Xem sản phẩm</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin/product/create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create a Product</p>
+                                <p>Tạo sản phẩm</p>
                             </a>
                         </li>
                     </ul>
@@ -84,7 +84,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Order
+                           Hóa đơn
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -92,7 +92,7 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/order/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Order</p>
+                                <p>Xem hóa đơn</p>
                             </a>
                         </li>
                       
@@ -106,7 +106,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                           User
+                          Người dùng
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -114,7 +114,7 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/user/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View User</p>
+                                <p>xem người dùng</p>
                             </a>
                         </li>
                       
@@ -128,7 +128,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                          Role
+                          Vai trò
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -136,13 +136,13 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/role/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Role</p>
+                                <p>Xem vai trò</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin/role/create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create Role</p>
+                                <p>Tạo vai trò</p>
                             </a>
                         </li>
                     </ul>
@@ -156,7 +156,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Contact_User
+                            Liên hệ
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -164,7 +164,7 @@
                         <li class="nav-item">
                             <a href="{{ url('admin/contact_user/index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>View Contact_User</p>
+                                <p>Xem liên hệ</p>
                             </a>
                         </li>
                       

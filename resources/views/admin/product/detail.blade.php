@@ -1,5 +1,5 @@
 @extends('layout.layout')
-@section('title', 'product - create new')
+@section('title', 'chi tiết sản phẩm')
 @section('content')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -325,7 +325,7 @@ $(document).ready(function()
                     <!-- general form elements -->
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Create Product</h3>
+                    <h3 class="card-title">chi tiết sản phẩm {{$p->name}}</h3>
                 </div>
                 <div class="card-body">
                   <form   enctype="multipart/form-data">

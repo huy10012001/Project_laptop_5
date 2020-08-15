@@ -161,9 +161,11 @@ if(performance.navigation.type == 2){
                             $("#AlertModal .modal-body").html("Bạn chờ tí nhé,..");
                             $("#AlertModal").modal("show");
                         },
-                        error:function(data)
+                        error:function(xhr)
                         {
-                            alert('lỗi rồi');
+                            var x=xhr.responseText;
+                            x=$.parseJSON(x);
+                           console.log(x.message);
                             
                         },
          	            success:function(data)

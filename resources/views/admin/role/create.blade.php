@@ -1,6 +1,6 @@
 <!-- lưu tại /resources/views/product/create.blade.php -->
 @extends('layout.layout')
-@section('title', 'product - create new')
+@section('title', 'tạo vai trò')
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -9,7 +9,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create Role</h3>
+                            <h3 class="card-title">Tạo vai trò</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -35,9 +35,9 @@
                             <div class="card-body">
                               
                                 <div class="form-group">
-                                    <label for="txt-name">Role Name</label>
+                                    <label for="txt-name">Tên vai trò</label>
                                     <input type="text" class="form-control" id="txt-name" name="name"
-                                           placeholder="Input Product Name">
+                                           placeholder="Nhập tên">
                                 </div>
                               
                             </div>

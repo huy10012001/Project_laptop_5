@@ -40,11 +40,17 @@
                                     <select name="status">
                                     <option value="{{$p->status}}"
                                      selected  hidden> 
-                                         {{$p->status}}
+                                    @if($p->status=="0")
+                                        đang trong giỏ hàng
+                                    @elseif($p->status=="1")
+                                     đã xác nhận
+                                     @else
+                                     đã hoàn thành
+                                      @endif
                                      </option> 
+                                        <option value="1">đã xác nhận</option>
+                                        <option value="2">đã hoàn thành</option>
                                        
-                                        <option value="1">1</option>
-                                        
   
   
                                        

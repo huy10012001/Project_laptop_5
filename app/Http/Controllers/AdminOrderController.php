@@ -42,6 +42,16 @@ class AdminOrderController extends Controller
        
 
    }
+   public function edit(Request $request)
+   {
+     $order_id=$request->order_id;
+     $status=$request->status;
+     $c=  Order::find($order_id);
+     $c->status=$status;
+     $c->save();
+     $request->session()->put(['message'=>'cập nhập thành công','alert-class'=>'alert-success']);
+   }
+   /*
     public function update($id,Request $request) 
     {
         
@@ -70,7 +80,6 @@ class AdminOrderController extends Controller
               return \abort('403');
           }
        
-       
       
    }
    public function postUpdate(Request $request, $id) {
@@ -82,7 +91,8 @@ class AdminOrderController extends Controller
     
        return redirect()->action('AdminOrderController@index');
        
-   }
+   }*/
+   /*
    public function delete(Request $request) {
         $id=$request->order_id; 
         if($id=="")
@@ -97,5 +107,5 @@ class AdminOrderController extends Controller
             $request->session()->put(['message'=>'xóa thành công','alert-class'=>'alert-success']);
         }
      
-   }
+   }*/
 }

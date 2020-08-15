@@ -32,7 +32,7 @@ class ProductRequest extends FormRequest
             'name' => 'unique:product,name,{$id},id',
             'name' => 'unique:category|required|string|min:3|max:180',
             'price' => 'required|integer|min:1000000|max:300000000',
-            
+            'category'=> 'required',
             'image' => 'file|image|mimes:jpeg,png,jpg|max:10240,image',
             
 
@@ -45,6 +45,7 @@ class ProductRequest extends FormRequest
 //            'email.required' => 'Email is required!',
             'name.unique'=> 'Tên sản phẩm hoặc tên danh mục đã tồn tại!',
             'name.required' => 'Tên sản phẩm cần được yêu cầu!',
+            'category.required' => 'Tên thương hiệu cần được yêu cầu!',
             'name.min' => 'Tên sản phẩm phải từ 180 ký tự',
             'name.max' => 'Tên sản phẩm không vượt quá 180 ký tự',
             'price.required' => 'Bạn chưa nhập giá!',

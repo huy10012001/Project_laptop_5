@@ -55,7 +55,7 @@ $(document).ready(function()
 });*/
 </script>
 @extends('layout.layout')
-@section('title', 'product - create new')
+@section('title', 'tạo sản phẩm')
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -64,7 +64,7 @@ $(document).ready(function()
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create Product</h3>
+                            <h3 class="card-title">Tạo sản phẩm</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- xử lý hiện thông báo lỗi -->
@@ -94,7 +94,7 @@ $(document).ready(function()
                             <div class="card-body">
                                
                                 <div class="form-group">
-                                    <label for="txt-name">Category Name</label>
+                                    <label for="txt-name">Tên thương hiệu:</label>
                                     <select name="category" >
                                  
                                         @foreach(App\category::all() as  $category)
@@ -109,19 +109,19 @@ $(document).ready(function()
                                 </div>
                                
                                 <div class="form-group">
-                                    <label for="txt-name">Produc Name</label>
+                                    <label for="txt-name">Tên sản phẩm</label>
                                     <input onchange="persist(this)"  type="text" class="form-control" id="txt-name" name="name"
-                                           placeholder="Input Product Name">
+                                           placeholder="Nhập tên sản phẩm">
                                 </div>
                                
                                 <div class="form-group">
-                                    <label>Price</label>
-                                    <input  onchange="persist(this)" type="text" class="form-control" id="txt-name" name="price"
-                                           placeholder="Input Product Name">
+                                    <label>Giá</label>
+                                    <input   type="text" class="form-control" id="txt-name" name="price"
+                                           placeholder="Nhập giá sản phẩm">
                                 </div>
                                
                                 <div class="form-group">
-                                    <label for="image">Image</label>   
+                                    <label for="image">Ảnh</label>   
                                     <br/> 
 
                                     <img  class="img-fluid" id="output"/>
@@ -129,14 +129,14 @@ $(document).ready(function()
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input"  name="image" onchange="loadFile(event)">
                                           
-                                            <label class="custom-file-label" for="image">Choose Image</label>
+                                            <label class="custom-file-label" for="image">Chọn ảnh</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Xác nhận</button>
                             </div>
                         </form>
                     </div>

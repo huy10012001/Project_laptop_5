@@ -215,11 +215,16 @@ function updateModal(qty)
 //Hàm add giỏ hàng
 function AddCart(product_id)
 {
+
     $.ajax({
     type:  "GET",
     url: "{{ asset('Addcart')}}",
     data: { product_id: product_id },
     datatype: 'json',
+	error: function(xhr, status, error) {
+  		
+  		alert(xhr.responseText);
+		},
     success: function (data) 
 	{
        	if(data.status=="error")
@@ -560,7 +565,7 @@ $("#cartModal").on('show.bs.modal', function(){
 						</ul>
 						<!-- Tab panes -->
 						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane " id="uploadTabLogin">
+							<div role="tabpanel" class="tab-pane " id="uploadTabLogin" >
 								<form   id="login" method="post" action="javascrip:void(0)" >
 								{{ csrf_field() }}
 								<h3  style="text-align: center;">Đăng Nhập</h3>
@@ -578,7 +583,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								</p>
 	
 								</form></div>
-							<div role="tabpanel" class="tab-pane" id="browseTabLogin" method="post" action="javascrip:void(0)" >
+							<div role="tabpanel" class="tab-pane" id="browseTabLogin"   >
 								<form  id="register" method="post" action="javascrip:void(0)">
 									{{ csrf_field() }}
 									<h3 style="text-align: center;">Tạo tài khoản</h3>

@@ -39,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
             foreach($user->role as $role)
             {
                  if($role->name=="admin"||$role->name=="super admin")
+              
                  return true;
             }
             
