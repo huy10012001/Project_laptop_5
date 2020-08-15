@@ -23,7 +23,7 @@ $(document).ready(function()
                     }
                 }
             );
-           
+
           $.ajax({
 			    method:'post',
       		url:	 " {{ asset('/postDetailProduct')}}",
@@ -36,16 +36,16 @@ $(document).ready(function()
 			    success:function(data)
           {
             $("#myModal").modal("hide");
-           
+
             var myObj=data.name;
-           
+
             var array = $.map(myObj, function(value, index) {
            return [value];
           });
-            
-            
+
+
             $('#textDescription').val(JSON.stringify(myObj));
-           
+
             $('#description').html("Modal Series:"+array[0]+",Bộ xử lý:" +array[1] +",...");
             }
         	});
@@ -86,35 +86,35 @@ $(document).ready(function()
                             </div>
                         @endif
                     <!-- form start -->
-                        <form role="form" method="post" action="{{ url('admin/product/postUpdate/'.$p->id) }}" 
+                        <form role="form" method="post" action="{{ url('admin/product/postUpdate/'.$p->id) }}"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="card-body">
-                                
+
                                 <div class="form-group">
                                     <label for="txt-name">Tên thương hiệu:</label>
                                     <select name="category">
                                     <option value="@php echo  App\Product::find($p->id)->category->id @endphp"
-                                     selected  hidden> 
+                                     selected  hidden>
                                          {{App\Product::find($p->id)->category->name}}
-                                     </option> 
+                                     </option>
                                         @foreach(App\category::all() as  $category)
-                                      
+
                                         <option value="{{$category->id}}">{{$category->name}}</option>
-                                            
-  
-  
+
+
+
                                         @endforeach
                                     </select>
 
                                 </div>
-                               
+
                                 <div class="form-group">
                                     <label for="txt-name">Tên sản phẩm</label>
                                     <input type="text" class="form-control" id="txt-name" name="name" value="{{$p->name}}"
                                            placeholder="Nhập tên sản phẩm">
                                 </div>
-                               
+
                                 <div class="form-group">
                                     <label>Giá</label>
                                     <input type="text" class="form-control" id="txt-name" name="price" value="{{$p->price}}"
@@ -124,6 +124,7 @@ $(document).ready(function()
                                 <label for="txt-name">Trạng thái:</label>
                                     <select name="status">
                                     <option value="{{$p->status}}"
+<<<<<<< HEAD
                                      selected  hidden> 
                                      @if($p->status=="0")
                                          Không hoạt động
@@ -133,14 +134,21 @@ $(document).ready(function()
                                      </option> 
                                      <option value="0">Không hoạt động</option>
                                         <option value="1">Hoạt động</option>
+=======
+                                     selected  hidden>
+                                         {{$p->status}}
+                                     </option>
+                                     <option value="0">0</option>
+                                        <option value="1">1</option>
+>>>>>>> origin/master
                                        </select>
 
                                 </div>
-                                
+
                                 <div class="form-group">
 
-                                    <label for="image">Image</label>   
-                                    <br/> 
+                                    <label for="image">Image</label>
+                                    <br/>
 
                                     <img class="img-fluid"  id="output" src="{{ url('images/'.$p->image) }}"/>
                                     <div class="input-group">
@@ -162,7 +170,10 @@ $(document).ready(function()
             </div>
         </div>
     </section>
+<<<<<<< HEAD
       
+=======
+>>>>>>> origin/master
 @endsection
 @section('script-section')
     <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>

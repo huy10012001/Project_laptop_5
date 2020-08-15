@@ -35,8 +35,8 @@
 
 .cart_product {
     position: relative;
- 
-  
+
+
 }
 .cart_product .badge
 {
@@ -103,7 +103,7 @@
 //load lại trang khi user bấm back
 if(!!window.performance && window.performance.navigation.type === 2)
 {
-        
+
     window.location.reload();
 }
 //tạo tài khoản
@@ -117,11 +117,11 @@ if(!!window.performance && window.performance.navigation.type === 2)
 
 	function  dangky()
 	{
-		
+
 		$('#browseTabLogin').addClass('active');
 		$('#liRegister').addClass('active');
 		//$('.users .dropdown-content').css('display','block');
-		
+
 	}
 //Hàm log out
 function logOut()
@@ -134,7 +134,7 @@ function logOut()
 			success:function(data)
            	{
 				 location.reload();
-				
+
            	}
        	}
     );
@@ -150,7 +150,7 @@ function updateCart(qty,product_id,order_id,timecreate)
 		success:function(data)
         {
 			if(data.status)
-			{	
+			{
 				if($("#noFindItem").text().length<80)
 				$("#noFindItem").append("không tìm thấy item ");
 			}
@@ -162,9 +162,9 @@ function updateCart(qty,product_id,order_id,timecreate)
 				var qty = $(this).find('td .input-qty').val();
 				var price= $(this).find('td.price').text();
 				if(!!qty)
-				{ 
+				{
 					$(this).find('td.amount').html(qty*price);
-					
+
 					$('#total').html(data.total);
 				}
  			});
@@ -174,14 +174,14 @@ function updateCart(qty,product_id,order_id,timecreate)
 //Hàm xóa số lượng item ở modal
 function deleteCartModal(product_id,order_id,emn,timecreate)
 {
-	
+
 	$.ajax({
 		type:  "GET",//type là get
       	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
       	data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 		datatype: 'json',
         success:function(data)
-        {	
+        {
 			if(data.status)
 			{
 				if($("#noFindItem").text().length<80)
@@ -190,12 +190,12 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 			else
 			{
 				$("#total").html(data.total);//dữ liệu từ response
-				$(emn).closest( "tr" ).hide();   
+				$(emn).closest( "tr" ).hide();
 			}
 		}
     });
 }
- 
+
 //Khi nhập số lượng bé hơn 1 hoặc lớn 10 ở modl
 function updateModal(qty)
 {
@@ -221,11 +221,19 @@ function AddCart(product_id)
     url: "{{ asset('Addcart')}}",
     data: { product_id: product_id },
     datatype: 'json',
+<<<<<<< HEAD
 	error: function(xhr, status, error) {
   		
   		alert(xhr.responseText);
 		},
     success: function (data) 
+=======
+	error: function(xhr) {
+
+  		alert(xhr.responseText);
+		},
+    success: function (data)
+>>>>>>> origin/master
 	{
        	if(data.status=="error")
         {
@@ -265,8 +273,8 @@ $(document).ready(function()
                     alert('loi');
                 },
 			    success:function(data)
-           	    { 
-                    
+           	    {
+
                     if(data.status=="Thành công" ||data.status=="admin")
                     {
                       location.reload();
@@ -274,10 +282,10 @@ $(document).ready(function()
                     else
                     $("#dangnhap").html(data.status)
                     $("#dangnhap").css('color','red');
-              
+
            	    }
         	});
-           
+
     });
          //đăng ký  mua hàng khi user chua đăng nhập
     $('#register').submit(function(e)
@@ -296,15 +304,19 @@ $(document).ready(function()
       		url:	 " {{ asset('/postRegisterCheckOut')}}",
       		data:$('#register').serialize(),
 			datatype: 'json',
+            error: function(xhr, status, error) {
+
+  		alert(xhr.responseText);
+		},
 			success:function(data)
            	{
-                 
+
                 if(data.status=="Thành công")
                 {
-					location.reload(); 
+					location.reload();
                 }
-                   
-             
+
+
            	}
         });
     });
@@ -316,11 +328,11 @@ $(document).ready(function()
 }
 
 $("#cartModal").on('show.bs.modal', function(){
-	
+
 	Cookies.set('modal', 'showed');
-	
+
 });
- 
+
   $("#cartModal").on('hide.bs.modal', function(){
 
 	Cookies.remove('modal');
@@ -328,13 +340,13 @@ $("#cartModal").on('show.bs.modal', function(){
   });
   function checkOut()
 	{
-	
+
 		Cookies.remove('modal');
-	
+
 	}*/
 
 
-	
+
 	//logOut
 
 
@@ -369,7 +381,7 @@ $("#cartModal").on('show.bs.modal', function(){
 			<!--Search-->
 		<div class="header-middle"   style="background:#0099ff">
             <div class="container">
-				<div class="row" >	
+				<div class="row" >
 					<div class="col-sm-2">
                     		<a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
                 	</div>
@@ -378,18 +390,18 @@ $("#cartModal").on('show.bs.modal', function(){
                         		<form action="/action_page.php" >
                          	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
-								
+
 							</form>
                       		</div>
 					</div>
 					@if(!Session::has('key'))
 					<div class="col-sm-2" >
 							<div class="users"  >
-								
+
                         		<div class="dropdown" >
-								
+
 									  <button class="dropbtn" style="text-align: center">
-									  
+
 									   <b>Đăng Nhập</b> <br> <small>tài khoản</small> </button>
                           			<div class="dropdown-content">
 									<!--modal-->
@@ -399,45 +411,45 @@ $("#cartModal").on('show.bs.modal', function(){
 									</div>
                         		</div>
 							</div>
-							
+
 					</div>
 					@else
 					<div class="col-sm-2" >
 							<div class="users"  >
-								
+
                         		<div class="dropdown" >
-								
+
 									  <button class="dropbtn" style="text-align: center">
-									  
+
 									   <b>Chào {{Session::get('key')->name}}</b> <br> <small>tài khoản</small> </button>
                           			<div class="dropdown-content">
 									<!--modal-->
 									<!-- Button trigger modal -->
 										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%;">Đăng xuất   </button>
-										
+
 									</div>
                         		</div>
 							</div>
-							
+
 					</div>
-                   
-                     
+
+
 					@endif
 
 					<div class="col-sm-2 shoppingcart">
-							
+
                        		<button  type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; ">
 							   <div classs>
 							   <i class="fa fa-shopping-cart" style="color:white;"></i>
 							   <b style="color: white;">  giỏ hàng</b>
-							   
+
 							   @if(isset($totalQty))
 							   <span class="label label-warning">{{$totalQty}}</span>
-							   @endif  
-								
+							   @endif
+
 							   <div>
                         	</button>
-						
+
 					</div>
 					<div class="clear" style="clear: both;"></div>
 				</div>
@@ -445,8 +457,8 @@ $("#cartModal").on('show.bs.modal', function(){
 		</div>
 			<!--end Search-->
         <!--/header_top-->
-       
-          
+
+
 
 		<div class="header-bottom"    style="background:  #0099ff;margin-bottom:20px"><!--header-bottom-->
 			<div class="container">
@@ -477,9 +489,9 @@ $("#cartModal").on('show.bs.modal', function(){
 								@if($count>0)
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu"  style="word-break: break-all;" class="sub-menu">
-									
+
 									@foreach(App\category::all() as $c)
-									
+
 										@if($c->product->where('status','1')->count()>0)
 										<li><a  href="{{ URL::to('/'.$c->name) }}" >{{$c->name}}</a></li>
 										@endif
@@ -542,25 +554,25 @@ $("#cartModal").on('show.bs.modal', function(){
 		</section>
 <!-- Modal  login-->
 <div class="modal fade" id="loginModal" data-backdrop="static"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-							
+
 							<div class="modal-dialog">
 							<div class="modal-content">
 							<div class="modal-header">
 					<button type="button" class="close"  data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-	
+
 					</button>
-					 
-	
+
+
 				</div>
 				<div class="modal-body" style="display: block; z-index:1;">
 					<div role="tabpanel">
 						<!-- Nav tabs -->
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation" id="liLogin" ><a href="#uploadTabLogin" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
-	
+
 							</li>
 							<li role="presentation" id="liRegister" ><a href="#browseTabLogin" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
-	
+
 							</li>
 						</ul>
 						<!-- Tab panes -->
@@ -575,15 +587,19 @@ $("#cartModal").on('show.bs.modal', function(){
 									<input type="password"   required name="password"  class="form-control" ><br>
 									<div id="dangnhap"></div>
 									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
-	
+
 									<p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
-	
-	
-	
+
+
+
 								</p>
-	
+
 								</form></div>
+<<<<<<< HEAD
 							<div role="tabpanel" class="tab-pane" id="browseTabLogin"   >
+=======
+							<div role="tabpanel" class="tab-pane" id="browseTabLogin"  >
+>>>>>>> origin/master
 								<form  id="register" method="post" action="javascrip:void(0)">
 									{{ csrf_field() }}
 									<h3 style="text-align: center;">Tạo tài khoản</h3>
@@ -597,18 +613,18 @@ $("#cartModal").on('show.bs.modal', function(){
 										<input type="email" class="form-control" name="email" required placeholder="email"><br>
 										<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
 										<input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"><br>
-										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+										<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>
 							</div>
 						</div>
-	
-	
+
+
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				  
+
 				</div>
 			</div>
 		</div>
@@ -618,10 +634,10 @@ $("#cartModal").on('show.bs.modal', function(){
 <!--modal alert-->
 		<div class="modal fade" id="AlertModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
-        
+
         <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
@@ -629,12 +645,12 @@ $("#cartModal").on('show.bs.modal', function(){
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
-  
+
 	</div>
-	
+
 		<div class="modal fade"  id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -651,10 +667,10 @@ $("#cartModal").on('show.bs.modal', function(){
                      <!--Trường hợp user chưa đăng nhập thao tác với session-->
                     @if(Session::has('cart'))
 						<div class="table table-responsive">
-							<table class="table table-image"> 
+							<table class="table table-image">
                                 <thead>
                                 <tr>
-                                   
+
 									<th scope="col">sản phẩm</th>
 									<th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
@@ -667,12 +683,12 @@ $("#cartModal").on('show.bs.modal', function(){
 									@php  $sum=0 @endphp
 									@foreach(Session::get('cart')->items as $product)
 											@if(App\Product::find($product['id'])->status=="1")
-											<tr>		
+											<tr>
 											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     		</td>
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
-                                    	
+
 											<td class="price">{{App\Product::find($product['id'])->price}}</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
@@ -697,7 +713,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                     			</td>
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
-                                    	
+
 												  <td class="price">{{App\Product::find($product['id'])->price}}</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
@@ -709,9 +725,9 @@ $("#cartModal").on('show.bs.modal', function(){
                                         	</svg>
                                     		</a>
 											</td>
-											</tr>	
+											</tr>
 											@endif
-										 
+
 									@endforeach
 								</tbody>
 							</table>
@@ -736,16 +752,16 @@ $("#cartModal").on('show.bs.modal', function(){
                             </thead>
                                 <tbody>
 									 @foreach($orders->product as $p)
-									
+
 									  @if($p->status=="1")
 									<tr>
-									
+
 										<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
 										<td class="price">{{$p->pivot->price }}</td>
-                                      
+
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
@@ -763,13 +779,13 @@ $("#cartModal").on('show.bs.modal', function(){
 									</tr>
 									 @else
 									   <tr class="khonghoatdong" >
-									 
+
 										<td class="image">
 											  <span class="badge" style="margin-bottom: 10px;">Không hoạt động</span>
 										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
-                                      
+
 										<td class="price">{{$p->pivot->price }}</td>
                                       	<td class="qty"> </td>
                                     	<td class = "amount"></td>
@@ -783,7 +799,7 @@ $("#cartModal").on('show.bs.modal', function(){
 										   </td>
 										 </tr>
 										@endif
-									
+
 								  	@endforeach
 								</tbody>
 							</table>
@@ -800,7 +816,7 @@ $("#cartModal").on('show.bs.modal', function(){
 							  <a href="{{url('/cart')}}" style="background: none; color:black;"> <button type="button"  class="btn btn-success" ><b>kiểm tra</b> </button></a>
 
 							</div>
-                </div> 
+                </div>
             </div>
         </div>
 		<footer id="footer"><!--Footer-->
