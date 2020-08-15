@@ -160,12 +160,15 @@ function updateCart(qty,product_id,order_id,timecreate)
 				var total=0;
 				$("tbody").find("tr").each(function() {
 				var qty = $(this).find('td .input-qty').val();
-				var price= $(this).find('td.price').text();
+				var price= $(this).find('td.price').text().replace(" đ","");
+				
 				if(!!qty)
 				{ 
-					$(this).find('td.amount').html(qty*price);
-					
-					$('#total').html(data.total);
+					var amount=qty*price+" đ"
+					$(this).find('td.amount').html(amount);
+					var total=data.total +" đ"
+					$('#total').html(total);
+				
 				}
  			});
 		}}
@@ -189,7 +192,9 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 			}
 			else
 			{
-				$("#total").html(data.total);//dữ liệu từ response
+				var total=data.total +" đ"
+					$('#total').html(total);
+			
 				$(emn).closest( "tr" ).hide();   
 			}
 		}
@@ -216,15 +221,18 @@ function updateModal(qty)
 function AddCart(product_id)
 {
 
+
     $.ajax({
     type:  "GET",
     url: "{{ asset('Addcart')}}",
     data: { product_id: product_id },
     datatype: 'json',
-	error: function(xhr, status, error) {
-  		
-  		alert(xhr.responseText);
-		},
+	error:function(xhr)
+      {
+         var x=xhr.responseText;
+            x=$.parseJSON(x);
+         console.log(x.message);
+	},
     success: function (data) 
 	{
        	if(data.status=="error")
@@ -260,10 +268,13 @@ $(document).ready(function()
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
-                error:function(data)
-                {
-                    alert('loi');
-                },
+				error:function(xhr)
+                        {
+                            var x=xhr.responseText;
+                            x=$.parseJSON(x);
+                           console.log(x.message);
+
+                        },
 			    success:function(data)
            	    { 
                     
@@ -296,6 +307,13 @@ $(document).ready(function()
       		url:	 " {{ asset('/postRegisterCheckOut')}}",
       		data:$('#register').serialize(),
 			datatype: 'json',
+			error:function(xhr)
+            {
+               var x=xhr.responseText;
+                  x=$.parseJSON(x);
+                           console.log(x.message);
+
+                        },
 			success:function(data)
            	{
                  
@@ -656,6 +674,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                 <tbody class="cart-body">
 									@php  $sum=0 @endphp
 									@foreach(Session::get('cart')->items as $product)
+										@if(App\Product::find($product['id']))
 											@if(App\Product::find($product['id'])->status=="1")
 											<tr>		
 											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
@@ -703,7 +722,9 @@ $("#cartModal").on('show.bs.modal', function(){
 											<tr class="khonghoatdong"><td colspan="6">
 										 <span class="badge" >Không hoạt động</span>
 										 </td>
-											@endif
+										
+										@endif
+										 @endif
 										 
 									@endforeach
 								</tbody>
@@ -737,14 +758,15 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
-										<td class="price"  >{{$p->pivot->price }} đ</td>
+										<td class="price">{{$p->pivot->price }} đ</td>
+									
                                       
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
                                          onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
 										</div></td>
-                                    	<td class = "amount">{{$p->pivot->amount }}  đ </td>
+                                    	<td class = "amount">{{$p->pivot->amount }} đ </td>
                                     	<td>
                                         <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

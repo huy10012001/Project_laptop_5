@@ -25,7 +25,8 @@ class homeController extends Controller
         return view('detail');
     }
     public function index(Request $request){
-    
+        
+        $request->session()->forget('cart');
         
 
        $category= category::join('product','product.category_id','=','category.id')
@@ -94,10 +95,10 @@ class homeController extends Controller
         $category = category::where(['name'=>$name])->first();
         
         if(!empty($category))
-           $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
+           { $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
             ->join('detail_product','detail_product.product_id','=','product.id') ;
-           
-           
+            
+           }
        //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
         if(!empty($category)&&$product->count()>0)
         { 

@@ -22,9 +22,9 @@ class CreateOrderTable extends Migration
             $table->enum('status', array('0','1','2'))->default('0');
            $table->integer('total');
            $table->date('date');
-           $table->string('name');
-           $table->string('phone');
-           $table->string('address');
+           $table->string('name')->nullable();
+           $table->string('phone')->nullable();
+           $table->string('address')->nullable();
             $table->timestamps();
         });
     }

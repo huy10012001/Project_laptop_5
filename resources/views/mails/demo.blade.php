@@ -193,7 +193,7 @@
 							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }}</p>
+						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                           
                            
@@ -205,7 +205,7 @@
 						        </td>
 
 						        <td class="cart_total">
-							    <p class="cart_total_price">{{$p->pivot->amount }}</p>
+							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
 						        </td>
 
                                 </td>

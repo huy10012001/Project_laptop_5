@@ -47,10 +47,13 @@
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
-				error:function(data)
-				{
-					alert('loi roi')
-				},
+				error:function(xhr)
+                        {
+                            var x=xhr.responseText;
+                            x=$.parseJSON(x);
+                           console.log(x.message);
+
+                        },
 			    success:function(data)
            	    {
 

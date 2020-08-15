@@ -396,7 +396,6 @@
 $lienquan=$lq->where('product.id','!=', "$p->id")->get();
 @endphp
 
-{{$p->id}}
  @if($lienquan->count()>4)
 
     <div class="row">

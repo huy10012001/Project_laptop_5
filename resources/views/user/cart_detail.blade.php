@@ -13,10 +13,13 @@ function onChange(qty,product_id,order_id,timecreate)
       		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
       		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 			datatype: 'json',
-           error:function(data)
-           {
-               alert('co loi');
-           },
+            error:function(xhr)
+            {
+                var x=xhr.responseText;
+                 x=$.parseJSON(x);
+                     console.log(x.message);
+
+             },
          	success:function(data)
             {
                  
@@ -212,7 +215,7 @@ function dat(login)
 					@foreach(Session::get('cart')->items as $product)
 						    
                             <!--Trường hợp còn hàng(status là 1)-->
-                          
+                          @if(App\Product::find($product['id']))
                             @if(App\Product::find($product['id'])->status=="1")
                             <tr>
                             <td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" /> 
@@ -256,7 +259,7 @@ function dat(login)
                                 </td>   
                                 </tr>
                             @endif
-                      
+                      @endif
                     @endforeach
 				</table>
             </div>

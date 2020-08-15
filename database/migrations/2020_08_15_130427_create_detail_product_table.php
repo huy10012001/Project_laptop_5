@@ -16,7 +16,7 @@ class CreateDetailProductTable extends Migration
         Schema::create('detail_product', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('product')->onUpdate('cascade');
+            $table->foreign('product_id')->references('id')->on('product')->onUpdate('cascade')->onDelete('cascade');
             $table->json('description');
             $table->timestamps();
         });

@@ -140,21 +140,20 @@ class loginController extends Controller
              $order=new Order();//cart mới
              $order->user_id=$user->id;
              $order->status="0";
+             $order->total="0";
              $order->save();
              $total=0;
              foreach($cart->items as $item)
              {   
                 if(Product::find($item['id'])->status=="1")
-                    $total+=Product::find($item['id'])->price*$item['qty'];
-                 
+                $total+=Product::find($item['id'])->price*$item['qty'];
                  $order_product=new order_product();
                  $order_product->order_id=$order->id;
                  $order_product->product_id=$item['id'];
                  $order_product->price=Product::find($item['id'])->price;
-                 $order_product->qty=$item['qty'];
-                 $order_product->amount=Product::find($item['id'])->price*$item['qty'];
-                 $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
-                 //$order_product->status=Product::find($item['id'])->status;
+                $order_product->qty=$item['qty'];
+                $order_product->amount=Product::find($item['id'])->price*$item['qty'];
+                $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
                  $order_product->save();
              }
              $order->date=\Carbon\Carbon::parse(array_values($cart->items)[0]['time_at']); 
@@ -231,17 +230,19 @@ class loginController extends Controller
             foreach($cart->items as $item)
             {   
               
-                if(Product::find($item['id'])->status=="1")
-                    $total+=Product::find($item['id'])->price*$item['qty'];
-                 $order_product=new order_product();
-                 $order_product->order_id=$order->id;
-                 $order_product->product_id=$item['id'];
-                 $order_product->price=Product::find($item['id'])->price;
-                 $order_product->qty=$item['qty'];
-                 $order_product->amount=Product::find($item['id'])->price*$item['qty'];
-                 $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
-                
-                 $order_product->save();
+                if(!empty(Product::find($item['id'])))
+                { 
+                    if(Product::find($item['id'])->status=="1")
+                        $total+=Product::find($item['id'])->price*$item['qty'];
+                    $order_product=new order_product();
+                    $order_product->order_id=$order->id;
+                     $order_product->product_id=$item['id'];
+                     $order_product->price=Product::find($item['id'])->price;
+                    $order_product->qty=$item['qty'];
+                     $order_product->amount=Product::find($item['id'])->price*$item['qty'];
+                     $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
+                     $order_product->save();
+                }
             }
             $order->date=\Carbon\Carbon::parse(array_values($cart->items)[0]['time_at']); 
             $order->total=$total;

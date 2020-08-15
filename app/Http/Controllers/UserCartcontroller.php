@@ -342,7 +342,10 @@ class UserCartcontroller extends Controller
                  //nếu item không tồn tại
                  
             if(isset($cart->items[$product_id]))    
-            $status=Product::find($cart->items[$product_id]['id'])->status;
+            {
+                   $status=Product::find($cart->items[$product_id]['id'])->status;
+                  
+            }
            if(!isset($cart->items[$product_id])||$status=="0")
             return Response::json(array(
                 'status'=>'no3',
@@ -361,7 +364,7 @@ class UserCartcontroller extends Controller
             $sum=0;
             foreach($cart->items as $item)
             {
-                if(Product::find($item['id'])->status=="1")
+                if(!empty(Product::find($item['id']))&&Product::find($item['id'])->status=="1")
                 {
                     $sum+=Product::find($item['id'])->price*$item['qty'];
                 }
@@ -527,7 +530,7 @@ class UserCartcontroller extends Controller
             foreach($cart->items as $item)
             {
               
-                if(Product::find($item['id'])->status=="1")
+                if(!empty(Product::find($item['id']))&&Product::find($item['id'])->status=="1")
                 {
                     $sum+=Product::find($item['id'])->price*$item['qty'];
                 }
@@ -695,6 +698,7 @@ class UserCartcontroller extends Controller
             $user_id=$user->id;
         
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
+       
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
         //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
        if(empty($carts))
@@ -721,7 +725,9 @@ class UserCartcontroller extends Controller
             $order_product=new order_product();
             $order_product->order_id=$carts->id;
             $order_product->product_id=$id;
+           
             $order_product->price=Product::find($id)->price;
+          
             $order_product->qty=1;
             $order_product->amount=$order_product->price;
         
@@ -729,6 +735,7 @@ class UserCartcontroller extends Controller
             $carts->total=$carts->total+=Product::find($id)->price;
             $carts->save();
         }
+        
         //neu da co san pham thi tagn qty len 1,nếu số lượng lớn hơn 10 thì thông báo lỗi
         elseif($order_product->qty>9)
         {
@@ -738,7 +745,7 @@ class UserCartcontroller extends Controller
                )); 
         }
         else
-        {  
+        {
             $order_product::where
             ([
                 'order_id'=>$carts->id,

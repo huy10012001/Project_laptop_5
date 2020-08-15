@@ -96,6 +96,7 @@
         <h2 class="title text-center">sản phẩm Laptop {{$c->name}}</h2>
         <!--sản phẩm-->
 <div class="row">
+
  @foreach($product as $p)
 <div class="col-sm-4">
 
@@ -106,13 +107,13 @@
                     <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
                     <h2>{{number_format($p->price)}} đ</h2>
                     <p style="word-break: break-all;" >{{$p->name}}</p>
-                    <a onclick="AddCart('{{$p->id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                    <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                 </div>
                 <div class="product-overlay">
                     <div class="overlay-content">
                         <h2>{{number_format($p->price)}} đ</h2>
                         <p  style="word-break: break-all;" >{{$p->name}}</p>
-                        <a   onclick="AddCart('{{$p->id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                        <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>
                 </div>
                 

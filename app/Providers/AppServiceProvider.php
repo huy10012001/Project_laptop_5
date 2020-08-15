@@ -43,8 +43,12 @@ class AppServiceProvider extends ServiceProvider
                     $totalQty=0;
                     foreach($cart->items as $item)
                     {
-                        if(Product::find($item['id'])->status=="1")
-                        $totalQty+=$item['qty'];
+                        if(!empty(Product::find($item['id'])))
+                       { 
+                             if(Product::find($item['id'])->status=="1")
+                             $totalQty+=$item['qty'];
+                       }
+                      
                     }
                     $view->with(['totalQty'=>$totalQty]);
                 }
@@ -66,7 +70,8 @@ class AppServiceProvider extends ServiceProvider
                 $view->with(['orders'=>$orders,'category'=>$category]);
                 }
            
-
+                else
+                $view->with(['category'=>$category]);
          
         });
 
