@@ -116,7 +116,10 @@ select option[value="2"] {
                                     <a class="btn btn-info btn-sm"   onclick="editOrder('{{$o->id}}',this)">
                                         <i class="fas fa-pencil-alt"></i> Sửa
                                     </a>
-                                   
+                                    <!--
+                                    <a class="btn btn-info btn-sm"  href="{{ url('admin/order/update/'.$o->id) }}"  >
+                                        <i class="fas fa-pencil-alt"></i> Sửa
+                                    </a>-->
                                 </td>
                                
                                 

@@ -411,8 +411,8 @@ if(performance.navigation.type == 2){
 				<table class="table table-condensed" >
 					<thead>
 						<tr class="cart_menu" style="color: black;">
-							<td class="image">Item</td>
-							<td class="description"></td>
+							<td class="image"></td>
+							<td class="description">Tên sản phẩm</td>
 							<td class="price">giá</td>
 							<td class="quantity">số lượng</td>
 							<td class="total">tổng tiền</td>

@@ -45,14 +45,16 @@ class AdminOrderController extends Controller
    public function edit(Request $request)
    {
      $order_id=$request->order_id;
+     if(empty($order_id))
+     return \abort('404');
      $status=$request->status;
      $c=  Order::find($order_id);
      $c->status=$status;
      $c->save();
      $request->session()->put(['message'=>'cập nhập thành công','alert-class'=>'alert-success']);
    }
-   /*
-    public function update($id,Request $request) 
+   
+   /* public function update($id,Request $request) 
     {
         
         $p = Order::find($id);

@@ -57,10 +57,14 @@ route::get('admin/order/view/{id}', 'AdminOrderController@view');
 
 Route::get('admin/order/edit', 'AdminOrderController@edit');
 /*
+Route::get('admin/order/update/{id}', 'AdminOrderController@update');
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('admin/order/postUpdate/{id}', 'AdminOrderController@postUpdate');
+*/
 Route::get('admin/category/update/{id}', 'AdminCategoryController@update');
 Route::get('admin/category/delete', 'AdminCategoryController@delete');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
-Route::post('admin/category/postUpdate/{id}', 'AdminCategoryController@postUpdate');*/
+Route::post('admin/category/postUpdate/{id}', 'AdminCategoryController@postUpdate');
 //Role Admin
 Route::get('admin/role/index', 'Adminrolecontroller@index');
 Route::get('admin/role/create', 'Adminrolecontroller@create');
