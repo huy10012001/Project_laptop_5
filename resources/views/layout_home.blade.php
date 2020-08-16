@@ -247,7 +247,8 @@ function AddCart(product_id)
 
 
 $(document).ready(function()
-{
+{ 
+
 	 $('.textsearch').on('keyup',function(){
 	 
                 $value = $(this).val();

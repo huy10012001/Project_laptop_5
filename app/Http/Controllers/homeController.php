@@ -88,21 +88,67 @@ class homeController extends Controller
         return view('user.contact');
     }
    
-    public function product ($name)
+    public function product ($name,Request $request)
     { 
         $name=str_replace("-", " ", $name);
         //Tìm tên danh mục trước
         $category = category::where(['name'=>$name])->first();
         
         if(!empty($category))
-           { 
+        { 
                $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
             ->join('detail_product','detail_product.product_id','=','product.id') ;
             
-           }
+        }
        //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
         if(!empty($category)&&$product->count()>0)
         { 
+            
+            if($request->price)
+            {
+               $price=$request->price;
+               switch($price)
+               {
+                   case'1':
+                     $product=$product->where('price','>=',1000000);
+                   break;
+                   case'2':
+                    $product=$product->where('price','>=',3000000);
+                  break;
+                  case'3':
+                    $product=$product->where('price','>=',5000000);
+                  break;
+               }
+            }
+            if($request->boxuly)
+            {
+                $boxuly=$request->boxuly;
+                switch($boxuly)
+                {
+                    case'80':
+                        //$a= j;
+                        $product=$product->whereRaw('JSON_VALUE(description,"$.2")=80');
+                       
+                      break;
+                      case'40':
+                       $product=$product->where('price','>=',3000000);
+                     break;
+                    
+                }
+            }
+            if($request->order)
+            {
+                $orders=$request->order;
+                switch($orders)
+                {
+                    case 'desc':
+                        $product=$product->orderBy('price','DESC');
+                    break;
+                    case 'asc':
+                            $product=$product->orderBy('price','ASC');
+                    break;
+                }
+            }
             $product=$product->paginate(6);
             return view('user.product', ['c'=>$category,'product'=>$product]);
         }

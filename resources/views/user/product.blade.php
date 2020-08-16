@@ -3,8 +3,19 @@
 <style>
    
 </style>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+
+<script>
+
+  $(document).ready(function(){
+  $('#order').change(function(){
+
+  });
+});
+  
+   
+   
+
+   
 </script>
 
 <div class="container">
@@ -84,10 +95,43 @@
                     </div>
                 </div>
             </div>
-
+    <form  action=""  id="form_product" method="get">
+   
+    <select name="order" id="order">
+        <option value="md" selected>mặc định</option>
+  <option value="desc">Gỉam dần</option>
+  <option value="asc">Tăng dần</option>
+  <input type="checkbox" name="vehicle1" value="Bike">
+  <label for="vehicle1"> I have a bike</label><br>
+  <input type="checkbox" name="vehicle2" value="Car">
+  <label for="vehicle2"> I have a car</label><br>
+  <input type="checkbox" name="vehicle3" value="Boat" checked>
+  <label for="vehicle3"> I have a boat</label><br><br>
+  <input type="submit" value="Submit">
+  <input type="checkbox" name="vehicle1" value="Bike">
+  <label for="vehicle1"> I have a bike</label><br>
+  <input type="checkbox" name="vehicle2" value="Car">
+  <label for="vehicle"> I have a car</label><br>
+  <input type="checkbox" name="vehicle3" value="Boat" checked>
+  <label for="vehicle3"> I have a boat</label><br><br>
+ 
+<input type="submit" value="search" >
+  </form>
+</select>
+            <label for="cars">Choose a car:</label>
+  <ul>
+       <li><a href="{{request()->fullUrlWithQuery(['price' => '1'])}}">Từ 1 triệu tới 3 triệu</a></li>
+       <li><a href="{{request()->fullUrlWithQuery(['price' => '2'])}}">Trên 3 triệ</a></li>
+       <li><a href="{{request()->fullUrlWithQuery(['price' => '3'])}}">Trên 5 triệ</a></li>
+       <li><a href="?price=4"></a></li>
+  </ul>
         </div><!--/category-products-->
-
-
+ <ul>
+       <li><a href="{{request()->fullUrlWithQuery(['boxuly' => '80'])}}">Bộ xử lý</a></li>
+       <li><a href="?boxuly=40">Trên 3 triệ</a></li>
+       <li><a href="?price=3">Trên 5 triệ</a></li>
+       <li><a href="?price=4"></a></li>
+  </ul>
 
 
     </div>
@@ -146,4 +190,7 @@
 
 </div>
 </div>
+@section('script')
+
+@endsection
 @endsection
