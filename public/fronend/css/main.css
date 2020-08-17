@@ -12,6 +12,7 @@ body {
 
   position: relative;
   font-weight:400px;
+   background-color:white ;
 }
 
 ul li {
@@ -2524,6 +2525,7 @@ margin-bottom: 0;
 .category{
     padding: 10px;
     padding-left: 5px;
+
 }
 
 

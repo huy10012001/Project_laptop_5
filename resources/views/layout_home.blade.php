@@ -436,33 +436,30 @@ $("#cartModal").on('show.bs.modal', function(){
 			</div>
 		</div>
 			<!--Search-->
-		<div class="header-middle"   style="background:#0099ff">
+		<div class="header-middle"   style="background:#0099ff;  display: block !important;    z-index: 10;">
             <div class="container">
 				<div class="row" >
 					<div class="col-sm-2">
                     		<a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
                 	</div>
                 	<div class="col-sm-6" >
-                    		<div  class="search">
+                    	<div  class="search" style="position: relative;">
 							<form id="search"   method="get" >
 							{{csrf_field()}}
                          	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
-
 							</form>
-
-							<table hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
+							<table  style="position: absolute;margin-top:50px;  z-index: 9999;background-color: white;" hidden class="resultsearch table table-bordered table-hover" >
                                 <thead>
                                     <tr>
+                                        <th></th>
 
-										<th></th>
-                                        <th>ID</th>
                                         <th>Tên sản phẩn</th>
-
                                         <th>Gía</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
 
 
 
@@ -588,8 +585,8 @@ $("#cartModal").on('show.bs.modal', function(){
 	@yield('slide')
 	<!--/slider-->
 
-		<section>
-			<div class="container">
+		<section style="background: white;">
+			<div class="container "  style="background: white;" >
 				<div class="row">
 					<!--tìm theo chi tiết-->
 					@yield('detail_home')
@@ -604,7 +601,7 @@ $("#cartModal").on('show.bs.modal', function(){
 					<!--end contact-->
 					@yield('dell')
 					<!--sản phẩm dell-->
-
+                    @yield('search')
 
 
 
