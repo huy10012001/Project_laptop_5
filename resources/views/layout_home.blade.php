@@ -553,7 +553,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                     <ul role="menu"  style="word-break: break-all;" class="sub-menu">
 									@foreach($category as $c)
 								
-										<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
+										<li><a  onclick="window.localStorage.clear();" href="{{ URL::to('/product/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
 									
 								
 									@endforeach
@@ -600,7 +600,7 @@ $("#cartModal").on('show.bs.modal', function(){
 					@yield('dell')
 					<!--sản phẩm dell-->
 
-
+					@yield('product_A')
 
 
 					<!--login-->
@@ -916,7 +916,8 @@ $("#cartModal").on('show.bs.modal', function(){
 							
 									@foreach($category as $c)
 								
-										<li><a href="{{ URL::to('/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
+									<li><a onclick="window.localStorage.clear();" href="{{ URL::to('/product/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
+									
 									
 								
 									@endforeach

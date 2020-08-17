@@ -17,23 +17,38 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use App\Cart;
 use App\order_product;
-
+USE Illuminate\Database\Eloquent\Collection;
+use League\CommonMark\Util\ArrayCollection;
 class homeController extends Controller
 {
+    
     public function detail(Request $request){
         
         return view('detail');
     }
+   
+    
     public function index(Request $request){
         
-        $request->session()->forget('cart');
+     
+        $product_recordA=Product::where(['status'=>"1"])
+        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',4000000)->get();
+  
+        $product_recordB=Product::where(['status'=>"1"])
+        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',5000000)->get();
+        $collect_product=$product_recordA->merge($product_recordB);
+        $p=[];
+        foreach($collect_product as $c_p)
+        {
+          
+            array_push($p,$c_p->product_id);
+          
+        }
         
-
-       $category= category::join('product','product.category_id','=','category.id')
-       ->join('detail_product','detail_product.product_id','=','product.id')->
-      where('product.status','1');
-       echo $category->get();
-   //  $request->session()->forget('cart');
+        $product= product::whereIn('id', $p);
+        $product=$product->paginate(6);
+        // $a=array_merge($product_recordA->toArray(),$product_recordB->toArray());
+       return view('user.product', ['product'=>$product]);
     }
 
     public function order(Request $request){
@@ -87,70 +102,297 @@ class homeController extends Controller
     public function contact(){
         return view('user.contact');
     }
-   
+    public function allproduct($name,Request $request)
+    {
+            if($name!="product")
+                return \abort('404');
+            $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
+            -> join('product','product.category_id','=','category.id')
+            ->join('detail_product','detail_product.product_id','=','product.id')->
+            where('product.status','1')->get();
+            $product=product::where(['status'=>"1"])
+            ->join('detail_product','detail_product.product_id','=','product.id');
+           
+           
+            //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
+                if($request->price)
+                {
+                  
+                    $prices= $_GET['price'];
+                    $p=[];
+                    $collect_product=new Collection();
+                   
+                    foreach($prices as $price)
+                    {
+                       
+                       switch($price)
+                       {
+                        case "dưới-10-triệu":
+                          $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
+                          
+                        break;
+                           
+                        case "từ-10-15-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
+                        break;
+                        case "từ-15-20-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                        break;
+                        case "từ-20-25-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                        break;
+                        case "trên-25-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
+                        break;
+                        }
+                        if(isset($product_record))
+                            $collect_product=$collect_product->merge($product_record);
+                    }
+                       
+                    foreach($collect_product as $c_p)
+                     {
+        
+                        array_push($p,$c_p->product_id);
+                    }
+                
+                   $product=$product->whereIn('id', $p)->get();
+               
+                }
+              
+                if($request->tenhang)   
+                {
+    
+                    $product=Product::where(['status'=>"1"])
+                    ->join('detail_product','detail_product.product_id','=','product.id') ;
+                    $tenhangs= $_GET['tenhang'];
+                    $th=[];
+                    foreach($tenhangs as $tenhang)
+                    {
+                        array_push($th,$tenhang);
+                    }
+                    if($th!=['tất-cả'])
+                        $product=$product->join('category','product.category_id','=','category.id')
+                       -> whereIn('category.name',$th);
+                   
+                }
+                
+                if($request->manhinh)
+                {
+                    $manhinhs= $_GET['manhinh'];
+                    $mh=[];
+                    foreach($manhinhs as $manhinh)
+                    {
+                            array_push($mh,$manhinh);
+                    }   
+                    if($mh!=['tất-cả'])
+                    $product=$product->whereIn('description->21', $mh);
+                }
+                if($request->cpu)
+                {
+                    $cpu_laptop= $_GET['cpu'];
+                    $cpu_arr=[];
+                    foreach($cpu_laptop as $cpu)
+                    {
+                            array_push($cpu_arr,$cpu);
+                    }   
+                    if($cpu_arr!=['tất-cả'])
+                    $product=$product->whereIn('description->4', $cpu_arr);
+                }
+                if($request->RAM)
+                {
+                    $ram_laptop= $_GET['RAM'];
+                    $ram_arr=[];
+                    foreach($ram_laptop as $ram)
+                    {
+                            array_push($ram_arr,$ram);
+                    }   
+                    if($ram_arr!=['tất-cả'])
+                    $product=$product->whereIn('description->11', $ram_arr);
+                }
+                if($request->ocung)
+                {
+                    $ocung_laptop= $_GET['ocung'];
+                    $ocung_arr=[];
+                    foreach($ocung_laptop as $ocung)
+                    {
+                            array_push($ocung_arr,$ocung);
+                    }   
+                    if($ocung_arr!=['tất-cả'])
+                    $product=$product->whereIn('description->17', $ocung_arr);
+                }
+                if($request->orderby)
+                {
+                    $orderBy=$request->orderby;
+                    switch($orderBy)
+                    {
+                        case 'asc':
+                            $product=$product->orderBy('price', 'asc');
+                            break;
+                         case 'desc':
+                            $product=$product->orderBy('price', 'desc');
+                            break;     
+                    }
+                }
+                
+                $product=$product->paginate(6);
+               return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
+           
+           
+    }
     public function product ($name,Request $request)
     { 
         $name=str_replace("-", " ", $name);
         //Tìm tên danh mục trước
+        $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
+        -> join('product','product.category_id','=','category.id')
+        ->join('detail_product','detail_product.product_id','=','product.id')->
+        where('product.status','1')->get();
         $category = category::where(['name'=>$name])->first();
         
         if(!empty($category))
         { 
-               $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
+            $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
             ->join('detail_product','detail_product.product_id','=','product.id') ;
-            
+      
         }
        //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
         if(!empty($category)&&$product->count()>0)
-        { 
+        {       
             
             if($request->price)
             {
-               $price=$request->price;
-               switch($price)
-               {
-                   case'1':
-                     $product=$product->where('price','>=',1000000);
-                   break;
-                   case'2':
-                    $product=$product->where('price','>=',3000000);
-                  break;
-                  case'3':
-                    $product=$product->where('price','>=',5000000);
-                  break;
-               }
-            }
-            if($request->boxuly)
-            {
-                $boxuly=$request->boxuly;
-                switch($boxuly)
-                {
-                    case'80':
-                        //$a= j;
-                        $product=$product->whereRaw('JSON_VALUE(description,"$.2")=80');
-                       
-                      break;
-                      case'40':
-                       $product=$product->where('price','>=',3000000);
-                     break;
+            
+                $prices= $_GET['price'];
+                $p=[];
+                $collect_product=new Collection();
+                foreach($prices as $price)
+                    {
+                       switch($price)
+                       {
+                        case "dưới-10-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
+                            break;
+                        case "từ-10-15-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
+                        break;
+                        case "từ-15-20-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                        break;
+                        case "từ-20-25-triệu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                        break;
+                        case "trên-25-triêu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
+                        break;
+                        }
+                        $collect_product=$collect_product->merge($product_record);
+                    }
                     
-                }
+                    foreach($collect_product as $c_p)
+                     {
+        
+                        array_push($p,$c_p->product_id);
+                    }
+                   
+                    $product= product::whereIn('id', $p);
             }
-            if($request->order)
+            if($request->tenhang)   
             {
-                $orders=$request->order;
-                switch($orders)
+
+                $product=Product::where(['status'=>"1"])
+                ->join('detail_product','detail_product.product_id','=','product.id') ;
+                $tenhangs= $_GET['tenhang'];
+                $th=[];
+                foreach($tenhangs as $tenhang)
                 {
-                    case 'desc':
-                        $product=$product->orderBy('price','DESC');
-                    break;
+                    array_push($th,$tenhang);
+                }
+                if($th!=['tất-cả'])
+                    $product=$product->join('category','product.category_id','=','category.id')
+                   -> whereIn('category.name',$th);
+               
+            }
+            if($request->manhinh)
+            {
+                $manhinhs= $_GET['manhinh'];
+                $mh=[];
+                foreach($manhinhs as $manhinh)
+                {
+                        array_push($mh,$manhinh);
+                }   
+                if($mh!=['tất-cả'])
+                $product=$product->whereIn('description->21', $mh);
+            }
+            if($request->manhinh)
+            {
+                $manhinhs= $_GET['manhinh'];
+                $mh=[];
+                foreach($manhinhs as $manhinh)
+                {
+                        array_push($mh,$manhinh);
+                }   
+                if($mh!=['tất-cả'])
+                $product=$product->whereIn('description->21', $mh);
+            }
+            if($request->cpu)
+            {
+                $cpu_laptop= $_GET['cpu'];
+                $cpu_arr=[];
+                foreach($cpu_laptop as $cpu)
+                {
+                        array_push($cpu_arr,$cpu);
+                }   
+                if($cpu_arr!=['tất-cả'])
+                $product=$product->whereIn('description->4', $cpu_arr);
+            }
+            if($request->RAM)
+            {
+                $ram_laptop= $_GET['RAM'];
+                $ram_arr=[];
+                foreach($ram_laptop as $ram)
+                {
+                        array_push($ram_arr,$ram);
+                }   
+                if($ram_arr!=['tất-cả'])
+                $product=$product->whereIn('description->11', $ram_arr);
+            }
+            if($request->ocung)
+            {
+                $ocung_laptop= $_GET['ocung'];
+                $ocung_arr=[];
+                foreach($ocung_laptop as $ocung)
+                {
+                        array_push($ocung_arr,$ocung);
+                }   
+                if($ocung_arr!=['tất-cả'])
+                $product=$product->whereIn('description->17', $ocung_arr);
+            }
+            if($request->orderby)
+            {
+                $orderBy=$request->orderby;
+                switch($orderBy)
+                {
                     case 'asc':
-                            $product=$product->orderBy('price','ASC');
-                    break;
+                        $product=$product->orderBy('price', 'asc');
+                        break;
+                     case 'desc':
+                        $product=$product->orderBy('price', 'desc');
+                        break;     
                 }
             }
             $product=$product->paginate(6);
-            return view('user.product', ['c'=>$category,'product'=>$product]);
+            return view('user.product', ['c'=>$category,'all_category'=>$all_category,'product'=>$product]);
+            
         }
         else
         {

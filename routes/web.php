@@ -23,6 +23,10 @@ Route::get('/', function () {
 Route::get('/checkout','homeController@checkout');
 Route::get('/home','homeController@home' );
 Route::get('/contact','homeController@contact' );
+//lo5c
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('/postLoc', 'UserCartcontroller@loc');
+//search
 Route::get('/searchindex', 'UserCartcontroller@index1');
 Route::get('/livesearch', 'UserCartcontroller@livesearch');
 Route::get('/search', 'UserCartcontroller@search');
@@ -129,9 +133,9 @@ if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 
 
-Route::get('{name}','homeController@product');
+Route::get('product/{name}','homeController@product');
 
-
+Route::get('/{name}','homeController@allproduct');
 
 
 
