@@ -159,16 +159,16 @@ class homeController extends Controller
         
                         array_push($p,$c_p->product_id);
                     }
-                
-                   $product=$product->whereIn('id', $p)->get();
-               
+                   
+                    if($p!=[]) 
+                   $product=$product->whereIn('product_id', $p);
+                   
                 }
               
                 if($request->tenhang)   
                 {
     
-                    $product=Product::where(['status'=>"1"])
-                    ->join('detail_product','detail_product.product_id','=','product.id') ;
+                   
                     $tenhangs= $_GET['tenhang'];
                     $th=[];
                     foreach($tenhangs as $tenhang)
@@ -238,9 +238,9 @@ class homeController extends Controller
                             break;     
                     }
                 }
-                
+             
                 $product=$product->paginate(6);
-               return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
+              return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
            
            
     }
@@ -253,7 +253,8 @@ class homeController extends Controller
         ->join('detail_product','detail_product.product_id','=','product.id')->
         where('product.status','1')->get();
         $category = category::where(['name'=>$name])->first();
-        
+        $product=Product::where(['status'=>"1"])
+        ->join('detail_product','detail_product.product_id','=','product.id') ;
         if(!empty($category))
         { 
             $product=Product::where(['category_id'=>$category->id,'status'=>"1"])
@@ -266,51 +267,56 @@ class homeController extends Controller
             
             if($request->price)
             {
-            
+              
                 $prices= $_GET['price'];
                 $p=[];
                 $collect_product=new Collection();
+               
                 foreach($prices as $price)
-                    {
-                       switch($price)
-                       {
-                        case "dưới-10-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
-                            break;
-                        case "từ-10-15-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
-                        break;
-                        case "từ-15-20-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
-                        break;
-                        case "từ-20-25-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
-                        break;
-                        case "trên-25-triêu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
-                        break;
-                        }
-                        $collect_product=$collect_product->merge($product_record);
-                    }
-                    
-                    foreach($collect_product as $c_p)
-                     {
-        
-                        array_push($p,$c_p->product_id);
-                    }
+                {
                    
-                    $product= product::whereIn('id', $p);
+                   switch($price)
+                   {
+                    case "dưới-10-triệu":
+                      $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
+                      
+                    break;
+                       
+                    case "từ-10-15-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
+                    break;
+                    case "từ-15-20-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                    break;
+                    case "từ-20-25-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                    break;
+                    case "trên-25-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
+                    break;
+                    }
+                    if(isset($product_record))
+                        $collect_product=$collect_product->merge($product_record);
+                }
+                   
+                foreach($collect_product as $c_p)
+                 {
+    
+                    array_push($p,$c_p->product_id);
+                }
+                if($p!=[]) 
+               $product=$product->whereIn('product_id', $p);
+               
             }
             if($request->tenhang)   
             {
 
-                $product=Product::where(['status'=>"1"])
-                ->join('detail_product','detail_product.product_id','=','product.id') ;
+               
                 $tenhangs= $_GET['tenhang'];
                 $th=[];
                 foreach($tenhangs as $tenhang)
