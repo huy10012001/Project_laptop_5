@@ -74,9 +74,46 @@
 @section('product')
 <div class="col-sm-9 padding-right">
 
+    <div class="card">
+        <div class="box">
+            <h2>Laptop</h2>
+        </div>
+        <div class="category" >
+
+        <a href=""><img src="{{ ('fronend/images/mac.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/Asus.jpg') }}" alt=""></a>
+       <a href=""> <img src="{{ ('fronend/images/Dell.jpg') }}" alt=""></a>
+      <a href="">  <img src="{{ ('fronend/images/Acer.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
+      <a href="">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
+
+        </div>
+    </div>
     <div class="features_items"><!--features_items-->
-        <h2 class="title text-center">sản phẩm mới </h2>
+        <div class="spm">
+        <h2 class="title text-center">sản phẩm mới </h2> <br>
+    </div>
         <!--sản phẩm-->
+        <div class="sort">
+            <div class="col-sm-12" style="background: rgb(245, 244, 244); margin-top:-10px;">
+                <div class="dropdown" style=" margin-left: 750px;">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">giá cao đến thấp </a></li>
+                      <li><a href="#">giá thấp đến cao</a></li>
+                      <li><a href="#">laptop mới nhất</a></li>
+                    </ul>
+                  </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="col-sm-12" style="height: 5px; width:10px;">
+
+            </div>
+
+        </div>
 
 
 <div class="col-sm-4">
@@ -102,10 +139,17 @@
                 <li><a href="#"><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
             </ul>
         </div>
-    </div>
 </div>
-</div><!--features_items-->
+    </div>
 
+</div><!--features_items-->
+<div class="spm">
+    <h2 class="title text-center">sản phẩm bán chạy nhất</h2>
+</div>
+
+<div class="spm">
+    <h2 class="title text-center">MacBook </h2>
+</div>
 </div>
 @endsection
 

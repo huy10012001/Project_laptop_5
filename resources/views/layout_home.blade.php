@@ -25,7 +25,9 @@
 		border: 2px solid white !important;
   		padding: 14px 20px;
   		font-size: 16px;
-  		cursor: pointer;
+          cursor: pointer;
+          height: 50px;
+
 	}
 	.khonghoatdong {
     opacity: 0.7;
@@ -35,8 +37,8 @@
 
 .cart_product {
     position: relative;
- 
-  
+
+
 }
 .cart_product .badge
 {
@@ -61,11 +63,13 @@
 
 .users .dropbtn {
 	width: 150px;
-    background-color: #3c9add;
+    background-color: #0099ff;
     color: white;
     padding: 10px;
     font-size: 16px;
     border: none;
+border: 2px solid white;
+
   }
 
   .users .dropdown {
@@ -76,7 +80,7 @@
   .users .dropdown-content {
 	display: none;
 	position: absolute;
-    background-color: #f1f1f1;
+    background-color:white;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
  	 z-index: 1;
@@ -104,7 +108,7 @@
 //load lại trang khi user bấm back
 if(!!window.performance && window.performance.navigation.type === 2)
 {
-        
+
     window.location.reload();
 }
 //search
@@ -120,11 +124,11 @@ if(!!window.performance && window.performance.navigation.type === 2)
 
 	function  dangky()
 	{
-		
+
 		$('#browseTabLogin').addClass('active');
 		$('#liRegister').addClass('active');
 		//$('.users .dropdown-content').css('display','block');
-		
+
 	}
 //Hàm log out
 function logOut()
@@ -137,7 +141,7 @@ function logOut()
 			success:function(data)
            	{
 				 location.reload();
-				
+
            	}
        	}
     );
@@ -153,7 +157,7 @@ function updateCart(qty,product_id,order_id,timecreate)
 		success:function(data)
         {
 			if(data.status)
-			{	
+			{
 				if($("#noFindItem").text().length<80)
 				$("#noFindItem").append("không tìm thấy item ");
 			}
@@ -164,14 +168,14 @@ function updateCart(qty,product_id,order_id,timecreate)
 				$("tbody").find("tr").each(function() {
 				var qty = $(this).find('td .input-qty').val();
 				var price= $(this).find('td.price').text().replace(" đ","");
-				
+
 				if(!!qty)
-				{ 
+				{
 					var amount=qty*price+" đ"
 					$(this).find('td.amount').html(amount);
 					var total=data.total +" đ"
 					$('#total').html(total);
-				
+
 				}
  			});
 		}}
@@ -180,14 +184,14 @@ function updateCart(qty,product_id,order_id,timecreate)
 //Hàm xóa số lượng item ở modal
 function deleteCartModal(product_id,order_id,emn,timecreate)
 {
-	
+
 	$.ajax({
 		type:  "GET",//type là get
       	url: " {{ asset('cart/delete')}}",//truy cập tới url cart/delete
       	data:{ order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
 		datatype: 'json',
         success:function(data)
-        {	
+        {
 			if(data.status)
 			{
 				if($("#noFindItem").text().length<80)
@@ -197,13 +201,13 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 			{
 				var total=data.total +" đ"
 					$('#total').html(total);
-			
-				$(emn).closest( "tr" ).hide();   
+
+				$(emn).closest( "tr" ).hide();
 			}
 		}
     });
 }
- 
+
 //Khi nhập số lượng bé hơn 1 hoặc lớn 10 ở modl
 function updateModal(qty)
 {
@@ -236,7 +240,7 @@ function AddCart(product_id)
             x=$.parseJSON(x);
          console.log(x.message);
 	},
-    success: function (data) 
+    success: function (data)
 	{
        	if(data.status=="error")
         {
@@ -308,7 +312,7 @@ $(document).ready(function()
         })
 	
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
-	
+
 	$("#loginModal").on('hide.bs.modal', function(){
 		$('#uploadTabLogin').removeClass('active');
 		$('#browseTabLogin').removeClass('active');
@@ -329,7 +333,7 @@ $(document).ready(function()
         });
 		if(x!="")
 		window.location.href = "/search?keyword="+x;
-           
+
     });
 	//mouse up search
 	
@@ -357,8 +361,8 @@ $(document).ready(function()
 
                         },
 			    success:function(data)
-           	    { 
-                    
+           	    {
+
                     if(data.status=="Thành công" ||data.status=="admin")
                     {
                       location.reload();
@@ -366,10 +370,10 @@ $(document).ready(function()
                     else
                     $("#dangnhap").html(data.status)
                     $("#dangnhap").css('color','red');
-              
+
            	    }
         	});
-           
+
     });
          //đăng ký  mua hàng khi user chua đăng nhập
     $('#register').submit(function(e)
@@ -397,13 +401,13 @@ $(document).ready(function()
                         },
 			success:function(data)
            	{
-                 
+
                 if(data.status=="Thành công")
                 {
-					location.reload(); 
+					location.reload();
                 }
-                   
-             
+
+
            	}
         });
     });
@@ -415,11 +419,11 @@ $(document).ready(function()
 }
 
 $("#cartModal").on('show.bs.modal', function(){
-	
+
 	Cookies.set('modal', 'showed');
-	
+
 });
- 
+
   $("#cartModal").on('hide.bs.modal', function(){
 
 	Cookies.remove('modal');
@@ -427,13 +431,13 @@ $("#cartModal").on('show.bs.modal', function(){
   });
   function checkOut()
 	{
-	
+
 		Cookies.remove('modal');
-	
+
 	}*/
 
 
-	
+
 	//logOut
 
 
@@ -467,9 +471,9 @@ $("#cartModal").on('show.bs.modal', function(){
 			</div>
 		</div>
 			<!--Search-->
-		<div class="header-middle"   style="background:#0099ff">
+		<div class="header-middle"   style="background:#0099ff;  display: block !important;    z-index: 10;">
             <div class="container">
-				<div class="row" >	
+				<div class="row" >
 					<div class="col-sm-2">
                     		<a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
                 	</div>
@@ -479,17 +483,16 @@ $("#cartModal").on('show.bs.modal', function(){
 							{{csrf_field()}}
                          	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
-								
 							</form>
 						
 							<table  style="background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
                                 <thead>
                                     <tr>
+                                        <th></th>
 
 										<th></th>
                                        
                                         <th>Tên sản phẩn</th>
-                                       
                                         <th>Gía</th>
                                     </tr>
                                 </thead>
@@ -500,59 +503,59 @@ $("#cartModal").on('show.bs.modal', function(){
 					@if(!Session::has('key'))
 					<div class="col-sm-2" >
 							<div class="users"  >
-								
+
                         		<div class="dropdown" >
-								
+
 									  <button class="dropbtn" style="text-align: center">
-									  
-									   <b>Đăng Nhập</b> <br> <small>tài khoản</small> </button>
-                          			<div class="dropdown-content">
+
+                                        <i class="fa fa-user" aria-hidden="true"></i> &nbsp; <b>Đăng Nhập</b> </button>
+                          			<div class="dropdown-content" >
 									<!--modal-->
 									<!-- Button trigger modal -->
 										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Đăng nhập    </button>
-										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Tạo tài khoản    </button>
+										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:0px;">Tạo tài khoản    </button>
 									</div>
                         		</div>
 							</div>
-							
+
 					</div>
 					@else
 					<div class="col-sm-2" >
 							<div class="users"  >
-								
+
                         		<div class="dropdown" >
-								
+
 									  <button class="dropbtn" style="text-align: center">
-									  
-									   <b>Chào {{Session::get('key')->name}}</b> <br> <small>tài khoản</small> </button>
+
+									   <b>Chào {{Session::get('key')->name}}</b> <br>  </button>
                           			<div class="dropdown-content">
 									<!--modal-->
 									<!-- Button trigger modal -->
 										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%;">Đăng xuất   </button>
-										
+
 									</div>
                         		</div>
 							</div>
-							
+
 					</div>
-                   
-                     
+
+
 					@endif
 
 					<div class="col-sm-2 shoppingcart">
-							
+
                        		<button  type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; ">
 							   <div classs>
 							   <i class="fa fa-shopping-cart" style="color:white;"></i>
 							   <b style="color: white;">  giỏ hàng</b>
-							   
+
 							   @if(isset($totalQty))
 							   <span class="label label-warning">{{$totalQty}}</span>
-							   @endif  
-								
+							   @endif
+
 							   <div>
                         	</button>
-						
+
 					</div>
 					<div class="clear" style="clear: both;"></div>
 				</div>
@@ -560,8 +563,8 @@ $("#cartModal").on('show.bs.modal', function(){
 		</div>
 			<!--end Search-->
         <!--/header_top-->
-       
-          
+
+
 
 		<div class="header-bottom"    style="background:  #0099ff;margin-bottom:20px"><!--header-bottom-->
 			<div class="container">
@@ -577,10 +580,10 @@ $("#cartModal").on('show.bs.modal', function(){
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);">Trang Chủ</a></li>
-								
+								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);"><i class="fa fa-home" aria-hidden="true"></i> &nbsp; Trang Chủ</a></li>
+
 								@if(isset($category) && $category->count()>0)
-								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);">Sản Phẩm<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);"><i class="fa fa-laptop" aria-hidden="true"></i> &nbsp; Sản Phẩm</a>
                                     <ul role="menu"  style="word-break: break-all;" class="sub-menu">
 									@foreach($category as $c)
 								
@@ -591,14 +594,15 @@ $("#cartModal").on('show.bs.modal', function(){
                                     </ul>
 								</li>
 								@endif
-								<li class="dropdown"><a href="#" style="color: rgb(250, 245, 245);">Về Chúng Tôi<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#" style="color: rgb(250, 245, 245);"><i class="fa fa-eye" aria-hidden="true"></i> &nbsp;Về Chúng Tôi</a>
 										<ul role="menu" class="sub-menu">
 											<li><a href="blog.html" style="color: rgb(250, 245, 245);">thông tin về shop</a></li>
 											<li><a href="blog-single.html" style="color: rgb(250, 245, 245);">thông tin LapTop-shop</a></li>
 										</ul>
 									</li>
 
-									<li><a href="{{ URL::to('/contact') }}" style="color: rgb(250, 245, 245);">liên hệ</a></li>
+									<li><a href="{{ URL::to('/contact') }}" style="color: rgb(250, 245, 245);"><i class="fa fa-phone-square" aria-hidden="true"></i> &nbsp;
+                                        liên hệ</a></li>
 								</ul>
 							</div>
 						</div>
@@ -614,8 +618,8 @@ $("#cartModal").on('show.bs.modal', function(){
 	@yield('slide')
 	<!--/slider-->
 
-		<section>
-			<div class="container">
+		<section style="background: white;">
+			<div class="container "  style="background: white;" >
 				<div class="row">
 					<!--tìm theo chi tiết-->
 					@yield('detail_home')
@@ -646,25 +650,25 @@ $("#cartModal").on('show.bs.modal', function(){
 		</section>
 <!-- Modal  login-->
 <div class="modal fade" id="loginModal" data-backdrop="static"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-							
+
 							<div class="modal-dialog">
 							<div class="modal-content">
 							<div class="modal-header">
 					<button type="button" class="close"  data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-	
+
 					</button>
-					 
-	
+
+
 				</div>
 				<div class="modal-body" style="display: block; z-index:1;">
 					<div role="tabpanel">
 						<!-- Nav tabs -->
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation" id="liLogin" ><a href="#uploadTabLogin" aria-controls="uploadTab" role="tab" data-toggle="tab">ĐĂng Nhập</a>
-	
+
 							</li>
 							<li role="presentation" id="liRegister" ><a href="#browseTabLogin" aria-controls="browseTab" role="tab" data-toggle="tab">ĐĂNG KÍ</a>
-	
+
 							</li>
 						</ul>
 						<!-- Tab panes -->
@@ -679,13 +683,13 @@ $("#cartModal").on('show.bs.modal', function(){
 									<input type="password"   required name="password"  class="form-control" ><br>
 									<div id="dangnhap"></div>
 									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
-	
+
 									<p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
-	
-	
-	
+
+
+
 								</p>
-	
+
 								</form></div>
 							<div role="tabpanel" class="tab-pane" id="browseTabLogin"   >
 								<form  id="register" method="post" action="javascrip:void(0)">
@@ -706,13 +710,13 @@ $("#cartModal").on('show.bs.modal', function(){
 									</form>
 							</div>
 						</div>
-	
-	
+
+
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				  
+
 				</div>
 			</div>
 		</div>
@@ -722,10 +726,10 @@ $("#cartModal").on('show.bs.modal', function(){
 <!--modal alert-->
 		<div class="modal fade" id="AlertModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
-        
+
         <div class="modal-body" style=" text-align: center;">
           <p>Some text in the modal.</p>
         </div>
@@ -733,12 +737,12 @@ $("#cartModal").on('show.bs.modal', function(){
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
-  
+
 	</div>
-	
+
 		<div class="modal fade"  id="cartModal" role="dialog" aria-labelledby="exampleModalLabel"  data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -755,10 +759,10 @@ $("#cartModal").on('show.bs.modal', function(){
                      <!--Trường hợp user chưa đăng nhập thao tác với session-->
                     @if(Session::has('cart'))
 						<div class="table table-responsive">
-							<table class="table table-image"> 
+							<table class="table table-image">
                                 <thead>
                                 <tr>
-                                   
+
 									<th scope="col">sản phẩm</th>
 									<th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
@@ -772,12 +776,12 @@ $("#cartModal").on('show.bs.modal', function(){
 									@foreach(Session::get('cart')->items as $product)
 										@if(App\Product::find($product['id']))
 											@if(App\Product::find($product['id'])->status=="1")
-											<tr>		
+											<tr>
 											<td class="image"><img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     		</td>
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
-                                    	
+
 											<td class="price">{{App\Product::find($product['id'])->price}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
@@ -797,12 +801,12 @@ $("#cartModal").on('show.bs.modal', function(){
 											@else
 											<tr class="khonghoatdong" >
 												<td class="image">
-												
+
 													<img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
                                     			</td>
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
-                                    	
+
 												  <td class="price">{{App\Product::find($product['id'])->price}} đ</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
@@ -814,14 +818,14 @@ $("#cartModal").on('show.bs.modal', function(){
                                         	</svg>
                                     		</a>
 											</td>
-											</tr>	
+											</tr>
 											<tr class="khonghoatdong"><td colspan="6">
 										 <span class="badge" >Không hoạt động</span>
 										 </td>
-										
+
 										@endif
 										 @endif
-										 
+
 									@endforeach
 								</tbody>
 							</table>
@@ -846,17 +850,17 @@ $("#cartModal").on('show.bs.modal', function(){
                             </thead>
                                 <tbody>
 									 @foreach($orders->product as $p)
-									
+
 									  @if($p->status=="1")
 									<tr>
-									
+
 										<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
 										<td class="price">{{$p->pivot->price }} đ</td>
-									
-                                      
+
+
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
@@ -873,15 +877,15 @@ $("#cartModal").on('show.bs.modal', function(){
 									   </td>
 									</tr>
 									 @else
-									
+
 									   <tr class="khonghoatdong" >
-									 
+
 										<td class="image">
-											
+
 										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
-                                      
+
 										<td class="price">{{$p->pivot->price }}  đ</td>
                                       	<td class="qty"> </td>
                                     	<td class = "amount"></td>
@@ -900,7 +904,7 @@ $("#cartModal").on('show.bs.modal', function(){
 										</tr>
 										</div>
 										@endif
-									
+
 								  	@endforeach
 								</tbody>
 							</table>
@@ -917,7 +921,7 @@ $("#cartModal").on('show.bs.modal', function(){
 							  <a href="{{url('/cart')}}" style="background: none; color:black;"> <button type="button"  class="btn btn-success" ><b>kiểm tra</b> </button></a>
 
 							</div>
-                </div> 
+                </div>
             </div>
         </div>
 		<footer id="footer"><!--Footer-->
@@ -943,8 +947,8 @@ $("#cartModal").on('show.bs.modal', function(){
 								<h2>Hãng Laptop </h2>
 								@if(isset($category) && $category->count()>0)
 								<ul class="nav nav-pills nav-stacked">
-								
-							
+
+
 									@foreach($category as $c)
 								
 									<li><a onclick="window.localStorage.clear();" href="{{ URL::to('/product/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
@@ -952,7 +956,7 @@ $("#cartModal").on('show.bs.modal', function(){
 									
 								
 									@endforeach
-                                   
+
 								</ul>
 								@endif
 							</div>
@@ -988,7 +992,7 @@ $("#cartModal").on('show.bs.modal', function(){
 
 
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-sm-8">
                             <div class="single-widget">
                                 <h2>Địa Chỉ và Liên Hề</h2>
@@ -1000,7 +1004,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                 </ul>
                             </div>
                         </div>
-                    </div> --}}
+                    </div> 
 
 				</div>
 			</div>

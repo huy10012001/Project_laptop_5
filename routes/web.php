@@ -31,6 +31,7 @@ Route::post('/postLoc', 'UserCartcontroller@loc');
 Route::get('/searchindex', 'UserCartcontroller@index1');
 Route::get('/livesearch', 'UserCartcontroller@livesearch');
 Route::get('/search', 'UserCartcontroller@search');
+Route::get('/search','homeController@search' );
 //trang test gio hang(khong nam trong do an)
 Route::get('/cart', 'UserCartcontroller@cart');
 Route::get('/index', 'homeController@index');
@@ -78,7 +79,7 @@ Route::get('admin/role/update/{id}', 'Adminrolecontroller@update');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('admin/role/postCreate', 'Adminrolecontroller@postCreate');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
-route::post('admin/role/postUpdate/{id}', 'Adminrolecontroller@postUpdate');    
+route::post('admin/role/postUpdate/{id}', 'Adminrolecontroller@postUpdate');
 //User Amin
 Route::get('admin/user/index', 'Adminusercontroller@index');
 Route::get('admin/user/viewRole/{id}', 'Adminusercontroller@update');

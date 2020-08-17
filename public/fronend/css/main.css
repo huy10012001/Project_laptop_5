@@ -12,6 +12,7 @@ body {
 
   position: relative;
   font-weight:400px;
+   background-color:white ;
 }
 
 ul li {
@@ -138,12 +139,12 @@ a#scrollUp i{
 }
 
 .header-middle .container .row {
- 
+
   margin-left: 0;
   margin-right: 0;
- 
+
   padding-top: 25px;
- 
+
 }
 
 .header-middle .container .row .col-sm-4{
@@ -2380,7 +2381,7 @@ h2.title {
 }
 
 .btn.btn-primary {
-  background:#FE980F;
+  background:#5dc1ec;
   border: 0 none;
   border-radius: 0;
   margin-top: 16px;
@@ -2507,5 +2508,25 @@ h2.title {
 .contact-info .social-networks ul li a:hover{
   color: #FE980F;
 }
+
+.card{
+    margin-bottom: 50px;
+    flex-direction: column;
+    border-radius: 6px;
+
+
+}
+.box{
+border-bottom: solid;
+padding: 5px;
+margin-bottom: 0;
+
+}
+.category{
+    padding: 10px;
+    padding-left: 5px;
+
+}
+
 
 
