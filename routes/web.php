@@ -5,6 +5,7 @@ use App\Http\Controllers\homeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Middleware\ClearFromAttributes;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -133,9 +134,9 @@ if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 
 
-Route::get('product/{name}','homeController@product');
+Route::get('product/{name}','homeController@product')->middleware(ClearFromAttributes::class);
 
-Route::get('/{name}','homeController@allproduct');
+Route::get('/{name}','homeController@allproduct')->middleware(ClearFromAttributes::class);
 
 
 

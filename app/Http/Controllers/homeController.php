@@ -104,6 +104,8 @@ class homeController extends Controller
     }
     public function allproduct($name,Request $request)
     {
+            $this->middleware(ClearFromAttributes::class)->only('index');
+
             if($name!="product")
                 return \abort('404');
             $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
@@ -149,6 +151,7 @@ class homeController extends Controller
                             $product_record=Product::where(['status'=>"1"])
                             ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
                         break;
+                       
                         }
                         if(isset($product_record))
                             $collect_product=$collect_product->merge($product_record);
@@ -246,6 +249,8 @@ class homeController extends Controller
     }
     public function product ($name,Request $request)
     { 
+        $this->middleware(ClearFromAttributes::class)->only('index');
+
         $name=str_replace("-", " ", $name);
         //Tìm tên danh mục trước
         $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()

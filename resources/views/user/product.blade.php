@@ -12,10 +12,6 @@ function onClickBox() {
 }
 
 $(document).ready(function() {
-
-    
-   
-    
     if(localStorage.getItem('mySelectLocalstorageValue'))
     {
         var x=localStorage.getItem('mySelectLocalstorageValue');
@@ -294,7 +290,7 @@ $('#form_product').submit(function(e)
                     </div>
                 </div>
             </div>
-    <form    id="form_product"  method="get">
+    <form    id="form_product"   method="get">
     <label for="cars">Sắp xếp:</label>
 
     <select name="orderby" id="orderBy">
