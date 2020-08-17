@@ -153,7 +153,7 @@ class homeController extends Controller
                         array_push($p,$c_p->product_id);
                     }
                    
-                    if($prices[0]!="tất-cả")
+                    if(in_array("tất-cả",$prices))
                    $product=$product->whereIn('product_id', $p);
                    
                 }
@@ -309,7 +309,7 @@ class homeController extends Controller
                     array_push($p,$c_p->product_id);
                 }
                
-               if($prices[0]!="tất-cả")
+                if(!in_array("tất-cả",$prices))
                  $product=$product->whereIn('product_id', $p);
                
             }
