@@ -100,6 +100,7 @@
 </head><!--/head-->
 
 <script type="text/javascript">
+
 //load lại trang khi user bấm back
 if(!!window.performance && window.performance.navigation.type === 2)
 {
@@ -246,11 +247,29 @@ function AddCart(product_id)
 }
 
 
-$(document).ready(function()
-{ 
 
+$(document).click(function (e)
+{
+    // Đối tượng container chứa popup
+	var container = $('.search');
+ 
+    // Nếu click bên ngoài đối tượng container thì ẩn nó đi
+    if (!container.is(e.target) && container.has(e.target).length === 0)
+    {
+        container.find('table').hide();
+    }
+});
+$(document).ready(function()
+{ 	
+	$('.textsearch').on('mouseup',function(){
+		if($('.resultsearch tbody').text()!="")
+		{
+			$('.resultsearch').show();
+		}
+	})
 	 $('.textsearch').on('keyup',function(){
 	 
+		
                 $value = $(this).val();
 				
                 $.ajax({
@@ -269,12 +288,13 @@ $(document).ready(function()
                     success:function(data){
 						console.log(data);
 						if(data.status!="")
-						{$('.resultsearch').show();
+						{
+							$('.resultsearch').show();
 						$('.resultsearch tbody').html(data.status);
 						}
                     }
                 });
-            })
+        })
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 	
 	$("#loginModal").on('hide.bs.modal', function(){
@@ -298,6 +318,8 @@ $(document).ready(function()
 		window.location.href = "/search?keyword="+x;
            
     });
+	//mouse up search
+	
     //đăng nhập và đăng ký
     $('#login').submit(function(e)
     {
@@ -439,7 +461,7 @@ $("#cartModal").on('show.bs.modal', function(){
                     		<a href=""><img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px"></a>
                 	</div>
                 	<div class="col-sm-6" >
-                    		<div  class="search">
+                    		<div  class="search" style="position: relative;">
 							<form id="search"   method="get" >
 							{{csrf_field()}}
                          	 	<input style="float:left;width:80%;height:40px" type="text" placeholder=" tìm kiếm sản phẩm mà bạn mong muốn.." name="search" class="textsearch">
@@ -447,7 +469,7 @@ $("#cartModal").on('show.bs.modal', function(){
 								
 							</form>
 						
-							<table hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
+							<table  style="position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
                                 <thead>
                                     <tr>
 
@@ -458,11 +480,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                         <th>Gía</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-								
-                                   
-                               
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                       		</div>
 					</div>

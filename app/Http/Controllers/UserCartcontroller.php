@@ -69,7 +69,8 @@ class UserCartcontroller extends Controller
                    <td>' . $product->price . 'đ </td>
                    </tr>';
               }
-           
+           if($products->count()==0)
+              $output="";
               return Response::json(array(
                 'status'=>$output
               

@@ -178,7 +178,18 @@ $(document).ready(function() {
 
     
     </script>
-   
+    <form action="">
+    <label for="cars">Sắp xếp:</label>
+
+<select name="orderby" id="orderBy">
+
+<option  value="default">Mặc định</option>
+
+<option value="asc">Tăng dần</option>
+<option value="desc">Giảm dần</option>
+
+</select>
+</form>
 @if(isset($c->name))
 <input type="hidden" class="current_tenhang" value="{{$c->name}}">
 @endif
@@ -261,16 +272,11 @@ $(document).ready(function() {
                 </div>
             </div>
     <form    id="form_product"   method="get">
-    <label for="cars">Sắp xếp:</label>
-
-    <select name="orderby" id="orderBy">
+   
+<a value="default">Mặc định</option>
   
-  <option  value="default">Mặc định</option>
-  
-  <option value="asc">Tăng dần</option>
-  <option value="desc">Giảm dần</option>
-  
-</select>
+  <a  href="{{request()->fullUrlWithQuery(['orderBy'=>'asc'])}}">Tăng dần</a>
+  <a    href="{{request()->fullUrlWithQuery(['orderBy'=>'desc'])}}">giảm dần</a>
    @if(isset($all_category))
   
    <label for="sapxep">Tên hãng </label></br>
