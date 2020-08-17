@@ -1,10 +1,15 @@
 @extends('layout_home')
 @section( 'search')
 <script>
-   
+   function macDinh()
+   {
+       var x=$("#keyword").val();
+      window.location.href = "/search?keyword="+x;
+   }
 </script>
 @if($product->count()>0)
 <div class="container" style="background: rgb(255, 255, 255);">
+<input type="hidden" id="keyword" value="{{$keyword}}">
 <div class="col-sm-12">
     <h5>tìm thấy sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
 </div>
@@ -15,7 +20,7 @@
     </div>
 
 <div class="col-sm-12">
-<a>Mặc định</option>
+<a  onclick="macDinh()">Mặc định</option>
 <a  href="{{request()->fullUrlWithQuery(['orderBy'=>'asc'])}}">Tăng dần</a>
 <a    href="{{request()->fullUrlWithQuery(['orderBy'=>'desc'])}}">giảm dần</a>
 @foreach($product as $p)
