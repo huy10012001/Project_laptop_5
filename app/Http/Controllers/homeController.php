@@ -236,9 +236,10 @@ class homeController extends Controller
                             break;     
                     }
                 }
-                if($flag==true)
+             
+                if($flag==true||count($request->all())==0)
                     $product=$product->paginate(6);
-                else 
+                elseif(count($request->all())>0)
                     $product=[];
                 return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
            
