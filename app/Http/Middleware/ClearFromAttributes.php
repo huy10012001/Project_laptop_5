@@ -83,17 +83,17 @@ class ClearFromAttributes
         {  
            
               $tenhang= $_GET['tenhang'];
-         
-                if(in_array("tất-cả",$tenhang) || count($tenhang)=="1")
+            
+                if(in_array("tất-cả",$tenhang) ||(count($tenhang)=="1"&&basename(url()->current())!="product"))
                 { 
                   //array_push($expect,$request->tenhang);
-             
+                
                 if(count($request->all())=="1")
-                    return redirect()->to(url()->current());
+                  return redirect()->to(url()->current());
                 else
                     return redirect()->to(url()->current().'?'.(http_build_query($request->except("tenhang"))));
                 }
-            
+             
         }   
        
       

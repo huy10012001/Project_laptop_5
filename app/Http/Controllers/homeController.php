@@ -90,7 +90,7 @@ class homeController extends Controller
     public function allproduct($name,Request $request)
     {
            
-
+         //dd(count($request->all()));
             if($name!="product")
                 return \abort('404');
             $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
