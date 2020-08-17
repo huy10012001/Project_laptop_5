@@ -23,7 +23,7 @@ class ClearFromAttributes
             return redirect()->to(url()->current().'?'.http_build_query($request->except("orderby")));
         }
        
-        if(isset($_GET['price']))
+        if(isset($_GET['price'])&& is_array($_GET['price']))
         {  
           
             $price= $_GET['price'];
@@ -33,17 +33,19 @@ class ClearFromAttributes
                 return redirect()->to(url()->current().'?'.(http_build_query($request->except("price"))));
             }
         } 
-        if(isset($_GET['manhinh']))
+        if(isset($_GET['manhinh'])&& is_array($_GET['manhinh']))
         {  
            
             $manhinh= $_GET['manhinh'];
-            if($manhinh[0]=="tất-cả")
+           
+           if(is_array($manhinh)&&$manhinh[0]=="tất-cả")
             {  
                // array_push($expect,$request->manhinh);
                 return redirect()->to(url()->current().'?'.(http_build_query($request->except("manhinh"))));
             }
+        
         } 
-        if(isset($_GET['cpu']))
+        if(isset($_GET['cpu'])&& is_array($_GET['cpu']))
         {  
            
             $cpu= $_GET['cpu'];
@@ -55,7 +57,7 @@ class ClearFromAttributes
                
             
         } 
-        if(isset($_GET['RAM']))
+        if(isset($_GET['RAM'])&& is_array($_GET['RAM']))
         {  
            
             $ram= $_GET['RAM'];
@@ -65,10 +67,11 @@ class ClearFromAttributes
                return redirect()->to(url()->current().'?'.(http_build_query($request->except("RAM"))));
             }
         } 
-        if(isset($_GET['ocung']))
+        if(isset($_GET['ocung']) && is_array($_GET['ocung']))
         {  
-           
+          
             $ocung= $_GET['ocung'];
+           
             if($ocung[0]=="tất-cả")
             {    
                  //array_push($expect,$request->ocung);
@@ -76,23 +79,21 @@ class ClearFromAttributes
             
             }
         } 
-        if(isset($_GET['tenhang']))
+        if(isset($_GET['tenhang']) && is_array($_GET['tenhang']))
         {  
            
             $tenhang= $_GET['tenhang'];
-            if($tenhang[0]=="tất-cả" || count($tenhang)=="1")
-            { 
+          
+                if($tenhang[0]=="tất-cả" || count($tenhang)=="1")
+                { 
                   //array_push($expect,$request->tenhang);
              
                 if(count($request->all())=="1")
-            return redirect()->to(url()->current());
-           else
-           return redirect()->to(url()->current().'?'.(http_build_query($request->except("tenhang"))));
-            }
-           
-           
-
-           
+                    return redirect()->to(url()->current());
+                else
+                    return redirect()->to(url()->current().'?'.(http_build_query($request->except("tenhang"))));
+                }
+            
         }   
       
       

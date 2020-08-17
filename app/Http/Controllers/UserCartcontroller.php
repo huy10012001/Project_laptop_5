@@ -32,10 +32,7 @@ class UserCartcontroller extends Controller
 
         return view('index', compact('products'));
     }
-    public function loc(Request $request)
-    {
-        
-    }
+ 
     public function search(Request $request)
     {
          $search= $request->query('keyword');
