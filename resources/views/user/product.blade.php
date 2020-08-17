@@ -105,10 +105,7 @@ $(document).ready(function() {
     { 
        
         
-         // alert(new_url);
-       // var regx = "/^[a-z0-9]+$/";
-     //   new_url=url.replace(regx,'');
-       // alert(new_url);
+        
         var hang="";
         $(y).each(function()
         {
@@ -116,11 +113,9 @@ $(document).ready(function() {
                 hang=$(this).val();
                
         });
-       
+      
         $('#form_product').attr('action','/product/'+hang);
-       // new_url=url.replace('=tất-cả','');
-       // alert(new_url);
-       // window.location.replace(new_url);
+     
     }
     if((tatCa==true ||count>1) &&$(this).attr("name")=="tenhang[]")
     { 
@@ -128,25 +123,14 @@ $(document).ready(function() {
      
       
         $('#form_product').attr('action','/product');
-       // new_url=url.replace('=tất-cả','');
-       // alert(new_url);
-       // window.location.replace(new_url);
+       
     }
-   
-    $("#form_product").submit();
+
+        $("#form_product").submit();
 });
 });
 
-$('#form_product').submit(function(e)
-{
-    $('.pop_up').dialog({
-			
-			height:110,
-			width:300,
-			position: "right bottom",
-			});
-     
-});
+
     /*$( "#form_product" ).submit(function( event ) {
 
 
