@@ -53,7 +53,8 @@ class UserCartcontroller extends Controller
        
            
            $output = '';
-           $products=Product::where(['status'=>"1"])
+           if($request->search!="")
+          { $products=Product::where(['status'=>"1"])
            ->join('detail_product','detail_product.product_id','=','product.id') ;
            $products = $products->where('name', 'LIKE', '%' . $request->search . '%')->get();
            
@@ -75,6 +76,7 @@ class UserCartcontroller extends Controller
                 'status'=>$output
               
        )); 
+    }
         }
     }
     public function postDiaChiCheckOut(Request $request)

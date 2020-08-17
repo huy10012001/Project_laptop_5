@@ -267,12 +267,12 @@ $(document).ready(function()
 			$('.resultsearch').show();
 		}
 	})
-	 $('.textsearch').on('keyup',function(){
-	 
-		
-                $value = $(this).val();
-				
-                $.ajax({
+	 $('.textsearch').on('keyup',function()
+	{
+		$value = $(this).val();
+		if($value!="")
+		{
+			 $.ajax({
                     type: 'get',
                     url:  " {{ asset('/livesearch')}}",
                     data: {
@@ -290,11 +290,23 @@ $(document).ready(function()
 						if(data.status!="")
 						{
 							$('.resultsearch').show();
-						$('.resultsearch tbody').html(data.status);
+							$('.resultsearch tbody').html(data.status);
+						}
+						else
+						{
+							$('.resultsearch').hide();
+							$('.resultsearch tbody').html(data.status);
 						}
                     }
-                });
+          
+		        });
+		}
+		else
+		{	$('.resultsearch').hide();
+			$('.resultsearch tbody').html(data.status);
+		}
         })
+	
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 	
 	$("#loginModal").on('hide.bs.modal', function(){
