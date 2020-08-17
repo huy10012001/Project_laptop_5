@@ -102,62 +102,61 @@ class homeController extends Controller
            
            
             //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
-                if($request->price)
-                {
-                  
-                    $prices= $_GET['price'];
-                    $p=[];
-                    $collect_product=new Collection();
-                   
-                    foreach($prices as $price)
-                    {
-                       
-                       switch($price)
-                       {
-                        case "dưới-10-triệu":
-                           
-                          $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
-                          
-                        break;
-                           
-                        case "từ-10-15-triệu":
-                         
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
-                        break;
-                        case "từ-15-20-triệu":  
-                           
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
-                           
-                        break;
-                        case "từ-20-25-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
-                            echo $product_record;
-                        break;
-                        case "trên-25-triệu":
-                            $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
-                        break;
-                       
-                        }
-                        if(isset($product_record))
-                            $collect_product=$collect_product->merge($product_record);
-                    }
-                       
-                    foreach($collect_product as $c_p)
-                     {
-        
-                        array_push($p,$c_p->product_id);
-                    }
-                   
-                    if(in_array("tất-cả",$prices))
-                   $product=$product->whereIn('product_id', $p);
-                   
-                }
+            if($request->price)
+            {
               
+                $prices= $_GET['price'];
+                $p=[];
+                $collect_product=new Collection();
+               
+                foreach($prices as $price)
+                {
+                   
+                   switch($price)
+                   {
+                    case "dưới-10-triệu":
+                      $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
+                      
+                    break;
+                       
+                    case "từ-10-15-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
+                    break;
+                    case "từ-15-20-triệu":
+                       
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                    
+                    break;
+                        
+                    case "từ-20-25-triệu":
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                      
+                    break;
+                    case "trên-25-triệu":
+                        
+                        $product_record=Product::where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
+                    break;
+                    }
+                    if(isset($product_record))
+                        $collect_product=$collect_product->merge($product_record);
+                }
+                   
+                foreach($collect_product as $c_p)
+                 {
+    
+                    array_push($p,$c_p->product_id);
+                }
+               
+                if(!in_array("tất-cả",$prices))
+                 $product=$product->whereIn('product_id', $p);
+               
+            }
+          
                 if($request->tenhang)   
                 {
     
