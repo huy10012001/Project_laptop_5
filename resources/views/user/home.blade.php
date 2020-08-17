@@ -74,8 +74,26 @@
 @section('product')
 <div class="col-sm-9 padding-right">
 
+    <div class="card">
+        <div class="box">
+            <h2>Laptop</h2>
+        </div>
+        <div class="category" >
+
+        <a href=""><img src="{{ ('fronend/images/mac.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/Asus.jpg') }}" alt=""></a>
+       <a href=""> <img src="{{ ('fronend/images/Dell.jpg') }}" alt=""></a>
+      <a href="">  <img src="{{ ('fronend/images/Acer.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
+        <a href=""><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
+      <a href="">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
+
+        </div>
+    </div>
     <div class="features_items"><!--features_items-->
+        <div class="spm">
         <h2 class="title text-center">sản phẩm mới </h2>
+    </div>
         <!--sản phẩm-->
 
 
@@ -102,10 +120,17 @@
                 <li><a href="#"><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
             </ul>
         </div>
-    </div>
 </div>
-</div><!--features_items-->
+    </div>
 
+</div><!--features_items-->
+<div class="spm">
+    <h2 class="title text-center">sản phẩm bán chạy nhất</h2>
+</div>
+
+<div class="spm">
+    <h2 class="title text-center">MacBook </h2>
+</div>
 </div>
 @endsection
 
