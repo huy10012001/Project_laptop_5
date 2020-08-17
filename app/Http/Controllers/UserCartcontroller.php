@@ -60,10 +60,10 @@ class UserCartcontroller extends Controller
            if ($products) {
                 foreach ($products as $key => $product) {
                     $output .= '<tr>
-                    <td  >
-                    <img  height="50px" width="50px" src="images/'.$product->image.'"/>
+                    <td>
+                    <img  height="50px" width="50px"  src="/images/'.$product->image.'"/>
                     </td> 
-                    <td >' . $product->id . '</td>
+                  
                   <td>' . $product->name . '</td>
                   
                    <td>' . $product->price . 'đ </td>

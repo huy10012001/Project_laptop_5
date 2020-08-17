@@ -452,7 +452,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                     <tr>
 
 										<th></th>
-                                        <th>ID</th>
+                                       
                                         <th>Tên sản phẩn</th>
                                        
                                         <th>Gía</th>

@@ -199,8 +199,6 @@ $('#form_product').submit(function(e)
 <input type="hidden" class="current_tenhang" value="{{$c->name}}">
 @endif
 
-
-</div>
     <div class="container">
         <!--tìm theo chi tiết sản phẩm trang home-->
 
@@ -445,7 +443,3 @@ $('#form_product').submit(function(e)
 
 </div>
 </div>
-@section('script')
-
-
-@endsection

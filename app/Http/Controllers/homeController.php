@@ -31,24 +31,9 @@ class homeController extends Controller
     public function index(Request $request){
         
      
-        $product_recordA=Product::where(['status'=>"1"])
-        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',4000000)->get();
-  
-        $product_recordB=Product::where(['status'=>"1"])
-        ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',5000000)->get();
-        $collect_product=$product_recordA->merge($product_recordB);
-        $p=[];
-        foreach($collect_product as $c_p)
-        {
-          
-            array_push($p,$c_p->product_id);
-          
-        }
-        
-        $product= product::whereIn('id', $p);
-        $product=$product->paginate(6);
+        return view('index');
         // $a=array_merge($product_recordA->toArray(),$product_recordB->toArray());
-       return view('user.product', ['product'=>$product]);
+    
     }
 
     public function order(Request $request){
@@ -249,8 +234,7 @@ class homeController extends Controller
     }
     public function product ($name,Request $request)
     { 
-       
-
+      
         $name=str_replace("-", " ", $name);
         //Tìm tên danh mục trước
         $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
