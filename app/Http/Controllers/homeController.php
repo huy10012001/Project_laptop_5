@@ -104,7 +104,7 @@ class homeController extends Controller
     }
     public function allproduct($name,Request $request)
     {
-            $this->middleware(ClearFromAttributes::class)->only('index');
+           
 
             if($name!="product")
                 return \abort('404');
@@ -249,7 +249,7 @@ class homeController extends Controller
     }
     public function product ($name,Request $request)
     { 
-        $this->middleware(ClearFromAttributes::class)->only('index');
+       
 
         $name=str_replace("-", " ", $name);
         //Tìm tên danh mục trước

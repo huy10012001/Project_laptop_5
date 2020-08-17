@@ -104,9 +104,7 @@ $(document).ready(function() {
    if(count==1 && tatCa==false &&$(this).attr("name")=="tenhang[]")
     { 
        
-         var url = window.location.href;
-          url=decodeURIComponent(url);
-          new_url=url.replace('tất-cả','');
+        
          // alert(new_url);
        // var regx = "/^[a-z0-9]+$/";
      //   new_url=url.replace(regx,'');
@@ -138,29 +136,16 @@ $(document).ready(function() {
     $("#form_product").submit();
 });
 });
-/*
+
 $('#form_product').submit(function(e)
 {
-   // e.preventDefault();
-  
-    if(count==1 )
-    { 
-        var url = window.location.href; 
-        
-        var hang="";
-        $(y).each(function()
-        {
-            if($(this).prop('checked')==true)
-                hang=$(this).val();
-               
-        });
-        alert(hang);
-        $('#form_product').attr('action', hang);
-       // new_url=url.replace('=tất-cả','');
-       // alert(new_url);
-       // window.location.replace(new_url);
-    }
-   
+    $('.pop_up').dialog({
+			
+			height:110,
+			width:300,
+			position: "right bottom",
+			});
+     
 });
     /*$( "#form_product" ).submit(function( event ) {
 
@@ -213,6 +198,9 @@ $('#form_product').submit(function(e)
 @if(isset($c->name))
 <input type="hidden" class="current_tenhang" value="{{$c->name}}">
 @endif
+
+
+</div>
     <div class="container">
         <!--tìm theo chi tiết sản phẩm trang home-->
 
