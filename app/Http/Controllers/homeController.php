@@ -115,22 +115,27 @@ class homeController extends Controller
                        switch($price)
                        {
                         case "dưới-10-triệu":
+                           
                           $product_record=Product::where(['status'=>"1"])
                             ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
                           
                         break;
                            
                         case "từ-10-15-triệu":
+                         
                             $product_record=Product::where(['status'=>"1"])
                             ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
                         break;
-                        case "từ-15-20-triệu":
+                        case "từ-15-20-triệu":  
+                           
                             $product_record=Product::where(['status'=>"1"])
                             ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                           
                         break;
                         case "từ-20-25-triệu":
                             $product_record=Product::where(['status'=>"1"])
                             ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                            echo $product_record;
                         break;
                         case "trên-25-triệu":
                             $product_record=Product::where(['status'=>"1"])
@@ -148,7 +153,7 @@ class homeController extends Controller
                         array_push($p,$c_p->product_id);
                     }
                    
-                    if($p!=[]) 
+                    if($prices[0]!="tất-cả")
                    $product=$product->whereIn('product_id', $p);
                    
                 }
@@ -228,7 +233,7 @@ class homeController extends Controller
                 }
              
                 $product=$product->paginate(6);
-              return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
+                return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
            
            
     }
@@ -277,14 +282,19 @@ class homeController extends Controller
                         ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
                     break;
                     case "từ-15-20-triệu":
+                       
                         $product_record=Product::where(['status'=>"1"])
                         ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                    
                     break;
+                        
                     case "từ-20-25-triệu":
                         $product_record=Product::where(['status'=>"1"])
                         ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                      
                     break;
                     case "trên-25-triệu":
+                        
                         $product_record=Product::where(['status'=>"1"])
                         ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
                     break;
@@ -298,8 +308,9 @@ class homeController extends Controller
     
                     array_push($p,$c_p->product_id);
                 }
-                if($p!=[]) 
-               $product=$product->whereIn('product_id', $p);
+               
+               if($prices[0]!="tất-cả")
+                 $product=$product->whereIn('product_id', $p);
                
             }
             if($request->tenhang)   
@@ -386,6 +397,7 @@ class homeController extends Controller
                 }
             }
             $product=$product->paginate(6);
+          
             return view('user.product', ['c'=>$category,'all_category'=>$all_category,'product'=>$product]);
             
         }

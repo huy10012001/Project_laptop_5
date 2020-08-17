@@ -134,9 +134,9 @@ if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 
 
-Route::get('product/{name}','homeController@product')->middleware(ClearFromAttributes::class);
+Route::get('product/{name}','homeController@product');
 
-Route::get('/{name}','homeController@allproduct')->middleware(ClearFromAttributes::class);
+Route::get('/{name}','homeController@allproduct');
 
 
 
