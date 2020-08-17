@@ -30,7 +30,7 @@ Route::post('/postLoc', 'UserCartcontroller@loc');
 //search
 Route::get('/searchindex', 'UserCartcontroller@index1');
 Route::get('/livesearch', 'UserCartcontroller@livesearch');
-Route::get('/search', 'UserCartcontroller@search');
+
 Route::get('/search','homeController@search' );
 //trang test gio hang(khong nam trong do an)
 Route::get('/cart', 'UserCartcontroller@cart');

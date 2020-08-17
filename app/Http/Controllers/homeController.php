@@ -452,8 +452,32 @@ class homeController extends Controller
          return Redirect::Back();
 
     }
-    public function search(){
-        return view('user.veview_search');
+    public function search(Request $request){
+
+        $search= $request->query('keyword');
+        if($search=="")
+        return \abort('404');
+             $product=Product::where(['status'=>"1"])
+       ->join('detail_product','detail_product.product_id','=','product.id') ;
+       $product = $product->where('name', 'LIKE', '%' . $search . '%');
+    
+       if($request->orderBy)
+         {
+           $orderBy=$request->orderBy;
+         
+             switch($orderBy)
+                    {
+                        
+                        case 'asc':
+                            $product=$product->orderBy('price', 'asc');
+                            break;
+                         case 'desc':
+                            $product=$product->orderBy('price', 'desc');
+                            break;     
+                    }
+                }
+        $product=$product->paginate(6);
+        return view('user.veview_search',['product'=>$product,'keyword'=>$search]);
     }
 
 

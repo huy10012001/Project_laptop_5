@@ -277,7 +277,7 @@ $(document).ready(function() {
   
   <a  href="{{request()->fullUrlWithQuery(['orderBy'=>'asc'])}}">Tăng dần</a>
   <a    href="{{request()->fullUrlWithQuery(['orderBy'=>'desc'])}}">giảm dần</a>
-   @if(isset($all_category))
+   @if(isset($all_category)a)
   
    <label for="sapxep">Tên hãng </label></br>
     <input type="checkbox" class="box all"  value="tất-cả"  class="categoryLoc" name="tenhang[]" >

@@ -35,14 +35,7 @@ class UserCartcontroller extends Controller
  
     public function search(Request $request)
     {
-         $search= $request->query('keyword');
-         if($search=="")
-         return \abort('404');
-        $products=Product::where(['status'=>"1"])
-        ->join('detail_product','detail_product.product_id','=','product.id') ;
-        $products = $products->where('name', 'LIKE', '%' . $search . '%');
-        $product=$products->paginate(6);
-        return view('user.product', ['product'=>$product]);
+
     }
 
     public function livesearch(Request $request)

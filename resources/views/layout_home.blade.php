@@ -637,7 +637,7 @@ $("#cartModal").on('show.bs.modal', function(){
 
 					@yield('product_A')
 
-
+					@yield('search')
 					<!--login-->
 					@yield('login')
 					<!--end login-->
