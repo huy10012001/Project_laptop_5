@@ -421,8 +421,9 @@ $(document).ready(function() {
 
 @endforeach 
 </div>
+@if($product!=[])
 <div class="row">{{$product->links()}}</div>
-
+@endif
 @endsection
     </div>
 </div><!--features_items-->

@@ -90,6 +90,7 @@ class homeController extends Controller
     public function allproduct($name,Request $request)
     {
            
+            $flag=false;
          //dd(count($request->all()));
             if($name!="product")
                 return \abort('404');
@@ -104,7 +105,7 @@ class homeController extends Controller
             //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
             if($request->price)
             {
-              
+                $flag=true;
                 $prices= $_GET['price'];
                 $p=[];
                 $collect_product=new Collection();
@@ -160,7 +161,7 @@ class homeController extends Controller
                 if($request->tenhang)   
                 {
     
-                   
+                    $flag=true;
                     $tenhangs= $_GET['tenhang'];
                     $th=[];
                     foreach($tenhangs as $tenhang)
@@ -175,6 +176,7 @@ class homeController extends Controller
                 
                 if($request->manhinh)
                 {
+                    $flag=true;
                     $manhinhs= $_GET['manhinh'];
                     $mh=[];
                     foreach($manhinhs as $manhinh)
@@ -186,6 +188,7 @@ class homeController extends Controller
                 }
                 if($request->cpu)
                 {
+                    $flag=true;
                     $cpu_laptop= $_GET['cpu'];
                     $cpu_arr=[];
                     foreach($cpu_laptop as $cpu)
@@ -197,6 +200,7 @@ class homeController extends Controller
                 }
                 if($request->RAM)
                 {
+                    $flag=true;
                     $ram_laptop= $_GET['RAM'];
                     $ram_arr=[];
                     foreach($ram_laptop as $ram)
@@ -208,6 +212,7 @@ class homeController extends Controller
                 }
                 if($request->ocung)
                 {
+                    $flag=true;
                     $ocung_laptop= $_GET['ocung'];
                     $ocung_arr=[];
                     foreach($ocung_laptop as $ocung)
@@ -219,6 +224,7 @@ class homeController extends Controller
                 }
                 if($request->orderby)
                 {
+                    $flag=true;
                     $orderBy=$request->orderby;
                     switch($orderBy)
                     {
@@ -230,8 +236,10 @@ class homeController extends Controller
                             break;     
                     }
                 }
-             
-                $product=$product->paginate(6);
+                if($flag==true)
+                    $product=$product->paginate(6);
+                else 
+                    $product=[];
                 return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
            
            
