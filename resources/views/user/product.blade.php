@@ -3,62 +3,93 @@
 @extends('layout_home')
 @section( 'dell')
 <script>
+let searchParams = new URLSearchParams(window.location.search);
+searchParams=decodeURIComponent(searchParams);
+function FindparseQuerystring(value){
+    
+    var flag=false;
 
+  
+    if(searchParams!="")
+    {
+        var foo = searchParams.split('&');
+   
+    var dict = {};
+    var elem = [];
+    for (var i = foo.length - 1; i >= 0; i--) {
+        elem = foo[i].split('=');
+           
+         if(elem[1].split('+').join(' ')==value)
+            flag=true;
+    };  
+    if(flag==true)
+        return true;
+    else
+        return false;
+    }
+};
+
+
+
+  
 
 $(document).ready(function() {
-    /*C1:Lưu anchor orderBy
-    $('.sort').click(function(e)
+    $("#show").hide();
+    setTimeout(function(){
+        $('#show').fadeIn('slow');
+    },1000);
+    //Lấy value requesr orderby
+    var valueOrder= $("#orderByR").val();
+    if(valueOrder!="")
     {
-        var x=$(this).text();
-       
-        if(x=="Tăng dần")
-            x="asc";
-        else if(x=="giảm dần")
-            x="desc";
+        if(valueOrder=="asc")
+            valueOrder="giá cao đến thấp";
+        else if(valueOrder=="desc")
+            valueOrder="giá thấp đến cao";
         else
-            x="default";
-        localStorage.setItem('orderBy',x);
-    });
-    if(localStorage.getItem('orderBy'))
-    {
-         var x=localStorage.getItem('orderBy');
-       
-        $("#orderByR").val(x);
-      
-    }*/
-    /*C2:Lấy giá trị selected orderBy
-    
-    $("#orderBy").change(function()
-    { 
-        localStorage.setItem('mySelectLocalstorageValue', $(this).val());
-        
-        $("#form_product").submit();
-       
-    });
-    
-    if(localStorage.getItem('mySelectLocalstorageValue'))
-    {
-        var x=localStorage.getItem('mySelectLocalstorageValue');
-        $("#orderBy").val(x);
-    }*/
-    $("#form_product input").each(function(){
-        var x =($(this).attr('name'));
-        if(this.value=="tất-cả" && x!="tenhang[]" )
+            valueOrder="Laptop mới nhất";
+        $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
+    }
+    //checked những input có value-tất cả
+   $("#form_product input").each(function(){
+   
+        if(this.value=="tất-cả" )
          $(this).prop('checked',true);
     });
-    //checked những hãng với url hiện tại
-    if(!localStorage.getItem('checked'))
-    {
-        var hang=$('.current_tenhang').val();
-        $('input[name^="tenhang"]').each(function(){
+   //checked tên hãng hiện tại
 
-            if(this.value==hang)
+    var hang=$('.current_tenhang').val();
+    $('input[name^="tenhang"]').each(function(){
+        var haveHang=false;
+        if(this.value==hang)
+        {
             $(this).prop('checked',true);
-         });
-    }
-    var arr = JSON.parse(localStorage.getItem('checked')) || [];
-    arr.forEach(function(checked, i) {
-    $('.box').eq(i).prop('checked', checked);
+            haveHang==true;
+        }
+    });
+    //checked những value input request 
+    $("#form_product input").each(function(){
+      
+        if(FindparseQuerystring($(this).val())==true)
+           $(this).prop('checked',true);
+    });
+    //nếu input cùng tên có value khác tất-cả thì checked tất-cả return false
+    $("#form_product input").each(function(){
+        if($(this).val()=="tất-cả")
+        {
+            var array_name = $(this).attr("name");
+            array_name=array_name.replace('[]','');
+            var y=$("[name^="+array_name+"]");
+            //lấy những input cùng tên với input this
+            var otherChecked=false;
+            //Check xem trong input cùng tên ấy có value nào khác value tất-cả
+            $(y).each(function(){
+                if($(this).val()!="tất-cả" && $(this).prop('checked')==true)
+                otherChecked=true;
+            });
+            if(otherChecked==true)
+                $(this).prop('checked',false);
+        }
   });
     //form thay đổi input
     $("#form_product input").change(function(){
@@ -152,7 +183,7 @@ $("#form_product").on('submit',function(e){
 });
 
 </script>
-  
+
 @if(isset($c->name))
 <input type="hidden" class="current_tenhang" value="{{$c->name}}">
 @endif
@@ -260,10 +291,10 @@ $("#form_product").on('submit',function(e){
      <input type="checkbox"   class="box" value="SSD 128 GB" name="ocung[]" >
      <label for="sapxep" >SSD 128 GB</label>  <br/>
      @if(isset($requestorderby))
-     <input type="text" id="orderByR" value="{{$requestorderby}}" name="orderby"> 
+     <input type="hidden" id="orderByR" value="{{$requestorderby}}" name="orderby"> 
       
     @else
-    <input type="text" id="orderByR"  name="orderby"> 
+    <input type="hidden" id="orderByR"  name="orderby"> 
     @endif
   </form>
 </select>
@@ -275,7 +306,7 @@ $("#form_product").on('submit',function(e){
     </div>
 </div>
 
-<div class="col-sm-9 padding-right">
+<div class="col-sm-9 padding-right" id="show">
 
     <div class="features_items"><!--features_items-->
 
@@ -285,7 +316,7 @@ $("#form_product").on('submit',function(e){
         
             <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
                 <div class="dropdown" style=" float:right;">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
+                    <button  id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                     <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>

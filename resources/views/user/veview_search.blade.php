@@ -6,21 +6,38 @@
        var x=$("#keyword").val();
       window.location.href = "/search?keyword="+x;
    }
-    $('.filterForm').on('submit',function(e){
-            e.preventDefault();
-            var formData=$(this).serialize();
-            var fullUrl = window.location.href;
-            var finalUrl = fullUrl+"&"+formData;
-          //  window.location.href = finalUrl;
-    })
+   $(document).ready(function() {
+    $("#show").hide();
+    setTimeout(function(){
+        $('#show').fadeIn('slow');
+    },500);
+    var valueOrder= $("#orderByR").val();
+    console.log(valueOrder);
+    if(valueOrder!="")
+    {
+        if(valueOrder=="asc")
+            valueOrder="giá cao đến thấp";
+        else if(valueOrder=="desc")
+            valueOrder="giá thấp đến cao";
+        else
+            valueOrder="Laptop mới nhất";
+        $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
+    }
+   });
 </script>
+
 @if($product->count()>0)
 <div class="container" style="background: rgb(255, 255, 255);">
 <input type="hidden" id="keyword" value="{{$keyword}}">
+@if(isset($requestorderby))
+    <input type="hidden" id="orderByR" value="{{$requestorderby}}" name="orderby"> 
+@else
+<input type="hidden" id="orderByR"  name="orderby"> 
+@endif
 <div class="col-sm-12">
     <h5>tìm thấy sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
 </div>
-<div class="row">
+<div class="row" id="show" >
     <div class="col-sm-12" style="  font-size: 20px;">
        <p>Sản Phẩm</p>
 
@@ -29,7 +46,7 @@
         
         <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
             <div class="dropdown" style=" float:right;">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
+                <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                 <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>
@@ -43,11 +60,6 @@
         </div>
 
 @foreach($product as $p)
-
-
-
-
-
 <div class="col-sm-3">
 
     <div class="product-image-wrapper">

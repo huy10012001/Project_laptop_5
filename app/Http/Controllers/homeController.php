@@ -490,12 +490,13 @@ class homeController extends Controller
                             break;  
                         case 'new':
                                 $product=$product->orderBy('product_id', 'desc');
-                            
+                              
                             break;    
                     }
                 }
         $product=$product->paginate(6);
-        return view('user.veview_search',['product'=>$product->appends($request->except('page')),'keyword'=>$search]);
+        $requestOrder=$request->orderby;
+        return view('user.veview_search',['requestorderby'=>$requestOrder,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
     }
 
 
