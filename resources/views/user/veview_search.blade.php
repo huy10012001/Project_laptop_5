@@ -6,14 +6,19 @@
        var x=$("#keyword").val();
       window.location.href = "/search?keyword="+x;
    }
-    $('.filterForm').on('submit',function(e){
+   $(document).ready(function()
+{ 	
+    $("#filterForm").on('submit',function(e){
             e.preventDefault();
             var formData=$(this).serialize();
+            
             var fullUrl = window.location.href;
             var finalUrl = fullUrl+"&"+formData;
-          //  window.location.href = finalUrl;
+            alert(finalUrl);
+           // window.location.href = finalUrl;
 
     })
+})
 </script>
 @if($product->count()>0)
 <div class="container" style="background: rgb(255, 255, 255);">
@@ -26,7 +31,7 @@
        <p>Sản Phẩm</p>
 
     </div>
-<form class="filterForm" >
+<form id="filterForm" >
   <label for="cars">Choose a car:</label>
   <select name="cars" id="cars">
     <option value="volvo">Volvo</option>

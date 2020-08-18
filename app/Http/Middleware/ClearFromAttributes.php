@@ -20,8 +20,12 @@ class ClearFromAttributes
         if ($request->orderby=="default") {
           // array_push($expect,$request->orderby);
            
-            return redirect()->to(url()->current().'?'.http_build_query($request->except("orderby")));
+          if(count($request->all())=="1")
+          return redirect()->to(url()->current());
+        else
+            return redirect()->to(url()->current().'?'.(http_build_query($request->except("orderby"))));
         }
+      
        
         if($request->price)
         {  

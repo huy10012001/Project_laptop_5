@@ -402,6 +402,7 @@ class homeController extends Controller
                      case 'desc':
                         $product=$product->orderBy('price', 'desc');
                         break;     
+                    
                 }
             }
             $product=$product->paginate(6);
