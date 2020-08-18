@@ -266,7 +266,8 @@ $(document).click(function (e)
 $(document).ready(function()
 { 	
 	$('.textsearch').on('mouseup',function(){
-		if($('.resultsearch tbody').text()!="")
+		console.log($('.resultsearch').text());
+		if($('.resultsearch').text()!="")
 		{
 			$('.resultsearch').show();
 		}
@@ -294,12 +295,12 @@ $(document).ready(function()
 						if(data.status!="")
 						{
 							$('.resultsearch').show();
-							$('.resultsearch tbody').html(data.status);
+							$('.resultsearch').html(data.status);
 						}
 						else
 						{
 							$('.resultsearch').hide();
-							$('.resultsearch tbody').html(data.status);
+							$('.resultsearch').html(data.status);
 						}
                     }
           
@@ -307,7 +308,7 @@ $(document).ready(function()
 		}
 		else
 		{	$('.resultsearch').hide();
-			$('.resultsearch tbody').html(data.status);
+			$('.resultsearch').html("");
 		}
         })
 	
@@ -485,18 +486,9 @@ $("#cartModal").on('show.bs.modal', function(){
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
 							</form>
 						
-							<table  style="background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
-                                <thead>
-                                    <tr>
-                                        <th></th>
+							<table  style="border:none ;background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
 
-										<th></th>
-                                       
-                                        <th>Tên sản phẩn</th>
-                                        <th>Gía</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
+                               
                             </table>
                       		</div>
 					</div>

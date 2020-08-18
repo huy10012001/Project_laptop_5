@@ -6,6 +6,14 @@
        var x=$("#keyword").val();
       window.location.href = "/search?keyword="+x;
    }
+    $('.filterForm').on('submit',function(e){
+            e.preventDefault();
+            var formData=$(this).serialize();
+            var fullUrl = window.location.href;
+            var finalUrl = fullUrl+"&"+formData;
+          //  window.location.href = finalUrl;
+
+    })
 </script>
 @if($product->count()>0)
 <div class="container" style="background: rgb(255, 255, 255);">
@@ -18,7 +26,17 @@
        <p>Sản Phẩm</p>
 
     </div>
-
+<form class="filterForm" >
+  <label for="cars">Choose a car:</label>
+  <select name="cars" id="cars">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+  </select>
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
 <div class="col-sm-12">
 <a  onclick="macDinh()">Mặc định</option>
 <a  href="{{request()->fullUrlWithQuery(['orderBy'=>'asc'])}}">Tăng dần</a>

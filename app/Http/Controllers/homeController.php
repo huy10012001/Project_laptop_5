@@ -236,7 +236,7 @@ class homeController extends Controller
                             break;     
                     }
                 }
-             
+                    
                 if($flag==true||count($request->all())==0)
                     $product=$product->paginate(6);
                 elseif(count($request->all())>0)
