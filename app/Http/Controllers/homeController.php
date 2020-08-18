@@ -234,10 +234,13 @@ class homeController extends Controller
                             break;        
                     }
                 }
-                    
+                if($request->page)
+                {
+                    $flag=true;
+                }
                 if($flag==true||count($request->all())==0)
                  {
-                    $product=$product->paginate(1);
+                    $product=$product->paginate(6);
                     $requestOrder=$request->orderby;
                     return view('user.product', ['requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
                  }
