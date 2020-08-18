@@ -137,10 +137,7 @@ $(document).ready(function() {
          });
     }
     //lưu những checked
-   var arr = $('.box').map(function() {
-    return this.checked;
-  }).get();
-   localStorage.setItem("checked", JSON.stringify(arr));
+   
     
     //nếu input tenhang có 1 hãng và không phải tất cả
     if(count==1 && tatCa==false &&$(this).attr("name")=="tenhang[]")
@@ -312,6 +309,7 @@ $("#form_product").on('submit',function(e){
 
         <h2 class="title text-center">sản phẩm laptop </h2>
         <!--sản phẩm-->
+        @if(isset($product) && $product->count()>0)
         <div class="sort" >
         
             <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
@@ -382,10 +380,14 @@ $("#form_product").on('submit',function(e){
 
 </div>
 
-@endforeach
+
 </div>
-@if($product!=[])
+@endforeach
+
+
 <div class="row">{{$product->links()}}</div>
+@else
+không tìm thấy items
 @endif
 
     </div>

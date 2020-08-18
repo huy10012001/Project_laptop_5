@@ -236,13 +236,16 @@ class homeController extends Controller
                 }
                     
                 if($flag==true||count($request->all())==0)
-                    $product=$product->paginate(6);
-                elseif(count($request->all())>0)
-                    $product=[];
-                $requestOrder=$request->orderby;
+                 {
+                    $product=$product->paginate(1);
+                    $requestOrder=$request->orderby;
                     return view('user.product', ['requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
-               
-
+                 }
+                elseif(count($request->all())>0)
+                {
+                  //  $product=[];
+                    return view('user.product', ['all_category'=>$all_category]);
+                }
            
     }
     public function product ($name,Request $request)
