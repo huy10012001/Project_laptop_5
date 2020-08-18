@@ -6,19 +6,13 @@
        var x=$("#keyword").val();
       window.location.href = "/search?keyword="+x;
    }
-   $(document).ready(function()
-{ 	
-    $("#filterForm").on('submit',function(e){
+    $('.filterForm').on('submit',function(e){
             e.preventDefault();
             var formData=$(this).serialize();
-            
             var fullUrl = window.location.href;
             var finalUrl = fullUrl+"&"+formData;
-            alert(finalUrl);
-           // window.location.href = finalUrl;
-
+          //  window.location.href = finalUrl;
     })
-})
 </script>
 @if($product->count()>0)
 <div class="container" style="background: rgb(255, 255, 255);">
@@ -31,31 +25,33 @@
        <p>Sản Phẩm</p>
 
     </div>
-<form id="filterForm" >
-  <label for="cars">Choose a car:</label>
-  <select name="cars" id="cars">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="opel">Opel</option>
-    <option value="audi">Audi</option>
-  </select>
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
-<div class="col-sm-12">
-<a  onclick="macDinh()">Mặc định</option>
-<a  href="{{request()->fullUrlWithQuery(['orderBy'=>'asc'])}}">Tăng dần</a>
-<a    href="{{request()->fullUrlWithQuery(['orderBy'=>'desc'])}}">giảm dần</a>
+    <div class="sort" >
+        
+        <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
+            <div class="dropdown" style=" float:right;">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>
+                <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá cao đến thấp</a></a></li>
+                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá thấp đến cao</a></li>
+                <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
+   
+              
+                </ul>
+              </div>
+        </div>
+
 @foreach($product as $p)
 
-   
+
 
 
 
 <div class="col-sm-3">
 
     <div class="product-image-wrapper">
-         
+
         <div class="single-products">
                 <div class="productinfo text-center">
                     <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
@@ -70,9 +66,9 @@
                         <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>
                 </div>
-                
+
         </div>
-        
+
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
@@ -80,10 +76,10 @@
             </ul>
         </div>
     </div>
-   
+
 </div>
 
-@endforeach 
+@endforeach
 </div>
 @else
 không tìm thấy sản phẩm cho từ khóa {{$keyword}}

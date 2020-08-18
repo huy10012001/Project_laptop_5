@@ -28,13 +28,7 @@ class homeController extends Controller
     }
    
     
-    public function index(Request $request){
-        
-     
-        return view('index');
-        // $a=array_merge($product_recordA->toArray(),$product_recordB->toArray());
     
-    }
 
     public function order(Request $request){
 
@@ -233,7 +227,11 @@ class homeController extends Controller
                             break;
                          case 'desc':
                             $product=$product->orderBy('price', 'desc');
-                            break;     
+                            break;   
+                        case 'new':
+                            $product=$product->orderBy('product_id', 'desc');
+                           
+                            break;        
                     }
                 }
                     
@@ -241,8 +239,10 @@ class homeController extends Controller
                     $product=$product->paginate(6);
                 elseif(count($request->all())>0)
                     $product=[];
-                return view('user.product', ['all_category'=>$all_category,'product'=>$product]);
-           
+                $requestOrder=$request->orderby;
+                    return view('user.product', ['requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
+               
+
            
     }
     public function product ($name,Request $request)
@@ -402,12 +402,16 @@ class homeController extends Controller
                      case 'desc':
                         $product=$product->orderBy('price', 'desc');
                         break;     
-                    
+                    case 'new':
+                         $product=$product->orderBy('product_id', 'desc');
+                       
+                        break;   
                 }
             }
             $product=$product->paginate(6);
-          
-            return view('user.product', ['c'=>$category,'all_category'=>$all_category,'product'=>$product]);
+            $requestOrder=$request->orderby;
+           
+            return view('user.product', ['requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
             
         }
         else
@@ -470,11 +474,11 @@ class homeController extends Controller
              $product=Product::where(['status'=>"1"])
        ->join('detail_product','detail_product.product_id','=','product.id') ;
        $product = $product->where('name', 'LIKE', '%' . $search . '%');
-    
-       if($request->orderBy)
+      
+       if($request->orderby)
          {
-           $orderBy=$request->orderBy;
-         
+           $orderBy=$request->orderby;
+           
              switch($orderBy)
                     {
                         
@@ -483,11 +487,15 @@ class homeController extends Controller
                             break;
                          case 'desc':
                             $product=$product->orderBy('price', 'desc');
-                            break;     
+                            break;  
+                        case 'new':
+                                $product=$product->orderBy('product_id', 'desc');
+                            
+                            break;    
                     }
                 }
         $product=$product->paginate(6);
-        return view('user.veview_search',['product'=>$product,'keyword'=>$search]);
+        return view('user.veview_search',['product'=>$product->appends($request->except('page')),'keyword'=>$search]);
     }
 
 

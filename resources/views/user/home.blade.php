@@ -72,7 +72,8 @@
 
 <!--product trang home-->
 @section('product')
-<div class="col-sm-9 padding-right">
+
+<div class="col-sm-12 padding-right">
 
     <div class="card">
         <div class="box">
@@ -90,14 +91,14 @@
 
         </div>
     </div>
-    <div class="features_items"><!--features_items-->
+        <div class="features_items"><!--features_items-->
         <div class="spm">
         <h2 class="title text-center">sản phẩm mới </h2> <br>
-    </div>
+        </div>
         <!--sản phẩm-->
-        <div class="sort">
-            <div class="col-sm-12" style="background: rgb(245, 244, 244); margin-top:-10px;">
-                <div class="dropdown" style=" margin-left: 750px;">
+        <div class="sort" >
+            <div class="col-sm-12" style="background: rgb(245, 244, 244); margin-top:-10px; ">
+                <div class="dropdown" style="float:right;padding-right:40px">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu">
@@ -116,7 +117,7 @@
         </div>
 
 
-<div class="col-sm-4">
+<div class="col-sm-3">
     <div class="product-image-wrapper">
         <div class="single-products">
                 <div class="productinfo text-center">
@@ -154,86 +155,3 @@
 @endsection
 
 <!--tìm theo chi tiết sản phẩm trang home-->
-
-@section( 'detail_home')
-<div class="col-sm-3">
-    <div class="left-sidebar">
-        <h2>loại sản phẩm</h2>
-        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            Dòng máy
-                        </a>
-                    </h4>
-                </div>
-                <div id="sportswear" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>
-                            <li><a href="#">ASUS </a></li>
-                            <li><a href="#">DELL</a></li>
-                            <li><a href="#">MacBook </a></li>
-                            <li><a href="#">HP</a></li>
-                            <li><a href="#">Huawei </a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordian" href="#mens">
-                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            Loại máy
-                        </a>
-                    </h4>
-                </div>
-                <div id="mens" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>
-                            <li><a href="#">laptop Văn phòng</a></li>
-                            <li><a href="#">Đồ Họa</a></li>
-                            <li><a href="#"></a>Gameming</li>
-                            <li><a href="#">máy nhân viên IT</a></li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordian" href="#womens">
-                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            Rom-Ram
-                        </a>
-                    </h4>
-                </div>
-                <div id="womens" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>
-                            <li><a href="#">4gb-256gb</a></li>
-                            <li><a href="#">4gd-1TB</a></li>
-                            <li><a href="#">Valentino</a></li>
-                            <li><a href="#">Dior</a></li>
-                            <li><a href="#">Versace</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div><!--/category-products-->
-
-
-
-
-    </div>
-</div>
-@endsection
-
-
-
-
