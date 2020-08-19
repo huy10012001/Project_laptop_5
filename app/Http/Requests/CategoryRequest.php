@@ -25,9 +25,10 @@ class CategoryRequest extends FormRequest
     {
         $id = $this->route('id');
         return [
-            'name' => 'required|string|min:3|max:40',
-            'name' =>'unique:product', 'unique:category,name,{$id},id',
+        
+            
            
+            'name' =>"required|string|min:3|max:40|unique:product,name|unique:category,name,{$id},id",
             //
         ];
         
