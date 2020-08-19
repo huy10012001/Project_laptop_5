@@ -29,8 +29,10 @@ class ProductRequest extends FormRequest
             
             //            'email' => 'required|email|unique:users',
            
-            'name' => 'unique:product,name,{$id},id',
+          
+            'name' => "unique:product,name,{$id},id",
             'name' => 'unique:category|required|string|min:3|max:180',
+            
             'price' => 'required|integer|min:1000000|max:300000000',
             'category'=> 'required',
             'image' => 'file|image|mimes:jpeg,png,jpg|max:10240,image',

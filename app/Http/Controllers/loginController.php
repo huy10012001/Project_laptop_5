@@ -12,6 +12,10 @@ use App\order_product;
 use App\Product;
 use App\User;
 use Illuminate\Support\Facades\Response;
+use App\Http\Requests\register;
+use App\Http\Requests\registerRequest;
+use App\Http\Requests\RoleRequest;
+use App\Http\Requests\ProductRequest;
 class loginController extends Controller
 {
     //
@@ -112,15 +116,35 @@ class loginController extends Controller
        // $request->session()->forget('cart');
        
     }
-    public function postRegisterCheckOut(Request $request)
+    public function checkValidate(Request $request)
+    {
+        $email=$request->email;
+        
+        $checkemail=User::where(['email'=>$email])->first();
+        if(!empty($checkemail))
+          echo "false";
+        else
+            echo "true";die;
+    }
+    public function postRegister(ProductRequest  $request)
+    {
+        
+      //  $validation=$request->all();
+       
+        
+    }
+    public function postRegisterCheckOut(registerRequest   $request)
     {
          
        
         $name = $request->input('name');
         $phone=$request->input('SĐT');
         $email = $request->input('email');
+       
         $Password=$request->input('password');
         $address=$request->input('address');
+      
+      
         $user=new User();
         
         $user->name=$name;

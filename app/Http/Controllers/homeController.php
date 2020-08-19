@@ -22,9 +22,9 @@ use League\CommonMark\Util\ArrayCollection;
 class homeController extends Controller
 {
     
-    public function detail(Request $request){
+    public function index(Request $request){
 
-        return view('detail');
+        return view('index');
     }
    
     
@@ -236,8 +236,8 @@ class homeController extends Controller
                 }
                 if($request->page)
                 {
-                    $flag=true;
-                }
+                    
+                                }
                 if($flag==true||count($request->all())==0)
                  {
                     $product=$product->paginate(6);

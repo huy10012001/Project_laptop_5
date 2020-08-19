@@ -25,9 +25,9 @@ class CategoryRequest extends FormRequest
     {
         $id = $this->route('id');
         return [
-            
             'name' => 'required|string|min:3|max:40',
             'name' =>'unique:product', 'unique:category,name,{$id},id',
+           
             //
         ];
         
@@ -36,8 +36,9 @@ class CategoryRequest extends FormRequest
     {
         return [
 //            'email.required' => 'Email is required!',
+            'name.unique'=> 'Tên sản phẩm hoặc tên danh mục đã tồn tại!',
             'name.required' => 'Tên cần nhập',
-            'name.unique' => 'Tên danh mục hoặc sản phẩm đã tồn tại',
+            
             'name.min' => 'Tên danh mục  quá ngắn',
         'name.max' => 'Tên danh mục quá dài',
          

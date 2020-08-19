@@ -2,6 +2,7 @@
 <?php
 
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\loginController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -21,6 +22,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 //trang front end
+//test index
+Route::post('postRegister','loginController@postRegister');
 Route::get('/checkout','homeController@checkout');
 Route::get('/home','homeController@home' );
 Route::get('/contact','homeController@contact' );
@@ -28,7 +31,7 @@ Route::get('/contact','homeController@contact' );
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLoc', 'UserCartcontroller@loc');
 //search
-
+route::match(['GET','POST'],'/checkValidate','loginController@checkValidate');
 Route::get('/livesearch', 'UserCartcontroller@livesearch');
 
 Route::get('/search','homeController@search' )->middleware(ClearFromAttributes::class);;
@@ -115,13 +118,12 @@ Route::get('/isDangNhap','loginController@checkDangNhap');
 //detail
 
 
-if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
-Route::post('/postLogin', 'loginController@postLogin');
+
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postLoginCheckOut', 'loginController@postLoginCheckOut');
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postRegisterCheckOut', 'loginController@postRegisterCheckOut');
-;
+
 //Route::get('/cart/{id}','Admincontroller@addCart' );
 
 
