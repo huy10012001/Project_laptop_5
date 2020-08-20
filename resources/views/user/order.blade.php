@@ -273,7 +273,7 @@ if(performance.navigation.type == 2){
 							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }} đ</p>
+						    <p style="white-space: nowrap;"> {{$p->pivot->price }} đ</p>
                             </td>
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
 
@@ -282,7 +282,7 @@ if(performance.navigation.type == 2){
 						             {{$p->pivot->qty}}
 						     </td>
 
-						        <td class="cart_total">
+						        <td class="cart_total" style="white-space: nowrap;">
 							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
 						        </td>
 
