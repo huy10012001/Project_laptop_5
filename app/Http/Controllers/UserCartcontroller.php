@@ -52,19 +52,20 @@ class UserCartcontroller extends Controller
                $count=0;
                 foreach ($products as $key => $product) {
                     $count+=1;
-                    $output .= '<tr onclick="Redirectlivesearch(this)" class="search_items">
+                    $output .= 
+                    '<tr onclick="Redirectlivesearch(this)" class="search_items">
                     <td hidden class="search_name">' . $product->name . '</td> 
                     <td  style="width:50px" >
                     <img  height="50px" width="50px"  src="/images/'.$product->image.'"/>
                     </td> 
-                    <td >' . $product->name . 
-
-                   '<br/>' . $product->price . "đ".'</td>
+                    <td >' . $product->name .
+                    '<br/>' . $product->price . "đ".'</td>
+                  
                    </tr>';
               }
               $resultOuput ="";
-              $resultOuput.='<tr><td colspan="3">Có khoảng '.$count.' kết quả tìm kiếm<td></tr>'.$output;
-            
+              $resultOuput.='<tr><td colspan="2">Có khoảng '.$count.' kết quả tìm kiếm</td></tr>';
+              $resultOuput.= $output;
            if($products->count()==0)
             {
                 $resultOuput="<tr><td> không có kết quả bạn tìm kiếm<td></tr>";
