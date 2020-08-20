@@ -35,7 +35,7 @@
 <input type="hidden" id="orderByR"  name="orderby"> 
 @endif
 <div class="col-sm-12">
-    <h5>tìm thấy sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
+    <h5>tìm thấy {{$count}} sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
 </div>
 <div class="row" id="show" >
     <div class="col-sm-12" style="  font-size: 20px;">
@@ -84,11 +84,7 @@
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
-            @if(strpos($p->name, '/'))
-             <li><a href="{{ URL::to('/product/'.Str::slug(substr($p->name, 0, strpos($p->name, '/')))) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
-             @else
-             <li><a href="{{ URL::to('/product/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
-             @endif
+            <li><a onclick="chiTiet('{{$p->name}}')"></i>Chi tiết sản phẩm</a></li>
             </ul>
         </div>
     </div>

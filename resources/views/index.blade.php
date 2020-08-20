@@ -8,9 +8,16 @@
 
 <body>
 
-<p><b>Test</b> Paragraph.</p>
-<p></p>
+<table>
+    
+    <tr onclick="hoc()">
+        <td>123 </td>
+    </tr>
+</table>
  
 <script>
-
+function hoc()
+{
+    console.log(123);
+}
 </script>

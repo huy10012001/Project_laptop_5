@@ -49,9 +49,12 @@ class UserCartcontroller extends Controller
            $products = $products->where('name', 'LIKE', '%' . $request->search . '%')->get();
 
            if ($products) {
+               $count=0;
                 foreach ($products as $key => $product) {
-                    $output .= '<tr>
-                    <td style="width:50px">
+                    $count+=1;
+                    $output .= '<tr onclick="Redirectlivesearch(this)" class="search_items">
+                    <td hidden class="search_name">' . $product->name . '</td> 
+                    <td  style="width:50px" >
                     <img  height="50px" width="50px"  src="/images/'.$product->image.'"/>
                     </td> 
                     <td >' . $product->name . 
@@ -59,10 +62,17 @@ class UserCartcontroller extends Controller
                    '<br/>' . $product->price . "đ".'</td>
                    </tr>';
               }
+              $resultOuput ="";
+              $resultOuput.='<tr><td colspan="3">Có khoảng '.$count.' kết quả tìm kiếm<td></tr>'.$output;
+            
            if($products->count()==0)
-              $output="";
+            {
+                $resultOuput="<tr><td> không có kết quả bạn tìm kiếm<td></tr>";
+            }
               return Response::json(array(
-                'status'=>$output
+                'status'=> $resultOuput,
+               
+                
               
        )); 
     }

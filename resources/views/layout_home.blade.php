@@ -100,6 +100,7 @@ border: 2px solid white;
   .users .dropdown:hover .dropdown-content {display: block;}
 
   .users .dropdown:hover .dropbtn {background-color: #61a2d0;}
+
 /*drowdown*/
 </style>
 </head><!--/head-->
@@ -116,6 +117,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
 //truy cập chi tiết
 function chiTiet(sanpham)
     {   
+		console.log(123);
 		console.log(sanpham);
         //tách ký tự đặc biệt trừ dấu chấm
         sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
@@ -272,24 +274,39 @@ function AddCart(product_id)
       	location.reload();
 	}});
 }
-
-
-
+//click vô item từ live search
+function Redirectlivesearch(a)
+{
+	var sanpham=$(a).find('.search_name').text();
+	console.log(sanpham);
+	sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
+     //gộp nhiều khoảng trắng làm 1
+	sanpham=sanpham.split(/\s+/g).join(" ");
+	//encode value này
+	var urlencode=encodeURIComponent(sanpham);
+	//chuyển ký tự khoảng trắng dc encode sang -
+	urlencode=urlencode.split("%20").join("-");
+	window.location.href='/product/'+urlencode;
+}
 $(document).click(function (e)
 {
     // Đối tượng container chứa popup
-	var container = $('.search');
+
 
     // Nếu click bên ngoài đối tượng container thì ẩn nó đi
+	var container = $('.search');
     if (!container.is(e.target) && container.has(e.target).length === 0)
     {
         container.find('table').hide();
     }
+
 });
 $(document).ready(function()
 {
+	//livesearchclic
+
 	$('.textsearch').on('mouseup',function(){
-		console.log($('.resultsearch').text());
+	
 		if($('.resultsearch').text()!="")
 		{
 			$('.resultsearch').show();
@@ -297,14 +314,16 @@ $(document).ready(function()
 	})
 	 $('.textsearch').on('keyup',function()
 	{
-		$value = $(this).val();
-		if($value!="")
+		var value = $(this).val();
+		value=value.split(" ").join("");
+		console.log(value);
+		if(value!="")
 		{
 			 $.ajax({
                     type: 'get',
                     url:  " {{ asset('/livesearch')}}",
                     data: {
-                        'search': $value
+                        'search': value
                     },
 					error:function(xhr)
             {
@@ -314,17 +333,19 @@ $(document).ready(function()
 
              },
                     success:function(data){
-						console.log(data);
-						if(data.status!="")
-						{
+					//	console.log(data);
+						
 							$('.resultsearch').show();
 							$('.resultsearch').html(data.status);
-						}
-						else
-						{
-							$('.resultsearch').hide();
-							$('.resultsearch').html(data.status);
-						}
+							
+							$(".search_name").each(function(){
+								$(this).click(function(){
+									var name=$(this).find('.search_name').text();
+									console.log(name);
+							});
+						});
+						
+						
                     }
 
 		        });
@@ -522,7 +543,7 @@ $("#cartModal").on('show.bs.modal', function(){
                           		<button   style="float:left;width:20%;height:40px" type="submit" class="search"><i class="fa fa-search"></i> Tìm kiếm</button>
 							</form>
 
-							<table  style="border:none ;background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-bordered table-hover" style="background-color: white;">
+							<table  style="border:none ;background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-hover" style="background-color: white;">
 
 
                             </table>

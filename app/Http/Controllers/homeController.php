@@ -56,7 +56,7 @@ class homeController extends Controller
     //$product=DB::table('product')->whereRaw("REPLACE(name,Substring(name, PatIndex('%[/]%', name),1),'') = ?",$b);
   
    //$productLoc=DB::table('product')-> whereRaw("REPLACE(name,Substring(name, PatIndex('%[^0-9.-]%', name), 1), '-') = ?",$a);
-     //   return view('index');
+      return view('index');
     }
    
     
@@ -285,7 +285,7 @@ class homeController extends Controller
                 elseif(count($request->all())>0)
                 {
                   //  $product=[];
-                  $count=$product->count();
+                     $count=$product->count();
                     return view('user.product', ['count'=>$count,'all_category'=>$all_category]);
                 }
            
@@ -532,7 +532,8 @@ class homeController extends Controller
                 }
         $product=$product->paginate(6);
         $requestOrder=$request->orderby;
-        return view('user.veview_search',['requestorderby'=>$requestOrder,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
+        $count=$product->count();
+        return view('user.veview_search',['count'=>$count,'requestorderby'=>$requestOrder,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
     }
 
 
