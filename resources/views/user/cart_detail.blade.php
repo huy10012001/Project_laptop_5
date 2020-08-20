@@ -205,7 +205,7 @@ function dat(login)
 							<td class="nameproduct">Tên sản phẩm</td>
 							<td class="price" style="white-space: nowrap;">giá</td>
 							<td class="quantity">số  lượng</td>
-							<td class="total" style="white-space: nowrap;">tổng tiền</td>
+							<td class="total">tổng tiền</td>
 							<td><p style="width:30px"></p></td>
 						</tr>
                     </thead>
@@ -232,8 +232,8 @@ function dat(login)
                              )">
                             </div>
                             </td>
-                            <td class="cart_amount">
-                           <p> {{App\Product::find($product['id'])->price*$product['qty']}} đ </p>
+                            <td class="cart_amount" >
+                           <p  style="white-space: nowrap;"> {{App\Product::find($product['id'])->price*$product['qty']}} đ </p>
                              @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
                              @php $totalqty+=$product['qty']; @endphp
                             </td> 
@@ -249,7 +249,7 @@ function dat(login)
                                 <td class="cart_name">
                                 <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                                 </td>
-                                <td>{{App\Product::find($product['id'])->price}} đ</td>
+                                <td  style="white-space: nowrap;" >{{App\Product::find($product['id'])->price}} đ</td>
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
