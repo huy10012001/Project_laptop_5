@@ -328,9 +328,10 @@ $("#form_product").on('submit',function(e){
         </div>
 @if(isset($count))
     Laptop {{ $count }} sản phẩm
-<div class="row product_f">
 
- @foreach($product as $p)
+@foreach($product->chunk(3) as $products)
+<div class="row course-set courses__row">
+ @foreach($products as $p)
 
 <div class="col-sm-4" style="height: 500px;">
 
@@ -387,6 +388,8 @@ $("#form_product").on('submit',function(e){
 
 @endforeach
 </div>
+@endforeach
+
 
 @endif
 

@@ -35,16 +35,19 @@ class homeController extends Controller
     public function index(Request $request){
        //$a="Dell-Inspiron-N3593C-i3-1005G1-4GB-256GB-15.6FHD-Win10";
         //$product=DB::table('product')->whereRaw("REPLACE(REPLACE(name,' ','-'),'/','-')= ?",$a);
-        $b='MacBook-Pro-16-2019-Touch-Bar-2.6GHz-Core-i7-512GB';
+        $b='Dell--';
         
-        $b=str_replace("-","",$b);
+       
       
         $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
         $product_detail= Product::whereRaw(
-            "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ','-'),'/','-'),'\"','-'),'_','-'),'&','-'),'+','-')= ?",$b)
+            "REGEXP_REPLACE(name,
+            '[^a-zA-Z0-9-]+',
+            '-')= ?",$b)
         ->first();
+        echo  $product_detail;
         //$product=Product::find($product->id);
-       echo $product_detail;
+     //  echo $product_detail;
         // $product=product::find($product_id);
         //return view('index')->with(['p'=>$product]);
         // $product=DB::table('product')->whereRaw("REPLACE(name,'\'\'','')= ?",$b);
@@ -56,7 +59,7 @@ class homeController extends Controller
     //$product=DB::table('product')->whereRaw("REPLACE(name,Substring(name, PatIndex('%[/]%', name),1),'') = ?",$b);
   
    //$productLoc=DB::table('product')-> whereRaw("REPLACE(name,Substring(name, PatIndex('%[^0-9.-]%', name), 1), '-') = ?",$a);
-      return view('index');
+     // return view('index');
     }
    
     
@@ -452,10 +455,17 @@ class homeController extends Controller
         {
          
             //Sản phẩm active và đã cập nhập xong detail
-            $name=str_replace("-","",$name);
-            $product_detail= Product::whereRaw(
-                "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ',''),'/',''),'\"',''),'_',''),'&',''),'+',''),'-','')= ?",$name)
+           // $name=str_replace("-","",$name);
+            $product_detail=Product::whereRaw(
+             
+                    "REGEXP_REPLACE(name,
+                    '[^a-zA-Z0-9.\]+',
+                    '-')= ?",$name)
             ->first();
+           
+           // $product_detail= Product::whereRaw(
+              //  "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ',''),'/',''),'\"',''),'_',''),'&',''),'+',''),'-','')= ?",$name)
+           // ->first();
            
           
             //$product_active=product::find($product_active_id)->first();
@@ -530,9 +540,10 @@ class homeController extends Controller
                             break;    
                     }
                 }
-        $product=$product->paginate(6);
+     
         $requestOrder=$request->orderby;
         $count=$product->count();
+        $product=$product->paginate(8);
         return view('user.veview_search',['count'=>$count,'requestorderby'=>$requestOrder,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
     }
 

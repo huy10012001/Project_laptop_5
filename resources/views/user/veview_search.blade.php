@@ -34,16 +34,10 @@
 @else
 <input type="hidden" id="orderByR"  name="orderby"> 
 @endif
-<div class="col-sm-12">
-    <h5>tìm thấy {{$count}} sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
-</div>
-<div class="row" id="show" >
-    <div class="col-sm-12" style="  font-size: 20px;">
-       <p>Sản Phẩm</p>
 
-    </div>
-    <div class="sort" >
-        
+    <h5>tìm thấy {{$count}} sản phẩm cho từ khóa <b>{{$keyword}}</b></h5>
+    <p  style="  font-size: 20px;">Sản Phẩm</p>
+    <div class="row">
         <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
             <div class="dropdown" style=" float:right;">
                 <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
@@ -58,8 +52,12 @@
                 </ul>
               </div>
         </div>
+    </div>
 
-@foreach($product as $p)
+ @foreach($product->chunk(4) as $products)
+ <div class="row course-set courses__row">
+@foreach($products as $p)
+
 <div class="col-sm-3">
 
     <div class="product-image-wrapper">
@@ -89,10 +87,16 @@
         </div>
     </div>
 
+
 </div>
 
 @endforeach
+
 </div>
+@endforeach
+{{$product->links()}}
+
+
 @else
 không tìm thấy sản phẩm cho từ khóa {{$keyword}}
 @endif
