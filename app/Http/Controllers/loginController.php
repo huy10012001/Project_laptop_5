@@ -33,10 +33,11 @@ class loginController extends Controller
         if(!empty($value) )
         {
             $user=User::find($value->id);
-            
+          
             foreach($user->role as $role)
             {
                //nếu có role admin hoặc super admin quay lại trang admin
+              
                if($role->name=="admin" ||$role->name=="super admin")
                
                 return Redirect::back();
