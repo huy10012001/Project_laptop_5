@@ -1,6 +1,16 @@
+
+
+ <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
-    var x={"message":"The given data was invalid.","errors":{"email":["tên email tồn tại"]}};
-    var x = JSON.parse(x);
-alert(x['message'])
-    alert(x['erros']);
+
+  
+</script>
+
+<body>
+
+<p><b>Test</b> Paragraph.</p>
+<p></p>
+ 
+<script>
+
 </script>

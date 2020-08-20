@@ -21,10 +21,42 @@ USE Illuminate\Database\Eloquent\Collection;
 use League\CommonMark\Util\ArrayCollection;
 class homeController extends Controller
 {
+    public function scopeWhereName($query, $queryString) {
+        $chars = [' ', '.', ',','/'];
     
+ 
+            $query=$query->selectRaw("REPLACE('name')");
+           
+       
+       
+        return $query;
+        
+    }
     public function index(Request $request){
-
-        return view('index');
+       //$a="Dell-Inspiron-N3593C-i3-1005G1-4GB-256GB-15.6FHD-Win10";
+        //$product=DB::table('product')->whereRaw("REPLACE(REPLACE(name,' ','-'),'/','-')= ?",$a);
+        $b='MacBook-Pro-16-2019-Touch-Bar-2.6GHz-Core-i7-512GB';
+        
+        $b=str_replace("-","",$b);
+      
+        $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
+        $product_detail= Product::whereRaw(
+            "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ','-'),'/','-'),'\"','-'),'_','-'),'&','-'),'+','-')= ?",$b)
+        ->first();
+        //$product=Product::find($product->id);
+       echo $product_detail;
+        // $product=product::find($product_id);
+        //return view('index')->with(['p'=>$product]);
+        // $product=DB::table('product')->whereRaw("REPLACE(name,'\'\'','')= ?",$b);
+      //  $product=Product::all();
+        //$product=$this->scopeWhereName(DB::table('product'),$b);
+     
+      // $productLoc=Product::selectRaw();
+       // $product=DB::table('product')->whereRaw("name = ?",[$b]);
+    //$product=DB::table('product')->whereRaw("REPLACE(name,Substring(name, PatIndex('%[/]%', name),1),'') = ?",$b);
+  
+   //$productLoc=DB::table('product')-> whereRaw("REPLACE(name,Substring(name, PatIndex('%[^0-9.-]%', name), 1), '-') = ?",$a);
+     //   return view('index');
     }
    
     
@@ -163,23 +195,26 @@ class homeController extends Controller
                         array_push($th,$tenhang);
                     }
                     if($th!=['tất-cả'])
-                        $product=$product->join('category','product.category_id','=','category.id')
-                       -> whereIn('category.name',$th);
-                   
-                }
+                    {   
+                        $id=[];
+                        $product=$product->
+                        select('product.id')->
+                        join('category','product.category_id','=','category.id')
+                       -> whereIn('category.name',$th)->get();
+                       
+                        foreach($product as $p)
+                        {
+                            array_push($id,$p->id);
+                        }
+                       
+                        $product=product::whereIn('product.id',$id)->
+                        where(['status'=>"1"])
+                        ->join('detail_product','detail_product.product_id','=','product.id');
+                      
+                    }
+                }   
                 
-                if($request->manhinh)
-                {
-                    $flag=true;
-                    $manhinhs= $_GET['manhinh'];
-                    $mh=[];
-                    foreach($manhinhs as $manhinh)
-                    {
-                            array_push($mh,$manhinh);
-                    }   
-                    if($mh!=['tất-cả'])
-                    $product=$product->whereIn('description->21', $mh);
-                }
+               
                 if($request->cpu)
                 {
                     $flag=true;
@@ -190,7 +225,7 @@ class homeController extends Controller
                             array_push($cpu_arr,$cpu);
                     }   
                     if($cpu_arr!=['tất-cả'])
-                    $product=$product->whereIn('description->4', $cpu_arr);
+                    $product=$product->whereIn('description->3', $cpu_arr);
                 }
                 if($request->RAM)
                 {
@@ -214,8 +249,10 @@ class homeController extends Controller
                             array_push($ocung_arr,$ocung);
                     }   
                     if($ocung_arr!=['tất-cả'])
-                    $product=$product->whereIn('description->17', $ocung_arr);
+                    $product=$product->whereIn('description->16', $ocung_arr);
+                  
                 }
+
                 if($request->orderby)
                 {
                     $flag=true;
@@ -236,25 +273,29 @@ class homeController extends Controller
                 }
                 if($request->page)
                 {
-                    
-                                }
+                    $flag=true;
+                }
                 if($flag==true||count($request->all())==0)
                  {
+                     $count=$product->count();
                     $product=$product->paginate(6);
                     $requestOrder=$request->orderby;
-                    return view('user.product', ['requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
+                    return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
                  }
                 elseif(count($request->all())>0)
                 {
                   //  $product=[];
-                    return view('user.product', ['all_category'=>$all_category]);
+                  $count=$product->count();
+                    return view('user.product', ['count'=>$count,'all_category'=>$all_category]);
                 }
            
     }
     public function product ($name,Request $request)
     { 
-      
-        $name=str_replace("-", " ", $name);
+        
+        
+        //dd( $decoded = html_entity_decode($name) );
+       
         //Tìm tên danh mục trước
         $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
         -> join('product','product.category_id','=','category.id')
@@ -342,28 +383,8 @@ class homeController extends Controller
                    -> whereIn('category.name',$th);
                
             }
-            if($request->manhinh)
-            {
-                $manhinhs= $_GET['manhinh'];
-                $mh=[];
-                foreach($manhinhs as $manhinh)
-                {
-                        array_push($mh,$manhinh);
-                }   
-                if($mh!=['tất-cả'])
-                $product=$product->whereIn('description->21', $mh);
-            }
-            if($request->manhinh)
-            {
-                $manhinhs= $_GET['manhinh'];
-                $mh=[];
-                foreach($manhinhs as $manhinh)
-                {
-                        array_push($mh,$manhinh);
-                }   
-                if($mh!=['tất-cả'])
-                $product=$product->whereIn('description->21', $mh);
-            }
+      
+    
             if($request->cpu)
             {
                 $cpu_laptop= $_GET['cpu'];
@@ -373,8 +394,10 @@ class homeController extends Controller
                         array_push($cpu_arr,$cpu);
                 }   
                 if($cpu_arr!=['tất-cả'])
-                $product=$product->whereIn('description->4', $cpu_arr);
+                $product=$product->whereIn('description->3', $cpu_arr);
+                
             }
+           
             if($request->RAM)
             {
                 $ram_laptop= $_GET['RAM'];
@@ -395,8 +418,12 @@ class homeController extends Controller
                         array_push($ocung_arr,$ocung);
                 }   
                 if($ocung_arr!=['tất-cả'])
-                $product=$product->whereIn('description->17', $ocung_arr);
+                $product=$product->whereIn('description->16', $ocung_arr);
+              
+               
+            
             }
+        
             if($request->orderby)
             {
                 $orderBy=$request->orderby;
@@ -414,39 +441,42 @@ class homeController extends Controller
                         break;   
                 }
             }
-            $product=$product->paginate(6);
+            $count=$product->count();
+             $product=$product->paginate(6);
             $requestOrder=$request->orderby;
-           
-            return view('user.product', ['requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
+         
+            return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
             
         }
         else
         {
+         
             //Sản phẩm active và đã cập nhập xong detail
-            $product_active_id=Product::where(['name'=>$name,'status'=>"1"])
-           -> join('detail_product','detail_product.product_id','=','product.id')->
-            select('product.id')->get();
-            $product_active=product::find($product_active_id)->first();
+            $name=str_replace("-","",$name);
+            $product_detail= Product::whereRaw(
+                "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ',''),'/',''),'\"',''),'_',''),'&',''),'+',''),'-','')= ?",$name)
+            ->first();
+           
+          
+            //$product_active=product::find($product_active_id)->first();
 
              //Sản phẩm không active và đã cập nhập xong detail
-            $product_noactive_id=Product::where(['name'=>$name,'status'=>"0"])
-            -> join('detail_product','detail_product.product_id','=','product.id')->
-             select('product.id')->get();
-             $product_noactive=product::find($product_noactive_id)->first(); ;
-            if(!empty($product_active))
-            {
-
-                $category=category::find($product_active->category_id);
+            if(!empty($product_detail))
+            {if($product_detail->status=="1")
+            {   
+              
+                $category=category::find($product_detail->category_id);
                 $lienquan= category::join('product','product.category_id','=','category.id')
                 ->join('detail_product','detail_product.product_id','=','product.id')->
                 where('product.status','1')->where('category.id',$category->id);
 
-                return view('detail')->with(['p'=>$product_active,'c'=>$category,'lq'=>$lienquan]);
+                return view('detail')->with(['p'=>$product_detail,'c'=>$category,'lq'=>$lienquan]);
 
             }
-            else  if(!empty($product_noactive))
-                  return view('detail')->with(['noactive'=>$product_noactive]);
-            else
+            else  if($product_detail->status=="0")
+                  return view('detail')->with(['noactive'=>$product_detail]);
+             }
+             else
             {
                 return \abort('404');
             }

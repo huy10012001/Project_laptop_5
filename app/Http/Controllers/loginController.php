@@ -116,7 +116,7 @@ class loginController extends Controller
        // $request->session()->forget('cart');
        
     }
-    public function checkValidate(Request $request)
+    public function checkValidate1(Request $request)
     {
         $email=$request->email;
         
@@ -125,6 +125,20 @@ class loginController extends Controller
           echo "false";
         else
             echo "true";die;
+    }
+    public function checkValidate(Request $request)
+    {
+        $email=$request->email;
+        
+        $checkemail=User::where(['email'=>$email])->first();
+        if(!empty($checkemail))
+            return Response::json(array(
+            'status'=>'datontai',
+        )); 
+        else
+        return Response::json(array(
+            'status'=>'chuatontai',
+        )); 
     }
     public function postRegister(ProductRequest  $request)
     {
@@ -160,13 +174,16 @@ class loginController extends Controller
         if($request->session()->get('cart'))
         {      
              //Trường hợp user mua lần đầu hoặc user order mới thì tạo order mới
-             $cart=new Cart(session()->get('cart'));//cart trong session
-             $order=new Order();//cart mới
-             $order->user_id=$user->id;
-             $order->status="0";
-             $order->total="0";
-             $order->save();
-             $total=0;
+            $cart=new Cart(session()->get('cart'));//cart trong session
+            $order=new Order();//cart mới
+            $order->user_id=$user->id;
+            $order->status="0";
+            $order->total="0";
+            $order->name=$name;
+            $order->phone=$phone;
+            $order->address=$address;
+            $order->save();
+            $total=0;
              foreach($cart->items as $item)
              {   
                 if(Product::find($item['id'])->status=="1")
@@ -180,6 +197,7 @@ class loginController extends Controller
                 $order_product->created_at=\Carbon\Carbon::parse($item['time_at']);
                  $order_product->save();
              }
+             //ngày mau sản phẩm đầu tiên
              $order->date=\Carbon\Carbon::parse(array_values($cart->items)[0]['time_at']); 
              $order->total=$total;
              $order->save();
@@ -233,6 +251,9 @@ class loginController extends Controller
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
+                $order->name=$user->name;
+                $order->phone=$user->phone;
+                $order->address=$user->address;
                 $order->save();
             }
             //Nếu giỏ hàng không trống(kể cả sản phẩm đã hết hàng) thì cập nhập lại tổng giá từ session cart và ngày order hiện tại
@@ -243,6 +264,9 @@ class loginController extends Controller
                 $order->user_id=$user->id;
                 $order->total=$cart->totalPrice;
                 $order->status="0";
+                $order->name=$user->name;
+                $order->phone=$user->phone;
+                $order->address=$user->address;
                 $order->save();
             }
             //Kiểm tra trong giỏ hiện tại của user nếu có sản phẩm thì xóa đi để lấy dữ liệu từ session cart
@@ -274,7 +298,7 @@ class loginController extends Controller
             $request->session()->forget('cart');
          }
       
-        // $url=$request->session()->get('url');
+         $url=$request->session()->get('url');
         
         if ($user->can('do')) 
             return Response::json(array(

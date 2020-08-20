@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+	<meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -112,7 +113,29 @@ if(!!window.performance && window.performance.navigation.type === 2)
     window.location.reload();
 }
 //search
-
+//truy cập chi tiết
+function chiTiet(sanpham)
+    {   
+		console.log(sanpham);
+        //tách ký tự đặc biệt trừ dấu chấm
+        sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
+       
+        //gộp nhiều khoảng trắng làm 1
+        sanpham=sanpham.split(/\s+/g).join(" ");
+        //encode value này
+        var urlencode=encodeURIComponent(sanpham);
+        //chuyển ký tự khoảng trắng dc encode sang -
+        urlencode=urlencode.split("%20").join("-");
+        console.log(urlencode);
+       // var urlencode=encodeURIComponent(sanpham);
+       // urlencode=urlencode.split("%20").join("-");
+        //urlencode=urlencode.split("%2").join("-");
+        //urlencode=urlencode.split("-F").join("-");
+       // urlencode=urlencode.split("-2").join("-");
+        
+       
+         window.location.href='/product/'+urlencode;
+    }
 //tạo tài khoản
 
 //Show phần modal đăng nhập
@@ -355,12 +378,12 @@ $(document).ready(function()
       		    data:$('#login').serialize(),
 			    datatype: 'json',
 				error:function(xhr)
-                        {
-                            var x=xhr.responseText;
-                            x=$.parseJSON(x);
-                           console.log(x.message);
+                {
+                    var x=xhr.responseText;
+                    x=$.parseJSON(x);
+                    console.log(x.message);
 
-                        },
+                },
 			    success:function(data)
            	    {
 
@@ -369,14 +392,21 @@ $(document).ready(function()
                       location.reload();
                     }
                     else
-                    $("#dangnhap").html(data.status)
-                    $("#dangnhap").css('color','red');
+                  	{ 
+						$("#dangnhap").html(data.status)
+                   		$("#dangnhap").css('color','red');
+					}
 
            	    }
         	});
 
     });
+	
          //đăng ký  mua hàng khi user chua đăng nhập
+	$('#emailR').change(function(e)
+    {
+		$('#emailTontaiR').text('');
+	});
     $('#register').submit(function(e)
     {
         e.preventDefault();
@@ -395,14 +425,14 @@ $(document).ready(function()
 			datatype: 'json',
 			error:function(xhr)
             {
-             // var x=xhr.responseText;
-                //  x=$.parseJSON(x);
-                      // console.log(x.message);
+             		 var x=xhr.responseText;
+                  x=$.parseJSON(x);
+                      console.log(x.message);
 				var errors =xhr.responseJSON.errors;
-				const propertyNames = Object.keys(errors);
-				$.each(errors, function( index, value ) {
-					$('#emailTontai').text(value);
-				})
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					$('#emailTontaiR').text('email đã tồn tại.');
+				//})
 					//errors=JSON.stringify(errors.error);
 			
               },
@@ -632,6 +662,7 @@ $("#cartModal").on('show.bs.modal', function(){
 					<!--end contact-->
 					@yield('dell')
 					<!--sản phẩm dell-->
+					@yield('index')
 
 					@yield('product_A')
 
@@ -700,8 +731,9 @@ $("#cartModal").on('show.bs.modal', function(){
 									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
 									<input type="text" class="form-control" name="address" required><br>
 									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-									<input type="email" class="form-control" name="email" required placeholder="email"  title="email không được để trống và đúng mẫu xxx@gmail.com"><br>
-									<div id="emailTontai" style="color:red"></div>
+						
+									<input id="emailR" type="email" class="form-control" name="email" required placeholder="email"  title="email không được để trống và đúng mẫu xxx@gmail.com"><br>
+									<div id="emailTontaiR" style="color:red"></div>
 									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
 										<input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"  pattern="{8,20}" title="mật khẩu phải có ít nhất 8 kí tự"><br>
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>

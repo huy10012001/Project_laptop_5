@@ -84,6 +84,7 @@
           </div>
         </div>
       </div>
+      
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
           <div class="table-responsive">
@@ -386,6 +387,7 @@
         </div>
         
       </div>
+      
       <div class="alert alert-warning" role="alert">
  Sản phẩm cùng danh mục
 </div>
@@ -418,7 +420,7 @@ $lienquan=$lq->where('product.id','!=', "$p->id")->get();
                   <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
                   <p>{{$product->name}}</p>
                   <p>{{number_format($product->price)}}</p>
-                  <button type="button" class="btn btn-default get"><a href="{{ URL::to('/product/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
+                  <button type="button" class="btn btn-default get"><a onclick="chiTiet('{{$product->name}}')" > xem sản phẩm</a></button>
                 </div>
            
                    
@@ -432,7 +434,7 @@ $lienquan=$lq->where('product.id','!=', "$p->id")->get();
                   <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
                   <p>{{$p->name}}</p>
                   <p>{{number_format($p->price)}}</p>
-                  <button type="button" class="btn btn-default get"><a href="{{ URL::to('/product/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
+                  <button type="button" class="btn btn-default get"><a  onclick="chiTiet('{{$product->name}}')"> xem sản phẩm</a></button>
                 </div>
               
               @endforeach
@@ -453,7 +455,7 @@ $lienquan=$lq->where('product.id','!=', "$p->id")->get();
             <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
             <p>{{$product->name}}</p>
             <p>{{number_format($product->price)}}</p>
-              <button type="button" class="btn btn-default get"><a href="{{ URL::to('/product/'.Str::slug($product->name)) }}" > xem sản phẩm</a></button>
+              <button type="button" class="btn btn-default get"><a  onclick="chiTiet('{{$product->name}}')" > xem sản phẩm</a></button>
             </div>
        
   @endforeach

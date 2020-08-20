@@ -84,7 +84,11 @@
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
-                <li><a href="{{ URL::to('/product/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+            @if(strpos($p->name, '/'))
+             <li><a href="{{ URL::to('/product/'.Str::slug(substr($p->name, 0, strpos($p->name, '/')))) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+             @else
+             <li><a href="{{ URL::to('/product/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+             @endif
             </ul>
         </div>
     </div>

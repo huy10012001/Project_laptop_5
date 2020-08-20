@@ -100,8 +100,7 @@ class ClearFromAttributes
              
         }   
        
-      
-           
+        
         return $next($request);
     }
      

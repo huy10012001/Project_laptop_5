@@ -3,6 +3,8 @@
 @extends('layout_home')
 @section( 'dell')
 <script>
+    
+    
 let searchParams = new URLSearchParams(window.location.search);
 searchParams=decodeURIComponent(searchParams);
 function FindparseQuerystring(value){
@@ -131,10 +133,15 @@ $(document).ready(function() {
     //nếu trong input không có value nào thì input cùng tên có value tất-cả return true
     if(count==0)
     {
+       
         $(y).each(function(){
           if(this.value=="tất-cả")
          $(this).prop('checked',true);
          });
+        if($(this).attr("name")=="tenhang[]")
+        {
+            $('#form_product').attr('action','/product');
+        }
     }
     //lưu những checked
    
@@ -228,40 +235,29 @@ $("#form_product").on('submit',function(e){
      <label for="sapxep" >Từ 20 - 25 triệu</label>  <br/>
      <input type="checkbox"  class="box"  value="trên-25-triệu" name="price[]" >
      <label for="sapxep" >Trên 25    triệu</label>  <br/>
-     <label for="cpu">CPU </label>
-    <br/>
-      <label for="sapxep">Màn hình </label>
-    <br/>
-     <input type="checkbox" class="box all" value="tất-cả" name="manhinh[]"  >
-     <label for="sapxep" >Tất cả </label>  <br/>
-     <input type="checkbox" class="box"  value="13 inch" name="manhinh[]">
-     <label for="sapxep" >Khoảng 13 inch </label>  <br/>
-     <input type="checkbox"  class="box" value="14 inch" name="manhinh[]" >
-     <label for="sapxep" >Khoảng 14 inch</label>  <br/>
-     <input type="checkbox"   class="box" value="15 inch" name="manhinh[]" >
-     <label for="sapxep" >trên 15 inch</label>  <br/>
-
+    
+      
      <label for="cpu">CPU </label>
     <br/>
      <input type="checkbox" class="box all"  value="tất-cả"   name="cpu[]" >
      <label  >Tất cả </label>  <br/>
-     <input type="checkbox"  class="box"  value="Intel Celeron" name="cpu[]">
+     <input type="checkbox"  class="box"  value="Celeron" name="cpu[]">
      <label for="sapxep" >Intel Celeron </label><br/>
-     <input type="checkbox"  class="box"   name="cpu[]"value="Intel Pentium">
+     <input type="checkbox"  class="box"   name="cpu[]"value="Pentium">
      <label for="sapxep" >Intel Pentium</label> <br/>
-     <input type="checkbox"  class="box"  name="cpu[]"   value="Intel Core i3">
+     <input type="checkbox"  class="box"  name="cpu[]"   value="Core i3">
      <label for="sapxep" >Intel Core i3</label> <br/>
-     <input type="checkbox"  class="box"  name="cpu[]"  value="Intel Core i5" >
+     <input type="checkbox"  class="box"  name="cpu[]"  value="Core i5" >
      <label for="sapxep" >Intel Core i5</label><br/>
-     <input type="checkbox"  class="box"  name="cpu[]"    value="Intel Core i7">
+     <input type="checkbox"  class="box"  name="cpu[]"    value="Core i7">
      <label for="sapxep" >Intel Core i7</label> <br/>
-     <input type="checkbox"   class="box"  name="cpu[]"    value="Intel Core i9">
+     <input type="checkbox"   class="box"  name="cpu[]"    value="Core i9">
      <label for="sapxep" >Intel Core i9</label> <br/>
-     <input type="checkbox"  class="box"  name="cpu[]" value="AMD Ryzen 3">
+     <input type="checkbox"  class="box"  name="cpu[]" value="Ryzen 3">
      <label for="sapxep" >AMD Ryzen 3</label> <br/>
-     <input type="checkbox"  class="box"  name="cpu[]"   value="AMD Ryzen 5">
+     <input type="checkbox"  class="box"  name="cpu[]"   value="Ryzen 5">
      <label for="sapxep" >AMD Ryzen 5</label> <br/>
-     <input type="checkbox"  class="box"  name="cpu[]"    value="AMD Ryzen 7">
+     <input type="checkbox"  class="box"  name="cpu[]"    value="Ryzen 7">
      <label for="sapxep" >AMD Ryzen 7</label> <br/>
      <label for="sapxep">RAM </label>
      <br/>
@@ -279,13 +275,13 @@ $("#form_product").on('submit',function(e){
      <br/>
      <input type="checkbox" class="box all" value="tất-cả" name="ocung[]"  >
      <label for="sapxep" >Tất cả </label>  <br/>
-     <input type="checkbox" class="box"  value="SSD 1 TB" name="ocung[]">
+     <input type="checkbox" class="box"  value="1 TB" name="ocung[]">
      <label for="sapxep" >SSD 1 TB</label>  <br/>
-     <input type="checkbox"  class="box" value="SSD 512 GB" name="ocung[]" >
+     <input type="checkbox"  class="box" value="512 GB" name="ocung[]" >
      <label for="sapxep" >SSD 512 GB</label>  <br/>
-     <input type="checkbox"   class="box" value="SSD 256 GB" name="ocung[]" >
+     <input type="checkbox"   class="box" value="256 GB" name="ocung[]" >
      <label for="sapxep" >SSD 256 GB</label>  <br/>
-     <input type="checkbox"   class="box" value="SSD 128 GB" name="ocung[]" >
+     <input type="checkbox"   class="box" value="128 GB" name="ocung[]" >
      <label for="sapxep" >SSD 128 GB</label>  <br/>
      @if(isset($requestorderby))
      <input type="hidden" id="orderByR" value="{{$requestorderby}}" name="orderby"> 
@@ -310,6 +306,7 @@ $("#form_product").on('submit',function(e){
         <h2 class="title text-center">sản phẩm laptop </h2>
         <!--sản phẩm-->
         @if(isset($product) && $product->count()>0)
+
         <div class="sort" >
         
             <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
@@ -329,15 +326,17 @@ $("#form_product").on('submit',function(e){
        
 
         </div>
+@if(isset($count))
+    Laptop {{ $count }} sản phẩm
 <div class="row product_f">
 
  @foreach($product as $p)
 
-<div class="col-sm-4">
+<div class="col-sm-4" style="height: 500px;">
 
     <div class="product-image-wrapper">
 
-        <div class="single-products">
+        <div class="single-products" >
                 <div class="productinfo text-center">
                     <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
                     <h2>{{number_format($p->price)}} đ</h2>
@@ -372,8 +371,14 @@ $("#form_product").on('submit',function(e){
 
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
-
-                <li><a href="{{ URL::to('/product/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+            <li><a onclick="chiTiet('{{$p->name}}')"></i>Chi tiết sản phẩm</a></li>
+            <!--
+             @if(strpos($p->name, '/'))
+             <li><a href="{{ URL::to('/product/'.Str::slug(substr($p->name, 0, strpos($p->name, '/')))) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+             @else
+             <li><a href="{{ URL::to('/product/'.Str::slug($p->name)) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+             @endif
+                -->
             </ul>
         </div>
     </div>
@@ -383,7 +388,7 @@ $("#form_product").on('submit',function(e){
 @endforeach
 </div>
 
-
+@endif
 
 <div class="row">{{$product->links()}}</div>
 @else

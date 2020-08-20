@@ -34,7 +34,7 @@ Route::post('/postLoc', 'UserCartcontroller@loc');
 route::match(['GET','POST'],'/checkValidate','loginController@checkValidate');
 Route::get('/livesearch', 'UserCartcontroller@livesearch');
 
-Route::get('/search','homeController@search' )->middleware(ClearFromAttributes::class);;
+Route::get('/search','homeController@search' )->middleware(ClearFromAttributes::class);
 //trang test gio hang(khong nam trong do an)
 Route::get('/cart', 'UserCartcontroller@cart');
 Route::get('/index', 'homeController@index');
