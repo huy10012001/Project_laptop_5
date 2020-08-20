@@ -544,8 +544,7 @@ $("#cartModal").on('show.bs.modal', function(){
 							</form>
 
 							<table  style="border:none ;background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-hover" style="background-color: white;">
-							
-							
+				
 
                             </table>
                       		</div>
@@ -835,12 +834,12 @@ $("#cartModal").on('show.bs.modal', function(){
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
 
-											<td class="price">{{App\Product::find($product['id'])->price}} đ</td>
+											<td class="price" style="white-space: nowrap;">{{App\Product::find($product['id'])->price}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
 											</td>
-                                    		<td class = "amount">{{App\Product::find($product['id'])->price*$product['qty']}} đ</td>
+                                    		<td class = "amount" style="white-space: nowrap;">{{App\Product::find($product['id'])->price*$product['qty']}} đ</td>
                                     		<td>
 												@php $sum+=App\Product::find($product['id'])->price*$product['qty'] @endphp
                                     		<a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
@@ -860,7 +859,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
 
-												  <td class="price">{{App\Product::find($product['id'])->price}} đ</td>
+												  <td class="price" style="white-space: nowrap;">{{App\Product::find($product['id'])->price}} đ</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
                                 	 			<td>
@@ -911,7 +910,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
-										<td class="price">{{$p->pivot->price }} đ</td>
+										<td class="price" style="white-space: nowrap;">{{$p->pivot->price }} đ</td>
 
 
 										<td class="qty">
@@ -919,7 +918,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
                                          onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
 										</div></td>
-                                    	<td class = "amount">{{$p->pivot->amount }} đ </td>
+                                    	<td class = "amount" style="white-space: nowrap;">{{$p->pivot->amount }} đ </td>
                                     	<td>
                                         <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -939,7 +938,7 @@ $("#cartModal").on('show.bs.modal', function(){
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
 
-										<td class="price">{{$p->pivot->price }}  đ</td>
+										<td class="price" style="white-space: nowrap;">{{$p->pivot->price }}  đ</td>
                                       	<td class="qty"> </td>
                                     	<td class = "amount"></td>
                                     	<td>

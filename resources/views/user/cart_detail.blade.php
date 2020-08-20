@@ -203,9 +203,9 @@ function dat(login)
 						    <tr class="cart_menu" style="color: black;">
 							<td class="image">Item</td>
 							<td class="nameproduct">Tên sản phẩm</td>
-							<td class="price">giá</td>
+							<td class="price" style="white-space: nowrap;">giá</td>
 							<td class="quantity">số  lượng</td>
-							<td class="total">tổng tiền</td>
+							<td class="total" style="white-space: nowrap;">tổng tiền</td>
 							<td><p style="width:30px"></p></td>
 						</tr>
                     </thead>
@@ -220,7 +220,7 @@ function dat(login)
                             <td class="cart_name">
                            <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                            </td>
-                           <td class="cart_price">
+                           <td class="cart_price" style="white-space: nowrap;">
                            <p> {{App\Product::find($product['id'])->price}} đ</p>
                            </td> 
                             <td class="">
@@ -437,7 +437,7 @@ $('input.input-qty').each(function() {
 						    <td class="cart_name" >
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
-                            <td class="cart_price">
+                            <td class="cart_price" style="white-space: nowrap;">
 						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                             <!--Trường hợp còn hàng(khác trashed)-->
@@ -451,7 +451,7 @@ $('input.input-qty').each(function() {
 						        </td>
                                 @php $totalqty+=$p->pivot->qty @endphp
 						        <td class="cart_total">
-							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
+							    <p class="cart_total_price" style="white-space: nowrap;">{{$p->pivot->amount }} đ</p>
 						        </td>
 						        <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
@@ -472,7 +472,7 @@ $('input.input-qty').each(function() {
 						    <td class="cart_name" s>
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
-                            <td class="cart_price">
+                            <td class="cart_price" style="white-space: nowrap;">
 						    <p> {{$p->pivot->price }} đ</p>
                             </td>
                                 <td ></td>

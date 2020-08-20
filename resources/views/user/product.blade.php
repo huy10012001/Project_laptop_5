@@ -339,7 +339,7 @@ $("#form_product").on('submit',function(e){
         <div class="single-products" >
                 <div class="productinfo text-center">
                     <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
-                    <h2>{{number_format($p->price)}} đ</h2>
+                    <h2>{{number_format($p->price,0,",",".")}} đ</h2>
                     <p style="word-break: break-all;" >{{$p->name}}</p>
                     <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                 </div>
@@ -361,7 +361,7 @@ $("#form_product").on('submit',function(e){
 
 
                       </div>
-                        <h2>{{number_format($p->price)}} đ</h2>
+                      <h2>{{number_format($p->price,0,",",".")}} đ</h2>
                         <p  style="word-break: break-all;" >{{$p->name}}</p>
                         <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
                     </div>
