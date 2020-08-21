@@ -117,7 +117,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
 //truy cập chi tiết
 function chiTiet(sanpham)
     {   
-		console.log(123);
+		
 		console.log(sanpham);
         //tách ký tự đặc biệt trừ dấu chấm
         sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
@@ -428,8 +428,14 @@ $(document).ready(function()
     {
 		$('#emailTontaiR').text('');
 	});
+	//form register submit
     $('#register').submit(function(e)
     {
+		//xóa hết lỗi trước khi bắt
+		$('.error').each(function() {
+			$(this).text('');
+		});
+		
         e.preventDefault();
         $.ajaxSetup(
         {
@@ -444,15 +450,34 @@ $(document).ready(function()
       		url:	 " {{ asset('/postRegisterCheckOut')}}",
       		data:$('#register').serialize(),
 			datatype: 'json',
-			error:function(xhr)
+			error:function(error)
             {
-             		 var x=xhr.responseText;
-                  x=$.parseJSON(x);
-                      console.log(x.message);
-				var errors =xhr.responseJSON.errors;
+             		 var x=error.responseText;
+                  	x=$.parseJSON(x);
+                   
+					let errors = error.responseJSON.errors;
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
+					
+					var nameFocus=$("#register input[name^="+errorsfocus+"]");
+				
+					nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+             			errorDiv.text(errors[key][0]);
+						 
+         			}
+					 //nếu không có lỗi
+				 	
+        		}
 				//const propertyNames = Object.keys(errors);
 				////$.each(errors, function( index, value ) {
-					$('#emailTontaiR').text('email đã tồn tại.');
+					//$('#emailTontaiR').text(errors.email);
 				//})
 					//errors=JSON.stringify(errors.error);
 			
@@ -728,7 +753,9 @@ $("#cartModal").on('show.bs.modal', function(){
 								{{ csrf_field() }}
 								<h3  style="text-align: center;">Đăng Nhập</h3>
 									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-									<input type="email" class="form-control" name="email" required ><br>
+									<input type="email"  class="form-control" name="email" required ><br>
+									<!-- định dạng lại c ss dòng này -->
+									
 									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
 									<input type="password"   required name="password"  class="form-control" ><br>
 									<div id="dangnhap"></div>
@@ -746,17 +773,22 @@ $("#cartModal").on('show.bs.modal', function(){
 									{{ csrf_field() }}
 									<h3 style="text-align: center;">Tạo tài khoản</h3>
 									<h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
-									<input type="text" class="form-control" name="name" required placeholder="Họ và tên"  ><br>
+									<input type="text" class="form-control" name="name" placeholder="Họ và tên"  ><br>
+									<div class="text-danger error" data-error="name"></div>
 									<h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
-									<input type="text" class="form-control" name="SĐT" required placeholder="Nhập số điện thoại"  pattern="[0-9]{9,}" title="số điện phải có ít nhất 9 số"><br>
+									<input type="text"  class="form-control" name="SĐT" placeholder="Nhập số điện thoại"  ><br>
+									<div class="text-danger error" data-error="SĐT"></div>
 									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
-									<input type="text" class="form-control" name="address" required><br>
+									<input type="text" class="form-control" name="address"><br>
+									<div class="text-danger error" data-error="address"></div>
 									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
 						
-									<input id="emailR" type="email" class="form-control" name="email" required placeholder="email"  title="email không được để trống và đúng mẫu xxx@gmail.com"><br>
-									<div id="emailTontaiR" style="color:red"></div>
+									<input id="emailR" type="email" class="form-control" name="email"  ><br>
+									<div class="text-danger error" data-error="email"></div>
+									
 									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
-										<input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"  pattern="{8,20}" title="mật khẩu phải có ít nhất 8 kí tự"><br>
+									<input type="password"  name="password"  class="form-control" placeholder="Mật khẩu"  ><br>
+									<div class="text-danger error" data-error="password"></div>	
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>

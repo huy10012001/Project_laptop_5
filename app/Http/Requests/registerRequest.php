@@ -25,18 +25,26 @@ class registerRequest extends FormRequest
     {
         
         return [
-            
-            'email' => 'unique:user',
+            'name' => 'required|min:2|max:30|regex:/^[a-zA-Z[:space:]ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{2,30}$/u',
+            'SĐT' => 'required',
+            'address' => 'required',
+            'email' => 'required|unique:user',
            
           
+           
+            'password' => 'required',
             //
         ];
     }
     public function messages()
     {
         return [
-          
-                        'email.unique'=> 'tên email tồn tại',
+            'name.required'=> 'Bạn chưa nhập tên',
+            'name.min'=> 'Tên phải từ 2-30 ký tự',
+            'name.max'=> 'Tên phải từ 2-30 ký tự',
+            'name.regex'=> 'tên name không hợp lệ',   
+            'email.unique'=> 'tên email tồn tại'
+               
                         
           ];
 

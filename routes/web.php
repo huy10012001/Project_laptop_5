@@ -139,7 +139,8 @@ Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 
 Route::get('product/{name}','homeController@product')->middleware(ClearFromAttributes::class);
 
-Route::get('/{name}','homeController@allproduct')->middleware(ClearFromAttributes::class);
+Route::get('/product','homeController@allproduct')->middleware(ClearFromAttributes::class);
 
 
-
+Route::get('/demovalidate','demoLoiFormController@index');
+Route::post('/validate','demoLoiFormController@Checkvalidate');

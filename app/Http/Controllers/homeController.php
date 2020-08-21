@@ -116,13 +116,12 @@ class homeController extends Controller
     public function contact(){
         return view('user.contact');
     }
-    public function allproduct($name,Request $request)
+    public function allproduct(Request $request)
     {
            
             $flag=false;
          //dd(count($request->all()));
-            if($name!="product")
-                return \abort('404');
+          
             $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
             -> join('product','product.category_id','=','category.id')
             ->join('detail_product','detail_product.product_id','=','product.id')->
