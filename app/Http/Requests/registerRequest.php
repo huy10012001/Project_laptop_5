@@ -43,7 +43,8 @@ class registerRequest extends FormRequest
             'name.max'=> 'Tên phải từ 2-30 ký tự',
             'name.regex'=> 'tên name không hợp lệ',   
             'email.unique'=> 'tên email tồn tại',
-            'password_confirmation.same'=> 'Mật khẩu không khớp'
+            
+            'password_confirmation.same'=> 'Xác nhận mật khẩu'
                         
           ];
 

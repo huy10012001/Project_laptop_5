@@ -459,9 +459,9 @@ $(document).ready(function()
 					//FOCUS vào lỗi đầu tiên
 					var errorsfocus=Object.keys(errors)[0];
 					
-					var nameFocus=$("#register input[name^="+errorsfocus+"]");
-				
+					var nameFocus=$("#register input[name="+errorsfocus+"]");
 					nameFocus.focus();
+					//nameFocus.focus();
 					//console.log(a.val());
 					//$(`.error[data-error="${errors[0]}"]`).focus();
       				for(let key in errors)
@@ -757,7 +757,7 @@ $("#cartModal").on('show.bs.modal', function(){
 									<!-- định dạng lại c ss dòng này -->
 									
 									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
-									<input type="password"   required name="password"  class="form-control" ><br>
+									<input type="password"   name="password"  class="form-control" ><br>
 									<div id="dangnhap"></div>
 									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
 
