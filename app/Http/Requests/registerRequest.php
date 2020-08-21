@@ -29,10 +29,9 @@ class registerRequest extends FormRequest
             'SĐT' => 'required',
             'address' => 'required',
             'email' => 'required|unique:user',
-           
           
-           
             'password' => 'required',
+            'password_confirmation' => 'same:password'
             //
         ];
     }
@@ -43,8 +42,8 @@ class registerRequest extends FormRequest
             'name.min'=> 'Tên phải từ 2-30 ký tự',
             'name.max'=> 'Tên phải từ 2-30 ký tự',
             'name.regex'=> 'tên name không hợp lệ',   
-            'email.unique'=> 'tên email tồn tại'
-               
+            'email.unique'=> 'tên email tồn tại',
+            'password_confirmation.same'=> 'Mật khẩu không khớp'
                         
           ];
 

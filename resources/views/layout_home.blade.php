@@ -454,7 +454,7 @@ $(document).ready(function()
             {
              		 var x=error.responseText;
                   	x=$.parseJSON(x);
-                   
+                   console.log(x);
 					let errors = error.responseJSON.errors;
 					//FOCUS vào lỗi đầu tiên
 					var errorsfocus=Object.keys(errors)[0];
@@ -788,7 +788,10 @@ $("#cartModal").on('show.bs.modal', function(){
 									
 									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
 									<input type="password"  name="password"  class="form-control" placeholder="Mật khẩu"  ><br>
-									<div class="text-danger error" data-error="password"></div>	
+									<div class="text-danger error" data-error="password"></div>
+									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu:</h5>
+									<input type="password"  name="password_confirmation"  class="form-control" placeholder="Mật khẩu"  ><br>
+									<div class="text-danger error" data-error="password_confirmation"></div>	
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>
