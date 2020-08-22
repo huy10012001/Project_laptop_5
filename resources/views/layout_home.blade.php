@@ -592,6 +592,7 @@ $("#cartModal").on('show.bs.modal', function(){
 										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:0px;">Tạo tài khoản    </button>
 										<button><a href="{{ URL::to('auth/google') }}">Google Login</a>	</button>
 										<button><a href="{{ URL::to('auth/github') }}">Github Login</a>	</button>
+										<button><a href="{{ URL::to('auth/facebook') }}">facebook Login</a>	</button>
 									</div>
                         		</div>
 							</div>

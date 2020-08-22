@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -19,8 +20,8 @@ return [
         'redirect' => 'http://localhost:8000/auth/github/callback'
     ],
     'google' => [
-        'client_id' => '252446790047-kj38tiiqohrl4dkpm3ore0gkmg0vfhgv.apps.googleusercontent.com',
-        'client_secret' => 'NYy-9OEjR9uHPLekbDKYjx0a',
+        'client_id' => '252446790047-9kim54gq63k36jfs84fd6l42evg5pkco.apps.googleusercontent.com',
+        'client_secret' => 'lMampwssojJBOTfbnrkr6or0',
         'redirect' => 'http://localhost:8000/auth/google/callback',
     ],
     'mailgun' => [
@@ -40,3 +41,4 @@ return [
     ],
 
 ];
+

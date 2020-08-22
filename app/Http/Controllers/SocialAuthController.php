@@ -33,20 +33,40 @@ class SocialAuthController extends Controller
     public function handleProviderCallback($provider,Request $request)
     {  
      
+      
         try {
             $user = Socialite::driver($provider)->user();
            
-           
         } catch (\Exception $e) {
-            return Redirect::to('auth/'.$provider);
+            return redirect('/auth'.$provider);
         }
-      
-       $authUser = $this->findOrCreateUser($user, $provider);
-       // dd($authUser->id);
-       $request->session()->put('key', $authUser);
+        if($provider=="github")
+        {
+            if($user->name=="")
+            $user->name=$user->nickname;
+        }
+        // check if they're an existing user
+        $existingUser = User::where('email', $user->email)->first();
+        if(!$existingUser){
+          {
+            // create a new user
+            $existingUser=  User::create([
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'provider' => $provider,
+                'provider_id' => $user->id
+            ]);
+          }
+          
+        }
+        $request->session()->put('key',  $existingUser);
+       
+     //  $authUser = $this->findOrCreateUser($user, $provider);
+      // // dd($authUser->id);
+      // $request->session()->put('key', $authUser);
       
      
-        $order= Order::where(['user_id'=>$authUser->id,'status'=>'0'])->first();
+        $order= Order::where(['user_id'=>$existingUser->id,'status'=>'0'])->first();
         if($request->session()->get('cart'))
         {
             //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
@@ -54,7 +74,7 @@ class SocialAuthController extends Controller
            if(empty($order))
            {
                $order=new Order();//cart mới
-               $order->user_id= $authUser->id;
+               $order->user_id= $existingUser->id;
                $order->total=$cart->totalPrice;
                $order->status="0";
                $order->name=$user->name;
@@ -66,7 +86,7 @@ class SocialAuthController extends Controller
            { 
                //$order->delete();
                //$order=new Order();
-               $order->user_id=$authUser->id;
+               $order->user_id=$existingUser->id;
                $order->total=$cart->totalPrice;
                $order->status="0";
                $order->name=$user->name;
@@ -115,10 +135,10 @@ class SocialAuthController extends Controller
     
     public function findOrCreateUser($user, $provider)
     {
-        if($provider=="github")
+        /*if($provider=="github")
         {if($user->name=="")
             $user->name=$user->nickname;
-        }
+        }*/
         $authUser = User::where('provider_id', $user->id)->first();
         
         if ($authUser) {
