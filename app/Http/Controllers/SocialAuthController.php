@@ -23,6 +23,8 @@ class SocialAuthController extends Controller
     {
        
         if(!Session::has('pre_url')){
+        
+          
             Session::put('pre_url', URL::previous());
         }else{
             if(URL::previous() != URL::to('login')) Session::put('pre_url', URL::previous());
@@ -33,13 +35,8 @@ class SocialAuthController extends Controller
     public function handleProviderCallback($provider,Request $request)
     {  
      
-      
-        try {
-            $user = Socialite::driver($provider)->user();
-           
-        } catch (\Exception $e) {
-            return redirect('/auth'.$provider);
-        }
+        $user = Socialite::driver($provider)->stateless()->user();
+       
         if($provider=="github")
         {
             if($user->name=="")
@@ -47,28 +44,28 @@ class SocialAuthController extends Controller
         }
         // check if they're an existing user
         $existingUser = User::where('email', $user->email)->first();
-        if(!$existingUser){
-          {
+        if(!$existingUser)
+        {
             // create a new user
-            $existingUser=  User::create([
-                'name'     => $user->name,
-                'email'    => $user->email,
-                'provider' => $provider,
-                'provider_id' => $user->id
-            ]);
-          }
-          
+            $existingUser= new user();
+            $existingUser->name  = $user->name;
+            $existingUser->email  = $user->email;
+            $existingUser->provider = $provider;
+            $existingUser->provider_id = $user->id;
+            $existingUser->save();
+           
         }
-        $request->session()->put('key',  $existingUser);
+        $request->session()->put('key',$existingUser);
        
      //  $authUser = $this->findOrCreateUser($user, $provider);
       // // dd($authUser->id);
       // $request->session()->put('key', $authUser);
       
      
-        $order= Order::where(['user_id'=>$existingUser->id,'status'=>'0'])->first();
+       
         if($request->session()->get('cart'))
         {
+            $order= Order::where(['user_id'=>$existingUser->id,'status'=>'0'])->first();
             //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
            $cart=new Cart(session()->get('cart'));//cart trong session
            if(empty($order))

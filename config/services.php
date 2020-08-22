@@ -14,6 +14,11 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'facebook' => [
+        'client_id' => '329505034764124',
+        'client_secret' => '56cb7811fc590b3fb367dee4bf96e81e',
+        'redirect' => 'http://localhost:8000/auth/facebook/callback'
+    ],
     'github' => [
         'client_id' => '15173708fa0bf037d1e4',
         'client_secret' => '4c297b2ff44ce58325f6ac536ff6aedab423e70d',
