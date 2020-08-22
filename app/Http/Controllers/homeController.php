@@ -35,17 +35,17 @@ class homeController extends Controller
     public function index(Request $request){
        //$a="Dell-Inspiron-N3593C-i3-1005G1-4GB-256GB-15.6FHD-Win10";
         //$product=DB::table('product')->whereRaw("REPLACE(REPLACE(name,' ','-'),'/','-')= ?",$a);
-        $b='Dell--';
+      //  $b='Dell--';
         
        
       
-        $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
-        $product_detail= Product::whereRaw(
-            "REGEXP_REPLACE(name,
-            '[^a-zA-Z0-9-]+',
-            '-')= ?",$b)
-        ->first();
-        echo  $product_detail;
+      //  $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
+       // $product_detail= Product::whereRaw(
+           // "REGEXP_REPLACE(name,
+           // '[^a-zA-Z0-9-]+',
+          //  '-')= ?",$b)
+       //// ->first();
+        //echo  $product_detail;
         //$product=Product::find($product->id);
      //  echo $product_detail;
         // $product=product::find($product_id);
@@ -59,7 +59,7 @@ class homeController extends Controller
     //$product=DB::table('product')->whereRaw("REPLACE(name,Substring(name, PatIndex('%[/]%', name),1),'') = ?",$b);
   
    //$productLoc=DB::table('product')-> whereRaw("REPLACE(name,Substring(name, PatIndex('%[^0-9.-]%', name), 1), '-') = ?",$a);
-     // return view('index');
+     return view('index');
     }
    
     

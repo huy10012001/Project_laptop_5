@@ -142,5 +142,5 @@ Route::get('product/{name}','homeController@product')->middleware(ClearFromAttri
 Route::get('/product','homeController@allproduct')->middleware(ClearFromAttributes::class);
 
 
-Route::get('/demovalidate','demoLoiFormController@index');
-Route::post('/validate','demoLoiFormController@Checkvalidate');
+Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'SocialAuthController@handleProviderCallback');

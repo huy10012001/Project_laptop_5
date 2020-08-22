@@ -381,6 +381,10 @@ $(document).ready(function()
 
     });
 	//mouse up search
+	$('#register input').keyup(function(e)
+    {
+		$(this).css('border','');
+	});
 
     //đăng nhập và đăng ký
     $('#login').submit(function(e)
@@ -424,10 +428,7 @@ $(document).ready(function()
     });
 	
          //đăng ký  mua hàng khi user chua đăng nhập
-	$('#emailR').change(function(e)
-    {
-		$('#emailTontaiR').text('');
-	});
+	
 	//form register submit
     $('#register').submit(function(e)
     {
@@ -452,7 +453,7 @@ $(document).ready(function()
 			datatype: 'json',
 			error:function(error)
             {
-             		 var x=error.responseText;
+             		var x=error.responseText;
                   	x=$.parseJSON(x);
                    console.log(x);
 					let errors = error.responseJSON.errors;
@@ -468,9 +469,10 @@ $(document).ready(function()
        			{
          			let errorDiv = $(`.error[data-error="${key}"]`);
          			if(errorDiv.length )
-         			{
-             			errorDiv.text(errors[key][0]);
-						 
+         			{	
+						
+             			 errorDiv.text(errors[key][0]);
+						 $("#register input[name="+key+"]").css('border','2px solid red');
          			}
 					 //nếu không có lỗi
 				 	
@@ -588,6 +590,8 @@ $("#cartModal").on('show.bs.modal', function(){
 									<!-- Button trigger modal -->
 										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Đăng nhập    </button>
 										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:0px;">Tạo tài khoản    </button>
+										<button><a href="{{ URL::to('auth/google') }}">Google Login</a>	</button>
+										<button><a href="{{ URL::to('auth/github') }}">Github Login</a>	</button>
 									</div>
                         		</div>
 							</div>
@@ -1106,6 +1110,7 @@ $("#cartModal").on('show.bs.modal', function(){
 		</div>
 
 	</footer><!--/Footer-->
+
 
 
 

@@ -99,5 +99,6 @@
 
 @else
 không tìm thấy sản phẩm cho từ khóa {{$keyword}}
+
 @endif
 @endsection

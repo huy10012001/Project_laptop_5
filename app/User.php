@@ -23,7 +23,7 @@ class User extends Authenticatable
     // mặc định khóa chính sẽ tự động tăng
     public $incrementing = true;  
     protected $fillable = [
-        'id','name', 'email','age','phone','address','image', 'password',
+        'id','name', 'email','age','phone','address','image', 'password','provider','provider_id'
     ];
 
     /**

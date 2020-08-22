@@ -30,7 +30,7 @@
         <td>Dooley</td>
         <td>july@example.com</td>
       </tr>
-   
+      {{Session::get('key')}}
   </table>
 </div>
 
