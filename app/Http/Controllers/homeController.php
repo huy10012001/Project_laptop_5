@@ -462,13 +462,6 @@ class homeController extends Controller
         }
         else
         {
-         
-            //Sản phẩm active và đã cập nhập xong detail
-           // $name=str_replace("-","",$name);
-           
-         
-            
-         
             //$product_detail=Product::whereRaw(
                    // "REGEXP_REPLACE($sql,
                     //'[^a-zA-Z0-9.\]+',
@@ -476,12 +469,7 @@ class homeController extends Controller
            // ->first();
           // dd($product_detail);
           $product_detail=Product::where(['slug'=>$name])->first();;
-           
-          
-            //$product_active=product::find($product_active_id)->first();
-
-             //Sản phẩm không active và đã cập nhập xong detail
-            if(!empty($product_detail))
+           if(!empty($product_detail))
             {
                 if($product_detail->status=="1")
                 {   
@@ -491,8 +479,8 @@ class homeController extends Controller
                     where('product.status','1')->where('category.id',$category->id);
                    return view('detail')->with(['p'=>$product_detail,'c'=>$category,'lq'=>$lienquan]);
                 }
-               // else  if($product_detail->status=="0")
-                  return view('detail')->with(['noactive'=>$product_detail]);
+                else  if($product_detail->status=="0")
+                return view('detail')->with(['noactive'=>$product_detail]);
             }
             else
             {
