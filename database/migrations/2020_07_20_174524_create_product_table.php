@@ -19,6 +19,7 @@ class CreateProductTable extends Migration
             $table->bigInteger('category_id')->unsigned()->index();
             $table->foreign('category_id')->references('id')->on('category')->onUpdate('cascade');
             $table->string('name');
+            $table->string('slug');
             $table->integer('price');
             
             $table->enum('status', array('0','1'))->default('1');

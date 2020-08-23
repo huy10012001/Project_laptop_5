@@ -16,28 +16,43 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use App\Cart;
+use App\Http\Requests\ProductRequest;
 use App\order_product;
 USE Illuminate\Database\Eloquent\Collection;
 use League\CommonMark\Util\ArrayCollection;
 class homeController extends Controller
 {
-    public function scopeWhereName($query, $queryString) {
-        $chars = [' ', '.', ',','/'];
-    
- 
-            $query=$query->selectRaw("REPLACE('name')");
-           
-       
-       
-        return $query;
-        
+    public function convert_name($str) {
+        $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+        $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+        $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+        $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+        $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+        $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+        $str = preg_replace("/(đ)/", 'd', $str);
+        $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+        $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+        $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/", 'I', $str);
+        $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+        $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+        $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+        $str = preg_replace("/(Đ)/", 'D', $str);
+        $str = preg_replace("/(\“|\”|\‘|\’|\,|\!|\/|\"|\&|\;|\@|\#|\%|\~|\`|\=|\_|\'|\]|\[|\}|\{|\)|\(|\+|\^)/", '-', $str);
+        $str = preg_replace("/( )/", '-', $str);
+        $str = preg_replace('/-+/', '-', $str);
+        return $str;
     }
     public function index(Request $request){
        //$a="Dell-Inspiron-N3593C-i3-1005G1-4GB-256GB-15.6FHD-Win10";
         //$product=DB::table('product')->whereRaw("REPLACE(REPLACE(name,' ','-'),'/','-')= ?",$a);
       //  $b='Dell--';
-        
        
+        $product=Product::all();
+        foreach($product as $p)
+        {
+            $p->slug=$this->convert_name($p->name);
+            $p->save();
+        }
       
       //  $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
        // $product_detail= Product::whereRaw(
@@ -59,7 +74,7 @@ class homeController extends Controller
     //$product=DB::table('product')->whereRaw("REPLACE(name,Substring(name, PatIndex('%[/]%', name),1),'') = ?",$b);
   
    //$productLoc=DB::table('product')-> whereRaw("REPLACE(name,Substring(name, PatIndex('%[^0-9.-]%', name), 1), '-') = ?",$a);
-     return view('index');
+    // return view('index');
     }
    
     
@@ -119,15 +134,14 @@ class homeController extends Controller
     public function allproduct(Request $request)
     {
            
-            $flag=false;
+        $flag=false;
          //dd(count($request->all()));
-          
-            $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
-            -> join('product','product.category_id','=','category.id')
-            ->join('detail_product','detail_product.product_id','=','product.id')->
-            where('product.status','1')->get();
-            $product=product::where(['status'=>"1"])
-            ->join('detail_product','detail_product.product_id','=','product.id');
+        $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
+        -> join('product','product.category_id','=','category.id')
+        ->join('detail_product','detail_product.product_id','=','product.id')->
+        where('product.status','1')->get();
+         $product=product::where(['status'=>"1"])
+        ->join('detail_product','detail_product.product_id','=','product.id');
            
            
             //Nếu tên danh mục tồn tại và ít nhất có 1 sản phẩm đã cập nhập xong chi tiết active
@@ -294,10 +308,6 @@ class homeController extends Controller
     }
     public function product ($name,Request $request)
     { 
-        
-        
-        //dd( $decoded = html_entity_decode($name) );
-       
         //Tìm tên danh mục trước
         $all_category= DB::table('category')->select(['category.name','category.id'])->distinct()
         -> join('product','product.category_id','=','category.id')
@@ -444,7 +454,7 @@ class homeController extends Controller
                 }
             }
             $count=$product->count();
-             $product=$product->paginate(6);
+            $product=$product->paginate(6);
             $requestOrder=$request->orderby;
          
             return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
@@ -455,42 +465,40 @@ class homeController extends Controller
          
             //Sản phẩm active và đã cập nhập xong detail
            // $name=str_replace("-","",$name);
-            $product_detail=Product::whereRaw(
-             
-                    "REGEXP_REPLACE(name,
-                    '[^a-zA-Z0-9.\]+',
-                    '-')= ?",$name)
-            ->first();
            
-           // $product_detail= Product::whereRaw(
-              //  "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name,' ',''),'/',''),'\"',''),'_',''),'&',''),'+',''),'-','')= ?",$name)
+         
+            
+         
+            //$product_detail=Product::whereRaw(
+                   // "REGEXP_REPLACE($sql,
+                    //'[^a-zA-Z0-9.\]+',
+                  //  '-')= ?",$name)
            // ->first();
+          // dd($product_detail);
+          $product_detail=Product::where(['slug'=>$name])->first();;
            
           
             //$product_active=product::find($product_active_id)->first();
 
              //Sản phẩm không active và đã cập nhập xong detail
             if(!empty($product_detail))
-            {if($product_detail->status=="1")
-            {   
-              
-                $category=category::find($product_detail->category_id);
-                $lienquan= category::join('product','product.category_id','=','category.id')
-                ->join('detail_product','detail_product.product_id','=','product.id')->
-                where('product.status','1')->where('category.id',$category->id);
-
-                return view('detail')->with(['p'=>$product_detail,'c'=>$category,'lq'=>$lienquan]);
-
-            }
-            else  if($product_detail->status=="0")
-                  return view('detail')->with(['noactive'=>$product_detail]);
-             }
-             else
             {
-                return \abort('404');
+                if($product_detail->status=="1")
+                {   
+                    $category=category::find($product_detail->category_id);
+                    $lienquan= category::join('product','product.category_id','=','category.id')
+                    ->join('detail_product','detail_product.product_id','=','product.id')->
+                    where('product.status','1')->where('category.id',$category->id);
+                   return view('detail')->with(['p'=>$product_detail,'c'=>$category,'lq'=>$lienquan]);
+                }
+               // else  if($product_detail->status=="0")
+                  return view('detail')->with(['noactive'=>$product_detail]);
+            }
+            else
+            {
+                    return \abort('404');
             }
         }
-
     }
 
 
@@ -502,15 +510,15 @@ class homeController extends Controller
         $title = $request->input('ct_title');
         $mess=$request->input('ct_message');
         $add=$request->input('ct_addres');
-         $c = new contact_user();
-         $c->name=$name;
-         $c->email=$email;
-         $c->phone=$phone;
-         $c->subject=$title;
-         $c->message=$mess;
-         $c->address=$add;
-         $c->save();
-         return Redirect::Back();
+        $c = new contact_user();
+        $c->name=$name;
+        $c->email=$email;
+        $c->phone=$phone;
+        $c->subject=$title;
+        $c->message=$mess;
+        $c->address=$add;
+        $c->save();
+        return Redirect::Back();
 
     }
     public function search(Request $request){
@@ -521,11 +529,11 @@ class homeController extends Controller
              $product=Product::where(['status'=>"1"])
        ->join('detail_product','detail_product.product_id','=','product.id') ;
        $product = $product->where('name', 'LIKE', '%' . $search . '%');
-      
+       $orderBy="";
        if($request->orderby)
          {
-           $orderBy=$request->orderby;
-           
+       
+            $orderBy=$request->orderby;
              switch($orderBy)
                     {
                         
@@ -542,10 +550,9 @@ class homeController extends Controller
                     }
                 }
      
-        $requestOrder=$request->orderby;
         $count=$product->count();
         $product=$product->paginate(8);
-        return view('user.veview_search',['count'=>$count,'requestorderby'=>$requestOrder,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
+        return view('user.veview_search',['count'=>$count,'requestorderby'=> $orderBy,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);
     }
 
 

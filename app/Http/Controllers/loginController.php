@@ -117,37 +117,8 @@ class loginController extends Controller
        // $request->session()->forget('cart');
        
     }
-    public function checkValidate1(Request $request)
-    {
-        $email=$request->email;
-        
-        $checkemail=User::where(['email'=>$email])->first();
-        if(!empty($checkemail))
-          echo "false";
-        else
-            echo "true";die;
-    }
-    public function checkValidate(Request $request)
-    {
-        $email=$request->email;
-        
-        $checkemail=User::where(['email'=>$email])->first();
-        if(!empty($checkemail))
-            return Response::json(array(
-            'status'=>'datontai',
-        )); 
-        else
-        return Response::json(array(
-            'status'=>'chuatontai',
-        )); 
-    }
-    public function postRegister(ProductRequest  $request)
-    {
-        
-      //  $validation=$request->all();
-       
-        
-    }
+    
+   
     public function postRegisterCheckOut(registerRequest   $request)
     {
          

@@ -219,8 +219,7 @@ $(document).ready(function() {
 
         @endforeach
         @endif
-
-
+        
         <br/>
         <label for="sapxep">Mức giá</label>  <br/>
         <input type="checkbox" class="box all"  value="tất-cả"   name="price[]">
@@ -372,7 +371,7 @@ $(document).ready(function() {
 
             <div class="choose">
                 <ul class="nav nav-pills nav-justified">
-                <li><a onclick="chiTiet('{{$p->name}}')"></i>Chi tiết sản phẩm</a></li>
+                <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
                 <!--
                 @if(strpos($p->name, '/'))
                 <li><a href="{{ URL::to('/product/'.Str::slug(substr($p->name, 0, strpos($p->name, '/')))) }}" ><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>

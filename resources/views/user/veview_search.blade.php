@@ -82,7 +82,7 @@
         <div class="choose">
             <ul class="nav nav-pills nav-justified">
 
-            <li><a onclick="chiTiet('{{$p->name}}')"></i>Chi tiết sản phẩm</a></li>
+            <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
             </ul>
         </div>
     </div>

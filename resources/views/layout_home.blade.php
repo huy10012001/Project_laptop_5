@@ -114,29 +114,61 @@ if(!!window.performance && window.performance.navigation.type === 2)
     window.location.reload();
 }
 //search
-//truy cập chi tiết
+/**
+ * (c) 2012 Steven Levithan <http://slevithan.com/>
+ * MIT license
+ */
+if (!String.prototype.codePointAt) {
+    String.prototype.codePointAt = function (pos) {
+        pos = isNaN(pos) ? 0 : pos;
+        var str = String(this),
+            code = str.charCodeAt(pos),
+            next = str.charCodeAt(pos + 1);
+        // If a surrogate pair
+        if (0xD800 <= code && code <= 0xDBFF && 0xDC00 <= next && next <= 0xDFFF) {
+            return ((code - 0xD800) * 0x400) + (next - 0xDC00) + 0x10000;
+        }
+        return code;
+    };
+}
+
+/**
+ * Encodes special html characters
+ * @param string
+ * @return {*}
+ */
+function change_alias(alias) {
+    var str = alias;
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+    str = str.replace(/đ/g,"d");
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+    str = str.replace(/ + /g," ");
+    str = str.trim(); 
+    return str;
+}
 function chiTiet(sanpham)
     {   
 		
-		console.log(sanpham);
-        //tách ký tự đặc biệt trừ dấu chấm
-        sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
-       
-        //gộp nhiều khoảng trắng làm 1
-        sanpham=sanpham.split(/\s+/g).join(" ");
-        //encode value này
-        var urlencode=encodeURIComponent(sanpham);
-        //chuyển ký tự khoảng trắng dc encode sang -
-        urlencode=urlencode.split("%20").join("-");
-        console.log(urlencode);
-       // var urlencode=encodeURIComponent(sanpham);
-       // urlencode=urlencode.split("%20").join("-");
-        //urlencode=urlencode.split("%2").join("-");
-        //urlencode=urlencode.split("-F").join("-");
-       // urlencode=urlencode.split("-2").join("-");
-        
-       
-         window.location.href='/product/'+urlencode;
+		sanpham=change_alias(sanpham);
+		 //tách ký tự đặc biệt trừ dấu chấm
+	 	sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
+       	//gộp nhiều khoảng trắng làm 1
+	   	sanpham=sanpham.split(/\s+/g).join(" ");
+	   	//encode value này
+	   	var urlencode=encodeURIComponent(sanpham);
+	   //chuyển ký tự khoảng trắng dc encode sang -
+	   urlencode=urlencode.split("%20").join("-");
+ 		
+		 //console.log(urlencode);
+		
+		//window.location = '/product/'+urlencode;
+  		
     }
 //tạo tài khoản
 
@@ -278,15 +310,8 @@ function AddCart(product_id)
 function Redirectlivesearch(a)
 {
 	var sanpham=$(a).find('.search_name').text();
-	console.log(sanpham);
-	sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
-     //gộp nhiều khoảng trắng làm 1
-	sanpham=sanpham.split(/\s+/g).join(" ");
-	//encode value này
-	var urlencode=encodeURIComponent(sanpham);
-	//chuyển ký tự khoảng trắng dc encode sang -
-	urlencode=urlencode.split("%20").join("-");
-	window.location.href='/product/'+urlencode;
+	
+	window.location.href='/product/'+sanpham;
 }
 $(document).click(function (e)
 {
@@ -660,6 +685,7 @@ $("#cartModal").on('show.bs.modal', function(){
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);"><i class="fa fa-home" aria-hidden="true"></i> &nbsp; Trang Chủ</a></li>
+								
 
 								@if(isset($category) && $category->count()>0)
 								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);"><i class="fa fa-laptop" aria-hidden="true"></i> &nbsp; Sản Phẩm</a>

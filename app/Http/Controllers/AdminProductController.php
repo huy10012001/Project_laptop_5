@@ -13,7 +13,27 @@ use App\Order;
 use App\User;
 use App\DetailProduct;
 class AdminProductController extends Controller
-{
+{   
+    public function convert_name($str) {
+        $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+        $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+        $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+        $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+        $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+        $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+        $str = preg_replace("/(đ)/", 'd', $str);
+        $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+        $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+        $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/", 'I', $str);
+        $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+        $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+        $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+        $str = preg_replace("/(Đ)/", 'D', $str);
+        $str = preg_replace("/(\“|\”|\‘|\’|\,|\!|\/|\"|\&|\;|\@|\#|\%|\~|\`|\=|\_|\'|\]|\[|\}|\{|\)|\(|\+|\^)/", '-', $str);
+        $str = preg_replace("/( )/", '-', $str);
+        $str = preg_replace('/-+/', '-', $str);
+        return $str;
+    }
     public function postDetailProduct(Request $request)
     {
         $d1=$request->except('_token','product');
@@ -81,7 +101,9 @@ class AdminProductController extends Controller
     public function postCreate(ProductRequest $request) 
     {
         // nhận tất cả tham số vào mảng product
+        
         $product = $request->all();
+        
         // xử lý upload hình vào thư mục
         if($request->hasFile('image'))
         {
@@ -106,7 +128,7 @@ class AdminProductController extends Controller
         $p = new Product($product);
         $category= $_POST['category'];
         $p->category_id = $category;
-       
+        $p->slug=$this->convert_name($request->input('name'));
         $p->image=$imageName;
         $p->status="1";
         $p->save();
@@ -162,10 +184,10 @@ class AdminProductController extends Controller
         }
         $p = Product::find($id);
         $p->name=$name;
-        
+        $p->slug=$this->convert_name($name);
         $p->category_id=$category;
         $p->image = $imageName;
-            
+        
         //update lại status
        
         //update lại tổng  giá sản phẩm trong giỏ hàng
@@ -174,7 +196,7 @@ class AdminProductController extends Controller
             $p->status=$status;
             $p->price=$price;
             $p->save();
-           
+            
             $orders=Order::where(['status'=>'0'])->get();
             foreach($orders as $order)
             {

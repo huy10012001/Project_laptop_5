@@ -54,7 +54,7 @@ class UserCartcontroller extends Controller
                     $count+=1;
                     $output .= 
                     '<tr onclick="Redirectlivesearch(this)" class="search_items">
-                    <td hidden class="search_name">' . $product->name . '</td> 
+                    <td hidden class="search_name">' . $product->slug . '</td> 
                     <td  style="width:50px" >
                     <img  height="50px" width="50px"  src="/images/'.$product->image.'"/>
                     </td> 
