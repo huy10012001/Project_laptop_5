@@ -30,9 +30,14 @@
         <td>Dooley</td>
         <td>july@example.com</td>
       </tr>
-      {{Session::get('pre_url')}}
+  <input type="text">
   </table>
 </div>
 
 </body>
+<script>
+ $( "input" ).keyup(function() {
+ console.log($(this).val());
+});
+</script>
 </html>

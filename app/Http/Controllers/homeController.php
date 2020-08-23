@@ -501,12 +501,14 @@ class homeController extends Controller
         $phone = $request->input('ct_phone');
         $title = $request->input('ct_title');
         $mess=$request->input('ct_message');
+        $add=$request->input('ct_addres');
          $c = new contact_user();
          $c->name=$name;
          $c->email=$email;
          $c->phone=$phone;
          $c->subject=$title;
          $c->message=$mess;
+         $c->address=$add;
          $c->save();
          return Redirect::Back();
 

@@ -12,7 +12,7 @@ use App\Product;
 use App\Cart;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
-
+use App\SocialAccount;
 use Illuminate\Support\Facades\URL;
 
 use Laravel\Socialite\One\AbstractProvider;
@@ -29,33 +29,53 @@ class SocialAuthController extends Controller
         }else{
             if(URL::previous() != URL::to('login')) Session::put('pre_url', URL::previous());
         }
-       return Socialite::driver($provider)->redirect();   
+        
+         return Socialite::driver($provider)->redirect();   
     }      
   
     public function handleProviderCallback($provider,Request $request)
     {  
      
-        $user = Socialite::driver($provider)->stateless()->user();
+        $providerUser = Socialite::driver($provider)->stateless()->user();
        
-        if($provider=="github")
+        if($providerUser->name=="")
+            $providerUser->name=$providerUser->nickname;
+        
+        
+        // kiểm tra xem tài khoản social của user có tồn tại chưa
+        $account = SocialAccount::whereProvider($provider)
+        ->whereprovider_id($providerUser->getId())
+        ->first();
+        //kiểm tra xem user có tồn tại
+        $user = User::whereEmail($providerUser->email)->first();
+       
+        if(!$account)
         {
-            if($user->name=="")
-            $user->name=$user->nickname;
-        }
-        // check if they're an existing user
-        $existingUser = User::where('email', $user->email)->first();
-        if(!$existingUser)
-        {
-            // create a new user
-            $existingUser= new user();
-            $existingUser->name  = $user->name;
-            $existingUser->email  = $user->email;
-            $existingUser->provider = $provider;
-            $existingUser->provider_id = $user->id;
-            $existingUser->save();
+            //tạo tài khoản mới
+            $account= new SocialAccount();
+           
+           
+            $account->provider = $provider;
+            $account->provider_id = $providerUser->id;
+           
+           
+            //nếu user chưa từng đăng ký  thì tạo tài khoản cho user
+            if (!$user) {
+
+                $user = User::create([
+                    'email' => $providerUser->email,
+                    'name' => $providerUser->name,
+                    
+                ]);
+               
+            }
+            $account->user_id = $user->id;
+            $account->save();
            
         }
-        $request->session()->put('key',$existingUser);
+        $request->session()->put('key',$user);
+        
+      
        
      //  $authUser = $this->findOrCreateUser($user, $provider);
       // // dd($authUser->id);
@@ -65,13 +85,13 @@ class SocialAuthController extends Controller
        
         if($request->session()->get('cart'))
         {
-            $order= Order::where(['user_id'=>$existingUser->id,'status'=>'0'])->first();
+            $order= Order::where(['user_id'=>$user->id,'status'=>'0'])->first();
             //Trường hợp giỏ hàng user trống hoặc mua lần đầu tạo order mới
            $cart=new Cart(session()->get('cart'));//cart trong session
            if(empty($order))
            {
                $order=new Order();//cart mới
-               $order->user_id= $existingUser->id;
+               $order->user_id= $user->id;
                $order->total=$cart->totalPrice;
                $order->status="0";
                $order->name=$user->name;
@@ -83,7 +103,7 @@ class SocialAuthController extends Controller
            { 
                //$order->delete();
                //$order=new Order();
-               $order->user_id=$existingUser->id;
+               $order->user_id=$user->id;
                $order->total=$cart->totalPrice;
                $order->status="0";
                $order->name=$user->name;

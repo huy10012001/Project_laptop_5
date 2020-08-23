@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Middleware\ClearFromAttributes;
+use App\Http\Middleware\facebookRedirect;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +25,8 @@ use App\Http\Middleware\ClearFromAttributes;
 Route::get('/', function () {
     return view('welcome');
 });
+
+    
 //trang front end
 //test index
 Route::post('postRegister','loginController@postRegister');
@@ -140,7 +146,6 @@ Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
 Route::get('product/{name}','homeController@product')->middleware(ClearFromAttributes::class);
 
 Route::get('/product','homeController@allproduct')->middleware(ClearFromAttributes::class);
+ Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');
+    Route::get('/auth/{provider}/callback', 'SocialAuthController@handleProviderCallback');
 
-
-Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');
-Route::get('/auth/{provider}/callback', 'SocialAuthController@handleProviderCallback');

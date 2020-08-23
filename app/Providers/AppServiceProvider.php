@@ -9,7 +9,7 @@ use  Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Order;
-
+use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,8 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        
+       
         view()->composer('layout_home', function($view)
         {
+           
               //lấy danh mục có ít nhất 1 sản phẩm cập nhập đầy đủ chi tiết và đang hoạt động
             $category= DB::table('category')->select('category.name')->distinct()
             -> join('product','product.category_id','=','category.id')

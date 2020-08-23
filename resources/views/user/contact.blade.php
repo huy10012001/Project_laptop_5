@@ -1,6 +1,76 @@
 @extends('layout_home')
 @section('contact')
+<script>
+    $(document).ready(function()
+{
+    $('#formContact').submit(function(e)
+    {
+        
 
+		//xóa hết lỗi trước khi bắt
+		$('.error').each(function() {
+			$(this).text('');
+		});
+
+       e.preventDefault();
+       $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+        $.ajax({
+			method:'post',
+      		url:	 " {{ asset('/postContact')}}",
+      		data:$('#formContact').serialize(),
+			datatype: 'json',
+			error:function(error)
+            {
+
+             		var x=error.responseText;
+                  	x=$.parseJSON(x);
+                   console.log(x);
+					let errors = error.responseJSON.errors;
+                   
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
+
+					var nameFocus=$("#formContact input[name="+errorsfocus+"]");
+					nameFocus.focus();
+					//nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+
+             			 errorDiv.text(errors[key][0]);
+						 $("#formContact input[name="+key+"]").css('border','2px solid red');
+         			}
+					 //nếu không có lỗi
+
+        		}
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					//$('#emailTontaiR').text(errors.email);
+				//})
+					//errors=JSON.stringify(errors.error);
+
+              },
+			success:function(data)
+           	{
+
+
+					location.reload();
+
+
+
+           	}
+        });
+    });
+});
+</script>
 <!-- breadcrumbs area end -->
 <!-- contact-details start -->
 <div class="main-contact-area">
@@ -55,64 +125,40 @@
                         <div class="contact-us-form">
                             <div class="contact-form">
                                 <span class="legend">Mời bạn điền thông tin liên hệ</span>
-                                <form action="{{ url('postContact') }}" method="post">
+                                <form  method="post"   id="formContact"  action="javascrip:void(0)">
                                 {{ csrf_field() }}
                                     <div class="form-top">
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Họ tên <sup>*</sup></label>
                                             <input type="text" name="ct_name" class="form-control">
-                                            @if($errors->has('ct_name'))
-                                            <div class="has-error">
-                                                <p class="help-block">
-                                                    {{$errors->first('ct_name')}}
-                                                </p>
-                                            </div>
-                                            @endif
+                                            <div class="text-danger error" data-error="ct_name"></div>
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Email <sup>*</sup></label>
                                             <input type="text" name="ct_email" class="form-control">
-                                            @if($errors->has('ct_email'))
-                                            <div class="has-error">
-                                                <p class="help-block">
-                                                    {{$errors->first('ct_email')}}
-                                                </p>
-                                            </div>
-                                            @endif
+                                            <div class="text-danger error" data-error="ct_email"></div>
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Số điện thoại <sup>*</sup></label>
                                             <input type="text" name="ct_phone" class="form-control">
-                                            @if($errors->has('ct_phone'))
-                                            <div class="has-error">
-                                                <p class="help-block">
-                                                    {{$errors->first('ct_phone')}}
-                                                </p>
-                                            </div>
-                                            @endif
+                                            <div class="text-danger error" data-error="ct_phone"></div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12" >
+                                            <label>địa chỉ <sup>*</sup></label>
+                                            <textarea class="yourmessage" name="ct_address" style=" border-radius: 5px;"></textarea>
+                                            <div class="text-danger error" data-error="ct_address"></div>
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Tiêu đề <sup>*</sup></label>
                                             <input type="text" name="ct_title" class="form-control">
-                                            @if($errors->has('ct_title'))
-                                            <div class="has-error">
-                                                <p class="help-block">
-                                                    {{$errors->first('ct_title')}}
-                                                </p>
-                                            </div>
-                                            @endif
+                                            <div class="text-danger error" data-error="ct_title"></div>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-12" >
                                             <label>Nội dung <sup>*</sup></label>
                                             <textarea class="yourmessage" name="ct_message" style=" border-radius: 5px;"></textarea>
-                                            @if($errors->has('ct_content'))
-                                            <div class="has-error">
-                                                <p class="help-block">
-                                                    {{$errors->first('ct_content')}}
-                                                </p>
-                                            </div>
-                                            @endif
+                                            <div class="text-danger error" data-error="ct_message"></div>
                                         </div>
+
                                     </div>
                                     <div class="submit-form form-group col-sm-12 submit-review">
                                         <p><sup>*</sup> Bắt buộc nhập</p>

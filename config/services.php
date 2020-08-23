@@ -15,19 +15,21 @@ return [
     |
     */
     'facebook' => [
-        'client_id' => '329505034764124',
-        'client_secret' => '56cb7811fc590b3fb367dee4bf96e81e',
-        'redirect' => 'http://localhost:8000/auth/facebook/callback'
+        'client_id' => '2694583624133611',
+        'client_secret' => 'e496400e367bd248e4957e87449cc1c8',
+        'redirect' => 'http://127.0.0.1:8000/auth/facebook/callback'
+       
+
     ],
     'github' => [
-        'client_id' => '15173708fa0bf037d1e4',
-        'client_secret' => '4c297b2ff44ce58325f6ac536ff6aedab423e70d',
-        'redirect' => 'http://localhost:8000/auth/github/callback'
+        'client_id' => 'ae2f51ec7d81658797f1',
+        'client_secret' => 'c17a9a79b03c24062af3fe48cc167aa869d2431a',
+        'redirect' => 'http://127.0.0.1:8000/auth/github/callback'
     ],
     'google' => [
         'client_id' => '252446790047-9kim54gq63k36jfs84fd6l42evg5pkco.apps.googleusercontent.com',
         'client_secret' => 'lMampwssojJBOTfbnrkr6or0',
-        'redirect' => 'http://localhost:8000/auth/google/callback',
+        'redirect' => 'http://127.0.0.1:8000/auth/google/callback',
     ],
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),

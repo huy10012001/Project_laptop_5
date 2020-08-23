@@ -705,7 +705,7 @@ class UserCartcontroller extends Controller
         $product=Product::find($id);
 
         $user= $request->session()->get('key');
-
+       
        if(empty($user))
         {
             if($request->session()->get('cart'))
@@ -749,8 +749,9 @@ class UserCartcontroller extends Controller
         }
         else
         {
+           
             $user_id=$user->id;
-
+           
        //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
 
         $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
