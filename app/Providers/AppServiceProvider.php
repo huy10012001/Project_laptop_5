@@ -9,7 +9,9 @@ use  Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Order;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Schema;
 class AppServiceProvider extends ServiceProvider
 {
     /**

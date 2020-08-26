@@ -356,20 +356,11 @@ class UserCartcontroller extends Controller
         $c=$request->qty;
         $time_create=$request->timecreate;
 
-        //nếu item không tồn tại
-
-
-        if(($c>10 ||$c<0 ||empty($c)) )
-        {
-            return Response::json(array(
-            'soluong'=>'1',
-        ));
-        }
-       // $request->session()->put('change','update');
+        
         if($product_id=="" )
                 return abort('404');
-       //khi giỏ hàng trống và user chưa đăng nhập hoặc khi vừa đăng nhập tab khác
-        if(empty($order_id) && !$request->session()->has('key') && !$request->session()->has('cart'))
+       //khi giỏ hàng ở tab hiện tại trống(tab hiện tại chưa login) và user chưa đăng nhập  tab khác
+        if(empty($order_id) &&!$request->session()->has('key') && !$request->session()->has('cart'))
         {
 
                  return Response::json(array(
@@ -377,7 +368,7 @@ class UserCartcontroller extends Controller
            ));
         }
 
-        //đăng xuất bên tab khác và tab hiện tại vẫn mở
+        //khi giỏ hàng ở tab hiện tại trống(tab hiện tại đã login) và user đăng xuất bên tab khác
         if(!empty($order_id) && !$request->session()->has('key'))
             {
                  return Response::json(array
@@ -391,48 +382,57 @@ class UserCartcontroller extends Controller
         //tìm order trong giỏ hàng hiện tại
         if($request->session()->get('cart'))
         {
-
+            
             $cart=new Cart(session()->get('cart'));
-                 //nếu item không tồn tại
 
             if(isset($cart->items[$product_id]))
             {
                    $status=Product::find($cart->items[$product_id]['id'])->status;
 
             }
+            //nếu items không  hoạt động hoăc ,tab hiện tại có sản phẩm và vừa xóa bên tab khác
            if(!isset($cart->items[$product_id])||$status=="0")
             return Response::json(array(
                 'status'=>'no3',
 
             ));
 
-
+            //Thời gian mua sản phẩm tab hiện tại và tab khác không giống nhau
             if($time_create!=$cart->items[$product_id]['time_at'])
             return Response::json(array(
                  'status'=>'no6'
             ));
-
-            $cart->update1($product,$c);
-
-            $request->session()->put('cart',$cart);
             $sum=0;
+            $totalQty=0;
+            $beforechange=$cart->items[$product_id]['qty'];
+            $cart->update1($product,$c);
             foreach($cart->items as $item)
             {
                 if(!empty(Product::find($item['id']))&&Product::find($item['id'])->status=="1")
-                {
+                {       
+                    $totalQty+=$item['qty'];
                     $sum+=Product::find($item['id'])->price*$item['qty'];
                 }
             }
-            return Response::json(array(
-                'total'=> $sum ,
+            if($totalQty>10)
+                return Response::json(array(
+                'status'=> 'tối đa' ,
+                'qty'=> $beforechange
 
             ));
+            else
+            {
+                $request->session()->put('cart',$cart);
+                 return Response::json(array(
+                'total'=> $sum ,
+                ));
+            }
 
         }
 
         if($request->session()->has('key'))
         {
-
+            
             $a= $request->session()->get('key')->id;
 
             //Lấy id order mới hoặc id order của user khác
@@ -440,23 +440,26 @@ class UserCartcontroller extends Controller
 
             {
                 $user_id=Order::where(['id'=>$order_id])->first()->user_id;
-                //Nếu order mới cập nhập hoặc đăng nhập với id khác
+                //Nếu user tạo đơn mới khác đơn tab hiện tại hoặc đăng nhập với id khác
                 if($user_id!=$a )
                 return Response::json(array(
                 'status'=>'no4' ));
             }
 
-            //khi đăng nhập ở tab khác rồi đăng xuất và đăng nhập lại
+           
             //Trường hợp thứ 8
+            //Khi mua hàng lúc chưa đăng nhập empty($order_id)
             if(empty($order_id))
             {
-
+                //Hóa đơn session hiện tại
                 $order=Order::where(['user_id'=>$a,'status'=>'0'])->first();
+                
                 if(!empty($order))
                 {
                     $order_id= $order->id;
 
                 }
+                //đơn hàng còn ở session cart
                 $old_order_id="have";
 
             }
@@ -465,14 +468,14 @@ class UserCartcontroller extends Controller
                 $old_order_id="";
             }
             //Hết trường hợp 8
-             //Khi trống sản phẩm hoặc ản phẩm không hoạt động
+           
             $p = order_product::where
             ([
                 'order_id'=>$order_id,
                 'product_id'=>$product_id
             ])->first();
 
-
+            //Khi tab hiện tại còn sản phẩm, trống sản phẩm ở tab khác hoặc sản phẩm không hoạt động
             if(empty($p) || Product::find($product_id)->status=="0")
                 return Response::json(array(
                 'status'=>'no5',
@@ -483,7 +486,10 @@ class UserCartcontroller extends Controller
             return Response::json(array(
                 'status'=>'no9'
             ));
-            //$time=Carbon::createFromTimestampUTC($p->created_at)->secondsSinceMidnight();
+            /*khi có sản phẩm ở tab hiện tại(lúc chưa đăng nhập), đăng nhập ở
+             tab khác thì sẽ lưu thời gian
+            tạo sản phẩm của session với user hiện tại, nếu user khác đăng nhập 
+            hoặc thời gian tạo sản phẩm khác thì không tìm thấy item*/
             if($old_order_id)
             {
                if(($p->created_at->timestamp+3600*7)!=$time_create )
@@ -491,6 +497,7 @@ class UserCartcontroller extends Controller
                  'status'=>'no8'
                 ));
             }
+             //Thời gian mua sản phẩm tab hiện tại và tab khác không giống nhau
             if($old_order_id=="")
             {
 
@@ -499,33 +506,64 @@ class UserCartcontroller extends Controller
                      'status'=>'no7'
                 ));
             }
-
+            //số lượng mua tối đa là 10
+           
             //update order_product
-             order_product::where
+             /*  order_product::where
              ([
             'order_id'=>$order_id,
             'product_id'=>$product_id
              ])->update(['qty' => $c,'amount'=>Product::find($product_id)->price*$c]);
             //Update lại tổng giá của đơn hàng đó
-            $c=Order::find($order_id);
-            /*
-            $c->total=order_product::where
-            ([
-             'order_id'=>$order_id
-                ,'status'=>"1"
-
-             ])->sum('amount');*/
-             $total=order_product::where
+             $carts=Order::find($order_id);
+            
+            /* $total=order_product::where
              (['order_id'=>$order_id ])->
              join('product','order_product.product_id','=','product.id')
              ->where(['product.status'=>"1"])
              ->sum('amount');
-             $c->total=$total;
-             $c->save();
-             return Response::json(array(
-                'total'=>$c->total  ,
-
-            ));
+             $cart->total=$total;
+             $cart->save();*/
+             $carts=Order::find($order_id);
+             $totalPrice=0;
+             $totalQty=0;
+             $qty_beforechange=0;
+             foreach($carts->product as $items)
+             {    
+                if($items->id!=$product_id)
+                { 
+                    $totalPrice+=$items->pivot->price*$items->pivot->qty;
+                    $totalQty+=$items->pivot->qty;
+                }
+                else
+                {
+                    $qty_beforechange=$items->pivot->qty;
+                    $totalPrice+=$items->pivot->price*$c;
+                    $totalQty+=$c;
+                }
+             }
+             if($totalQty>10)
+                 return Response::json(array(
+             'status'=>'tối đa',
+             'qty'=> $qty_beforechange
+             ));
+             else
+             {
+                order_product::where
+                ([
+               'order_id'=>$order_id,
+               'product_id'=>$product_id
+                ])->update(['qty' => $c,'amount'=>Product::find($product_id)->price*$c]);
+               //Update lại tổng giá của đơn hàng đó
+               $carts->total=$totalPrice;
+               $carts->save();
+                    
+                return Response::json(array(
+                    'total'=>$carts->total  ,
+    
+                ));
+             }
+         
 
         }
     }
@@ -703,23 +741,29 @@ class UserCartcontroller extends Controller
         if($id=="")
             return abort('404');
         $product=Product::find($id);
-
         $user= $request->session()->get('key');
-       
-       if(empty($user))
+        if(empty($user))
         {
             if($request->session()->get('cart'))
             {
                 $cart=new Cart(session()->get('cart'));
-
+                $totalQty=0;
+                foreach($cart->items as $items)
+                    $totalQty+= $items['qty'];
+                if($totalQty>9)
+                    return Response::json(array(
+                    'status'=>'số lượng trong giỏ hàng đã đạt tối đa',
+       
+                ));
             }
-
             else
             {
                $cart=new Cart();
-
             }
+            $cart->add($product);
+            $request->session()->put('cart',$cart);
 
+            /*
             if(isset($cart->items[$id]))
             {
                 if($cart->items[$id]['qty']<10 )
@@ -729,7 +773,7 @@ class UserCartcontroller extends Controller
                  else
                {
                  return Response::json(array(
-                    'status'=>'error',
+                    'status'=>'sản phẩm max',
                      'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
                    ));
                }
@@ -740,9 +784,8 @@ class UserCartcontroller extends Controller
                 //Thời gian tạo sản phẩm order mới session
 
                  $cart->add($product);
-            }
-                $request->session()->put('cart',$cart);
-
+            }*/
+               
               //dd($cart);
 
 
@@ -751,65 +794,61 @@ class UserCartcontroller extends Controller
         {
            
             $user_id=$user->id;
-           
-       //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
-
-        $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
-        //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
-       if(empty($carts))
-        {
-            $carts=new Order();
-            $carts->user_id=$user_id;
-            $carts->total=0;
-            $carts->status="0";
-            $carts->date=Carbon::now();
-            $carts->name=$user->name;
-            $carts->address=$user->address;
-            $carts->phone=$user->phone;
-            $carts->save();
-        }
-         //kiem tra san pham vua them da nam trong cart chua
-         $order_product=order_product::where([
+             //Kiểm tra xem user_id có tồn tại trong database giỏ hàng
+            $carts=Order::where(['user_id'=>$user_id,'status'=>'0'])->first();
+            //nếu không tìm được giỏ hàng chứa id đó thì tạo order mới
+            if(empty($carts))
+            {
+                $carts=new Order();
+                $carts->user_id=$user_id;
+                $carts->total=0;
+                $carts->status="0";
+                $carts->date=Carbon::now();
+                $carts->name=$user->name;
+                $carts->address=$user->address;
+                $carts->phone=$user->phone;
+                $carts->save();
+            }
+            $totalQty=0;
+            foreach($carts->product as $items)
+            {
+                $totalQty+=$items->pivot->qty;
+            }
+            if($totalQty>9)
+                return Response::json(array(
+            'status'=>'số lượng trong giỏ hàng đã đạt tối đa',
+            ));
+        //kiem tra san pham vua them da nam trong cart chua
+            $order_product=order_product::where([
             'order_id'=>$carts->id,
             'product_id'=>$id
 
-        ])->first();
-
-        if(empty($order_product))
-        {
-            $order_product=new order_product();
-            $order_product->order_id=$carts->id;
-            $order_product->product_id=$id;
-
-            $order_product->price=Product::find($id)->price;
-
-            $order_product->qty=1;
-            $order_product->amount=$order_product->price;
-
-            $order_product->save();
-            $carts->total=$carts->total+=Product::find($id)->price;
-            $carts->save();
-        }
+            ])->first();
+            if(empty($order_product))
+            {
+                $order_product=new order_product();
+                $order_product->order_id=$carts->id;
+                $order_product->product_id=$id;
+                $order_product->price=Product::find($id)->price;
+                $order_product->qty=1;
+                $order_product->amount=$order_product->price;
+                $order_product->save();
+                $carts->total=$carts->total+=Product::find($id)->price;
+                $carts->save();
+            }
 
         //neu da co san pham thi tagn qty len 1,nếu số lượng lớn hơn 10 thì thông báo lỗi
-        elseif($order_product->qty>9)
-        {
-            return Response::json(array(
-                'status'=>'error',
-                 'message'   => 'Số lượng sản phẩm trong giỏ hàng lớn hơn 10'
-               ));
-        }
-        else
-        {
-            $order_product::where
-            ([
-                'order_id'=>$carts->id,
-                'product_id'=>$id
-            ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
-             $order_product->save();
-            $carts->total=$carts->total+=Product::find($id)->price;
-            $carts->save();
-        }
+            else
+            {
+                $order_product::where
+                ([
+                    'order_id'=>$carts->id,
+                    'product_id'=>$id
+                ])->update(['qty'=> $order_product->qty+1,'amount'=>Product::find($id)->price*($order_product->qty+1)]);
+                $order_product->save();
+                $carts->total=$carts->total+=Product::find($id)->price;
+                $carts->save();
+            }
        }
     }
 }

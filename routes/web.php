@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Middleware\ClearFromAttributes;
 use App\Http\Middleware\facebookRedirect;
+use App\Product;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 
@@ -141,9 +142,9 @@ Route::post('/postDiaChiCheckOut', 'UserCartcontroller@postDiaChiCheckOut');
 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('/postDetailProduct', 'AdminProductController@postDetailProduct');
+Route::get('product/{slug}','homeController@product')->middleware(ClearFromAttributes::class);
 
-
-Route::get('product/{name}','homeController@product')->middleware(ClearFromAttributes::class);
+//Route::get('product/{slug}','homeController@product')->middleware(ClearFromAttributes::class);
 
 Route::get('/product','homeController@allproduct')->middleware(ClearFromAttributes::class);
  Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');

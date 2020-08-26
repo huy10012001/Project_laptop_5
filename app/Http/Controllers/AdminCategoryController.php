@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use App\category;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\ProductRequest;
@@ -50,6 +50,7 @@ class AdminCategoryController extends Controller
     {
         $category = $request->all();
         $c = new category($category);
+        $c->slug=SlugService::createSlug(Category::class,'slug',$request->name);
         $c->save();
         $request->session()->put(['message'=>'Tạo thành công','alert-class'=>'alert-success']);
         return redirect()->action('AdminCategoryController@index');
@@ -76,7 +77,12 @@ class AdminCategoryController extends Controller
     {
         $name=$request->input('name');
         $c= category::find($id);
-        $c->name=$name;
+        
+        if($c->name !=$name)
+        {
+            $c->name=$name;
+            $c->slug=SlugService::createSlug(Category::class,'slug',$request->name);
+        }
         $c->save();
         $request->session()->put(['message'=>'Cập nhập thành công','alert-class'=>'alert-success']);
         return redirect()->action('AdminCategoryController@index');

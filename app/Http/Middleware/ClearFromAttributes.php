@@ -3,7 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
+use Illuminate\Support\Facades\App;
+use App\category;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Cocur\Slugify\Slugify;
 class ClearFromAttributes
 {
     /**
@@ -13,93 +16,116 @@ class ClearFromAttributes
      * @param  \Closure  $next
      * @return mixed
      */
+    public function convert_name($str) {
+        $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+        $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+        $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+        $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+        $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+        $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+        $str = preg_replace("/(đ)/", 'd', $str);
+        $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+        $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+        $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/", 'I', $str);
+        $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+        $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+        $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+        $str = preg_replace("/(Đ)/", 'D', $str);
+        $str = preg_replace("/(\“|\”|\‘|\’|\,|\!|\/|\"|\&|\;|\@|\#|\%|\~|\`|\=|\_|\'|\]|\[|\}|\{|\)|\(|\+|\^)/", '-', $str);
+        $str = preg_replace("/( )/", '-', $str);
+        $str = preg_replace('/-+/', '-', $str);
+        return $str;
+    }
+    public function urlSlug($value)
+    {
+      
+       
+            $url_slug=[];
+           
+            foreach($value as $val)
+            {
+                if($val!="tất-cả")
+                array_push($url_slug,$this->convert_name($val));
+            }
+            $url_slug=implode(",",$url_slug);
+            return $url_slug;
+      
+  
+      
+    }
     public function handle($request, Closure $next)
     {
        
-        
-        if ($request->orderby=="default") {
-          // array_push($expect,$request->orderby);
-           
-          if(count($request->all())=="1")
-          return redirect()->to(url()->current());
-        else
-            return redirect()->to(url()->current().'?'.(http_build_query($request->except("orderby"))));
-        }
       
-       
-        if($request->price)
-        {  
-          
-            $price= $_GET['price'];
-            if(in_array("tất-cả",$price))
+        $fullurl_redirect="";
+         
+        foreach($request->except('_token') as $key=> $value)
+        {   
+         
+            if(is_array($value)  && ($key=="price" || $key=="cpu" ||$key=="RAM"||$key=="ocung"))
+            //nếu value này dạng mảng   
             {
-               // array_push($expect,$request->price);
-                return redirect()->to(url()->current().'?'.(http_build_query($request->except("price"))));
-            }
-        } 
-        if($request->manhinh)
-        {  
-           
-            $manhinh= $_GET['manhinh'];
-           
-           if(in_array("tất-cả",$manhinh))
-            {  
-               // array_push($expect,$request->manhinh);
-                return redirect()->to(url()->current().'?'.(http_build_query($request->except("manhinh"))));
-            }
-        
-        } 
-        if($request->cpu)
-        {  
-           
-            $cpu= $_GET['cpu'];
-            if(in_array("tất-cả",$cpu))
-            {
-                 //array_push($expect,$request->cpu);
-               return redirect()->to(url()->current().'?'.(http_build_query($request->except("cpu"))));
-            }
-               
             
-        } 
-        if($request->RAM)
-        {  
-           
-            $ram= $_GET['RAM'];
-            if(in_array("tất-cả",$ram))
-            {   
-                 //array_push($expect,$request->RAM);
-               return redirect()->to(url()->current().'?'.(http_build_query($request->except("RAM"))));
-            }
-        } 
-        if($request->ocung) 
-        {  
-          
-            $ocung= $_GET['ocung'];
-           
-            if(in_array("tất-cả",$ocung))
-            {    
-                 //array_push($expect,$request->ocung);
-                return redirect()->to(url()->current().'?'.(http_build_query($request->except("ocung"))));
-            
-            }
-        } 
-        if($request->tenhang)
-        {  
-           
-              $tenhang= $_GET['tenhang'];
-            
-                if(in_array("tất-cả",$tenhang) ||(count($tenhang)=="1"&&basename(url()->current())!="product"))
-                { 
-                  //array_push($expect,$request->tenhang);
+                $value=$this->urlSlug($value);
+                if($value!="")
+                    $fullurl_redirect.=$key."=".$value."&";
                 
-                if(count($request->all())=="1")
-                  return redirect()->to(url()->current());
+            }   
+        }
+        
+        $fullurl_redirect=substr($fullurl_redirect, 0, -1);
+        if (is_string($request->orderby)) {
+            // array_push($expect,$request->orderby);]
+            if($request->orderby!="default")
+             $fullurl_redirect.="&"."orderby=".$request->orderby;
+           
+        }
+          
+    
+        //$fullurl_redirect=substr($fullurl_redirect, 0, -1);
+     
+        //  dd(url()->current()."?".$fullurl_redirect);
+        if(is_array($request->tenhang))
+        {  
+           
+            //$fullurl_redirect.=$r;
+             $tenhang= $_GET['tenhang'];
+               
+            //$a=url()->current().'?'.(http_build_query($request->except('tenhang')));
+               
+            if(in_array("tất-cả",$tenhang))
+            {
+                if($fullurl_redirect!="")
+                    return redirect()->to('product'."?".$fullurl_redirect);
                 else
-                    return redirect()->to(url()->current().'?'.(http_build_query($request->except("tenhang"))));
-                }
-             
-        }   
-       
+                    return redirect()->to('product');
+            }
+            else if(count($request->tenhang)=="1")
+            {
+                   
+                if($fullurl_redirect!="")
+                    return redirect()->to('product/'. implode($tenhang).'?'.$fullurl_redirect);
+                 else
+                    return redirect()->to('product/'.implode($tenhang));
+                   
+            }
+            else
+
+            {
+                
+                $value=$this->urlSlug($request->tenhang);
+           
+                if($fullurl_redirect!="")
+                    $fullurl_redirect="?ten-hang=".$value."&".$fullurl_redirect;
+                else
+                    $fullurl_redirect="?ten-hang=".$value;
+                return redirect()->to('product/'.$fullurl_redirect);
+            }
+              
+        } 
+            
+            
+               
         
         return $next($request);
     }

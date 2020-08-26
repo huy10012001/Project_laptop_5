@@ -113,64 +113,7 @@ if(!!window.performance && window.performance.navigation.type === 2)
 
     window.location.reload();
 }
-//search
-/**
- * (c) 2012 Steven Levithan <http://slevithan.com/>
- * MIT license
- */
-if (!String.prototype.codePointAt) {
-    String.prototype.codePointAt = function (pos) {
-        pos = isNaN(pos) ? 0 : pos;
-        var str = String(this),
-            code = str.charCodeAt(pos),
-            next = str.charCodeAt(pos + 1);
-        // If a surrogate pair
-        if (0xD800 <= code && code <= 0xDBFF && 0xDC00 <= next && next <= 0xDFFF) {
-            return ((code - 0xD800) * 0x400) + (next - 0xDC00) + 0x10000;
-        }
-        return code;
-    };
-}
 
-/**
- * Encodes special html characters
- * @param string
- * @return {*}
- */
-function change_alias(alias) {
-    var str = alias;
-    str = str.toLowerCase();
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
-    str = str.replace(/đ/g,"d");
-    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
-    str = str.replace(/ + /g," ");
-    str = str.trim(); 
-    return str;
-}
-function chiTiet(sanpham)
-    {   
-		
-		sanpham=change_alias(sanpham);
-		 //tách ký tự đặc biệt trừ dấu chấm
-	 	sanpham=sanpham.split(/[^a-z0-9.]/gi).join(" ");
-       	//gộp nhiều khoảng trắng làm 1
-	   	sanpham=sanpham.split(/\s+/g).join(" ");
-	   	//encode value này
-	   	var urlencode=encodeURIComponent(sanpham);
-	   //chuyển ký tự khoảng trắng dc encode sang -
-	   urlencode=urlencode.split("%20").join("-");
- 		
-		 //console.log(urlencode);
-		
-		//window.location = '/product/'+urlencode;
-  		
-    }
-//tạo tài khoản
 
 //Show phần modal đăng nhập
 	function dangnhap()
@@ -204,16 +147,28 @@ function logOut()
     );
 }
 //hàm update số lượng item ở modal
-function updateCart(qty,product_id,order_id,timecreate)
-{
+function updateCart(qty,product_id,order_id,timecreate,qty_before)
+{	
+
 	$.ajax({
 		type:  "GET",
     	url:	 " {{ asset('cart/update')}}",
       	data:{qty:qty,order_id:order_id,product_id:product_id,timecreate:timecreate},
 		datatype: 'json',
+		error:function(xhr)
+      {
+         var x=xhr.responseText;
+            x=$.parseJSON(x);
+         console.log(x.message);
+		},
 		success:function(data)
         {
-			if(data.status)
+			if(data.status=="tối đa")
+			{	console.log(data.qty);
+				$(qty_before).val(data.qty);
+				$('.soluongmax').html('số lượng giỏ hàng đã đạt tối đa, chỉ tối đa 10 sản phẩm');
+			}
+			else if(data.status)
 			{
 				if($("#noFindItem").text().length<80)
 				$("#noFindItem").append("không tìm thấy item ");
@@ -225,15 +180,12 @@ function updateCart(qty,product_id,order_id,timecreate)
 				$("tbody").find("tr").each(function() {
 				var qty = $(this).find('td .input-qty').val();
 				var price= $(this).find('td.price').text().replace(" đ","");
-
-				if(!!qty)
-				{
-					var amount=qty*price+" đ"
+				var amount=qty*price+" đ"
 					$(this).find('td.amount').html(amount);
 					var total=data.total +" đ"
 					$('#total').html(total);
-
-				}
+					$('.soluongmax').html('');
+				
  			});
 		}}
     });
@@ -269,6 +221,7 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 function updateModal(qty)
 {
 		//Nếu nhập bé hơn 1 thì mặc định là 1
+		
 	if($(qty).val()<1)
 	{
 		var error="số lượng phải từ 1 tới 10 và không được trống";
@@ -299,11 +252,14 @@ function AddCart(product_id)
 	},
     success: function (data)
 	{
-       	if(data.status=="error")
-        {
-            alert(data.message);
+		
+       	if(data.status)
+        {	
+			console.log(data.status);
+			$("#AlertModal .modal-body").html("số lượng trong giỏ hàng đã đạt tối đa,chỉ được tối đa 10");
+        	$("#AlertModal").modal("show");
         }
-      	location.reload();
+        else	location.reload();
 	}});
 }
 //click vô item từ live search
@@ -522,33 +478,7 @@ $(document).ready(function()
         });
     });
 });
- /*
-	if (Cookies.get('modal')=="showed") {
-    // show dialog...
-	$("#cartModal").modal("show");
-}
-
-$("#cartModal").on('show.bs.modal', function(){
-
-	Cookies.set('modal', 'showed');
-
-});
-
-  $("#cartModal").on('hide.bs.modal', function(){
-
-	Cookies.remove('modal');
-
-  });
-  function checkOut()
-	{
-
-		Cookies.remove('modal');
-
-	}*/
-
-
-
-	//logOut
+ 
 
 
 </script>
@@ -727,13 +657,14 @@ $("#cartModal").on('show.bs.modal', function(){
 			<div class="container "  style="background: white;" >
 				<div class="row">
 					<!--tìm theo chi tiết-->
+					@yield('detail')
 					@yield('detail_home')
 					<!--end tìm theo chi tiéte-->
-
+					
 					<!--sản phẩm-->
 					@yield('product')
 					<!--end sản phẩm-->
-					@yield('detail')
+				
 					<!--ccontact-->
 					@yield('contact')
 					<!--end contact-->
@@ -852,7 +783,7 @@ $("#cartModal").on('show.bs.modal', function(){
           <p>Some text in the modal.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" onclick="javascript:window.location.reload()" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
 
@@ -903,7 +834,7 @@ $("#cartModal").on('show.bs.modal', function(){
 											<td class="price" style="white-space: nowrap;">{{App\Product::find($product['id'])->price}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
-                                             onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>)">
+                                             onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>,this)">
 											</td>
                                     		<td class = "amount" style="white-space: nowrap;">{{App\Product::find($product['id'])->price*$product['qty']}} đ</td>
                                     		<td>
@@ -950,7 +881,8 @@ $("#cartModal").on('show.bs.modal', function(){
 						</div>
                         <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-                                {{$sum}} đ</span></h5>
+								{{$sum}} đ</span></h5>
+								<h5 class="soluongmax" style="color:red"></h5>
                         </div>
                             <!--Trường hợp user  đăng nhập thao tác với database-->
 					@elseif(isset($orders))
@@ -982,7 +914,7 @@ $("#cartModal").on('show.bs.modal', function(){
 										<td class="qty">
                                         <div class="buttons_added">
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
-                                         onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
+                                         onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}',this)">
 										</div></td>
                                     	<td class = "amount" style="white-space: nowrap;">{{$p->pivot->amount }} đ </td>
                                     	<td>
@@ -1029,7 +961,8 @@ $("#cartModal").on('show.bs.modal', function(){
 							</div>
                             <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-                                {{ $orders->total }} đ</span></h5>
+								{{ $orders->total }} đ</span></h5>
+								<h5 class="soluongmax" style="color:red"></h5>
 							</div>
 							<!--end cart body-->
                 			@endif

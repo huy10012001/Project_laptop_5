@@ -16,9 +16,9 @@
     if(valueOrder!="")
     {
         if(valueOrder=="asc")
-            valueOrder="giá cao đến thấp";
+            valueOrder="giá  thấp đến cao";
         else if(valueOrder=="desc")
-            valueOrder="giá thấp đến cao";
+            valueOrder="giá  cao đến  thấp ";
         else
             valueOrder="Laptop mới nhất";
         $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
@@ -44,8 +44,8 @@
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                 <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>
-                <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá cao đến thấp</a></a></li>
-                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá thấp đến cao</a></li>
+                <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao</a></a></li>
+                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến thấp </a></li>
                 <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
    
               

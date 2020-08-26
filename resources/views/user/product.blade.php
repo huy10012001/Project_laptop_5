@@ -7,10 +7,48 @@
     
 let searchParams = new URLSearchParams(window.location.search);
 searchParams=decodeURIComponent(searchParams);
+function ChangeToSlug(title)
+{
+    var slug;
+ 
+    //Lấy text từ thẻ input title 
+   // title = document.getElementById("title").value;
+ 
+    //Đổi chữ hoa thành chữ thường
+    slug = title;
+ 
+    //Đổi ký tự có dấu thành không dấu
+    slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+    slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+    slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+    slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+    slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+    slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+    slug = slug.replace(/đ/gi, 'd');
+    slug = slug.replace(/\s/gi, '-');
+    //Xóa các ký tự đặt biệt
+    slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+    //Đổi khoảng trắng thành ký tự gạch ngang
+    slug = slug.replace(/ /gi, " - ");
+    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+    slug = slug.replace(/\-\-\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-\-/gi, '-');
+    slug = slug.replace(/\-\-/gi, '-');
+    //Xóa các ký tự gạch ngang ở đầu và cuối
+    slug = '@' + slug + '@';
+    slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+    return slug;
+    //In slug ra textbox có id “slug”
+ 
+}
 function FindparseQuerystring(value){
-    
+   
+   value= ChangeToSlug(value);
+    console.log(value);
     var flag=false;
-
+    
   
     if(searchParams!="")
     {
@@ -20,8 +58,8 @@ function FindparseQuerystring(value){
     var elem = [];
     for (var i = foo.length - 1; i >= 0; i--) {
         elem = foo[i].split('=');
-           
-         if(elem[1].split('+').join(' ')==value)
+     
+         if(elem[1].includes(value))
             flag=true;
     };  
     if(flag==true)
@@ -45,9 +83,9 @@ $(document).ready(function() {
     if(valueOrder!="")
     {
         if(valueOrder=="asc")
-            valueOrder="giá cao đến thấp";
-        else if(valueOrder=="desc")
             valueOrder="giá thấp đến cao";
+        else if(valueOrder=="desc")
+            valueOrder="giá cao đến thấp ";
             else
                 valueOrder="Laptop mới nhất";
             $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
@@ -189,7 +227,7 @@ $(document).ready(function() {
     </script>
 
     @if(isset($c->name))
-    <input type="hidden" class="current_tenhang" value="{{$c->name}}">
+    <input type="hidden" class="current_tenhang" value="{{$c->slug}}">
     @endif
 
         <div class="container">
@@ -214,7 +252,7 @@ $(document).ready(function() {
 
         @foreach($all_category as $all_c)
 
-        <input type="checkbox" class="box"  value="{{$all_c->name}}"  class="categoryLoc" name="tenhang[]" >
+        <input type="checkbox" class="box"  value="{{$all_c->slug}}"  class="categoryLoc" name="tenhang[]" >
         <label for="sapxep">{{$all_c->name}} </label>  <br/>
 
         @endforeach
@@ -304,7 +342,7 @@ $(document).ready(function() {
 
             <h2 class="title text-center">sản phẩm laptop </h2>
             <!--sản phẩm-->
-            @if(isset($product) && $product->count()>0)
+ @if(isset($product) && $product->count()>0)
 
             <div class="sort" >
             
@@ -314,8 +352,8 @@ $(document).ready(function() {
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                         <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>
-                        <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá cao đến thấp</a></a></li>
-                        <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá thấp đến cao</a></li>
+                        <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
+                        <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
                         <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
         
                     

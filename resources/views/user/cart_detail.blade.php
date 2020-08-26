@@ -5,6 +5,7 @@
 <script type="text/javascript">
 
 //Hàm update item ở giỏ hàng
+
 function onChange(qty,product_id,order_id,timecreate)
 {
    $.ajax({
@@ -21,12 +22,13 @@ function onChange(qty,product_id,order_id,timecreate)
              },
          	success:function(data)
             {
-                 
                 //khi số lượng bé hơn 1 và lớn hơn 10
-                if(data.soluong=="1")
+                console.log(data.status);
+                if(data.status=="tối đa")
                 {
-                    $("#AlertModal .modal-body").html("Số lượng phải từ 1 tới 10");
+                    $("#AlertModal .modal-body").html("Số lượng trong giỏ hàng đã đạt tối đa");
                     $("#AlertModal").modal("show");
+                  
                 }
                 //khi không tìm thấy item
                 else if(data.status)

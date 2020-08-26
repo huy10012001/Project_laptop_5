@@ -1,5 +1,14 @@
+
 @extends('layout_home')
 @section( 'slide')
+<style>
+
+.carousel-control
+{
+  width: 4%;
+ 
+}
+</style>
 <section id="slider"><!--slider-->
     <div class="container">
         <div class="row">
@@ -73,7 +82,7 @@
 <!--product trang home-->
 @section('product')
 
-<div class="col-sm-12 padding-right">
+
 
     <div class="card">
         <div class="box">
@@ -81,77 +90,399 @@
         </div>
         <div class="category" >
 
-        <a href=""><img src="{{ ('fronend/images/mac.jpg') }}" alt=""></a>
-        <a href=""><img src="{{ ('fronend/images/Asus.jpg') }}" alt=""></a>
-       <a href=""> <img src="{{ ('fronend/images/Dell.jpg') }}" alt=""></a>
-      <a href="">  <img src="{{ ('fronend/images/Acer.jpg') }}" alt=""></a>
-        <a href=""><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
-        <a href=""><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
-      <a href="">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
+        <a href="/product/macbook"><img src="{{ ('fronend/images/mac.jpg') }}" alt=""></a>
+        <a href="/product/asus"><img src="{{ ('fronend/images/Asus.jpg') }}" alt=""></a>
+       <a href="/product/dell"> <img src="{{ ('fronend/images/Dell.jpg') }}" alt=""></a>
+      <a href="/product/acer">  <img src="{{ ('fronend/images/Acer.jpg') }}" alt=""></a>
+        <a href="/product/hp"><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
+        <a href="/product/msi"><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
+      <a href="/product/lenovo">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
 
         </div>
     </div>
-        <div class="features_items"><!--features_items-->
-        <div class="spm">
-        <h2 class="title text-center">sản phẩm mới </h2> <br>
-        </div>
-        <!--sản phẩm-->
-        <div class="sort" >
-            <div class="col-sm-12" style="background: rgb(245, 244, 244); margin-top:-10px; ">
-                <div class="dropdown" style="float:right;padding-right:40px">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">giá cao đến thấp </a></li>
-                      <li><a href="#">giá thấp đến cao</a></li>
-                      <li><a href="#">laptop mới nhất</a></li>
-                    </ul>
+    <div class="spm">
+        <div style="text-align: right;">
+        <a   href="{{ url('product') }}">Xem tất cả</a>
+    </div>
+    <h2 class="title text-center">Giá sốc hôm nay</h2>
+    </div>
+
+<div id="giasocproductcarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+  
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" style="margin-bottom: 30px;">
+      <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
+     
+        <div class="item  row active">
+          @foreach($sale_product->take(4) as $s_p)
+          <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$s_p->image) }}" alt="" />
+              <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$s_p->name}}</p>
+                <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
                   </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="col-sm-12" style="height: 5px; width:10px;">
-
-            </div>
-
-        </div>
-
-
-<div class="col-sm-3">
-    <div class="product-image-wrapper">
-        <div class="single-products">
-                <div class="productinfo text-center">
-                    <img src="{{ ('fronend/images/slide1.jpg') }}" alt="" />
-                    <h2>$56</h2>
-                    <p>Easy Polo Black Edition</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
                 </div>
-                <div class="product-overlay">
-                    <div class="overlay-content">
-                        <h2>$56s</h2>
-                        <p>Easy Polo Black Edition</p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                    </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
                 </div>
-        </div>
-        <div class="choose">
+                <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$s_p->name}}</p>
+                  <a   onclick="AddCart('{{$s_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
             <ul class="nav nav-pills nav-justified">
-
-                <li><a href="#"><i class="fa fa-plus-square"></i>Chi tiết sản phẩm</a></li>
+              <li><a href="{{ url('product/'.$s_p->slug) }}"></i>Chi tiết sản phẩm</a></li>
             </ul>
+          </div>
         </div>
-</div>
+        @endforeach 
+      </div>
+      @php   
+      $product_slide2over=$sale_product->skip(4)
+      @endphp
+      @foreach($product_slide2over->chunk(4) as $s_products)
+      <div class="row  item course-set courses__row">
+        @foreach($s_products as $s_p)
+        <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$s_p->image) }}" alt="" />
+              <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$s_p->name}}</p>
+                <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
+                </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                </div>
+                <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$s_p->name}}</p>
+                  <a   onclick="AddCart('{{$s_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+              <li><a href="{{ url('product/'.$s_p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+            </ul>
+          </div>
+       </div>
+        @endforeach 
+      </div>
+      @endforeach
+    
     </div>
 
-</div><!--features_items-->
-<div class="spm">
-    <h2 class="title text-center">sản phẩm bán chạy nhất</h2>
+    <!-- Left and right controls -->
+   
+      <a class="left carousel-control" href="#giasocproductcarousel" data-slide="prev">
+   
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+       
+      </a>
+      <a class="right carousel-control" href="#giasocproductcarousel" data-slide="next">
+      
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+       
+      </a>
+      
 </div>
 
 <div class="spm">
-    <h2 class="title text-center">MacBook </h2>
+        <div style="text-align: right;">
+    <a   href="{{ url('product?orderby=new') }}">Xem tất cả</a>
+    </div>
+    <h2 class="title text-center">sản phẩm mới nhất</h2>
 </div>
+
+<div id="newproductcarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+  
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" style="margin-bottom: 30px;">
+      <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
+     
+        <div class="item  row active">
+          @foreach($new_product->take(4) as $n_p)
+          <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$n_p->image) }}" alt="" />
+              <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$n_p->name}}</p>
+                <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
+                </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                </div>
+                <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$n_p->name}}</p>
+                  <a   onclick="AddCart('{{$n_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+              <li><a href="{{ url('product/'.$n_p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+            </ul>
+          </div>
+        </div>
+        @endforeach 
+      </div>
+      @php   
+      $product_slide2over=$new_product->skip(4)
+      @endphp
+      @foreach($product_slide2over->chunk(4) as $n_products)
+      <div class="row  item course-set courses__row">
+        @foreach($n_products as $n_p)
+        <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$n_p->image) }}" alt="" />
+              <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$n_p->name}}</p>
+                <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
+                </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                </div>
+                <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$n_p->name}}</p>
+                  <a   onclick="AddCart('{{$n_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+              <li><a href="{{ url('product/'.$n_p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+            </ul>
+          </div>
+       </div>
+        @endforeach 
+      </div>
+      @endforeach
+    
+    </div>
+
+    <!-- Left and right controls -->
+   
+      <a class="left carousel-control" href="#newproductcarousel" data-slide="prev">
+   
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+       
+      </a>
+      <a class="right carousel-control" href="#newproductcarousel" data-slide="next">
+      
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+       
+      </a>
+      
 </div>
+
+
+@foreach($all_category as $category)
+  
+  <div class="spm"  >
+    <div style="text-align: right;">
+    <a   href="{{ url('product/'.$category->name) }}">Xem tất cả</a>
+    </div>
+    <h2 class="title text-center">{{$category->name}} </h2>
+
+  </div>
+  <!--
+  @php
+    $products[$category->id]=App\product::where(['category_id'=>$category->id,'status'=>"1"])
+    ->join('detail_product','detail_product.product_id','=','product.id');
+    $products[$category->id]=$products[$category->id]->paginate(2);
+  @endphp
+  @foreach($products[$category->id] as $product[$category->id])
+      {{$product[$category->id]->name}}
+
+  @endforeach
+  {{$products[$category->id]->links()}}
+-->
+    @php   
+    
+    $product=App\product::where(['category_id'=>$category->id,'status'=>"1"])
+    ->join('detail_product','detail_product.product_id','=','product.id')->get();
+  
+  
+    @endphp
+ 
+   <div id="categorycarousel{{$category->id}}" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+  
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" style="margin-bottom: 30px">
+      <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
+     
+        <div class="item  row active">
+          @foreach($product->take(4) as $p)
+          <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
+              <h2>{{number_format($p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$p->name}}</p>
+                <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
+                </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                </div>
+                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$p->name}}</p>
+                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+              <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+            </ul>
+          </div>
+        </div>
+        @endforeach 
+      </div>
+      @php   
+      $product_slide2over=$product->skip(4)
+      @endphp
+      @foreach($product_slide2over->chunk(4) as $products)
+      <div class="row  item course-set courses__row " >
+        @foreach($products as $p)
+        <div class="col-sm-3" style="height: 500px;">
+          <div class="single-products" >
+            <div class="productinfo text-center">
+              <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
+              <h2>{{number_format($p->price,0,",",".")}} đ</h2>
+               <p style="word-break: break-all;" >{{$p->name}}</p>
+                <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+            </div>
+            <div class="product-overlay">
+              <div class="overlay-content">
+                <div class="row">
+                  <div class="core" >
+                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
+                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                <div class="ram" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
+                </div>
+                <div class="rom" >
+                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
+                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
+                  </div>
+                </div>
+                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
+                  <p  style="word-break: break-all;" >{{$p->name}}</p>
+                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+                </div>
+            </div>
+          </div>
+          <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+              <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+            </ul>
+          </div>
+       </div>
+        @endforeach 
+      </div>
+      @endforeach
+    
+    </div>
+
+    <!-- Left and right controls -->
+    @if( $product->count()>4)
+      <a class="left carousel-control" href="#categorycarousel{{$category->id}}" data-slide="prev">
+   
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+       
+      </a>
+      <a class="right carousel-control" href="#categorycarousel{{$category->id}}" data-slide="next">
+      
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+       
+      </a>
+      @endif
+  </div>
+ 
+@endforeach
+
+
 @endsection
 
 <!--tìm theo chi tiết sản phẩm trang home-->

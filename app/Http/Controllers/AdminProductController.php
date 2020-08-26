@@ -12,6 +12,9 @@ use App\Cart;
 use App\Order;
 use App\User;
 use App\DetailProduct;
+ use \Cviebrock\EloquentSluggable\Services\SlugService;
+use League\CommonMark\Normalizer\SlugNormalizer;
+
 class AdminProductController extends Controller
 {   
     public function convert_name($str) {
@@ -71,7 +74,7 @@ class AdminProductController extends Controller
     }
     public function index(Request $request) 
     {
-       
+      
         $user=$request->session()->get('key');
             if(!empty($user))
         $user=User::find($user->id);
@@ -128,7 +131,8 @@ class AdminProductController extends Controller
         $p = new Product($product);
         $category= $_POST['category'];
         $p->category_id = $category;
-        $p->slug=$this->convert_name($request->input('name'));
+        $p->slug=SlugService::createSlug(Product::class,'slug',$request->name);
+       // $p->slug=$this->convert_name($request->input('name'));
         $p->image=$imageName;
         $p->status="1";
         $p->save();
@@ -183,8 +187,11 @@ class AdminProductController extends Controller
             $imageName = $p->image;
         }
         $p = Product::find($id);
-        $p->name=$name;
-        $p->slug=$this->convert_name($name);
+        if($p->name!=$name)
+        {
+            $p->name=$name;
+            $p->slug=SlugService::createSlug(Product::class,'slug',$request->name);
+        }
         $p->category_id=$category;
         $p->image = $imageName;
         
