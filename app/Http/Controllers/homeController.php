@@ -30,6 +30,7 @@ class homeController extends Controller
     {
       
         //convert chuỗi nhận từ url sang mảng
+         $flag=false;
          $filter_request=  explode(',',$filter_request);
         //đếm số lượng request url
         $count_filter_request=count( $filter_request);
@@ -54,9 +55,16 @@ class homeController extends Controller
         {  //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
             $value=strtolower($value);
             if((in_array($value,$string_request_filter)))
-            $product=$product->whereIn("description->".$query,  $request_arr);
+           {
+                $flag=true;
+                $product=$product->whereIn("description->".$query,  $request_arr);
+           }
         }
-        return $product;
+        if($flag==true)
+            return $product;
+        else
+            return "";
+        
     }
     public function allproduct(Request $request)
     {
@@ -73,13 +81,14 @@ class homeController extends Controller
            
       
         if(is_string($request->price))
-            { 
+        { 
                 $prices= explode(',',$request->price);
-                $flag=true;
+               
                 $p=[];
                 $collect_product=new Collection();
                 foreach($prices as $price)
                 {
+                    $price=strtolower($price);
                 switch($price)
                 {
                     case "duoi-10-trieu":
@@ -116,14 +125,23 @@ class homeController extends Controller
                     array_push($p,$c_p->product_id);
                 }
               
-                if(!in_array("tất-cả",$prices))
-                {
-                    if(count($prices)>1||$prices==['duoi-10-trieu']||$prices==['tu-10-15-trieu']||$prices==['tu-15-20-trieu']
-                    ||$prices==['tu-20-25-trieu']||$prices==['tren-25-trieu'])
-                    $product=$product->whereIn('product_id', $p);
+                foreach($prices  as $value)
+                 {   
+                  
+                     //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
+                    $value=strtolower($value);
+                   
+                    if($value=='duoi-10-trieu'||$value=='tu-10-15-trieu'||$value=='tu-15-20-trieu'
+                    ||$value=='tu-20-25-trieu'||$value=='tren-25-trieu')
+                    {
+                        $flag=true;
+                        $product=$product->whereIn('product_id', $p);
+                    }
                 }
+                
                   
         }
+      
         if(is_string($request->input('ten-hang')))
         {   
             $flag=true;
@@ -134,8 +152,8 @@ class homeController extends Controller
                 array_push($th,$tenhang);
             }
         
-           $id=[];
-            $product=$product->
+                $id=[];
+                $product=$product->
                 select('product.id')->
                 join('category','product.category_id','=','category.id')
                 -> whereIn('category.slug',$th)->get();
@@ -150,28 +168,43 @@ class homeController extends Controller
                       
                 
         }   
+     
+     
         if(is_string($request->cpu))
         { 
-            $flag=true;
+            
             $key_description=3;
             $string_request_filter="celeron,pentium,core-i3,core-i5,core-i7,core-i9,ryzen-3,ryzen-5,ryzen-7";
-            $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
-                
+            if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+            {
+                $flag=true;
+                $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+            }
+          
         }
-           
+       
+         
         if(is_string($request->RAM))
         {
             $flag=true;
             $key_description=11;
             $string_request_filter="4-gb,8-gb,16-gb,32-gb";
-            $product=$this->filter($request->RAM,$string_request_filter,$product,$key_description);
+            if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+            {
+                $flag=true;
+                $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+            }
        }
         if(is_string($request->ocung))
         {
             $flag=true;
             $key_description=16;
             $string_request_filter="1-tb,512-gb,256-gb,128-gb";
-            $product=$this->filter($request->ocung,$string_request_filter,$product,$key_description);
+            if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+            {
+                $flag=true;
+                $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+            }
               
         }
         if(is_string($request->orderby))
@@ -195,8 +228,10 @@ class homeController extends Controller
         {
             $flag=true;
         }
-        if($flag==true||count($request->all())==0)
+     
+        if($flag==true ||count($request->all())==0)
         {
+           
             $count=$product->count();
             $product=$product->paginate(6);
             $requestOrder=$request->orderby;
@@ -229,61 +264,74 @@ class homeController extends Controller
         {       
             if(is_string($request->price))
             { 
-                $prices= explode(',',$request->price);
-                $flag=true;
-                $p=[];
-                $collect_product=new Collection();
-                foreach($prices as $price)
-                {
-                switch($price)
-                {
-                    case "duoi-10-trieu":
-                        $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
-                         break;
-                        
-                    case "tu-10-15-trieu":
+                    $prices= explode(',',$request->price);
+                   
+                    $p=[];
+                    $collect_product=new Collection();
+                    foreach($prices as $price)
+                    {
+                        $price=strtolower($price);
+                    switch($price)
+                    {
+                        case "duoi-10-trieu":
                             $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
-                        break;
-                    case "tu-15-20-trieu":
-                        
-                        $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
-                        break;
-                    case "tu-20-25-trieu":
-                        $product_record=Product::where(['status'=>"1"])
-                        ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
-                        break;
-                    case "tren-25-trieu":
-                         $product_record=Product::where(['status'=>"1"])
-                            ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
-                        break;
+                                ->join('detail_product','detail_product.product_id','=','product.id')->where('price','<',10000000)->get();
+                             break;
+                            
+                        case "tu-10-15-trieu":
+                                $product_record=Product::where(['status'=>"1"])
+                                ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(10000000,15000000))->get();
+                            break;
+                        case "tu-15-20-trieu":
+                            
+                            $product_record=Product::where(['status'=>"1"])
+                                ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(15000000,20000000))->get();
+                            break;
+                        case "tu-20-25-trieu":
+                            $product_record=Product::where(['status'=>"1"])
+                            ->join('detail_product','detail_product.product_id','=','product.id')->whereBetween('price',array(20000000,25000000))->get();
+                            break;
+                        case "tren-25-trieu":
+                             $product_record=Product::where(['status'=>"1"])
+                                ->join('detail_product','detail_product.product_id','=','product.id')->where('price','>',25000000)->get();
+                            break;
+                      
+                    }
+                    if(isset($product_record))
+                            $collect_product=$collect_product->merge($product_record);
+                    }
+             
+                    foreach($collect_product as $c_p)
+                    {
+    
+                        array_push($p,$c_p->product_id);
+                    }
                   
-                }
-                if(isset($product_record))
-                        $collect_product=$collect_product->merge($product_record);
-                }
-         
-                foreach($collect_product as $c_p)
-                {
-
-                    array_push($p,$c_p->product_id);
-                }
-              
-                if(!in_array("tất-cả",$prices))
-                {
-                    if(count($prices)>1||$prices==['duoi-10-trieu']||$prices==['tu-10-15-trieu']||$prices==['tu-15-20-trieu']
-                    ||$prices==['tu-20-25-trieu']||$prices==['tren-25-trieu'])
-                    $product=$product->whereIn('product_id', $p);
-                }
-                  
+                    foreach($prices  as $value)
+                     {   
+                      
+                         //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
+                        $value=strtolower($value);
+                       
+                        if($value=='duoi-10-trieu'||$value=='tu-10-15-trieu'||$value=='tu-15-20-trieu'
+                        ||$value=='tu-20-25-trieu'||$value=='tren-25-trieu')
+                        {
+                            $flag=true;
+                            $product=$product->whereIn('product_id', $p);
+                        }
+                    }
+                    
+                      
             }
             if(is_string($request->cpu))
             {
                 $key_description=3;
                 $string_request_filter="celeron,pentium,core-i3,core-i5,core-i7,core-i9,ryzen-3,ryzen-5,ryzen-7";
-                $product= $this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+                {
+                    
+                    $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                }
                 
             }
            
@@ -291,7 +339,11 @@ class homeController extends Controller
             {
                 $key_description=11;
                 $string_request_filter="4-gb,8-gb,16-gb,32-gb";
-                $product= $this->filter($request->RAM,$string_request_filter,$product,$key_description);
+                if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+                {
+                    
+                    $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                }
              
             
             }
@@ -300,7 +352,11 @@ class homeController extends Controller
             {
                 $key_description=16;
                 $string_request_filter="1-tb,512-gb,256-gb,128-gb";
-                $product=$this->filter($request->ocung,$string_request_filter,$product,$key_description);
+                if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+                {
+                    
+                    $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                }
               
             }
             if(is_string($request->orderby))
