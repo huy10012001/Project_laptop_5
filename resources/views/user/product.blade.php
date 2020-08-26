@@ -100,11 +100,11 @@ $(document).ready(function() {
 
         var hang=$('.current_tenhang').val();
         $('input[name^="tenhang"]').each(function(){
-            var haveHang=false;
+          
             if(this.value==hang)
             {
                 $(this).prop('checked',true);
-                haveHang==true;
+               
             }
         });
         //checked những value input request 
@@ -160,6 +160,7 @@ $(document).ready(function() {
             $(this).prop('checked',false);
             });
         }
+    
         var count=0;
         //đếm số checked input cùng tên
         $(y).each(function()
@@ -176,13 +177,23 @@ $(document).ready(function() {
             if(this.value=="tất-cả")
             $(this).prop('checked',true);
             });
+            
+        }
+         /*
+        if(count==0)
+        {
+        
+            $(y).each(function(){
+            if(this.value=="tất-cả")
+            $(this).prop('checked',true);
+            });
             if($(this).attr("name")=="tenhang[]")
             {
                 $('#form_product').attr('action','/product');
             }
         }
         //lưu những checked
-    
+        /*
         
         //nếu input tenhang có 1 hãng và không phải tất cả
         if(count==1 && tatCa==false &&$(this).attr("name")=="tenhang[]")
@@ -201,10 +212,10 @@ $(document).ready(function() {
         //nếu input tenhang có trên 1 hãng hoặc là tất cả
         if((tatCa==true ||count>1) &&$(this).attr("name")=="tenhang[]")
         { 
-        $('#form_product').attr('action','/product');
+             $('#form_product').attr('action','/product');
         
         }
-
+        */
         $("#form_product").submit();
     });
     /*	
