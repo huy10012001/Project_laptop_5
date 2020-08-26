@@ -49,11 +49,13 @@ class homeController extends Controller
             }
         }
       
-        $filter_request=strtoLower(implode($filter_request));
-        //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
-       if($count_filter_request>1||(in_array($filter_request,$string_request_filter)))
+  
+       foreach( $filter_request  as $value)
+        {  //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
+            $value=strtolower($value);
+            if((in_array($value,$string_request_filter)))
             $product=$product->whereIn("description->".$query,  $request_arr);
-        
+        }
         return $product;
     }
     public function allproduct(Request $request)
