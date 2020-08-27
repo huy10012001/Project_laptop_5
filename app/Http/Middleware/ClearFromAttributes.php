@@ -85,9 +85,9 @@ class ClearFromAttributes
        //$url_WithPage=url()->current().'?'.(http_build_query($request->all()));
         //dd(URL::full());
     
-        if(is_string($request->orderby))
-        {
-          
+        if(is_string($request->orderby)&&($request->orderby=="new"||$request->orderby=="asc"||$request->orderby=="desc"))
+        {   
+         
             if($fullurl_redirect!="")
                 $fullurl_redirect.="&"."orderby=".$request->orderby;
             else
