@@ -1,180 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  
-   <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<title>Home Page</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/style.css">
-   <link rel="stylesheet" href="animate.css">
-
-
+	<script>
+		function validate()
+		{var tel=document.getElementById("txtTel").value;
+		var fName=document.getElementById("txtFullName").value;
+		var regExp=/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+		var email=document.getElementById("txtEmail").value;
+		var testTel=/^([0-9]{2}-[0-9]{3}-[0-9]{6})$/;
+		var date=document.getElementById("txtDate").value;
+		var time=document.getElementById("txtTime").value;
+		var flag=true;
+		if(fName=="")
+		{
+			alert("FullName must be entered");
+			flag=false;
+		}
+		else if(email=="")
+		{
+			alert("FullName must be entered");
+			flag=false;
+		}
+		else if(tel=="")
+		{
+			alert("Tel must be entered");
+			flag=false;
+		}
+		else if(date=="")
+		{
+			alert("Date must be entered");
+			flag=false;
+		}
+		else if(time=="")
+		{
+			alert("Time must be entered");
+			flag=false;
+		}
+		else if(fName.length<5)
+		{
+			alert("Full name must be 5 characters at least");
+			flag=false;
+		}
+		else if(!regExp.test(email))
+			
+		{
+					alert("Email is invalid");
+					flag=false;
+		}
+		else if(!testTel.test(tel))
+		{
+				alert("Tel is invalid");
+				document.getElementById("txtTel").focus();
+				flag=false;
+		}
+		if(flag==true)
+		{
+       return true;
+    }
+    else
+      return false;
+	}
+	</script>
 </head>
 <body>
-  <header>
-        <div class="header_row">
-          <div class="container">
-            <div class="row">
-            <div class=" col-sm-4 col-lg-9">
-              <form class="form-inline" action="/action_page.php">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" size="38">
-               
-              </form>
-            </div>
-          <div class="col-sm-8 col-lg-3">
-            <ul>
-              <li>
-              <a  href="#"><span class="fa fa-user"></span> Sign In</a>
-              </li>
-              <li>
-              <a  href="#"><span class="fa fa-registered"></span> Register</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        </div>
-      </div>
-      <nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
-      <div class="container">
-         <a class="navbar-brand" href="#">
-          <img src="1.jpg" alt="" width="100"  height="100" />
-        </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">About Us <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#">Bands</a>
-          </li>
-          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Range of Cars
-              </a>
-              <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Link 1</a>
-              <a class="dropdown-item" href="#">Link 2</a>
-              <a class="dropdown-item" href="#">Link 3</a>
-              </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">PreOwned Cars</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="#">Contact Us</a>
-          </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-   
-  </header>
-  <div class="login-form w3_form">
-  <!--  Title-->
-      <div class="login-title w3_title">
-           <h1>Elegant login Form</h1>
-      </div>
-           <div class="login w3_login">
-                <h2 class="login-header w3_header">Log in</h2>
-            <div class="w3l_grid">
-                        <form class="login-container" action="#" method="post">
-                             <input type="email" placeholder="Email" Name="Email" required="" >
-                             <input type="password" placeholder="Password" Name="password" required="">
-                             <input type="submit" value="Submit">
-                        </form>
-<div class="second-section w3_section">
-     <div class="bottom-header w3_bottom">
-          <h3>OR</h3>
-     </div>
-     <div class="social-links w3_social">
-         <ul>
-         <!-- facebook -->
-             <li> <a class="facebook" href="#" target="blank"><i class="fa fa-facebook"></i></a></li>
+	
+	<br>
+	
+	<nav>
+		<ul>
+			<li><a href="homepage.html">ABOUT US</a></li>
+			<li class="a"><a href="">MENU</a></li>
+			<li class="a"><a href="Reservation.html">RESERVATION</a></li>
+			<li class="a" style="font-weight: bold;font-size: 200%"><a href="BaiThiMau.html"><i>BonBon</i></a></li>
+			<li class="a"><a href="">EVENTS</a></li>
+			<li class="a"><a href="">GALARY</a></li>
+			<li class="a"><a href="">CONTACT</a></li>
+		</ul>
+	</nav>
+	<section>
+		<form id="123" action="" method="get" onsubmit="return validate()">
+			<table  align="center">
+				<th colspan="2">Online Booking</th>
+			
+			<tr>
+		<td width="25%"><label>FullName</label>	</td>
+		<td><input type="text" id="txtFullName"  size="54"  ></td>
+		</tr>
+		
+		<tr>
+		<td><label>Email</label>	</td>
+		<td><input type="email"  id="txtEmail" size="54" ></td>
+		</tr>
+		<tr>
+		<td><label>Phone Number</label>	</td>
+		<td><input type="tel"   id="txtTel" size="54" ></td>
+		</tr>
+		<tr>
+		<td><label>No. of Persons:</label>	</td>
+		<td><select>
+			<option  name="person" value="1 person">1 person</option>
+			<option  name="person" value="2 person">2 person</option>
+			<option  name="person" value="3 person">3 person</option>
+			<option  name="person" value="4 person">4 person</option>
+			<option  name="person" value="5 person">5 person</option>
+			<option  name="person" value="None">None</option>
+			</select>
+			</td>
+		</tr>
+		<tr>
+		<td><label>Set Date</label>	</td>
+		<td><input type="date" id="txtDate"><td>
+		</tr>
+		<tr>
+		<td><label>Time Set</label>	</td>
+		<td><input type="time"   id="txtTime"><td>
+		</tr>
+		<tr>
+		<td><label>Comment</label>	</td>
+		<td><textarea name="Content" cols="50" rows="10"></textarea></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><input type="submit" name="btnOK" value="RESERVE A TABLE" onclick="validate()"></td>
+			
+		</tr>
+		
+			</table>
 
-         <!-- twitter -->
-             <li> <a class="twitter" href="#" target="blank"><i class="fa fa-twitter"></i></a></li>
-
-         <!-- google plus -->
-             <li> <a class="googleplus" href="#" target="blank"><i class="fa fa-google-plus"></i></a></li>
-       </ul>
-   </div>
-</div>
-                 
-<div class="bottom-text w3_bottom_text">
-      <p>No account yet?<a href="#">Signup</a></p>
-      <h4> <a href="#">Forgot your password?</a></h4>
-</div>
-
-                  </div>
-       </div>
-  
-</div>
-  
-  
-
-
-  <footer>
-    <div class="informfooter">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 col-sm-6">
-            <div class="menuFooter">
-            <ul> 
-              <li> <a href="  ">About Us</a></li>
-              <li> <a href="  ">Brands</a></li>
-              <li> <a href="  ">Range of Cars</a></li>
-              <li> <a href="  ">PreOwned Cars</a></li>
-              <li> <a href="  ">Contact Us</a></li>
-            </ul>
-          </div>
-          </div>
-          <div class="col-lg-4 col-sm-5">
-            <h1 style="text-align:center;">Contact Us</h1>
-            <p style="text-align:center;font-size: 120%">Name:Tran Kim Dat<br>
-            Email:kimdat1999@gmail.com<br>
-            Tel:0907961470<br>
-            HotLine:0912312323<br>
-            Address:590 CMT8 WARD 11 DISTRICT 3 HCM CITY<br>
-            Open time:7pm-10Am <br>
-            Open even Saturday and Sunday expect holiday
-            </p>
-          </div>
-          <div class="col-lg-4 col-sm-1">
-              <h1 style="text-align:center;">Follow Us</h1>
-              <nav style="text-align:center;">
-                <a href=""class="fa fa-facebook"></a>
-              <a href="#" class="fa fa-twitter"></a>
-              <a href="#" class="fa fa-google"></a>
-              <a href="#" class="fa fa-linkedin"></a>
-              <a href="#" class="fa fa-youtube"></a>
-              <a href="#" class="fa fa-instagram"></a>
-              <a href="#" class="fa fa-android"></a>
-              <a href="#" class="fa fa-pinterest"></a>
-              <a href="#" class="fa fa-snapchat-ghost"></a>
-              <a href="#" class="fa fa-skype"></a>
-              <a href="#" class="fa fa-reddit"></a>
-              <a href="#" class="fa fa-rss"></a>
-              </nav>
-          </div>  
-        </div>
-      </div>
-    </div>
-    <div class="copy">
-      <div class="container">
-         &copy; Copyright 2019 Canvas market 
-      </div> 
-    </div>
-  </footer>
-  
+		</form>
+	</section>
+	<footer  align="center" style="font-size: 150%"> 2018 BonBon.All rights reserved</footer>
 </body>
 </html>
-

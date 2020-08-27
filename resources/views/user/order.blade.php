@@ -55,10 +55,44 @@ $(document).ready(function()
       		    url:	 " {{ asset('/postDiaChiCheckOut')}}",
       		    data:$('#update').serialize(),
 			    datatype: 'json',
-				error:function(data)
-				{
-					alert('loi roi')
-				},
+				error:function(error)
+            {
+
+             		var x=error.responseText;
+                  	x=$.parseJSON(x);
+                  
+					let errors = error.responseJSON.errors;
+                    console.log(errors);
+
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
+                    if(errorsfocus!="message")
+					var nameFocus=$("#formContact input[name="+errorsfocus+"]");
+                    else
+                    var nameFocus=$("#formContact .yourmessage");
+					nameFocus.focus();
+					//nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+
+             			 errorDiv.text(errors[key][0]);
+						 $("#formContact input[name="+key+"]").css('border','2px solid red');
+         			}
+					 //nếu không có lỗi
+
+        		}
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					//$('#emailTontaiR').text(errors.email);
+				//})
+					//errors=JSON.stringify(errors.error);
+
+              },
 			    success:function(data)
            	    {
 

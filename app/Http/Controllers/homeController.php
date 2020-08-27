@@ -454,22 +454,10 @@ class homeController extends Controller
     public function index(Request $request){
        
        //lấy id các danh mục có ít nhất 1 sản phẩm hoạt động và đã cập nhập chi tiết
-       $a=SlugService::createSlug(Product::class,'slug','sản..----/          pHẩm');
-        foreach(category::all() as $c)
-        {
-                $c->slug=SlugService::createSlug(Product::class,'slug',$c->name);
-                $c->save();
-        }
-        foreach(product::all() as $c)
-        {
-                $c->slug=SlugService::createSlug(Product::class,'slug',$c->name);
-                $c->save();
-        }
-      //  $user=$request->session()->get('key');
-       
+    
       
        
-      // return view('index', ['all_category'=>$all_category]);
+     return view('index');
       
       //  $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
        // $product_detail= Product::whereRaw(
