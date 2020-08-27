@@ -29,13 +29,13 @@ class homeController extends Controller
 
     public function filter($filter_request,$string_request_filter,$product,$query)
     {
-      
-        //convert chuỗi nhận từ url sang mảng
-         $flag=false;
-         $filter_request=  explode(',',$filter_request);
-        //đếm số lượng request url
-        $count_filter_request=count( $filter_request);
-       //convert chuỗi filter sang mảng
+        
+     
+        $flag=false;
+        //conver chuỗi giá trị lọc và request  nhận từ url
+        //chuỗi từ url
+        $filter_request=  explode(',',$filter_request);
+        //chuỗi lọc
         $string_request_filter= explode(',',$string_request_filter);
         $request_arr=[];
         foreach($filter_request as $f_request)
@@ -45,24 +45,17 @@ class homeController extends Controller
             //nếu giá trị đó có trong chuỗi cần filter
             if(in_array($f_request,$string_request_filter))
             { 
-                
+                $flag=true;
                 $f_request=str_replace('-',' ', $f_request);
                 array_push($request_arr, $f_request);
+
             }
         }
-      
-  
-       foreach( $filter_request  as $value)
-        {  //nếu request từ url lớn hơn 1 honặc  giá trị url có trong chuỗi filter
-            $value=strtolower($value);
-            if((in_array($value,$string_request_filter)))
-           {
-                $flag=true;
-                $product=$product->whereIn("description->".$query,  $request_arr);
-           }
-        }
         if($flag==true)
+        {   
+            $product=$product->whereIn("description->".$query,  $request_arr);
             return $product;
+        }
         else
             return "";
         

@@ -57,7 +57,7 @@ class SocialAuthController extends Controller
            
             $account->provider = $provider;
             $account->provider_id = $providerUser->id;
-           
+         
            
             //nếu user chưa từng đăng ký  thì tạo tài khoản cho user
             if (!$user) {
