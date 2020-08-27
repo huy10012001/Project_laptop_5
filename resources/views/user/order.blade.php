@@ -285,7 +285,7 @@ if(performance.navigation.type == 2){
 							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p style="white-space: nowrap;"> {{$p->pivot->price }} đ</p>
+						    <p style="white-space: nowrap;">	{{number_format($p->pivot->price,0,",",".")}} đ</p>
                             </td>
                             <input type="hidden"  value="{{$p->pivot->updated_at}}" class="product_update" />
 
@@ -295,7 +295,7 @@ if(performance.navigation.type == 2){
 						     </td>
 
 						        <td class="cart_total" style="white-space: nowrap;">
-							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
+							    <p class="cart_total_price">	{{number_format($p->pivot->amount,0,",",".")}} đ</p>
 						        </td>
 
                                 </td>
@@ -351,7 +351,7 @@ if(performance.navigation.type == 2){
         <tr>
             <td>tạm tính: </td>
 			@if(isset($orders) )
-			<td>{{ $orders->total }} đ
+			<td>{{number_format($orders->total,0,",",".")}} đ
 			</td>
 			@else
 			<td>0 đ
@@ -366,8 +366,7 @@ if(performance.navigation.type == 2){
      <tr>
 		<td> Thành tiền:</td>
 
-        <td>{{ $orders->total  }}
-        đ<br><p>đã bao gồm thuế (VAT)</p></td>
+        <td>	{{number_format($orders->total,0,",",".")}} đ<br><p>đã bao gồm thuế (VAT)</p></td>
 
     </tr>
     </table>
@@ -379,7 +378,7 @@ if(performance.navigation.type == 2){
      <tr>
 		<td> Thành tiền:</td>
 
-        <td>0 vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+        <td>0 đ <br><p>đã bao gồm thuế (VAT)</p></td>
 
     </tr>
     </table>

@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use App\Cart;
+use App\Http\Requests\ContactRequest;
 use App\Http\Requests\ProductRequest;
 use App\order_product;
 use Facade\FlareClient\Api;
@@ -939,23 +940,13 @@ class homeController extends Controller
     }
 
 
-    public function postContact(Request $request)
+    public function postContact(ContactRequest $request)
     {
-        $name = $request->input('ct_name');
-        $email = $request->input('ct_email');
-        $phone = $request->input('ct_phone');
-        $title = $request->input('ct_title');
-        $mess=$request->input('ct_message');
-        $add=$request->input('ct_addres');
-        $c = new contact_user();
-        $c->name=$name;
-        $c->email=$email;
-        $c->phone=$phone;
-        $c->subject=$title;
-        $c->message=$mess;
-        $c->address=$add;
+        $contact=$request->all();
+        $c = new contact_user($contact);
+       
         $c->save();
-        return Redirect::Back();
+        
 
     }
     public function search(Request $request){

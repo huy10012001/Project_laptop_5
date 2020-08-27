@@ -223,7 +223,8 @@ function dat(login)
                            <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                            </td>
                            <td class="cart_price" style="white-space: nowrap;">
-                           <p> {{App\Product::find($product['id'])->price}} đ</p>
+                          	{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ
+                
                            </td> 
                             <td class="">
 							<div class="buttons_added">
@@ -234,8 +235,10 @@ function dat(login)
                              )">
                             </div>
                             </td>
-                            <td class="cart_amount" >
-                           <p  style="white-space: nowrap;"> {{App\Product::find($product['id'])->price*$product['qty']}} đ </p>
+                            <td class="cart_amount"  style="white-space: nowrap;">
+                         
+                           {{number_format(App\Product::find($product['id'])->price*$product['qty'],0,",",".")}} đ
+                           
                              @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
                              @php $totalqty+=$product['qty']; @endphp
                             </td> 
@@ -251,7 +254,7 @@ function dat(login)
                                 <td class="cart_name">
                                 <h4 style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</h4>
                                 </td>
-                                <td  style="white-space: nowrap;" >{{App\Product::find($product['id'])->price}} đ</td>
+                                <td  style="white-space: nowrap;" > 	{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
                                 <td></td>
                                 <td></td>
                                 <td class="cart_delete">
@@ -278,7 +281,7 @@ function dat(login)
             <table class="table table-striped"  >
                 <tr>
                     <td>tạm tính: </td>
-                    <td> {{$sum}} đ
+                    <td> 	{{number_format($sum,0,",",".")}}  đ
 
                     </td>
 
@@ -288,7 +291,7 @@ function dat(login)
             <table class="table table-striped">
              <tr>
                 <td> Thành tiền:</td>
-                <td> {{$sum}} đ<br><p>đã bao gồm thuế (VAT)</p></td>
+                <td>	{{number_format($sum,0,",",".")}} đ<br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->
@@ -342,7 +345,22 @@ function dat(login)
 
                             </p>
 
-                            </form></div>
+                            </form>
+                        	<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
+      											<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+												  đăng nhập với google
+   										 </a>
+  										
+									<!--login google-->
+									<!--login github-->
+								
+  									
+										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
+										<i class="fa fa-github"></i>  
+										<p style="padding-left: 20px;color:white">	Đăng nhập với git hub</p>
+										</a>
+  									
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="browseTabCheckOut" method="post" action="javascrip:void(0)" >
                             <form  id="registerCheckOut" action="" method="post">
                                 {{ csrf_field() }}
@@ -440,7 +458,7 @@ $('input.input-qty').each(function() {
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price" style="white-space: nowrap;">
-						    <p> {{$p->pivot->price }} đ</p>
+							{{number_format($p->pivot->price,0,",",".")}} đ
                             </td>
                             <!--Trường hợp còn hàng(khác trashed)-->
                             
@@ -453,7 +471,7 @@ $('input.input-qty').each(function() {
 						        </td>
                                 @php $totalqty+=$p->pivot->qty @endphp
 						        <td class="cart_total">
-							    <p class="cart_total_price" style="white-space: nowrap;">{{$p->pivot->amount }} đ</p>
+							    <p class="cart_total_price" style="white-space: nowrap;">{{number_format($p->pivot->amount,0,",",".")}}  đ</p>
 						        </td>
 						        <td class="cart_delete">
 						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
@@ -475,7 +493,7 @@ $('input.input-qty').each(function() {
 							<h4 style="word-break: break-all;" >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price" style="white-space: nowrap;">
-						    <p> {{$p->pivot->price }} đ</p>
+							{{number_format($p->pivot->price,0,",",".")}}  đ
                             </td>
                                 <td ></td>
                                 <td></td>
@@ -504,7 +522,7 @@ $('input.input-qty').each(function() {
             <table class="table table-striped">
                 <tr>
                     <td>tạm tính: </td>
-                    <td>{{ $orders->total  }} đ
+                    <td>	{{number_format($orders->total,0,",",".")}}  đ
 
                     </td>
 
@@ -516,7 +534,7 @@ $('input.input-qty').each(function() {
                 <td> Thành tiền:</td>
 
 
-                <td>{{ $orders->total  }} đ <br><p>đã bao gồm thuế (VAT)</p></td>
+                <td>{{number_format($orders->total,0,",",".")}}  đ <br><p>đã bao gồm thuế (VAT)</p></td>
             </tr>
             </table>
             <!-- Button trigger modal -->

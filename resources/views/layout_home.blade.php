@@ -13,14 +13,57 @@
     <link href="{{ asset('fronend/css/price-range.css') }}" rel="stylesheet">
     <link href="{{ asset('fronend/css/animate.css') }}" rel="stylesheet">
 	<link href="{{ asset('fronend/css/main.css') }}" rel="stylesheet">
+	<link href="{{ asset('fronend/css/bootstrap-social.css') }}" rel="stylesheet">
     <link href="{{ asset('fronend/css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
+	<link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <style>
-
+	.btn-social {
+    position: relative;
+    padding-left: 44px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+}
+.btn-social.btn-lg {
+    padding-left: 61px;
+}
+.btn-google-plus {
+    color: #fff;
+    background-color: #dd4b39;
+    border-color: rgba(0,0,0,0.2);
+}
 	.shoppingcart button
 	{
 		border: 2px solid white !important;
@@ -28,18 +71,14 @@
   		font-size: 16px;
           cursor: pointer;
           height: 50px;
-
 	}
 	.khonghoatdong {
-    opacity: 0.7;
-    background-color: #ccc;
-
+	opacity: 0.7;
+	background-color: #ccc;
+   
 }
-
 .cart_product {
     position: relative;
-
-
 }
 .cart_product .badge
 {
@@ -61,7 +100,6 @@
     width: 100px;
     height: 70px;
 }
-
 .users .dropbtn {
 	width: 150px;
     background-color: #0099ff;
@@ -70,14 +108,11 @@
     font-size: 16px;
     border: none;
 border: 2px solid white;
-
   }
-
   .users .dropdown {
     position: relative;
     display: inline-block;
   }
-
   .users .dropdown-content {
 	display: none;
 	position: absolute;
@@ -87,7 +122,6 @@ border: 2px solid white;
  	 z-index: 1;
 	padding-bottom: 10px;
   }
-
   .users .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -95,11 +129,9 @@ border: 2px solid white;
     display: block;
   }
 
-  .users .dropdown-content a:hover {background-color: #ddd;}
-
   .users .dropdown:hover .dropdown-content {display: block;}
-
   .users .dropdown:hover .dropbtn {background-color: #61a2d0;}
+/*drowdown*/
 
 /*drowdown*/
 </style>
@@ -484,7 +516,7 @@ $(document).ready(function()
 </script>
 <body>
 
-	<header id="header" ><!--header-->
+<header id="header"  ><!--header-->
 		<div class="header_top" ><!--header_top-->
 			<div class="container">
 				<div class="row" >
@@ -511,11 +543,11 @@ $(document).ready(function()
 			</div>
 		</div>
 			<!--Search-->
-		<div class="header-middle"   style="background:#0099ff;   z-index: 10;">
+		<div class="header-middle"   style="background:#fafafa; padding-bottom:10px;  z-index: 10;">
             <div class="container">
 				<div class="row" >
-					<div class="col-sm-2">
-                    		<img src="{{URL::asset('/images/logolap1.jpg')}}" alt="" style="width:150px; height:40px">
+					<div class="col-sm-2" style="padding-top:10px">
+                    		<img src="{{URL::asset('images/laptop.png')}}" alt="" style="width:150px; height:100px;margin-top:-25px">
                 	</div>
                 	<div class="col-sm-6" >
                     		<div  class="search" style="position: relative;">
@@ -526,10 +558,12 @@ $(document).ready(function()
 							</form>
 
 							<table  style="border:none ;background-color:white;position: absolute;margin-top:40px;  z-index: 9999;" hidden class="resultsearch table table-hover" style="background-color: white;">
-				
+
 
                             </table>
-                      		</div>
+                              </div>
+
+
 					</div>
 					@if(!Session::has('key'))
 					<div class="col-sm-2" >
@@ -537,17 +571,31 @@ $(document).ready(function()
 
                         		<div class="dropdown" >
 
-									  <button class="dropbtn" style="text-align: center">
+									  <button class="dropbtn" style="text-align: center; border-radius: 5px;">
 
                                         <i class="fa fa-user" aria-hidden="true"></i> &nbsp; <b>Đăng Nhập</b> </button>
                           			<div class="dropdown-content" >
 									<!--modal-->
 									<!-- Button trigger modal -->
-										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%;">Đăng nhập    </button>
-										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:0px;">Tạo tài khoản    </button>
-										<button><a href="{{ URL::to('auth/google') }}">Google Login</a>	</button>
-										<button><a href="{{ URL::to('auth/github') }}">Github Login</a>	</button>
-										<button><a href="{{ URL::to('auth/facebook') }}">facebook Login</a>	</button>
+										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; border-radius: 5px; ">Đăng nhập    </button>
+										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:10px; border-radius: 5px;">Tạo tài khoản    </button>
+										<!--login google-->
+										
+    									<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
+      											<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+												  đăng nhập với google
+   										 </a>
+  										
+									<!--login google-->
+									<!--login github-->
+								
+  									
+										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
+										<i class="fa fa-github"></i>  
+										<p style="padding-left: 20px;color:white">	Đăng nhập với git hub</p>
+										</a>
+  									
+									<!--login github-->
 									</div>
                         		</div>
 							</div>
@@ -559,7 +607,7 @@ $(document).ready(function()
 
                         		<div class="dropdown" >
 
-									  <button class="dropbtn" style="text-align: center">
+									  <button class="dropbtn" style="text-align: center;border-radius: 5px;">
 
 									   <b>Chào {{Session::get('key')->name}}</b> <br>  </button>
                           			<div class="dropdown-content">
@@ -580,10 +628,10 @@ $(document).ready(function()
 
                        		<button  type="button"data-toggle="modal" data-target="#cartModal" style="background: none; border:none; ">
 							   <div classs>
-							   <i class="fa fa-shopping-cart" style="color:white;"></i>
-							   <b style="color: white;">  giỏ hàng</b>
+							   <i class="fa fa-shopping-cart" style="color:rgb(15, 15, 15);"></i>
+							   <b style="color: rgb(10, 10, 10);">  giỏ hàng</b>
 
-							   @if(isset($totalQty))
+							   @if(isset($totalQty) &&$totalQty>0)
 							   <span class="label label-warning">{{$totalQty}}</span>
 							   @endif
 
@@ -600,10 +648,10 @@ $(document).ready(function()
 
 
 
-		<div class="header-bottom"    style="background:  #0099ff;margin-bottom:20px"><!--header-bottom-->
-			<div class="container">
+		<div class="header-bottom"    style="background:  #ffffff;margin-bottom:20px"><!--header-bottom-->
+			<div class="container" >
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-9" style="margin-top:-25px;">
                         <div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 								<span class="sr-only">Toggle navigation</span>
@@ -612,14 +660,13 @@ $(document).ready(function()
 								<span class="icon-bar"></span>
 							</button>
 						</div>
-						<div class="mainmenu pull-left">
+						<div class="mainmenu " style="float: right;">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(250, 245, 245);"><i class="fa fa-home" aria-hidden="true"></i> &nbsp; Trang Chủ</a></li>
-								
+								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(12, 12, 12);"><i class="fa fa-home" aria-hidden="true"></i> &nbsp; Trang Chủ</a></li>
 
 								@if(isset($category) && $category->count()>0)
-								<li class="dropdown"><a href="#"  style="color: rgb(250, 245, 245);"><i class="fa fa-laptop" aria-hidden="true"></i> &nbsp; Sản Phẩm</a>
-                                    <ul role="menu"  style="word-break: break-all;" class="sub-menu">
+								<li class="dropdown"><a href="#"  style="color: rgb(3, 3, 3);"><i class="fa fa-laptop" aria-hidden="true"></i> &nbsp; Sản Phẩm</a>
+                                    <ul role="menu"  style="word-break: break-all;" class="sub-menu" style="background: white;">
 									@foreach($category as $c)
 
 										<li><a  onclick="window.localStorage.clear();" href="{{ URL::to('/product/'.Str::slug($c->name)) }}" >{{$c->name}}</a></li>
@@ -629,14 +676,11 @@ $(document).ready(function()
                                     </ul>
 								</li>
 								@endif
-								<li class="dropdown"><a href="#" style="color: rgb(250, 245, 245);"><i class="fa fa-eye" aria-hidden="true"></i> &nbsp;Về Chúng Tôi</a>
-										<ul role="menu" class="sub-menu">
-											<li><a href="blog.html" style="color: rgb(250, 245, 245);">thông tin về shop</a></li>
-											<li><a href="blog-single.html" style="color: rgb(250, 245, 245);">thông tin LapTop-shop</a></li>
-										</ul>
+								<li class="dropdown"><a href="#" style="color: rgb(15, 15, 15);"><i class="fa fa-eye" aria-hidden="true"></i> &nbsp;thông tin về shop </a>
+
 									</li>
 
-									<li><a href="{{ URL::to('/contact') }}" style="color: rgb(250, 245, 245);"><i class="fa fa-phone-square" aria-hidden="true"></i> &nbsp;
+									<li><a href="{{ URL::to('/contact') }}" style="color: rgb(15, 15, 15);"><i class="fa fa-phone-square" aria-hidden="true"></i> &nbsp;
                                         liên hệ</a></li>
 								</ul>
 							</div>
@@ -729,7 +773,25 @@ $(document).ready(function()
 
 								</p>
 
-								</form></div>
+								</form>
+								<!--login google-->
+										
+								<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
+      											<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+												  đăng nhập với google
+   										 </a>
+  										
+									<!--login google-->
+									<!--login github-->
+								
+  									
+										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
+										<i class="fa fa-github"></i>  
+										<p style="padding-left: 20px;color:white">	Đăng nhập với git hub</p>
+										</a>
+  									
+									<!--login github-->
+							</div>
 							<div role="tabpanel" class="tab-pane" id="browseTabLogin"   >
 								<form  id="register" method="post" action="javascrip:void(0)">
 									{{ csrf_field() }}
@@ -757,6 +819,7 @@ $(document).ready(function()
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>
+								
 							</div>
 						</div>
 
@@ -831,12 +894,14 @@ $(document).ready(function()
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
 
-											<td class="price" style="white-space: nowrap;">{{App\Product::find($product['id'])->price}} đ</td>
+											<td class="price" style="white-space: nowrap;">{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>,this)">
 											</td>
-                                    		<td class = "amount" style="white-space: nowrap;">{{App\Product::find($product['id'])->price*$product['qty']}} đ</td>
+											<td class = "amount" style="white-space: nowrap;">
+											{{number_format(App\Product::find($product['id'])->price*$product['qty'],0,",",".")}}
+											 đ</td>
                                     		<td>
 												@php $sum+=App\Product::find($product['id'])->price*$product['qty'] @endphp
                                     		<a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
@@ -849,29 +914,35 @@ $(document).ready(function()
 											</tr>
 											@else
 											<tr class="khonghoatdong" >
+												
+												
 												<td class="image">
 
-													<img  height="100px" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
-                                    			</td>
+													<img  height="100px" style="margin-bottom: 10px;" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
+												
+													<span class="badge" >Không hoạt động</span>
+												
+												</td>
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
 
-												  <td class="price" style="white-space: nowrap;">{{App\Product::find($product['id'])->price}} đ</td>
+												  <td class="price" style="white-space: nowrap;">
+												  {{number_format(App\Product::find($product['id'])->price,0,",",".")}}
+												  đ</td>
                                 				<td class="qty"> </td>
                                		 			<td class = "amount"></td>
                                 	 			<td>
 												 <a href="#" onclick="deleteCartModal(<?php echo $product['id'] ?>,'',this,<?php echo $product['time_at']?>)">
-                                        	<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                        	</svg>
-                                    		</a>
-											</td>
+                                        		<svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            	<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            	<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        		</svg>
+                                    			</a>
+												</td>
 											</tr>
-											<tr class="khonghoatdong"><td colspan="6">
-										 <span class="badge" >Không hoạt động</span>
-										 </td>
-
+										
+										
+											 
 										@endif
 										 @endif
 
@@ -881,7 +952,7 @@ $(document).ready(function()
 						</div>
                         <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-								{{$sum}} đ</span></h5>
+								{{number_format($sum,0,",",".")}} đ</span></h5>
 								<h5 class="soluongmax" style="color:red"></h5>
                         </div>
                             <!--Trường hợp user  đăng nhập thao tác với database-->
@@ -908,7 +979,7 @@ $(document).ready(function()
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
                                       	<!--Trường hợp còn hàng(status là 1)-->
-										<td class="price" style="white-space: nowrap;">{{$p->pivot->price }} đ</td>
+										<td class="price" style="white-space: nowrap;">	{{number_format($p->pivot->price,0,",",".")}} đ</td>
 
 
 										<td class="qty">
@@ -916,7 +987,7 @@ $(document).ready(function()
                                             <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
                                          onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}',this)">
 										</div></td>
-                                    	<td class = "amount" style="white-space: nowrap;">{{$p->pivot->amount }} đ </td>
+                                    	<td class = "amount" style="white-space: nowrap;">	{{number_format($p->pivot->amount,0,",",".")}} đ </td>
                                     	<td>
                                         <a href="#"  onclick="deleteCartModal('{{$p->id}}','{{$orders->id}}',this,'{{$p->pivot->created_at}}')">
                                         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -932,11 +1003,14 @@ $(document).ready(function()
 
 										<td class="image">
 
-										<img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
-                                        </td>
+										<img  width="100px" style="margin-bottom: 10px;"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
+										<span class="badge" >Không hoạt động</span>
+										</td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
 
-										<td class="price" style="white-space: nowrap;">{{$p->pivot->price }}  đ</td>
+										<td class="price" style="white-space: nowrap;">
+										{{number_format($p->pivot->price,0,",",".")}} đ
+										 </td>
                                       	<td class="qty"> </td>
                                     	<td class = "amount"></td>
                                     	<td>
@@ -948,11 +1022,7 @@ $(document).ready(function()
                                       	</a>
 										   </td>
 										 </tr>
-										 <tr class="khonghoatdong"><td colspan="6">
-										 <span class="badge" >Không hoạt động</span>
-										 </td>
-										</tr>
-										</div>
+										 
 										@endif
 
 								  	@endforeach
@@ -961,7 +1031,7 @@ $(document).ready(function()
 							</div>
                             <div class="d-flex justify-content-end">
                                 <h5>Total: <span class="price text-success" id="total" >
-								{{ $orders->total }} đ</span></h5>
+								{{number_format($orders->total,0,",",".")}} đ</span></h5>
 								<h5 class="soluongmax" style="color:red"></h5>
 							</div>
 							<!--end cart body-->

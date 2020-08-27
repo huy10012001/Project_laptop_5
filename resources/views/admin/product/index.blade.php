@@ -62,7 +62,7 @@
                                     }}</td>
                                 <td>{{ $p->name }}</td>
                               
-                                <td>{{ $p->price }}</td>
+                                <td>{{number_format($p->price,0,",",".")}} </td>
                                 <td><img width="100px" src="{{ url('images/'.$p->image) }}"/></td>
                                
                                 @if( $p->status=="1")

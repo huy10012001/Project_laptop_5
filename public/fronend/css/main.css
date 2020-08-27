@@ -1019,7 +1019,7 @@ h2.title {
 }
 
 .category-tab ul  li  a:hover{
-	background:#FE980F;
+	background:#7cd8f1;
 	color:#fff;
 }
 
@@ -1028,7 +1028,7 @@ h2.title {
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  background-color: #FE980F;
+  background-color: #85e3f8;
   border:0px;
   color: #FFFFFF;
   cursor: default;
@@ -1530,7 +1530,7 @@ h2.title {
 }
 
 .breadcrumbs .breadcrumb li a {
-  background:#FE980F;
+  background:#9bdafa;
   color: #FFFFFF;
   padding: 3px 7px;
 }
@@ -1559,7 +1559,7 @@ h2.title {
 
 
 #cart_items .cart_info .cart_menu {
-  background: #FE980F;
+  background: #86e2fc;
   color: #fff;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
@@ -2398,7 +2398,7 @@ h2.title {
   height: auto;
   border-style: solid;
   border-width: 8px;
-  border-color:#FE980F transparent transparent transparent;
+  border-color:#86ddfa transparent transparent transparent;
   top: 25px;
   left: 5px
 }
@@ -2455,7 +2455,7 @@ h2.title {
 #contact-page .form-control:focus,
 #contact-page .form-control:hover {
   box-shadow: inherit;
-  border-color: #FDB45E;
+  border-color: #74cffd;
 }
 
 #contact-page .contact-info {
@@ -2506,7 +2506,7 @@ h2.title {
 }
 
 .contact-info .social-networks ul li a:hover{
-  color: #FE980F;
+  color: #7ce4fc;
 }
 
 .card{

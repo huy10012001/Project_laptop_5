@@ -3,21 +3,31 @@
 <script>
     $(document).ready(function()
 {
+    $('#formContact input').keyup(function(e)
+    {
+		$(this).css('border','');
+	});
+
     $('#formContact').submit(function(e)
     {
-        
+
 
 		//xóa hết lỗi trước khi bắt
 		$('.error').each(function() {
 			$(this).text('');
 		});
 
-       e.preventDefault();
-       $.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-});
+        var a=$("input[name=ct_email").val();
+        console.log(a);
+        e.preventDefault();
+        $.ajaxSetup(
+        {
+             headers:
+            {
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+            }
+        );
         $.ajax({
 			method:'post',
       		url:	 " {{ asset('/postContact')}}",
@@ -28,13 +38,16 @@
 
              		var x=error.responseText;
                   	x=$.parseJSON(x);
-                   console.log(x);
+                  
 					let errors = error.responseJSON.errors;
-                   
+                    console.log(errors);
+
 					//FOCUS vào lỗi đầu tiên
 					var errorsfocus=Object.keys(errors)[0];
-
+                    if(errorsfocus!="message")
 					var nameFocus=$("#formContact input[name="+errorsfocus+"]");
+                    else
+                    var nameFocus=$("#formContact .yourmessage");
 					nameFocus.focus();
 					//nameFocus.focus();
 					//console.log(a.val());
@@ -61,8 +74,13 @@
 			success:function(data)
            	{
 
-
-					location.reload();
+                    console.log(123);
+                $("#AlertModal .modal-body").html("Bạn đã gửi thành công");
+               $("#AlertModal").modal("show");
+                                  setTimeout(function () {
+                           location.reload(); //will redirect to your blog page (an ex: blog.html)
+                              }, 3000); //will call the function after 2 secs.
+                    
 
 
 
@@ -130,33 +148,29 @@
                                     <div class="form-top">
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Họ tên <sup>*</sup></label>
-                                            <input type="text" name="ct_name" class="form-control">
-                                            <div class="text-danger error" data-error="ct_name"></div>
+                                            <input type="text" name="name" class="form-control">
+                                            <div class="text-danger error" data-error="name"></div>
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Email <sup>*</sup></label>
-                                            <input type="text" name="ct_email" class="form-control">
-                                            <div class="text-danger error" data-error="ct_email"></div>
+                                            <input type="text" name="email" class="form-control">
+                                            <div class="text-danger error" data-error="email"></div>
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label>Số điện thoại <sup>*</sup></label>
-                                            <input type="text" name="ct_phone" class="form-control">
-                                            <div class="text-danger error" data-error="ct_phone"></div>
+                                            <input type="text" name="phone" class="form-control">
+                                            <div class="text-danger error" data-error="phone"></div>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-12" >
+                                        <div class="form-group col-sm-6 col-md-6" >
                                             <label>địa chỉ <sup>*</sup></label>
-                                            <textarea class="yourmessage" name="ct_address" style=" border-radius: 5px;"></textarea>
-                                            <div class="text-danger error" data-error="ct_address"></div>
+                                            <input type="text" name="address" class="form-control">
+                                            <div class="text-danger error" data-error="address"></div>
                                         </div>
-                                        <div class="form-group col-sm-6 col-md-6">
-                                            <label>Tiêu đề <sup>*</sup></label>
-                                            <input type="text" name="ct_title" class="form-control">
-                                            <div class="text-danger error" data-error="ct_title"></div>
-                                        </div>
+                                       
                                         <div class="form-group col-sm-12 col-md-12" >
                                             <label>Nội dung <sup>*</sup></label>
-                                            <textarea class="yourmessage" name="ct_message" style=" border-radius: 5px;"></textarea>
-                                            <div class="text-danger error" data-error="ct_message"></div>
+                                            <textarea class="yourmessage" name="message" style=" border-radius: 5px;"></textarea>
+                                            <div class="text-danger error" data-error="message"></div>
                                         </div>
 
                                     </div>
