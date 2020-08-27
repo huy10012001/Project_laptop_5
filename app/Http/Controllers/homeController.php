@@ -210,8 +210,9 @@ class homeController extends Controller
         $orderBy="";
         if(is_string($request->orderby))
         {
-            $flag=true;
-            
+            if(count($request->all())=="1")
+                $flag=true;
+        
             $orderBy=$request->orderby;
             switch($orderBy)
             {
@@ -234,9 +235,10 @@ class homeController extends Controller
         //nếu không có  request sắp xếp thì mặc định sẽ mới nhất
         if(!is_string($request->orderby))
         {
-            $flag=true;
+        
             $product=$product->orderBy('product_id', 'desc');
         }
+     
         if($request->page)
         {
             $flag=true;

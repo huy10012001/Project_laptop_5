@@ -88,8 +88,7 @@
         <div class="box">
             <h2>Laptop</h2>
         </div>
-        <div class="category" >
-    @foreach($all_category as $c)
+
         <a href="/product/macbook"><img src="{{ ('fronend/images/mac.jpg') }}" alt=""></a>
         <a href="/product/asus"><img src="{{ ('fronend/images/Asus.jpg') }}" alt=""></a>
        <a href="/product/dell"> <img src="{{ ('fronend/images/Dell.jpg') }}" alt=""></a>
@@ -97,7 +96,7 @@
         <a href="/product/hp"><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
         <a href="/product/msi"><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
       <a href="/product/lenovo">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
-  @endforeach
+  
         </div>
     </div>
     <div class="spm">
