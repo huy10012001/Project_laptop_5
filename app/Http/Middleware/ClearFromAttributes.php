@@ -94,7 +94,13 @@ class ClearFromAttributes
                 $fullurl_redirect.="orderby=".$request->orderby;
              
         }
-        
+        if(is_string($request->page))
+        {
+            if($fullurl_redirect!="")
+            $fullurl_redirect.="&"."page=".$request->orderby;
+            else
+            $fullurl_redirect.="page=".$request->orderby;
+        }
         if(is_array($request->tenhang))
         {  
            
