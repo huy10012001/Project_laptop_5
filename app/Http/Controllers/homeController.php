@@ -207,9 +207,11 @@ class homeController extends Controller
             }
               
         }
+        $orderBy="";
         if(is_string($request->orderby))
         {
             $flag=true;
+            
             $orderBy=$request->orderby;
             switch($orderBy)
             {
@@ -226,9 +228,10 @@ class homeController extends Controller
                     $product=$product->orderBy('product_id', 'desc');
                     break;    
             }
+           
         }
-       
-        //nếu không request sắp xếp thì mặc định sẽ mới nhất
+     
+        //nếu không có  request sắp xếp thì mặc định sẽ mới nhất
         if(!is_string($request->orderby))
         {
             $flag=true;
@@ -244,12 +247,9 @@ class homeController extends Controller
            
             $count=$product->count();
             $product=$product->paginate(6);
-            $requestOrder="";
-            if(is_string($request->orderby))
-            {
-                $requestOrder=$request->orderby;
-            }
-            return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
+           
+            
+            return view('user.product', ['count'=>$count,'requestorderby'=> $orderBy,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
         }
         elseif(count($request->all())>0)
         {
@@ -373,7 +373,7 @@ class homeController extends Controller
                 }
               
             }
-         
+            $orderBy="";
             if(is_string($request->orderby))
             {
                 $flag=true;
@@ -393,19 +393,16 @@ class homeController extends Controller
                         $product=$product->orderBy('product_id', 'desc');
                         break;         
                 }
+              
             }
+          
          
             if(!is_string($request->orderby))
                 $product=$product->orderBy('product_id', 'desc');
             $count=$product->count();
             $product=$product->paginate(6);
-            $requestOrder="";
-            if(is_string($request->orderby))
-            {
-                $requestOrder=$request->orderby;
-            }
-
-            return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
+         
+            return view('user.product', ['count'=>$count,'requestorderby'=>$orderBy,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
             
         }
         else
@@ -969,7 +966,7 @@ class homeController extends Controller
        $product = $product->where('name', 'LIKE', '%' . $search . '%');
       
        $orderBy="";
-       if($request->orderby)
+       if(is_string($request->orderby))
         {
        
             $orderBy=$request->orderby;
@@ -986,12 +983,18 @@ class homeController extends Controller
                                 $product=$product->orderBy('product_id', 'desc');
                               
                             break;    
+                        default:    
+                            $product=$product->orderBy('product_id', 'desc');
+                            break;   
                     }
         }
-        if($request->orderby=="")
+       
+        if(!is_string($request->orderby))
         {
+           
             $product=$product->orderBy('product_id', 'desc');
         }
+       
         $count=$product->count();
         $product=$product->paginate(8);
         return view('user.veview_search',['count'=>$count,'requestorderby'=> $orderBy,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);

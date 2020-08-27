@@ -100,7 +100,7 @@ $(document).ready(function() {
             else
                 valueOrder="Laptop mới nhất";
             $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
-        }
+    }
         //checked những input có value-tất cả
     $("#form_product input").each(function(){
     
@@ -252,7 +252,7 @@ $(document).ready(function() {
         $("#orderByR").val(orderBy);
     })
     */
-    });
+ });
 
     </script>
 

@@ -88,8 +88,8 @@
                 <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Laptop mới nhất
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                        <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
-                        <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
+             <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
+                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
                         <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
    
               
