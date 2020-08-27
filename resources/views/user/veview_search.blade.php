@@ -12,18 +12,63 @@
         $('#show').fadeIn('slow');
     },500);
     var valueOrder= $("#orderByR").val();
-    console.log(valueOrder);
+   
     if(valueOrder!="")
     {
         if(valueOrder=="asc")
-            valueOrder="giá  thấp đến cao";
+            valueOrder="giá thấp đến cao";
         else if(valueOrder=="desc")
-            valueOrder="giá  cao đến  thấp ";
+            valueOrder="giá cao đến thấp";
         else
             valueOrder="Laptop mới nhất";
         $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
     }
    });
+   
+   $('a').each(function () {
+    if ($(this).attr('href').indexOf('other') > -1) {
+        var hrefStr = $(this).attr('href');
+        var start_pos = hrefStr.indexOf('fruit=') + 1;
+        var end_pos = hrefStr.indexOf('&',start_pos); //works as long as fruit=apple is in the middle or front of the string
+        var fruit = hrefStr.substring(start_pos,end_pos);
+       console.log(fruit)
+        //put modified href back in <a>
+    }
+});
+   function UrlWithOrderBy(order)
+   {
+       var orderBy="";
+      
+        if(order.text=="giá thấp đến cao")
+            orderBy="asc";
+        else if(order.text=="giá cao đến thấp")
+            orderBy="desc";
+        else if(order.text=="Laptop mới nhất")
+            orderBy="new";
+           //lấy url hiện tại 
+       
+      //  var fullUrl = window.location.href;
+        //tìm vị trí orderby
+       //var indexOrderBy=fullUrl.indexOf("orderby");
+        //var urlwithorderBy="";
+        //lấy value sau chuỗi orderby
+       // if(indexOrderBy!=-1)
+      //  {  
+            //if(orderBy!="")
+            //urlwithorderBy = fullUrl.substring(0,indexOrderBy+8)+orderBy; 
+           // else
+           // urlwithorderBy = fullUrl.substring(0,indexOrderBy-1); 
+        
+       // }
+       // else
+      //  {   
+            //if(orderBy!="")
+           // urlwithorderBy=fullUrl+"&orderby="+orderBy;
+       //// }
+     // window.location.href=urlwithorderBy;
+        //gán value vô input 
+      
+   }
 </script>
 
 @if($product->count()>0)
@@ -40,13 +85,12 @@
     <div class="row">
         <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
             <div class="dropdown" style=" float:right;">
-                <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp xếp
+                <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Laptop mới nhất
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'default'])}}">mặc định</option></li>
-                <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao</a></a></li>
-                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến thấp </a></li>
-                <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
+                        <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
+                        <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
+                        <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
    
               
                 </ul>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use App\category;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Cocur\Slugify\Slugify;
+use Illuminate\Support\Facades\URL;
 class ClearFromAttributes
 {
     /**
@@ -56,7 +57,7 @@ class ClearFromAttributes
     public function handle($request, Closure $next)
     {
        
-      
+        
         $fullurl_redirect="";
          
         foreach($request->except('_token') as $key=> $value)
@@ -73,6 +74,7 @@ class ClearFromAttributes
             }   
         }
         
+      
         $fullurl_redirect=substr($fullurl_redirect, 0, -1);
         if (is_string($request->orderby)) {
             // array_push($expect,$request->orderby);]
@@ -85,6 +87,10 @@ class ClearFromAttributes
         //$fullurl_redirect=substr($fullurl_redirect, 0, -1);
      
         //  dd(url()->current()."?".$fullurl_redirect);
+       //$url_WithPage=url()->current().'?'.(http_build_query($request->all()));
+        //dd(URL::full());
+    
+      
         if(is_array($request->tenhang))
         {  
            

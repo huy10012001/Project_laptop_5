@@ -224,6 +224,10 @@ class homeController extends Controller
                     break;        
             }
         }
+        if($request->orderby=="")
+        {
+            $product=$product->orderBy('product_id', 'desc');
+        }
         if($request->page)
         {
             $flag=true;
@@ -376,10 +380,15 @@ class homeController extends Controller
                         break;        
                 }
             }
+            if($request->orderby=="")
+            {
+                $product=$product->orderBy('product_id', 'desc');
+            }
             $count=$product->count();
             $product=$product->paginate(6);
+           
             $requestOrder=$request->orderby;
-         
+           
             return view('user.product', ['count'=>$count,'requestorderby'=>$requestOrder,'c'=>$category,'all_category'=>$all_category,'product'=>$product->appends($request->except('page'))]);
             
         }
@@ -695,6 +704,10 @@ class homeController extends Controller
                             break;        
                     }
                 }
+                if($request->orderby=="")
+                {
+                    $product=$product->orderBy('product_id', 'desc');
+                }
                 if($request->page)
                 {
                     $flag=true;
@@ -865,6 +878,11 @@ class homeController extends Controller
                         break;   
                 }
             }
+          
+            if($request->orderby=="")
+            {
+                $product=$product->orderBy('product_id', 'desc');
+            }
             $count=$product->count();
             $product=$product->paginate(6);
             $requestOrder=$request->orderby;
@@ -929,9 +947,10 @@ class homeController extends Controller
              $product=Product::where(['status'=>"1"])
        ->join('detail_product','detail_product.product_id','=','product.id') ;
        $product = $product->where('name', 'LIKE', '%' . $search . '%');
+      
        $orderBy="";
        if($request->orderby)
-         {
+        {
        
             $orderBy=$request->orderby;
              switch($orderBy)
@@ -948,8 +967,11 @@ class homeController extends Controller
                               
                             break;    
                     }
-                }
-     
+        }
+        if($request->orderby=="")
+        {
+            $product=$product->orderBy('product_id', 'desc');
+        }
         $count=$product->count();
         $product=$product->paginate(8);
         return view('user.veview_search',['count'=>$count,'requestorderby'=> $orderBy,'product'=>$product->appends($request->except('page')),'keyword'=>$search]);

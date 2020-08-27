@@ -12,6 +12,8 @@ use App\Order;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -32,7 +34,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         
-       
+        /*$this->app->resolving(LengthAwarePaginator::class, static function (LengthAwarePaginator $paginator) {
+           $a=request()->query();
+           
+            return $paginator->appends($a);
+        });
+        $this->app->resolving(Paginator::class, static function (Paginator $paginator) {
+            $a=request()->query();
+           
+            return $paginator->appends($a);
+        });*/
         view()->composer('layout_home', function($view)
         {
            

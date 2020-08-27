@@ -92,114 +92,126 @@ if(performance.navigation.type == 2){
     }
     function tienhanh()
     {
+        var name=$("#khach input[name=name]").val() ;
+        var khach=$("#khach input[name=phone]").val() ;
+        var add=$("#khach input[name=address]").val() ;
+        if(name==""||khach==""||add=="")
+        {
+            $("#AlertModal .modal-body").html("bạn chưa cập nhập day du"); 
+            $("#AlertModal").modal("show");
+        }
+        else
+        {
+            var product_update =[];
+            $(".product_update").each(function() {
+            product_update.push($(this).val());
+            });
 
-        var product_update =[];
-        $(".product_update").each(function() {
-        product_update.push($(this).val());
-        });
-
-        var user_id =$("input[name=id]").val();
-        $.ajax({
-            type:  "GET",
-      		url:	 " {{ asset('/isDangNhap')}}",
-      		data: { check:"true",user_id:user_id,status:"login" },
-			datatype: 'json',
-            error:function(data)
-            {
-                alert('lỗi rồi bạn');
-            }
-            ,
-			success:function(data)
-           	{
-
-
-                //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
-                if(data.status=="phiên kết thúc")
+            var user_id =$("input[name=id]").val();
+            $.ajax({
+                type:  "GET",
+                url:	 " {{ asset('/isDangNhap')}}",
+                data: { check:"true",user_id:user_id,status:"login" },
+                datatype: 'json',
+                error:function(data)
                 {
-                    $("#AlertModal .modal-body").html("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
-                        $("#AlertModal").modal("show");
-
-
-                    setTimeout(function () {
-                    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-                    }, 1000); //will call the function after 2 secs.
+                    alert('lỗi rồi bạn');
                 }
-                //khi thoát đăng phienhập
-                else if(data.status=="thoát đăng nhập")
+                ,
+                success:function(data)
                 {
-                    $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
-                        $("#AlertModal").modal("show");
-
-                    setTimeout(function () {
-                    window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-                     }, 1000); //will call the function after 2 secs.
-                }
-                //Nếu chưa cập nhập xong thông báo
-                else if( $('#update').is(":visible"))
-                {
-                    $("#AlertModal .modal-body").html("bạn chưa cập nhập xong");
-                        $("#AlertModal").modal("show");
-                }
-                //Order
-
-                else
-                {
-                    $("#waitModal").modal("hide");
-                    $name= $("#khach  input[name=name]").val();
-                    $phone=$("#khach input[name=phone]").val();
-                    $add=$("#khach input[name=address]").val();
-
-		            $.ajax({
-
-			            type:  "GET",//type là get
-      		            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
-      		            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
-
-                        datatype: 'json',
-                        beforeSend: function(){
-
-                            $("#waitModal .modal-body").html("Bạn chờ tí nhé,..");
-                            $("#waitModal").modal("show");
-                        },
-                        error:function(xhr)
-                        {
-                            var x=xhr.responseText;
-                            x=$.parseJSON(x);
-                           console.log(x.message);
-
-                        },
-         	            success:function(data)
-                        {
 
 
-                            //nếu giỏ hàng thay đổi trong lúc order
-                            if(data.status=="thay đổi")
+                    //Khi order mới cập nhập hoặc khi đăng nhập tài khoản khác
+                    if(data.status=="phiên kết thúc")
+                    {
+                        $("#AlertModal .modal-body").html("Có lỗi xảy ra hoặc phiên làm việc kết thúc,xin vui lòng thử lại. ");
+                            $("#AlertModal").modal("show");
+
+
+                        setTimeout(function () {
+                        window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                        }, 1000); //will call the function after 2 secs.
+                    }
+                    //khi thoát đăng phienhập
+                    else if(data.status=="thoát đăng nhập")
+                    {
+                        $("#AlertModal .modal-body").html("phiên làm việc hết hạn ");
+                            $("#AlertModal").modal("show");
+
+                        setTimeout(function () {
+                        window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                        }, 1000); //will call the function after 2 secs.
+                    }
+                    //Nếu chưa cập nhập xong thông báo
+                    else if( $('#update').is(":visible"))
+                    {
+                        $("#AlertModal .modal-body").html("bạn chưa cập nhập xong");
+                            $("#AlertModal").modal("show");
+                    }
+                    //Order
+
+                    else
+                    {
+                        $("#waitModal").modal("hide");
+                        $name= $("#khach  input[name=name]").val();
+                        $phone=$("#khach input[name=phone]").val();
+                        $add=$("#khach input[name=address]").val();
+
+                        $.ajax({
+
+                            type:  "GET",//type là get
+                            url: " {{ asset('/getOrder')}}",//truy cập tới url cart/delete
+                            data:{ name:$name,phone:$phone,address:$add,product_update:product_update},//pass tham số vào key
+
+                            datatype: 'json',
+                            beforeSend: function(){
+
+                                $("#waitModal .modal-body").html("Bạn chờ tí nhé,..");
+                                $("#waitModal").modal("show");
+                            },
+                            error:function(xhr)
                             {
-                                $("#AlertModal .modal-body").html("Giỏ hàng của bạn có sự thay đổi");
-                                $("#AlertModal").modal("show");
-                            }
+                                var x=xhr.responseText;
+                                x=$.parseJSON(x);
+                            console.log(x.message);
 
-						   else if(data.status=="giỏ hàng của bạn trống")
+                            },
+                            success:function(data)
                             {
-                                $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
-                                $("#AlertModal").modal("show");
-                            }
 
 
-                            else
-                          {
-                           
-                                $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
-                                $("#AlertModal").modal("show");
-                              setTimeout(function () {
-                             window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
-                              }, 3000); //will call the function after 2 secs.
+                                //nếu giỏ hàng thay đổi trong lúc order
+                                if(data.status=="thay đổi")
+                                {
+                                    $("#AlertModal .modal-body").html("Giỏ hàng của bạn có sự thay đổi");
+                                    $("#AlertModal").modal("show");
+                                }
+
+                            else if(data.status=="giỏ hàng của bạn trống")
+                                {
+                                    $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
+                                    $("#AlertModal").modal("show");
+                                }
+
+
+                                else
+                            {
+                            
+                                    $("#waitModal").modal("hide");
+                                    $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
+                                  
+                                    $("#AlertModal").modal("show");
+                                    setTimeout(function () {
+                                window.location.href = "{{URL::to('/home')}}" //will redirect to your blog page (an ex: blog.html)
+                                }, 3000); //will call the function after 2 secs.
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-           	}
-        });
+            });
+        }
     }
 </script>
 
