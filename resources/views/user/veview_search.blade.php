@@ -1,31 +1,6 @@
 @extends('layout_home')
 @section( 'search')
 <script>
-  function FindparseQuerystring(value){
-   
-   value= ChangeToSlug(value);
-    console.log(value);
-    var flag=false;
-    
-  
-    if(searchParams!="")
-    {
-        var foo = searchParams.split('&');
-   
-    var dict = {};
-    var elem = [];
-    for (var i = foo.length - 1; i >= 0; i--) {
-        elem = foo[i].split('=');
-     
-         if(elem[1].includes(value))
-            flag=true;
-    };  
-    if(flag==true)
-        return true;
-    else
-        return false;
-    }
-};
 
    $(document).ready(function() {
     $("#show").hide();
@@ -49,8 +24,7 @@
 
    function redirectOrderSearch(order)
    {
-       var orderBy="";
-      
+         var orderBy="";
         if(order.text=="giá thấp đến cao")
             orderBy="asc";
         else if(order.text=="giá cao đến thấp")
