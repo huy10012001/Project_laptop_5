@@ -51,6 +51,7 @@ class homeController extends Controller
 
             }
         }
+        //nếu value request từ url nằm trong value chuỗi giá trị lọc
         if($flag==true)
         {   
             $product=$product->whereIn("description->".$query,  $request_arr);

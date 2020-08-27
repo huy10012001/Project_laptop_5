@@ -1,200 +1,180 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="animate.css">
+
 
 </head>
 <body>
- <!--
-@foreach($all_category as $category)
-   {{$category->product->count()}}
-  @foreach($category->product as $product)
-    
-    @if($product->status=="0" && $product->detail!="")
-      {{$product->name}} ::
-      {{$product->detail}}
-      <br/>
-    @endif
-  @endforeach
-@endforeach
-
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<script>
- $(document).ready(function()
-{
-  var x=$('.carousel');
-  console.log(x.attr('id');
-});
-</script>
-
-<body>
-<div class="container" style="margin-bottom: 30px;">
-@foreach($all_category as $category)
-  
-  <div class="spm">
-  <h2 class="title text-center">{{$category->name}} </h2>
-  </div>
-  @php   
-      $product=App\product::where(['category_id'=>$category->id,'status'=>"1"])
-      ->join('detail_product','detail_product.product_id','=','product.id')->get()    
-      @endphp
-
-  <div id="categorycarousel{{$category->id}}" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-  
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
-     
-        <div class="item  row active">
-          @foreach($product->take(4) as $p)
-          <div class="col-sm-3" style="height: 500px;">
-          <div class="single-products" >
-            <div class="productinfo text-center">
-              <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
-              <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-               <p style="word-break: break-all;" >{{$p->name}}</p>
-                <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
+  <header>
+        <div class="header_row">
+          <div class="container">
+            <div class="row">
+            <div class=" col-sm-4 col-lg-9">
+              <form class="form-inline" action="/action_page.php">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" size="38">
+               
+              </form>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$p->name}}</p>
-                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
-          </div>
-          <div class="choose">
-            <ul class="nav nav-pills nav-justified">
-              <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+          <div class="col-sm-8 col-lg-3">
+            <ul>
+              <li>
+              <a  href="#"><span class="fa fa-user"></span> Sign In</a>
+              </li>
+              <li>
+              <a  href="#"><span class="fa fa-registered"></span> Register</a>
+              </li>
             </ul>
           </div>
         </div>
-        @endforeach 
+        </div>
       </div>
-      @php   
-      $product_slide2over=$product->skip(4)
-      @endphp
-      @foreach($product_slide2over->chunk(4) as $products)
-      <div class="row  item course-set courses__row " name="{{$category->name}}">
-        @foreach($product_slide2over as $p)
-        <div class="col-sm-3" style="height: 500px;">
-          <div class="single-products" >
-            <div class="productinfo text-center">
-              <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
-              <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-               <p style="word-break: break-all;" >{{$p->name}}</p>
-                <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-            </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
+      <nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+      <div class="container">
+         <a class="navbar-brand" href="#">
+          <img src="1.jpg" alt="" width="100"  height="100" />
+        </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">About Us <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Bands</a>
+          </li>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Range of Cars
+              </a>
+              <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Link 1</a>
+              <a class="dropdown-item" href="#">Link 2</a>
+              <a class="dropdown-item" href="#">Link 3</a>
+              </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">PreOwned Cars</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="#">Contact Us</a>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+   
+  </header>
+  <div class="login-form w3_form">
+  <!--  Title-->
+      <div class="login-title w3_title">
+           <h1>Elegant login Form</h1>
+      </div>
+           <div class="login w3_login">
+                <h2 class="login-header w3_header">Log in</h2>
+            <div class="w3l_grid">
+                        <form class="login-container" action="#" method="post">
+                             <input type="email" placeholder="Email" Name="Email" required="" >
+                             <input type="password" placeholder="Password" Name="password" required="">
+                             <input type="submit" value="Submit">
+                        </form>
+<div class="second-section w3_section">
+     <div class="bottom-header w3_bottom">
+          <h3>OR</h3>
+     </div>
+     <div class="social-links w3_social">
+         <ul>
+         <!-- facebook -->
+             <li> <a class="facebook" href="#" target="blank"><i class="fa fa-facebook"></i></a></li>
+
+         <!-- twitter -->
+             <li> <a class="twitter" href="#" target="blank"><i class="fa fa-twitter"></i></a></li>
+
+         <!-- google plus -->
+             <li> <a class="googleplus" href="#" target="blank"><i class="fa fa-google-plus"></i></a></li>
+       </ul>
+   </div>
+</div>
+                 
+<div class="bottom-text w3_bottom_text">
+      <p>No account yet?<a href="#">Signup</a></p>
+      <h4> <a href="#">Forgot your password?</a></h4>
+</div>
+
                   </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$p->name}}</p>
-                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
-          </div>
-          <div class="choose">
-            <ul class="nav nav-pills nav-justified">
-              <li><a href="{{ url('product/'.$p->slug) }}"></i>Chi tiết sản phẩm</a></li>
+       </div>
+  
+</div>
+  
+  
+
+
+  <footer>
+    <div class="informfooter">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-sm-6">
+            <div class="menuFooter">
+            <ul> 
+              <li> <a href="  ">About Us</a></li>
+              <li> <a href="  ">Brands</a></li>
+              <li> <a href="  ">Range of Cars</a></li>
+              <li> <a href="  ">PreOwned Cars</a></li>
+              <li> <a href="  ">Contact Us</a></li>
             </ul>
           </div>
-       </div>
-        @endforeach 
+          </div>
+          <div class="col-lg-4 col-sm-5">
+            <h1 style="text-align:center;">Contact Us</h1>
+            <p style="text-align:center;font-size: 120%">Name:Tran Kim Dat<br>
+            Email:kimdat1999@gmail.com<br>
+            Tel:0907961470<br>
+            HotLine:0912312323<br>
+            Address:590 CMT8 WARD 11 DISTRICT 3 HCM CITY<br>
+            Open time:7pm-10Am <br>
+            Open even Saturday and Sunday expect holiday
+            </p>
+          </div>
+          <div class="col-lg-4 col-sm-1">
+              <h1 style="text-align:center;">Follow Us</h1>
+              <nav style="text-align:center;">
+                <a href=""class="fa fa-facebook"></a>
+              <a href="#" class="fa fa-twitter"></a>
+              <a href="#" class="fa fa-google"></a>
+              <a href="#" class="fa fa-linkedin"></a>
+              <a href="#" class="fa fa-youtube"></a>
+              <a href="#" class="fa fa-instagram"></a>
+              <a href="#" class="fa fa-android"></a>
+              <a href="#" class="fa fa-pinterest"></a>
+              <a href="#" class="fa fa-snapchat-ghost"></a>
+              <a href="#" class="fa fa-skype"></a>
+              <a href="#" class="fa fa-reddit"></a>
+              <a href="#" class="fa fa-rss"></a>
+              </nav>
+          </div>  
+        </div>
       </div>
-      @endforeach
-    
     </div>
-
-    <!-- Left and right controls -->
-    @if( $product->count()>4)
-      <a class="left carousel-control" href="#{{$category->id}}" data-slide="prev">
-   
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span class="sr-only">Previous</span>
-       
-      </a>
-      <a class="right carousel-control" href="#{{$category->id}}" data-slide="next">
-      
-        <span class="glyphicon glyphicon-chevron-right"></span>
-        <span class="sr-only">Next</span>
-       
-      </a>
-      @endif
-  </div>
- 
-@endforeach
-</div>
-<script>
+    <div class="copy">
+      <div class="container">
+         &copy; Copyright 2019 Canvas market 
+      </div> 
+    </div>
+  </footer>
   
-  $(document).ready(function() {
-    $('.carousel').each(function()
-    {
-        console.log($(this).attr('id'))
-    });
-    /*
-    var x=$(".product_category");
-    var name=[];
-        $(x.children()).each(function( index ) {
-         var x=$(this).attr('name');
-         if(!name.includes(x))
-          name.push(x);
-    });
-    
-    for (i = 0; i < name.length; i++) {
-      
-        var y=$("[name^="+name[i]+"]");
-        $("[name^="+name[i]+"]:eq(0)").addClass("active");
-        
-        
-    }*/
-  });
-
-</script>
-
+</body>
 </html>
+
