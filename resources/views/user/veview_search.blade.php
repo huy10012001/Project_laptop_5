@@ -1,11 +1,32 @@
 @extends('layout_home')
 @section( 'search')
 <script>
-   function macDinh()
-   {
-       var x=$("#keyword").val();
-      window.location.href = "/search?keyword="+x;
-   }
+  function FindparseQuerystring(value){
+   
+   value= ChangeToSlug(value);
+    console.log(value);
+    var flag=false;
+    
+  
+    if(searchParams!="")
+    {
+        var foo = searchParams.split('&');
+   
+    var dict = {};
+    var elem = [];
+    for (var i = foo.length - 1; i >= 0; i--) {
+        elem = foo[i].split('=');
+     
+         if(elem[1].includes(value))
+            flag=true;
+    };  
+    if(flag==true)
+        return true;
+    else
+        return false;
+    }
+};
+
    $(document).ready(function() {
     $("#show").hide();
     setTimeout(function(){
@@ -24,18 +45,9 @@
         $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
     }
    });
-   
-   $('a').each(function () {
-    if ($(this).attr('href').indexOf('other') > -1) {
-        var hrefStr = $(this).attr('href');
-        var start_pos = hrefStr.indexOf('fruit=') + 1;
-        var end_pos = hrefStr.indexOf('&',start_pos); //works as long as fruit=apple is in the middle or front of the string
-        var fruit = hrefStr.substring(start_pos,end_pos);
-       console.log(fruit)
-        //put modified href back in <a>
-    }
-});
-   function UrlWithOrderBy(order)
+ 
+
+   function redirectOrderSearch(order)
    {
        var orderBy="";
       
@@ -45,27 +57,56 @@
             orderBy="desc";
         else if(order.text=="Laptop mới nhất")
             orderBy="new";
-           //lấy url hiện tại 
-       
-      //  var fullUrl = window.location.href;
-        //tìm vị trí orderby
-       //var indexOrderBy=fullUrl.indexOf("orderby");
-        //var urlwithorderBy="";
-        //lấy value sau chuỗi orderby
-       // if(indexOrderBy!=-1)
-      //  {  
-            //if(orderBy!="")
-            //urlwithorderBy = fullUrl.substring(0,indexOrderBy+8)+orderBy; 
-           // else
-           // urlwithorderBy = fullUrl.substring(0,indexOrderBy-1); 
+            //lấy query search param
+        let searchParams = new URLSearchParams(window.location.search);
+        searchParams=decodeURIComponent(searchParams);
+    
+        var param = searchParams.split('&');
         
-       // }
-       // else
-      //  {   
-            //if(orderBy!="")
-           // urlwithorderBy=fullUrl+"&orderby="+orderBy;
-       //// }
-     // window.location.href=urlwithorderBy;
+       
+        //Nếu như param chỉ có searchkeyword
+        if(param.length=="1")
+            window.location.href="search?"+param+"&orderby="+orderBy;
+        //param có từ 2 trở lên
+        //check xem orderby có ở vị trí 1 hay không
+        var checkorderbyIndex1=param[1].split('=');
+        orderBy="orderby="+orderBy;
+        
+        if(checkorderbyIndex1[0]=="orderby")
+        {   
+            var arr = [];
+          
+            param.forEach(function(element) {
+                var a=element.split('=')[0];
+                //nếu orderby ở vị trí 1 thì nếu mảng ở vị trí push value orerby,còn lại push value element từ param
+                if(a=="orderby")
+                    arr.push(orderBy);
+                else
+                     arr.push(element);
+               
+            });
+
+        }
+       
+        else
+        {
+            var arr = [];
+            //push value tham số param
+            param.forEach(element => arr.push(element));
+            //push value orderby vào index1
+             arr.splice(1, 0, orderBy);
+           
+        }
+        var urlQuery="";
+        //lấy query từ arr
+        arr.forEach(element => urlQuery+="&"+element);
+        //cắt bỏ & ở vị trí đầu tiên
+        urlQuery=urlQuery.substring(1,urlQuery.length);
+        window.location.href="search?"+urlQuery;
+       
+
+     
+     
         //gán value vô input 
       
    }
@@ -88,9 +129,9 @@
                 <button id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Laptop mới nhất
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-             <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
-                <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
-                        <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
+             <li><a   onclick="redirectOrderSearch(this)">giá thấp đến cao</a></li>
+            <li> <a     onclick="redirectOrderSearch(this)">giá cao đến thấp</a></li>
+             <li><a     onclick="redirectOrderSearch(this)">Laptop mới nhất</a></li>
    
               
                 </ul>
