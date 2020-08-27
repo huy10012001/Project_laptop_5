@@ -76,12 +76,7 @@ class ClearFromAttributes
         
       
         $fullurl_redirect=substr($fullurl_redirect, 0, -1);
-        if (is_string($request->orderby)) {
-            // array_push($expect,$request->orderby);]
-            if($request->orderby!="default")
-             $fullurl_redirect.="&"."orderby=".$request->orderby;
-           
-        }
+      
           
     
         //$fullurl_redirect=substr($fullurl_redirect, 0, -1);
@@ -90,7 +85,16 @@ class ClearFromAttributes
        //$url_WithPage=url()->current().'?'.(http_build_query($request->all()));
         //dd(URL::full());
     
-      
+        if(is_string($request->orderby))
+        {
+          
+            if($fullurl_redirect!="")
+                $fullurl_redirect.="&"."orderby=".$request->orderby;
+            else
+                $fullurl_redirect.="orderby=".$request->orderby;
+             
+        }
+        
         if(is_array($request->tenhang))
         {  
            

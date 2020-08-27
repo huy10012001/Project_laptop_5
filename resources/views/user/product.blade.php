@@ -69,7 +69,18 @@ function FindparseQuerystring(value){
     }
 };
 
-
+function requestOrder(order)
+{
+    var order=order.text;
+    if(order=="giá thấp đến cao")
+        order="asc";
+    else if(order=="giá cao đến thấp")
+        order="desc";
+    else
+        order="new";
+    $("#orderByR").val(order);
+    $("#form_product").submit();
+}
 
   
 
@@ -85,7 +96,7 @@ $(document).ready(function() {
         if(valueOrder=="asc")
             valueOrder="giá thấp đến cao";
         else if(valueOrder=="desc")
-            valueOrder="giá cao đến thấp ";
+            valueOrder="giá cao đến thấp";
             else
                 valueOrder="Laptop mới nhất";
             $("#sapxep").text(valueOrder).append(" <span class='caret'></span>");
@@ -223,7 +234,7 @@ $(document).ready(function() {
       
         var order=$("#orderByR").val();
         if(order=="")
-        $("#orderByR").val("new");
+            $("#orderByR").val("new");
         
     }); 
     /*	
@@ -370,10 +381,10 @@ $(document).ready(function() {
                         <button  id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Laptop mới nhất
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-
-                        <li><a   href="{{request()->fullUrlWithQuery(['orderby'=>'asc'])}}">giá thấp đến cao </a></a></li>
-                        <li> <a    href="{{request()->fullUrlWithQuery(['orderby'=>'desc'])}}">giá cao đến  thấp</a></li>
-                        <li><a    href="{{request()->fullUrlWithQuery(['orderby'=>'new'])}}">Laptop mới nhất</a></li>
+                     
+                        <li><a  onclick="requestOrder(this)">giá thấp đến cao</a></a></li>
+                        <li> <a   onclick="requestOrder(this)">giá cao đến thấp</a></li>
+                        <li><a    onclick="requestOrder(this)">Laptop mới nhất</a></li>
         
                     
                         </ul>
