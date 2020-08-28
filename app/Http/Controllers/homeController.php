@@ -181,7 +181,7 @@ class homeController extends Controller
          
         if(is_string($request->RAM))
         {
-            $flag=true;
+          
             $key_description=11;
             $string_request_filter="4-gb,8-gb,16-gb,32-gb";
             if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
@@ -192,7 +192,7 @@ class homeController extends Controller
        }
         if(is_string($request->ocung))
         {
-            $flag=true;
+           
             $key_description=16;
             $string_request_filter="1-tb,512-gb,256-gb,128-gb";
             if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
@@ -202,6 +202,7 @@ class homeController extends Controller
             }
               
         }
+       
         $orderBy="";
         if(is_string($request->orderby))
         {
