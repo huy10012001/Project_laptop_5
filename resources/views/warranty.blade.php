@@ -1,6 +1,6 @@
   
 @extends('layout_home')
-@section('frontend')
+@section('warranty')
 
 <div class="block">
     <h4>QUY ĐỊNH BẢO HÀNH</h4>

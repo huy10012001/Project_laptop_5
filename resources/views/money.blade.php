@@ -1,4 +1,5 @@
-@section('frontend')  
+@extends('layout_home')
+@section('money')  
 
 <div class="block">
     <h4>PHƯƠNG THỨC THANH TOÁN</h4>

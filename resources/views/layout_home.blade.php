@@ -702,6 +702,10 @@ $(document).ready(function()
 				<div class="row">
 					<!--tìm theo chi tiết-->
 					@yield('detail')
+					@yield('money')
+					@yield('ship_home')
+					@yield('ship')
+					@yield('warranty')
 					@yield('detail_home')
 					<!--end tìm theo chi tiéte-->
 					
@@ -1055,10 +1059,10 @@ $(document).ready(function()
 							<div class="single-widget">
 								<h2>CHÍNH SÁCH VÀ HỖ TRỢ</h2>
 								<ul class="nav nav-pills nav-stacked">
-									<li><a href="#">Phương Thức Thanh toán</a></li>
-									<li><a href="#">Phương Thức vận chuyển</a></li>
-									<li><a href="#">Giao Hàng Tận nhà</a></li>
-									<li><a href="#">Quy Định Bảo hành</a></li>
+									<li><a href="/money">Phương Thức Thanh toán</a></li>
+									<li><a href="/ship-home">Phương Thức vận chuyển</a></li>
+									<li><a href="/ship">Giao Hàng Tận nhà</a></li>
+									<li><a href="/warranty">Quy Định Bảo hành</a></li>
 									<li><a href="#">Quy Định Đặt Cọc</a></li>
 								</ul>
 							</div>

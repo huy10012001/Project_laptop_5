@@ -1,5 +1,5 @@
 @extends('layout_home')
-@section('frontend')
+@section('ship')
 
 
 <main role="main">

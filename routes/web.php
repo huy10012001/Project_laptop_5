@@ -147,6 +147,11 @@ Route::get('product/{slug}','homeController@product')->middleware(ClearFromAttri
 //Route::get('product/{slug}','homeController@product')->middleware(ClearFromAttributes::class);
 
 Route::get('/product','homeController@allproduct')->middleware(ClearFromAttributes::class);
- Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');
-    Route::get('/auth/{provider}/callback', 'SocialAuthController@handleProviderCallback');
+Route::get('/auth/{provider}', 'SocialAuthController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'SocialAuthController@handleProviderCallback');
+
+Route::view('/money', 'money');
+Route::view('/ship-home', 'ship_home');
+Route::view('/ship', 'ship');
+Route::view('/warranty', 'warranty');
 

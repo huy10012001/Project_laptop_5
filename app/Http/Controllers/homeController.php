@@ -26,7 +26,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class homeController extends Controller
 {
-
+    
     public function filter($filter_request,$string_request_filter,$product,$query)
     {
         
@@ -455,10 +455,11 @@ class homeController extends Controller
     public function index(Request $request){
        
        //lấy id các danh mục có ít nhất 1 sản phẩm hoạt động và đã cập nhập chi tiết
-    
       
-       
-     return view('index');
+       $category=category::all();
+      // $category=$category->paginate(5);
+      // $category=$category-> product()->paginate(5);
+     return view('index',['category'=>$category]);
       
       //  $c='MacBook Pro 16" 2019 Touch Bar 2.6GHz Core i7 512GB';
        // $product_detail= Product::whereRaw(
