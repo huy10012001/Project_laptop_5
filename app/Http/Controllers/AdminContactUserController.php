@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class AdminContactUserController extends Controller
 {
+    
     public function index(Request $request) {
         $user=$request->session()->get('key');
         if(!empty($user))

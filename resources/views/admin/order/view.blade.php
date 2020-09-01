@@ -48,12 +48,13 @@
                             <tr>
                                  <th>Số điện thoại</th> 
                                  <td>{{$p->phone}}</td>
-                                </tr>
+                                
                             </tr>
                             <tr>
                                  <th>Tổng tiền</th> 
-                                 <td>{{App\Order::find($p->id)->total}}</td>
-                                </tr>
+                                 <td>{{number_format(App\Order::find($p->id)->total,0,",",".")}} đ </td>
+                            
+                               
                             </tr>
                            
                         </table>

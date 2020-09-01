@@ -67,6 +67,10 @@ route::post('admin/product/postUpdate/{id}', 'AdminProductController@postUpdate'
 //Contact User Admin
 Route::get('admin/contact_user/index', 'AdminContactUserController@index');
 Route::get('admin/contact_user/delete', 'AdminContactUserController@delete');
+
+//comment admin
+Route::get('admin/comment/index', 'AdminCommentController@index');
+Route::get('admin/comment/delete', 'AdminCommentController@delete');
 //Order Admin
 Route::get('admin/order/index', 'AdminOrderController@index');
 route::get('admin/order/view/{id}', 'AdminOrderController@view');
@@ -154,6 +158,9 @@ Route::view('/money', 'money');
 Route::view('/ship-home', 'ship_home');
 Route::view('/ship', 'ship');
 Route::view('/warranty', 'warranty');
+Route::view('/deposit', 'deposit');
+//coment 
+if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
+Route::post('comment/{id}','CommentController@postComment');
 
-route::get('testpdf','DynamicPDFController@index');
 route::get('dynamic_pdf/{id}/pdf','DynamicPDFController@pdf');

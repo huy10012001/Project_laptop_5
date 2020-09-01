@@ -156,6 +156,28 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
+                           Bình luận
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('admin/comment/index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Xem bình luận</p>
+                            </a>
+                        </li>
+                      
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
                             Liên hệ
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -171,6 +193,7 @@
                     </ul>
                 </li>
             </ul>
+           
         </nav>
         <!-- /.sidebar-menu -->
     </div>

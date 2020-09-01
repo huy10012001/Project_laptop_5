@@ -706,6 +706,7 @@ $(document).ready(function()
 					@yield('ship_home')
 					@yield('ship')
 					@yield('warranty')
+					@yield('deposit')
 					@yield('detail_home')
 					<!--end tìm theo chi tiéte-->
 					
@@ -1063,7 +1064,7 @@ $(document).ready(function()
 									<li><a href="/ship-home">Phương Thức vận chuyển</a></li>
 									<li><a href="/ship">Giao Hàng Tận nhà</a></li>
 									<li><a href="/warranty">Quy Định Bảo hành</a></li>
-									<li><a href="#">Quy Định Đặt Cọc</a></li>
+									<li><a href="/deposit">Quy Định Đặt Cọc</a></li>
 								</ul>
 							</div>
 						</div>

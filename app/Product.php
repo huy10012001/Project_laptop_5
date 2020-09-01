@@ -45,5 +45,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Cart')->withPivot('price', 'qty','amount');
     }
+    public function comment()
+    {
+        return $this->hasMany('App\Comment','product_id','id');
+    }
   
 }

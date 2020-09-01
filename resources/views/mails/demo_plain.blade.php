@@ -193,11 +193,10 @@
 							<h4 >{{$p->name}}</h4>
                             </td>
                             <td class="cart_price">
-						    <p> {{$p->pivot->price }} đ</p>
+						    <p> {{number_format($p->pivot->price,0,",",".") }} đ</p>
                             </td>
                           
-                           
-
+                 
                      <td class=""  style="text-align: center;">
 						        
                             {{  $p->pivot->qty}}
@@ -205,7 +204,7 @@
 						        </td>
 
 						        <td class="cart_total">
-							    <p class="cart_total_price">{{$p->pivot->amount }} đ</p>
+							    <p class="cart_total_price">{{number_format($p->pivot->amount,0,",",".") }} đ</p>
 						        </td>
 
                                 </td>
@@ -223,7 +222,7 @@
       <table class="table-striped">
      <tr>
         <td > Thành tiền:</td>
-        <td>{{ $demo->order->total  }} vnd <br><p>đã bao gồm thuế (VAT)</p></td>
+        <td> {{number_format($demo->order->total,0,",",".") }} đ<br><p>đã bao gồm thuế (VAT)</p></td>
     </tr>
     </table>
       Cám ơn bạn</div>
