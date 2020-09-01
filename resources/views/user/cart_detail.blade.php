@@ -242,9 +242,11 @@ function dat(login)
                              @php $sum+=App\Product::find($product['id'])->price*$product['qty']; @endphp
                              @php $totalqty+=$product['qty']; @endphp
                             </td> 
-						    <td class="cart_delete">
-						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
-                              </td>
+						    <td >
+                          
+                            <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
+                            </td>
+                            </tr>
                             <!--Trường hợp hết hàng show giá + dòng đã hết hàng-->
                             @else
                             <tr class="khonghoatdong">
@@ -257,7 +259,7 @@ function dat(login)
                                 <td  style="white-space: nowrap;" > 	{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
                                 <td></td>
                                 <td></td>
-                                <td class="cart_delete">
+                                <td >
 						        <button class="cart_quantity_delete" href=""    onclick="deleteCart(<?php echo $product['id'] ?>,'',<?php echo $product['time_at']?>)"><i class="fa fa-times"></i></button>
                                 </td>   
                                 </tr>
@@ -473,7 +475,7 @@ $('input.input-qty').each(function() {
 						        <td class="cart_total">
 							    <p class="cart_total_price" style="white-space: nowrap;">{{number_format($p->pivot->amount,0,",",".")}}  đ</p>
 						        </td>
-						        <td class="cart_delete">
+						        <td >
 						        <button class="cart_quantity_delete" href=""      onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 <i class="fas fa-trash"><i class="fa fa-times"></i></button>
                                 </td>
@@ -498,7 +500,7 @@ $('input.input-qty').each(function() {
                                 <td ></td>
                                 <td></td>
                                
-                                <td class="cart_delete">
+                                <td>
 						        <button class="cart_quantity_delete" href=""   onclick="deleteCart('{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')"><i class="fa fa-times"></i></button>
                                 
                             </td>        

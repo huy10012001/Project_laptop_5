@@ -29,6 +29,7 @@
   }
  
 </style>
+
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
     <div class="row">
@@ -84,7 +85,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
           <div class="table-responsive">
@@ -127,6 +128,7 @@
               </table>
             </div>
           </div>
+          
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
               <div class="accordion-group">
@@ -468,7 +470,6 @@ không có sản phẩm cùng danh mục với sản phẩm bạn đang xem !
   @endif
 
 @endif
-
 
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">

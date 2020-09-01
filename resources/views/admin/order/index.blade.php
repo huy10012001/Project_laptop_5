@@ -117,9 +117,12 @@ select option[value="2"] {
                                 <td>{{$o->total}}</td>
                                 <td>{{$o->date}}</td>
                                 <td class="text-right">
+                                <a class="btn btn-danger btn-sm" href="{{ url('dynamic_pdf/'.$o->id.'/pdf')}}">
+                                        <i class="fas fa-folder"></i> xuất hóa đơn
+                                    </a>
                                     <a class="btn btn-primary btn-sm" href="{{ url('admin/order/view/'.$o->id) }}">
                                         <i class="fas fa-folder"></i> Xem
-                                    </a>
+                                    </a> 
                                     <!-- <a class="btn btn-info btn-sm"   onclick="editOrder('{{$o->id}}',this)">
                                         <i class="fas fa-pencil-alt"></i> Sửa
                                     </a>

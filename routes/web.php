@@ -155,3 +155,5 @@ Route::view('/ship-home', 'ship_home');
 Route::view('/ship', 'ship');
 Route::view('/warranty', 'warranty');
 
+route::get('testpdf','DynamicPDFController@index');
+route::get('dynamic_pdf/{id}/pdf','DynamicPDFController@pdf');

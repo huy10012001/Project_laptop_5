@@ -19,6 +19,7 @@ class CreateSocialAccountsTable extends Migration
             $table->string('provider_id');
             $table->string('provider');
             $table->string('name');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('user')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

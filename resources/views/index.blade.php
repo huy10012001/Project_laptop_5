@@ -1,47 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
+<html>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script>
+
+function mySubmitFunction()
+{
+
+	var a= $('#user').val();
+	if(a=="")
+ 		{
+       alert('123');
+       return false;
+     }
+
+	 
+
+}
+</script>
 <body>
 
-
-	@php
-    $products=App\product::where(['category_id'=>'1','status'=>"1"])
-    ->join('detail_product','detail_product.product_id','=','product.id');
-	$products=$products->paginate(2);
-	
- 	 @endphp
-	  @foreach($products as $p)
-	  
-	<br/>
-		 {{$p->name}}
-		
-	@endforeach
-	{{$products->links()}}
-	<br/>
-
-	@foreach($category as $c)
-	danh muc {{$c->id}}:
+<h2>HTML Forms</h2>
 
 
-	@php
-    $products[$c->id]=App\product::where(['category_id'=>$c->id,'status'=>"1"])
-    ->join('detail_product','detail_product.product_id','=','product.id');
-	$products[$c->id]=$products[$c->id]->paginate(2);
-	
- 	 @endphp
-	  @foreach($products[$c->id] as $p[$c->id])
-	  
-	<br/>
-		 {{$p[$c->id]->name}}
-		
-	@endforeach
-	{{$products[$c->id]->links()}}
-	<br/>
-	@endforeach
-	
+
+<form id="comment" onsubmit="return mySubmitFunction(event)"  method="post" action="/product">
+@if(Session::has('key'))
+<input type="hidden"  id="user" name="id" value="{{Session::get('key')->id}}">
+@endif
+  <label for="fname">First name:</label><br>
+  <input type="text" id="fname" name="fname" value="{John}"><br>
+  <label for="lname">Last name:</label><br>
+  <input type="text" id="lname" name="lname" value="Doe"><br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+
+
 </body>
+
 </html>
