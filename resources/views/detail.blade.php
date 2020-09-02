@@ -546,7 +546,7 @@
 
 
 
-    @endif
+    @else
     <!-- comment-->
 
     <div class="row">
@@ -559,21 +559,21 @@
                 <div class="accordion-heading">
 
                     <form action="{{ url('comment/'.$p->id) }}" method="post" role="form">
-                        @if(Session::has('key'))
+                
                         <h4> Viết bình luận của bạn ... <span class="glyphicon glyphicon-pencil"></span></h4>
                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
                         <div class="form-group">
                             <textarea class="form-control" name="content" rows="3"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Gửi</button>
-                        @endif
+                     
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-
+    @endif
     <br>
 
     @foreach($p->comment as $cm)
