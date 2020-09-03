@@ -249,7 +249,7 @@
                     <select name="roleUser">
                         @foreach(App\role::all() as  $category)
                         
-                        @if( $category->name!="super admin")
+                        @if( $category->name!="super admin"  && $category->name!="admin" )
                         <option value="{{$category->id}}">{{$category->name}}</option>
                         @endif
                         @endforeach

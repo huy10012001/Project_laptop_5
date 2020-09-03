@@ -51,12 +51,14 @@
                                     $count=0;
                                     @endphp
                                     @foreach($p::find($p->id)->role as $p1)
+                                    <!--
                                        @php
                                        echo $count=$count+1;
                                        
-                                      @endphp
+                                      @endphp.
+-->
                                     
-                                      .{{ $p1->name }} 
+                                      {{ $p1->name }} 
                                       <br/>
                                    @endforeach
                                     </td>

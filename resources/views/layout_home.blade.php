@@ -383,11 +383,33 @@ $(document).ready(function()
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 
 	$("#loginModal").on('hide.bs.modal', function(){
+		
 		$('#uploadTabLogin').removeClass('active');
 		$('#browseTabLogin').removeClass('active');
 		$('#liLogin').removeClass('active');
 		$('#liRegister').removeClass('active');
  	});
+	
+	$("#loginModal").on('show.bs.modal', function(){
+		$(this).find('input').css('border','');
+		$("#dangnhap").html("");
+	
+		$("#dangnhap").html("");
+		$('.error').each(function() {
+			$(this).text('');
+		});
+	
+ 	});
+	 $("#modalCheckOut").on('show.bs.modal', function(){
+		
+		$(this).find('input').css('border','');
+		$("#dangnhap").html("");
+		$('.error').each(function() {
+			$(this).text('');
+		});
+	
+ 	});
+	
 	 //search
 	 $('#search').submit(function(e)
     {
