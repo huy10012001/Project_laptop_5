@@ -51,11 +51,12 @@
                             </thead>
                             <tbody>
                             @foreach($role as $p)
+                            
                             <tr>
                                     <td>{{$p->id}}</td>
                                     <td>{{$p->name}}</td>
                                     <td class="text-right">
-                                   
+                                   @if($p->name!="admin")
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/role/update/'.$p->id) }}">
                                         <i class="fas fa-pencil-alt"></i> Sửa
                                     </a>
@@ -63,8 +64,9 @@
                                         
                                         <i class="fas fa-trash"></i> Xóa
                                     </a>
+                                 
                                     </td>
-                                   
+                                    @endif
                             </tr>
                             
                             @endforeach

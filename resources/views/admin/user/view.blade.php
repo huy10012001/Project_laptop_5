@@ -140,7 +140,7 @@
         
         <div class="card-body">
             <div class="form-group">
-                <label for="txt-name">Role</label>
+                <label for="txt-name">Vai trò</label>
                     <select name="roleUser">
                         @foreach(App\role::all() as  $category)
                         
@@ -245,7 +245,7 @@
         
         <div class="card-body">
             <div class="form-group">
-                <label for="txt-name">Role</label>
+                <label for="txt-name">Vai trò</label>
                     <select name="roleUser">
                         @foreach(App\role::all() as  $category)
                         

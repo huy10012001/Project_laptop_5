@@ -201,14 +201,14 @@ function updateCart(qty,product_id,order_id,timecreate,qty_before)
 			if(data.status=="tối đa")
 			{	console.log(data.qty);
 				$(qty_before).val(data.qty);
-				$('.soluongmax').html('số lượng giỏ hàng đã đạt tối đa, chỉ tối đa 10 sản phẩm');
+				$('.soluongmax').html('số lượng giỏ hàng đã đạt tối đa, chỉ tối đa 100 sản phẩm');
 			}
 			else if(data.status)
 			{
 				if($("#noFindItem").text().length<80)
 				$("#noFindItem").append("không tìm thấy item ");
 			}
-            else if(qty!="" && qty >0 && qty<=10)
+            else if(qty!="" && qty >0 && qty<=100)
        		{
 					//dùng scrip hoặc ajax cập nhập lại giá tổng tiền
 				var total=0;
@@ -263,13 +263,13 @@ function updateModal(qty)
 
 	if($(qty).val()<1)
 	{
-		var error="số lượng phải từ 1 tới 10 và không được trống";
+		var error="số lượng phải từ 1 tới 100 và không được trống";
 		$(qty).val(1);
 	}
-	else if($(qty).val()>10)
+	else if($(qty).val()>100)
 	{
-		var error="số lượng phải từ 1 tới 10 và không được trống";
-		$(qty).val(10);
+		var error="số lượng phải từ 1 tới 100 và không được trống";
+		$(qty).val(100);
 	}
 }
 
@@ -295,7 +295,7 @@ function AddCart(product_id)
        	if(data.status)
         {
 			console.log(data.status);
-			$("#AlertModal .modal-body").html("số lượng trong giỏ hàng đã đạt tối đa,chỉ được tối đa 10");
+			$("#AlertModal .modal-body").html("số lượng trong giỏ hàng đã đạt tối đa,chỉ được tối đa 100");
         	$("#AlertModal").modal("show");
         }
         else	location.reload();
@@ -972,7 +972,7 @@ $(document).ready(function()
 											<input name="price" type="hidden" value="{{App\Product::find($product['id'])->price}}">
 											<td class="price"  style="white-space: nowrap;">{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
 											<td class="buttons_added qty ">
-											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
+											<input aria-label="quantity" class="input-qty" max="100" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>,this)">
 											</td>
 											<td class = "amount" style="white-space: nowrap;">
@@ -1061,7 +1061,7 @@ $(document).ready(function()
 
 										<td class="qty">
                                         <div class="buttons_added">
-                                            <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
+                                            <input aria-label="quantity" class="input-qty" max="100" min="1" name="" type="number" value="{{ $p->pivot->qty}}"
                                          onchange="updateModal(this);updateCart(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}',this)">
 										</div></td>
                                     	<td class = "amount" style="white-space: nowrap;">	{{number_format($p->pivot->amount,0,",",".")}} đ </td>

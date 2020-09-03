@@ -415,7 +415,7 @@ class UserCartcontroller extends Controller
                     $sum+=Product::find($item['id'])->price*$item['qty'];
                 }
             }
-            if($totalQty>10)
+            if($totalQty>100)
                 return Response::json(array(
                 'status'=> 'tối đa' ,
                 'qty'=> $beforechange
@@ -543,7 +543,7 @@ class UserCartcontroller extends Controller
                     $totalQty+=$c;
                 }
              }
-             if($totalQty>10)
+             if($totalQty>100)
                  return Response::json(array(
              'status'=>'tối đa',
              'qty'=> $qty_beforechange
@@ -751,7 +751,7 @@ class UserCartcontroller extends Controller
                 $totalQty=0;
                 foreach($cart->items as $items)
                     $totalQty+= $items['qty'];
-                if($totalQty>9)
+                if($totalQty>99)
                     return Response::json(array(
                     'status'=>'số lượng trong giỏ hàng đã đạt tối đa',
        
@@ -815,7 +815,7 @@ class UserCartcontroller extends Controller
             {
                 $totalQty+=$items->pivot->qty;
             }
-            if($totalQty>9)
+            if($totalQty>99)
                 return Response::json(array(
             'status'=>'số lượng trong giỏ hàng đã đạt tối đa',
             ));
