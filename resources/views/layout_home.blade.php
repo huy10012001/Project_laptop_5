@@ -870,7 +870,7 @@ $(document).ready(function()
 									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu:</h5>
 									<input type="password"  name="password_confirmation"  class="form-control" placeholder="Mật khẩu"  ><br>
 									<div class="text-danger error" data-error="password_confirmation"></div>
-										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoản</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>
 

@@ -691,7 +691,7 @@ $('input.input-qty').each(function() {
                                     <input type="email" class="form-control" name="email" required placeholder="email"><br>
                                     <h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
                                     <input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"><br>
-                                    <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+                                    <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoản</button>
                                 <p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
                                 </form>
                         </div>
