@@ -11,6 +11,7 @@ use App\order_product;
 use App\Order;
 use App\cart_product;
 use App\Events\Qty;
+use App\Http\Requests\checkoutRequest;
 use App\Product;
 use Carbon\Traits\Cast;
 use Illuminate\Support\Facades\Redirect;
@@ -47,11 +48,11 @@ class UserCartcontroller extends Controller
           { $products=Product::where(['status'=>"1"])
            ->join('detail_product','detail_product.product_id','=','product.id') ;
            $products = $products->where('name', 'LIKE', '%' . $request->search . '%')->get();
-
+         
            if ($products) {
-               $count=0;
-                foreach ($products as $key => $product) {
-                    $count+=1;
+             
+                foreach ($products->take(6) as $key => $product) {
+                  
                     $output .= 
                     '<tr onclick="Redirectlivesearch(this)" class="search_items">
                     <td hidden class="search_name">' . $product->slug . '</td> 
@@ -64,8 +65,8 @@ class UserCartcontroller extends Controller
                    </tr>';
               }
               $resultOuput ="";
-              $resultOuput.='<tr><td colspan="2">Có khoảng '.$count.' kết quả tìm kiếm</td></tr>';
-              $resultOuput.= $output;
+              
+              $resultOuput.= $output.'<tr><td colspan="2" onclick="searchSubmit()">Hiện kết quả tìm kiếm cho '.$request->search.'</td></tr>';
            if($products->count()==0)
             {
                 $resultOuput="<tr><td> không có kết quả bạn tìm kiếm<td></tr>";
@@ -79,7 +80,7 @@ class UserCartcontroller extends Controller
     }
         }
     }
-    public function postDiaChiCheckOut(Request $request)
+    public function postDiaChiCheckOut(checkoutRequest $request)
     {   
         $name=$request->name;
         $phone=$request->phone;

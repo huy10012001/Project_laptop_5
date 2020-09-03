@@ -28,7 +28,7 @@ class registerRequest extends FormRequest
             'name' => 'required|min:2|max:30|regex:/^[a-zA-Z[:space:]ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{2,30}$/u',
             'SĐT' => 'required',
             'address' => 'required',
-            'email' => 'required|unique:user',
+            'email' => 'required|email|unique:user',
           
             'password' => 'required',
             'password_confirmation' => 'same:password'
@@ -43,6 +43,11 @@ class registerRequest extends FormRequest
             'name.max'=> 'Tên phải từ 2-30 ký tự',
             'name.regex'=> 'tên name không hợp lệ',   
             'email.unique'=> 'tên email tồn tại',
+            'email.email'=> 'tên email không hợp lệ',
+            'email.required'=>'email phải nhập',
+            'SĐT.required'=>'SĐT phải nhập',
+            'address.required'=>'Địa chỉ phải nhập',
+            'password.required'=>'mật khẩu phải nhập',
             
             'password_confirmation.same'=> 'Xác nhận mật khẩu'
                         

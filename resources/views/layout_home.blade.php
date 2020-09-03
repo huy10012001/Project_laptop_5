@@ -16,7 +16,7 @@
 	<link href="{{ asset('fronend/css/bootstrap-social.css') }}" rel="stylesheet">
     <link href="{{ asset('fronend/css/responsive.css') }}" rel="stylesheet">
 	<link href="{{ asset('fronend/css/style_overview.css') }}" rel="stylesheet">
-	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -75,7 +75,7 @@
 	.khonghoatdong {
 	opacity: 0.7;
 	background-color: #ccc;
-   
+
 }
 .cart_product {
     position: relative;
@@ -179,8 +179,11 @@ function logOut()
     );
 }
 //hàm update số lượng item ở modal
+function formatNumber (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+}
 function updateCart(qty,product_id,order_id,timecreate,qty_before)
-{	
+{
 
 	$.ajax({
 		type:  "GET",
@@ -211,13 +214,16 @@ function updateCart(qty,product_id,order_id,timecreate,qty_before)
 				var total=0;
 				$("tbody").find("tr").each(function() {
 				var qty = $(this).find('td .input-qty').val();
-				var price= $(this).find('td.price').text().replace(" đ","");
-				var amount=qty*price+" đ"
+				var price=  $(this).find("input[name='price']").val();
+
+					var amount=qty*price;
+					amount= formatNumber(amount)+ " đ";
 					$(this).find('td.amount').html(amount);
-					var total=data.total +" đ"
+					var total=data.total;
+					total=formatNumber(total) + " đ";
 					$('#total').html(total);
 					$('.soluongmax').html('');
-				
+
  			});
 		}}
     });
@@ -240,7 +246,8 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 			}
 			else
 			{
-				var total=data.total +" đ"
+				var total=data.total ;
+				total=formatNumber(total) + " đ";
 					$('#total').html(total);
 
 				$(emn).closest( "tr" ).hide();
@@ -253,7 +260,7 @@ function deleteCartModal(product_id,order_id,emn,timecreate)
 function updateModal(qty)
 {
 		//Nếu nhập bé hơn 1 thì mặc định là 1
-		
+
 	if($(qty).val()<1)
 	{
 		var error="số lượng phải từ 1 tới 10 và không được trống";
@@ -284,9 +291,9 @@ function AddCart(product_id)
 	},
     success: function (data)
 	{
-		
+
        	if(data.status)
-        {	
+        {
 			console.log(data.status);
 			$("#AlertModal .modal-body").html("số lượng trong giỏ hàng đã đạt tối đa,chỉ được tối đa 10");
         	$("#AlertModal").modal("show");
@@ -298,8 +305,12 @@ function AddCart(product_id)
 function Redirectlivesearch(a)
 {
 	var sanpham=$(a).find('.search_name').text();
-	
+
 	window.location.href='/product/'+sanpham;
+}
+function searchSubmit()
+{
+	$('#search').submit();
 }
 $(document).click(function (e)
 {
@@ -319,7 +330,7 @@ $(document).ready(function()
 	//livesearchclic
 
 	$('.textsearch').on('mouseup',function(){
-	
+
 		if($('.resultsearch').text()!="")
 		{
 			$('.resultsearch').show();
@@ -347,18 +358,18 @@ $(document).ready(function()
              },
                     success:function(data){
 					//	console.log(data);
-						
+
 							$('.resultsearch').show();
 							$('.resultsearch').html(data.status);
-							
+
 							$(".search_name").each(function(){
 								$(this).click(function(){
 									var name=$(this).find('.search_name').text();
 									console.log(name);
 							});
 						});
-						
-						
+
+
                     }
 
 		        });
@@ -398,10 +409,19 @@ $(document).ready(function()
     {
 		$(this).css('border','');
 	});
+	$('#login input').keyup(function(e)
+    {
+		$(this).css('border','');
+		$("#dangnhap").html("");
+	});
 
     //đăng nhập và đăng ký
     $('#login').submit(function(e)
     {
+	
+		$('.error').each(function() {
+			$(this).text('');
+		});
         e.preventDefault();
         $.ajaxSetup(
         {
@@ -415,13 +435,39 @@ $(document).ready(function()
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#login').serialize(),
 			    datatype: 'json',
-				error:function(xhr)
-                {
-                    var x=xhr.responseText;
-                    x=$.parseJSON(x);
-                    console.log(x.message);
+				error:function(error)
+            {
+             		var x=error.responseText;
+                  	x=$.parseJSON(x);
+                   console.log(x);
+					let errors = error.responseJSON.errors;
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
 
-                },
+					var nameFocus=$("#login input[name="+errorsfocus+"]");
+					nameFocus.focus();
+					//nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+
+             			 errorDiv.text(errors[key][0]);
+						 $("#login input[name="+key+"]").css('border','2px solid red');
+         			}
+					 //nếu không có lỗi
+
+        		}
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					//$('#emailTontaiR').text(errors.email);
+				//})
+					//errors=JSON.stringify(errors.error);
+
+              },
 			    success:function(data)
            	    {
 
@@ -430,7 +476,7 @@ $(document).ready(function()
                       location.reload();
                     }
                     else
-                  	{ 
+                  	{
 						$("#dangnhap").html(data.status)
                    		$("#dangnhap").css('color','red');
 					}
@@ -439,9 +485,9 @@ $(document).ready(function()
         	});
 
     });
-	
+
          //đăng ký  mua hàng khi user chua đăng nhập
-	
+
 	//form register submit
     $('#register').submit(function(e)
     {
@@ -449,7 +495,7 @@ $(document).ready(function()
 		$('.error').each(function() {
 			$(this).text('');
 		});
-		
+
         e.preventDefault();
         $.ajaxSetup(
         {
@@ -472,7 +518,7 @@ $(document).ready(function()
 					let errors = error.responseJSON.errors;
 					//FOCUS vào lỗi đầu tiên
 					var errorsfocus=Object.keys(errors)[0];
-					
+
 					var nameFocus=$("#register input[name="+errorsfocus+"]");
 					nameFocus.focus();
 					//nameFocus.focus();
@@ -482,20 +528,20 @@ $(document).ready(function()
        			{
          			let errorDiv = $(`.error[data-error="${key}"]`);
          			if(errorDiv.length )
-         			{	
-						
+         			{
+
              			 errorDiv.text(errors[key][0]);
 						 $("#register input[name="+key+"]").css('border','2px solid red');
          			}
 					 //nếu không có lỗi
-				 	
+
         		}
 				//const propertyNames = Object.keys(errors);
 				////$.each(errors, function( index, value ) {
 					//$('#emailTontaiR').text(errors.email);
 				//})
 					//errors=JSON.stringify(errors.error);
-			
+
               },
 			success:function(data)
            	{
@@ -510,7 +556,7 @@ $(document).ready(function()
         });
     });
 });
- 
+
 
 
 </script>
@@ -574,27 +620,27 @@ $(document).ready(function()
 									  <button class="dropbtn" style="text-align: center; border-radius: 5px;">
 
                                         <i class="fa fa-user" aria-hidden="true"></i> &nbsp; <b>Đăng Nhập</b> </button>
-                          			<div class="dropdown-content" >
+                          			<div class="dropdown-content" style="padding: 10px;">
 									<!--modal-->
 									<!-- Button trigger modal -->
 										<button type="button" onclick="dangnhap()" id="target1"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; border-radius: 5px; ">Đăng nhập    </button>
 										<button type="button" onclick="dangky()" id="target2"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; margin-top:10px; border-radius: 5px;">Tạo tài khoản    </button>
 										<!--login google-->
-										
+
     									<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
       											<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
 												  đăng nhập với google
    										 </a>
-  										
+
 									<!--login google-->
 									<!--login github-->
-								
-  									
-										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
-										<i class="fa fa-github"></i>  
+
+
+										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github" style="height: 40px;">
+										<i class="fa fa-github"></i>
 										<p style="padding-left: 20px;color:white">	Đăng nhập với git hub</p>
 										</a>
-  									
+
 									<!--login github-->
 									</div>
                         		</div>
@@ -660,7 +706,7 @@ $(document).ready(function()
 								<span class="icon-bar"></span>
 							</button>
 						</div>
-						<div class="mainmenu " style="float: right;">
+						<div class="mainmenu " style="float: right; margin-top:-20px;">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ URL::to('/home') }}" class="active"  style="color: rgb(12, 12, 12);"><i class="fa fa-home" aria-hidden="true"></i> &nbsp; Trang Chủ</a></li>
 
@@ -676,7 +722,7 @@ $(document).ready(function()
                                     </ul>
 								</li>
 								@endif
-								<li class="dropdown"><a href="#" style="color: rgb(15, 15, 15);"><i class="fa fa-eye" aria-hidden="true"></i> &nbsp;thông tin về shop </a>
+								<li class="dropdown"><a href="{{ URL::to('/news') }}" style="color: rgb(15, 15, 15);"><i class="fa fa-eye" aria-hidden="true"></i> &nbsp;thông tin về shop </a>
 
 									</li>
 
@@ -709,11 +755,11 @@ $(document).ready(function()
 					@yield('deposit')
 					@yield('detail_home')
 					<!--end tìm theo chi tiéte-->
-					
+
 					<!--sản phẩm-->
 					@yield('product')
 					<!--end sản phẩm-->
-				
+
 					<!--ccontact-->
 					@yield('contact')
 					<!--end contact-->
@@ -730,7 +776,8 @@ $(document).ready(function()
 
 					<!--cart_detail-->
 					@yield('cart_detail')
-					<!--end cart detail-->
+                    <!--end cart detail-->
+                    @yield('news')
 				</div>
 			</div>
 		</section>
@@ -764,11 +811,13 @@ $(document).ready(function()
 								{{ csrf_field() }}
 								<h3  style="text-align: center;">Đăng Nhập</h3>
 									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-									<input type="email"  class="form-control" name="email" required ><br>
+									<input type="text"  class="form-control" name="email"  ><br>
+									<div class="text-danger error" data-error="email"></div>
 									<!-- định dạng lại c ss dòng này -->
-									
+
 									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
 									<input type="password"   name="password"  class="form-control" ><br>
+									<div class="text-danger error" data-error="password"></div>
 									<div id="dangnhap"></div>
 									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
 
@@ -780,21 +829,21 @@ $(document).ready(function()
 
 								</form>
 								<!--login google-->
-										
+
 								<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
       											<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
 												  đăng nhập với google
    										 </a>
-  										
+
 									<!--login google-->
 									<!--login github-->
-								
-  									
+
+
 										<a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
-										<i class="fa fa-github"></i>  
+										<i class="fa fa-github"></i>
 										<p style="padding-left: 20px;color:white">	Đăng nhập với git hub</p>
 										</a>
-  									
+
 									<!--login github-->
 							</div>
 							<div role="tabpanel" class="tab-pane" id="browseTabLogin"   >
@@ -811,20 +860,20 @@ $(document).ready(function()
 									<input type="text" class="form-control" name="address"><br>
 									<div class="text-danger error" data-error="address"></div>
 									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-						
-									<input id="emailR" type="email" class="form-control" name="email"  ><br>
+
+									<input id="emailR" type="text" class="form-control" name="email"  ><br>
 									<div class="text-danger error" data-error="email"></div>
-									
+
 									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
 									<input type="password"  name="password"  class="form-control" placeholder="Mật khẩu"  ><br>
 									<div class="text-danger error" data-error="password"></div>
 									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu:</h5>
 									<input type="password"  name="password_confirmation"  class="form-control" placeholder="Mật khẩu"  ><br>
-									<div class="text-danger error" data-error="password_confirmation"></div>	
+									<div class="text-danger error" data-error="password_confirmation"></div>
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
 									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
 									</form>
-								
+
 							</div>
 						</div>
 
@@ -898,8 +947,8 @@ $(document).ready(function()
                                     		</td>
                                     		<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       		<!--Trường hợp còn hàng(status là 1)-->
-
-											<td class="price" style="white-space: nowrap;">{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
+											<input name="price" type="hidden" value="{{App\Product::find($product['id'])->price}}">
+											<td class="price"  style="white-space: nowrap;">{{number_format(App\Product::find($product['id'])->price,0,",",".")}} đ</td>
 											<td class="buttons_added qty ">
 											<input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" value="{{$product['qty']}}"
                                              onchange="updateModal(this);updateCart(this.value,<?php echo $product['id'] ?>,'',<?php echo $product['time_at'] ?>,this)">
@@ -919,14 +968,14 @@ $(document).ready(function()
 											</tr>
 											@else
 											<tr class="khonghoatdong" >
-												
-												
+
+
 												<td class="image">
 
 													<img  height="100px" style="margin-bottom: 10px;" width="100px" src="{{ url('images/'.App\Product::find($product['id'])->image) }}" alt="" />
-												
+
 													<span class="badge" >Không hoạt động</span>
-												
+
 												</td>
                                     			<td class="" style="word-break: break-all;">{{App\Product::find($product['id'])->name}}</td>
                                       			<!--Trường hợp còn hàng(status là 1)-->
@@ -945,9 +994,9 @@ $(document).ready(function()
                                     			</a>
 												</td>
 											</tr>
-										
-										
-											 
+
+
+
 										@endif
 										 @endif
 
@@ -983,7 +1032,8 @@ $(document).ready(function()
 										<td class="image"><img  width="100px"  height="100px" src="{{ url('images/'.$p->image) }}" alt="" />
                                         </td>
                                     	<td style="word-break: break-all;">{{$p->name}}</td>
-                                      	<!--Trường hợp còn hàng(status là 1)-->
+										  <!--Trường hợp còn hàng(status là 1)-->
+										  <input name="price" type="hidden" value="{{$p->price}}">
 										<td class="price" style="white-space: nowrap;">	{{number_format($p->pivot->price,0,",",".")}} đ</td>
 
 
@@ -1027,7 +1077,7 @@ $(document).ready(function()
                                       	</a>
 										   </td>
 										 </tr>
-										 
+
 										@endif
 
 								  	@endforeach
@@ -1089,7 +1139,7 @@ $(document).ready(function()
 						</div>
 						<div class="col-sm-3">
 							<div class="single-widget">
-								<h2>Địa Chỉ và Liên Hề</h2>
+								<h2>Địa Chỉ và Liên Hệ</h2>
 								<ul class="nav nav-pills nav-stacked">
 									<li><a href="https://www.google.com/maps/place/FPT-Aptech+Computer+Education+HCM/@10.7865832,106.6639139,17z/data=!4m12!1m6!3m5!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!2sFPT-Aptech+Computer+Education+HCM!8m2!3d10.7865832!4d106.6661026!3m4!1s0x31752ed2392c44df:0xd2ecb62e0d050fe9!8m2!3d10.7865832!4d106.6661026?hl=vi-VN">- Đ/C :590 Cách Mạng Tháng Tám, Phường 11, Quận 3, Hồ Chí Minh 723564, Việt Nam</a></li>
 									<li><a href="#">- Số điện thoại liên hệ:  +08 123 456 789</a></li>
@@ -1118,19 +1168,7 @@ $(document).ready(function()
 
 
                     </div>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="single-widget">
-                                <h2>Địa Chỉ và Liên Hề</h2>
-                                <ul class="nav nav-pills nav-stacked">
-
-                                    <li><a href="#">- Thời gian mở cửa 8:00-22:00</a></li>
-                                    <li><a href="#">- Từ Thứ 2 đến chủ nhật </a></li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    
 
 				</div>
 			</div>

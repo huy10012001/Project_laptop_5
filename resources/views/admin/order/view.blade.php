@@ -83,9 +83,9 @@
                                     <td>  <img style=" margin-right:5em;" width="100px" height="80px" src="{{ url('images/'.$o_p->image) }}"/> </td>
                                     <td>{{ App\Product::
                                      find($o_p->pivot->product_id)->name}}</td>
-                                    <td>{{$o_p->pivot->price}}</td>
+                                    <td>{{number_format($o_p->pivot->price,0,",",".")}} đ</td>
                                     <td>{{$o_p->pivot->qty}}</td>
-                                    <td>{{$o_p->pivot->amount}}</td>
+                                    <td>{{number_format($o_p->pivot->amount,0,",",".")}} đ</td>
                                    
                                 </tr>
                                 @endforeach

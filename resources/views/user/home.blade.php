@@ -6,8 +6,9 @@
 .carousel-control
 {
   width: 4%;
- 
+
 }
+
 </style>
 <section id="slider"><!--slider-->
     <div class="container">
@@ -22,7 +23,7 @@
 
                     <div class="carousel-inner">
                         <div class="item active">
-                             <div class="col-sm-6">
+                             <div class="col-sm-6" style="margin-top:-50px;">
                                 <h1><span>lapTop</span>-Shop</h1>
                                 <h2>giao hàng tận nơi</h2>
                                 <p>miễn phí giao hàng tận tay bạn , thanh toán khi sản phẩm được giao và kiểm tra. </p>
@@ -34,7 +35,7 @@
                             </div>
                         </div>
                         <div class="item">
-                            <div class="col-sm-6">
+                            <div class="col-sm-6"style="margin-top:-50px;">
                                 <h1><span>lapTop</span>-Shop</h1>
                                 <h2>100% hàng chất lương</h2>
                                 <p>uy tính và chất lượng đặt trên hàng đầu. </p>
@@ -47,7 +48,7 @@
                         </div>
 
                         <div class="item">
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" style="margin-top:-50px;">
                                 <h1><span>lapTop</span>-Shop</h1>
                                 <h2>giao dịch trực tiếp trên website</h2>
                                 <p>uy tính chất lượng là điều quan trọng tạo nên LapTop-shop của chúng tôi. </p>
@@ -96,7 +97,7 @@
         <a href="/product/hp"><img src="{{ ('fronend/images/HP.jpg') }}" alt=""></a>
         <a href="/product/msi"><img src="{{ ('fronend/images/MSI.jpg') }}" alt=""></a>
       <a href="/product/lenovo">  <img src="{{ ('fronend/images/Lenovo.jpg') }}" alt=""></a>
-  
+
         </div>
     </div>
     <div class="spm">
@@ -108,11 +109,11 @@
 
 <div id="giasocproductcarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
-  
+
     <!-- Wrapper for slides -->
     <div class="carousel-inner" style="margin-bottom: 30px;">
       <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
-     
+
         <div class="item  row active">
           @foreach($sale_product->take(4) as $s_p)
           <div class="col-sm-3" style="height: 500px;">
@@ -151,9 +152,9 @@
             </ul>
           </div>
         </div>
-        @endforeach 
+        @endforeach
       </div>
-      @php   
+      @php
       $product_slide2over=$sale_product->skip(4)
       @endphp
       @foreach($product_slide2over->chunk(4) as $s_products)
@@ -195,27 +196,27 @@
             </ul>
           </div>
        </div>
-        @endforeach 
+        @endforeach
       </div>
       @endforeach
-    
+
     </div>
 
     <!-- Left and right controls -->
-   
+
       <a class="left carousel-control" href="#giasocproductcarousel" data-slide="prev">
-   
+
         <span class="glyphicon glyphicon-chevron-left"></span>
         <span class="sr-only">Previous</span>
-       
+
       </a>
       <a class="right carousel-control" href="#giasocproductcarousel" data-slide="next">
-      
+
         <span class="glyphicon glyphicon-chevron-right"></span>
         <span class="sr-only">Next</span>
-       
+
       </a>
-      
+
 </div>
 
 <div class="spm">
@@ -227,11 +228,11 @@
 
 <div id="newproductcarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
-  
+
     <!-- Wrapper for slides -->
     <div class="carousel-inner" style="margin-bottom: 30px;">
       <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
-     
+
         <div class="item  row active">
           @foreach($new_product->take(4) as $n_p)
           <div class="col-sm-3" style="height: 500px;">
@@ -270,9 +271,9 @@
             </ul>
           </div>
         </div>
-        @endforeach 
+        @endforeach
       </div>
-      @php   
+      @php
       $product_slide2over=$new_product->skip(4)
       @endphp
       @foreach($product_slide2over->chunk(4) as $n_products)
@@ -314,32 +315,32 @@
             </ul>
           </div>
        </div>
-        @endforeach 
+        @endforeach
       </div>
       @endforeach
-    
+
     </div>
 
     <!-- Left and right controls -->
-   
+
       <a class="left carousel-control" href="#newproductcarousel" data-slide="prev">
-   
+
         <span class="glyphicon glyphicon-chevron-left"></span>
         <span class="sr-only">Previous</span>
-       
+
       </a>
       <a class="right carousel-control" href="#newproductcarousel" data-slide="next">
-      
+
         <span class="glyphicon glyphicon-chevron-right"></span>
         <span class="sr-only">Next</span>
-       
+
       </a>
-      
+
 </div>
 
 
 @foreach($all_category as $category)
-  
+
   <div class="spm"  >
     <div style="text-align: right;">
     <a   href="{{ url('product/'.$category->name) }}">Xem tất cả</a>
@@ -359,21 +360,21 @@
   @endforeach
   {{$products[$category->id]->links()}}
 -->
-    @php   
-    
+    @php
+
     $product=App\product::where(['category_id'=>$category->id,'status'=>"1"])
     ->join('detail_product','detail_product.product_id','=','product.id')->get();
-  
-  
+
+
     @endphp
- 
+
    <div id="categorycarousel{{$category->id}}" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
-  
+
     <!-- Wrapper for slides -->
     <div class="carousel-inner" style="margin-bottom: 30px">
       <!--Nếu sản phẩm hoạt đang hoạt động và đã cập nhập detail -->
-     
+
         <div class="item  row active">
           @foreach($product->take(4) as $p)
           <div class="col-sm-3" style="height: 500px;">
@@ -412,9 +413,9 @@
             </ul>
           </div>
         </div>
-        @endforeach 
+        @endforeach
       </div>
-      @php   
+      @php
       $product_slide2over=$product->skip(4)
       @endphp
       @foreach($product_slide2over->chunk(4) as $products)
@@ -456,29 +457,29 @@
             </ul>
           </div>
        </div>
-        @endforeach 
+        @endforeach
       </div>
       @endforeach
-    
+
     </div>
 
     <!-- Left and right controls -->
     @if( $product->count()>4)
       <a class="left carousel-control" href="#categorycarousel{{$category->id}}" data-slide="prev">
-   
+
         <span class="glyphicon glyphicon-chevron-left"></span>
         <span class="sr-only">Previous</span>
-       
+
       </a>
       <a class="right carousel-control" href="#categorycarousel{{$category->id}}" data-slide="next">
-      
+
         <span class="glyphicon glyphicon-chevron-right"></span>
         <span class="sr-only">Next</span>
-       
+
       </a>
       @endif
   </div>
- 
+
 @endforeach
 
 

@@ -114,7 +114,7 @@ select option[value="2"] {
                                  đã hoàn thành
                                 </div></td>
                                 @endif-->
-                                <td>{{$o->total}}</td>
+                                <td>	{{number_format($o->total,0,",",".")}} đ</td>
                                 <td>{{$o->date}}</td>
                                 <td class="text-right">
                                 <a class="btn btn-danger btn-sm" href="{{ url('dynamic_pdf/'.$o->id.'/pdf')}}">

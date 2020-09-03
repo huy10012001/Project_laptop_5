@@ -38,8 +38,15 @@
 //load lại trang khi user bấm back
 $(document).ready(function()
 {
+    $('#update input').keyup(function(e)
+    {
+		$(this).css('border','');
+	});
 
     $( "#update" ).submit(function(e) {
+        $('.error').each(function() {
+			$(this).text('');
+		});
         e.preventDefault();
             $.ajaxSetup(
                 {
@@ -51,13 +58,16 @@ $(document).ready(function()
             );
 
             $.ajax({
+                
 			    method:'post',
       		    url:	 " {{ asset('/postDiaChiCheckOut')}}",
       		    data:$('#update').serialize(),
 			    datatype: 'json',
 				error:function(error)
             {
-
+                $('.error').each(function() {
+			        $(this).text('');
+		        });
              		var x=error.responseText;
                   	x=$.parseJSON(x);
                   
@@ -67,9 +77,9 @@ $(document).ready(function()
 					//FOCUS vào lỗi đầu tiên
 					var errorsfocus=Object.keys(errors)[0];
                     if(errorsfocus!="message")
-					var nameFocus=$("#formContact input[name="+errorsfocus+"]");
+					var nameFocus=$("#update input[name="+errorsfocus+"]");
                     else
-                    var nameFocus=$("#formContact .yourmessage");
+                    var nameFocus=$("#update .yourmessage");
 					nameFocus.focus();
 					//nameFocus.focus();
 					//console.log(a.val());
@@ -131,7 +141,7 @@ if(performance.navigation.type == 2){
         var add=$("#khach input[name=address]").val() ;
         if(name==""||khach==""||add=="")
         {
-            $("#AlertModal .modal-body").html("bạn chưa cập nhập day du"); 
+            $("#AlertModal .modal-body").html("bạn chưa cập nhập đầy đủ thông tin"); 
             $("#AlertModal").modal("show");
         }
         else
@@ -233,7 +243,7 @@ if(performance.navigation.type == 2){
                             {
                             
                                     $("#waitModal").modal("hide");
-                                    $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công");
+                                    $("#AlertModal .modal-body").html("Bạn đã đặt hàng thành công, vui lòng check mail");
                                   
                                     $("#AlertModal").modal("show");
                                     setTimeout(function () {
@@ -370,11 +380,14 @@ if(performance.navigation.type == 2){
 <form  id="update"  hidden method="post" action="javascrip:void(0)">
         {{csrf_field()}}
             <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
-            <input   value="{{Session::get('key')->name}}"  required type="text" class="form-control" name="name" required ><br>
+            <input   value="{{Session::get('key')->name}}" type="text" class="form-control" name="name" ><br>
+            <div class="text-danger error" data-error="name"></div>
             <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
-            <input    value="{{Session::get('key')->phone}}"  required type="text" class="form-control" name="phone" required placeholder="Nhập số điện thoại"><br>
-             <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
-            <input   value="{{Session::get('key')->address}}"  required  type="text" class="form-control" name="address" required placeholder="Nhập số điện thoại"><br>
+            <input    value="{{Session::get('key')->phone}}" type="text" class="form-control" name="phone" placeholder="Nhập số điện thoại"><br>
+            <div class="text-danger error" data-error="phone"></div>
+            <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+            <input   value="{{Session::get('key')->address}}"  type="text" class="form-control" name="address"  placeholder="Nhập số điện thoại"><br>
+            <div class="text-danger error" data-error="address"></div>
             <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Huy</button>
             <input type="submit"    id="oK" value="xác nhận"   class="btn btn-primary "/>
 
@@ -416,7 +429,11 @@ if(performance.navigation.type == 2){
 
     </tr>
     </table>
-    <!-- Button trigger modal -->
+    <!-- Button trigger modal -->Update
+
+
+
+    
    <input type="hidden" name="id" value="{{Session::get('key')->id}}">
     <button type="button" class="btn btn-primary " onclick="tienhanh()">Tiến hành đặt </button>
 	@endif

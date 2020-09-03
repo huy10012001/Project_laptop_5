@@ -137,6 +137,8 @@
   <img style=" margin-right:5em;" width="100px" height="80px" 
                             src="{{ $message->embed('images/laptop.png')}}"/> 
                             <br>
+                            <p>590 CMT8 F11 Quận 3 TPHCM</p>
+ <p>0909090909</p>
     <p>Shop rất vui thông báo đơn hàng {{$demo->order->id }} của quý khách đã được tiếp nhận và đang trong quá trình xử lý.
     ..</p>
     <p>Thông tin đơn hàng  {{ $demo->order->id }} ( {{$demo->order->date}} )</p>

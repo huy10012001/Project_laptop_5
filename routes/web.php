@@ -159,6 +159,7 @@ Route::view('/ship-home', 'ship_home');
 Route::view('/ship', 'ship');
 Route::view('/warranty', 'warranty');
 Route::view('/deposit', 'deposit');
+Route::view('/news', 'news');
 //coment 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('comment/{id}','CommentController@postComment');

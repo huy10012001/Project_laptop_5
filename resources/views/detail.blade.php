@@ -10,17 +10,20 @@
         padding: 15px;
         width: 24%;
         word-break: break-all;
-        height: 400px;
-        margin: 5px;
+        height: 450px;
+        margin: 3px;
     }
+
     .detail img {
         height: 150px;
     }
+
     div p {
         margin: auto;
         width: 90%;
         padding: 10px;
     }
+
     .item1 {
         display: table;
         width: 100%;
@@ -35,7 +38,7 @@
                         <div class="row">
                             <!-- hot new content -->
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
-                                <td class="pro-detail-title">Sản phẩm {{$p->name}}</td>
+                                <td class="pro-detail-title">Sản phẩm laptop <label> {{$p->name}}</label></td>
                                 <hr>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
@@ -43,7 +46,7 @@
                                             <img class="img-responsive" width="100%" src="{{ url('images/'.$p->image) }}" alt="img responsive">
                                         </div>
 
-                                        <label class="btn btn-large btn-block btn-warning">xem</label>
+                                        <a href="{{ url('images/'.$p->image) }}"> <label class="btn btn-large btn-block btn-warning"> xem</label></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
                                         <div class="panel panel-info" style="margin: 0;">
@@ -51,7 +54,7 @@
                                                 <td class="panel-title">Khuyễn mãi - Chính sách</td>
                                             </div>
                                             <div class="panel-body">
-                                                <div class="khuyenmai">
+                                                <div>
 
                                                     <li><span class="glyphicon glyphicon-ok-sign"></span>Cài đặt phần miềm, tải nhạc - ứng dụng miến phí</li>
                                                 </div>
@@ -60,7 +63,6 @@
                                         <div class="panel panel-info">
                                             <div class="panel-body">
                                                 <div>
-                                                    <li><span class="glyphicon glyphicon-hand-right"></span> Trong hộp :</li>
                                                     <li><span class="glyphicon glyphicon-hand-right"></span> Bảo hành chính hãng: thân máy 12 tháng, pin 12 tháng, sạc 12 tháng</li>
                                                     <li><span class="glyphicon glyphicon-hand-right"></span> Giao hàng tận nơi miễn phí trong 1 ngày</li>
                                                     <li><span class="glyphicon glyphicon-hand-right"></span> 1 đổi 1 trong 1 tháng với sản phẩm lỗi</li>
@@ -68,7 +70,7 @@
                                             </div>
                                         </div>
                                         <div class="price">
-                                            <span class="btn btn-info btn-block "><strong>{{number_format($p->price)}}</strong> Vnd</span>
+                                            <p class="btn btn-info btn-block ">{{number_format($p->price)}} Vnd</p>
                                             <a href="" onclick="AddCart('{{$p->id}}')" class="btn btn-success btn-block">Thêm vào giỏ</a>
                                         </div>
 
@@ -77,7 +79,6 @@
                             </div>
                         </div>
                         <br>
-
                     </div>
                 </div>
             </div>
@@ -122,7 +123,6 @@
                                         <td><?php echo json_decode($p->detail->description, true)['6'] ?></td>
                                     </tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -470,7 +470,7 @@
         @endif
 
         @endif
-        
+
 
 
 
@@ -482,6 +482,7 @@
         #khongtontai .image {
             text-align: center;
         }
+
         #khongtontai {
             height: 350px;
         }
@@ -516,7 +517,7 @@
                 <button class="btn btn-warning" style="text-align: center; border-radius: 5px;">
 
                     &nbsp; <b> Đăng Nhập Tài Khoản</b> </button><label> để có thể bình luận sản phẩm của shop</label>
-                <div class="dropdown-content">
+                <div class="dropdown-content" style="padding:10px">
                     <!--modal-->
                     <!-- Button trigger modal -->
                     <button type="button" onclick="dangnhap()" id="target1" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; border-radius: 5px; ">Đăng nhập </button>
@@ -559,14 +560,14 @@
                 <div class="accordion-heading">
 
                     <form action="{{ url('comment/'.$p->id) }}" method="post" role="form">
-                
+
                         <h4> Viết bình luận của bạn ... <span class="glyphicon glyphicon-pencil"></span></h4>
                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
                         <div class="form-group">
                             <textarea class="form-control" name="content" rows="3"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Gửi</button>
-                     
+
                     </form>
                 </div>
             </div>
@@ -586,4 +587,6 @@
         </div>
     </div>
     @endforeach
-    @endsection
+</div>
+
+@endsection

@@ -114,8 +114,21 @@ function dat(login)
  $(document).ready(function()
 {
     //đăng nhập mua hàng khi user chua đăng nhập
+    $('#registerCheckOut input').keyup(function(e)
+    {
+		$(this).css('border','');
+	});
+	$('#loginCheckOut input').keyup(function(e)
+    {
+		$(this).css('border','');
+		$("#dangnhap").html("");
+	});
+
     $('#loginCheckOut').submit(function(e)
     {
+        $('.error').each(function() {
+			$(this).text('');
+		});
         e.preventDefault();
         $.ajaxSetup(
         {
@@ -129,10 +142,39 @@ function dat(login)
       		    url:	 " {{ asset('/postLoginCheckOut')}}",
       		    data:$('#loginCheckOut').serialize(),
 			    datatype: 'json',
-                error:function(data)
-                {
-                    alert('loi');
-                },
+                error:function(error)
+            {
+             		var x=error.responseText;
+                  	x=$.parseJSON(x);
+                     console.log(x);
+					let errors = error.responseJSON.errors;
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
+
+					var nameFocus=$("#loginCheckOut input[name="+errorsfocus+"]");
+					nameFocus.focus();
+					//nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+
+             			 errorDiv.text(errors[key][0]);
+						 $("#loginCheckOut input[name="+key+"]").css('border','2px solid red');
+         			}
+					 //nếu không có lỗi
+
+        		}
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					//$('#emailTontaiR').text(errors.email);
+				//})
+					//errors=JSON.stringify(errors.error);
+
+              },
 			    success:function(data)
            	    { 
                     
@@ -151,6 +193,9 @@ function dat(login)
          //đăng ký  mua hàng khi user chua đăng nhập
     $('#registerCheckOut').submit(function(e)
     {
+        $('.error').each(function() {
+			$(this).text('');
+		});
         e.preventDefault();
         $.ajaxSetup(
         {
@@ -165,6 +210,39 @@ function dat(login)
       		url:	 " {{ asset('/postRegisterCheckOut')}}",
       		data:$('#registerCheckOut').serialize(),
 			datatype: 'json',
+            error:function(error)
+            {
+             		var x=error.responseText;
+                  	x=$.parseJSON(x);
+                   console.log(x);
+					let errors = error.responseJSON.errors;
+					//FOCUS vào lỗi đầu tiên
+					var errorsfocus=Object.keys(errors)[0];
+
+					var nameFocus=$("#registerCheckOut input[name="+errorsfocus+"]");
+					nameFocus.focus();
+					//nameFocus.focus();
+					//console.log(a.val());
+					//$(`.error[data-error="${errors[0]}"]`).focus();
+      				for(let key in errors)
+       			{
+         			let errorDiv = $(`.error[data-error="${key}"]`);
+         			if(errorDiv.length )
+         			{
+
+             			 errorDiv.text(errors[key][0]);
+						 $("#registerCheckOut input[name="+key+"]").css('border','2px solid red');
+         			}
+					 //nếu không có lỗi
+
+        		}
+				//const propertyNames = Object.keys(errors);
+				////$.each(errors, function( index, value ) {
+					//$('#emailTontaiR').text(errors.email);
+				//})
+					//errors=JSON.stringify(errors.error);
+
+              },
 			success:function(data)
            	{
                  
@@ -333,19 +411,24 @@ function dat(login)
                         <div role="tabpanel" class="tab-pane active" id="uploadTabCheckOut"> 
                             <form   id="loginCheckOut" method="post" action="javascrip:void(0)" >
                             {{ csrf_field() }}
-                            <h3  style="text-align: center;">Đăng Nhập</h3>
-                                <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-                                <input type="email" class="form-control" name="email" required><br>
-                                <h5 style="color: rgb(15, 15, 15);">Password:</h5>
-                                <input type="password"   required name="password"  class="form-control" ><br>
-                                <div id="dangnhap"></div>
-                                <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
-                                
-                                <p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
+                        
+								<h3  style="text-align: center;">Đăng Nhập</h3>
+									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+									<input type="text"  class="form-control" name="email"  ><br>
+									<div class="text-danger error" data-error="email"></div>
+									<!-- định dạng lại c ss dòng này -->
+
+									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
+									<input type="password"   name="password"  class="form-control" ><br>
+									<div class="text-danger error" data-error="password"></div>
+									<div id="dangnhap"></div>
+									<button type="submit"  class="btn btn-primary" style=" border-radius: 15px;">đăng nhập</button>
+
+									<p style="color: rgb(26, 24, 24);">bạn đã có tài khoản?
 
 
 
-                            </p>
+								</p>
 
                             </form>
                         	<a class="btn btn-outline-dark"  href="{{ URL::to('auth/google') }}" role="button" style="text-transform:none">
@@ -365,20 +448,30 @@ function dat(login)
                         </div>
                         <div role="tabpanel" class="tab-pane" id="browseTabCheckOut" method="post" action="javascrip:void(0)" >
                             <form  id="registerCheckOut" action="" method="post">
-                                {{ csrf_field() }}
-                                <h3 style="text-align: center;">Tạo tài khoản</h3>
-                                <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
-                                <input type="text" class="form-control" name="name" required placeholder="Họ và tên"><br>
-                                <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
-                                <input type="text" class="form-control" name="SĐT" required placeholder="Nhập số điện thoại"><br>
-                                <h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
-                                <input type="text" class="form-control" name="address" required><br> 
-                                <h5 style="color: rgb(12, 12, 12);" >Email:</h5>
-                                    <input type="email" class="form-control" name="email" required placeholder="email"><br>
-                                    <h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
-                                    <input type="password"   required name="password"  class="form-control" placeholder="Mật khẩu"><br>
-                                    <button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
-                                <p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
+                            {{ csrf_field() }}
+									<h3 style="text-align: center;">Tạo tài khoản</h3>
+									<h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+									<input type="text" class="form-control" name="name" placeholder="Họ và tên"  ><br>
+									<div class="text-danger error" data-error="name"></div>
+									<h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+									<input type="text"  class="form-control" name="SĐT" placeholder="Nhập số điện thoại"  ><br>
+									<div class="text-danger error" data-error="SĐT"></div>
+									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+									<input type="text" class="form-control" name="address"><br>
+									<div class="text-danger error" data-error="address"></div>
+									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+
+									<input id="emailR" type="text" class="form-control" name="email"  ><br>
+									<div class="text-danger error" data-error="email"></div>
+
+									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
+									<input type="password"  name="password"  class="form-control" placeholder="Mật khẩu"  ><br>
+									<div class="text-danger error" data-error="password"></div>
+									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu:</h5>
+									<input type="password"  name="password_confirmation"  class="form-control" placeholder="Mật khẩu"  ><br>
+									<div class="text-danger error" data-error="password_confirmation"></div>
+										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>
+									<p>Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao dịch mua bán theo điều kiện sử dụng và chính sách của LapTop-shop.</p>
                                 </form>
                         </div>
                     </div>
@@ -431,7 +524,7 @@ $('input.input-qty').each(function() {
                 <div class="col-sm-9">
 			<div class="breadcrumbs">
 				<ol class="breadcrumb">
-				  <li><a href="#">Giỏ hàng</a></li>
+				  <li><a href="#">Giỏ hàng</a></li> 
 				  <li class="active">chi tiết giỏ hàng</li>
 				</ol>
 			</div>

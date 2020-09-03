@@ -47,16 +47,16 @@ class ContactRequest extends FormRequest
             'name.min'=> 'Tên phải từ 2-30 ký tự',
             'name.max'=> 'Tên phải từ 2-30 ký tự',
             'name.regex'=> 'tên name không hợp lệ',
-            'ct_phone.required'=>'vui lòng nhập số điện thoại',
-            'ct_phone.min'=>'số điện thoại 10 số vui lòng nhập lại',
-            'ct_phone.max'=>'số điện thoại 10 số vui lòng nhập lại',
-            'ct_phone.numeric'=>'số điện thoại không hợp lệ vui lòng nhập lại',
-            'ct_phone.regex'=>'số điện thoại không hợp lệ vui lòng nhập lại',
+            'phone.required'=>'vui lòng nhập số điện thoại',
+            'phone.min'=>'số điện thoại 10 số vui lòng nhập lại',
+            'phone.max'=>'số điện thoại 10 số vui lòng nhập lại',
+            'phone.numeric'=>'số điện thoại không hợp lệ vui lòng nhập lại',
+            'phone.regex'=>'số điện thoại không hợp lệ vui lòng nhập lại',
 
-            'ct_message.required'=>'trường này không được để trống',
+            'message.required'=>'trường này không được để trống',
             'email.required'=>'vui lòng nhập email',
             'email.email'=>'email của bạn không hợp lệ vui lòng nhập lại email',
-            'ct_address.required'=>'vui lòng nhập địa chỉ của bạn'
+            'address.required'=>'vui lòng nhập địa chỉ của bạn'
         ];
     }
 }

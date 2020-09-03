@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
 use App\Cart;
+use App\Http\Requests\loginRequest;
 use App\Order;
 use Illuminate\Support\Carbon;
 use App\order_product;
@@ -183,7 +184,7 @@ class loginController extends Controller
         
     }
    
-    public function postLoginCheckOut(Request $request)
+    public function postLoginCheckOut(loginRequest $request)
     { 
         //Khi user đã đăng nhập ở tab khác
        
