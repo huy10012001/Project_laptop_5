@@ -13,17 +13,14 @@
         height: 450px;
         margin: 3px;
     }
-
     .detail img {
         height: 150px;
     }
-
     div p {
         margin: auto;
         width: 90%;
         padding: 10px;
     }
-
     .item1 {
         display: table;
         width: 100%;
@@ -45,8 +42,24 @@
                                         <div class="img-box" style="margin-bottom:20px">
                                             <img class="img-responsive" width="100%" src="{{ url('images/'.$p->image) }}" alt="img responsive">
                                         </div>
+                                        <button type="button" class="btn btn-large btn-block btn-warning" data-toggle="modal" data-target="#imgModal">
+                                            Xem
+                                        </button>
+                                        <!-- The Modal -->
+                                        <div class="modal" id="imgModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
 
-                                        <a href="{{ url('images/'.$p->image) }}"> <label class="btn btn-large btn-block btn-warning"> xem</label></a>
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <td class="pro-detail-title">Laptop <label> {{$p->name}}</label></td>
+                                                        <img src="{{ url('images/'.$p->image) }}" alt="" width="100%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
                                         <div class="panel panel-info" style="margin: 0;">
@@ -123,15 +136,17 @@
                                         <td><?php echo json_decode($p->detail->description, true)['6'] ?></td>
                                     </tr>
                                 </tbody>
+                                
                             </table>
-                        </div>
+                            
+                        </div><button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#DetailModal">
+                                    Xem thông tin chi tiết
+                                </button>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
                             <div class="accordion-group">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DetailModal">
-                                    Xem thông tin chi tiết
-                                </button>
+                                
                                 <!-- The Modal -->
                                 <div class="modal" id="DetailModal">
                                     <div class="modal-dialog">
@@ -388,9 +403,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
             <div class="alert alert-warning" role="alert">
                 Sản phẩm cùng danh mục
             </div>
@@ -457,7 +470,8 @@
             <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
             <p>{{$product->name}}</p>
             <p>{{number_format($product->price)}}</p>
-            <button type="button" class="btn btn-default get"><a href="{{ url('product/'.$product->slug) }}"></i> xem sản phẩm</a></button>
+            <a href="{{ url('product/'.$product->slug) }}"><button type="button" class="btn btn-default get"> xem sản phẩm</button>
+            </a>
         </div>
 
         @endforeach
@@ -473,7 +487,6 @@
 
 
 
-
     </div>
     <br>
 
@@ -482,7 +495,6 @@
         #khongtontai .image {
             text-align: center;
         }
-
         #khongtontai {
             height: 350px;
         }
@@ -517,7 +529,7 @@
                 <button class="btn btn-warning" style="text-align: center; border-radius: 5px;">
 
                     &nbsp; <b> Đăng Nhập Tài Khoản</b> </button><label> để có thể bình luận sản phẩm của shop</label>
-                <div class="dropdown-content" style="padding:10px">
+                <div class="dropdown-content">
                     <!--modal-->
                     <!-- Button trigger modal -->
                     <button type="button" onclick="dangnhap()" id="target1" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal" style="width: 100%; border-radius: 5px; ">Đăng nhập </button>
@@ -531,61 +543,47 @@
 
                     <!--login google-->
                     <!--login github-->
-
-
                     <a id="github-button" href="{{ URL::to('auth/github') }}" class="btn btn-block btn-social btn-github">
                         <i class="fa fa-github"></i>
                         <p style="padding-left: 20px;color:white"> Đăng nhập với git hub</p>
                     </a>
-
                     <!--login github-->
                 </div>
             </div>
         </div>
-
     </div>
-
-
-
     @else
     <!-- comment-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
             @if(session('thongbao'))
             {{session('thongbao')}}
             @endif
-
             <div class="accordion-group">
                 <div class="accordion-heading">
-
                     <form action="{{ url('comment/'.$p->id) }}" method="post" role="form">
-
                         <h4> Viết bình luận của bạn ... <span class="glyphicon glyphicon-pencil"></span></h4>
                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
                         <div class="form-group">
                             <textarea class="form-control" name="content" rows="3"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Gửi</button>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     @endif
-    <br>
 
     @foreach($p->comment as $cm)
     <div class="media">
         <div class="media-body">
             <h4 class="media-heading">{{$cm->user->name}}
-                <small>{{$cm->created_at->format('d/m/y H:i:s')}}</small>
-            </h4>
+                <small>{{$cm->created_at->format('d/m/y H:i:s')}}</small> </h4>
             {{$cm->content}}
         </div>
     </div>
+    <br>
     @endforeach
 </div>
 

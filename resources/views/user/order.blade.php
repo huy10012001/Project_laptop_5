@@ -388,7 +388,7 @@ if(performance.navigation.type == 2){
             <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
             <input   value="{{Session::get('key')->address}}"  type="text" class="form-control" name="address"  placeholder="Nhập số điện thoại"><br>
             <div class="text-danger error" data-error="address"></div>
-            <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Huy</button>
+            <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Hủy</button>
             <input type="submit"    id="oK" value="xác nhận"   class="btn btn-primary "/>
 
  </form>

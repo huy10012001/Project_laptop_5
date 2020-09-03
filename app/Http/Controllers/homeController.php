@@ -31,13 +31,14 @@ class homeController extends Controller
     public function filter($filter_request,$string_request_filter,$product,$query)
     {
         
-     
+      
         $flag=false;
         //conver chuỗi giá trị lọc và request  nhận từ url
         //chuỗi từ url
         $filter_request=  explode(',',$filter_request);
         //chuỗi lọc
         $string_request_filter= explode(',',$string_request_filter);
+      
         $request_arr=[];
         foreach($filter_request as $f_request)
         {
@@ -52,6 +53,7 @@ class homeController extends Controller
 
             }
         }
+       
         //nếu value request từ url nằm trong value chuỗi giá trị lọc
         if($flag==true)
         {   
@@ -179,16 +181,17 @@ class homeController extends Controller
           
         }
        
-         
+       
         if(is_string($request->RAM))
         {
-          
+        
             $key_description=11;
             $string_request_filter="4-gb,8-gb,16-gb,32-gb";
-            if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+            if($this->filter($request->RAM,$string_request_filter,$product,$key_description)!="")
             {
+
                 $flag=true;
-                $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                $product=$this->filter($request->RAM,$string_request_filter,$product,$key_description);
             }
        }
         if(is_string($request->ocung))
@@ -196,10 +199,10 @@ class homeController extends Controller
            
             $key_description=16;
             $string_request_filter="1-tb,512-gb,256-gb,128-gb";
-            if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+            if($this->filter($request->ocung,$string_request_filter,$product,$key_description)!="")
             {
                 $flag=true;
-                $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                $product=$this->filter($request->ocung,$string_request_filter,$product,$key_description);
             }
               
         }
@@ -350,28 +353,29 @@ class homeController extends Controller
            
             if(is_string($request->RAM))
             {
+            
                 $key_description=11;
                 $string_request_filter="4-gb,8-gb,16-gb,32-gb";
-                if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+                if($this->filter($request->RAM,$string_request_filter,$product,$key_description)!="")
                 {
-                    
-                    $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+    
+                    $flag=true;
+                    $product=$this->filter($request->RAM,$string_request_filter,$product,$key_description);
                 }
-             
-            
-            }
-           
+           }
             if(is_string($request->ocung))
             {
+               
                 $key_description=16;
                 $string_request_filter="1-tb,512-gb,256-gb,128-gb";
-                if($this->filter($request->cpu,$string_request_filter,$product,$key_description)!="")
+                if($this->filter($request->ocung,$string_request_filter,$product,$key_description)!="")
                 {
-                    
-                    $product=$this->filter($request->cpu,$string_request_filter,$product,$key_description);
+                    $flag=true;
+                    $product=$this->filter($request->ocung,$string_request_filter,$product,$key_description);
                 }
-              
+                  
             }
+           
             $orderBy="";
             if(is_string($request->orderby))
             {
