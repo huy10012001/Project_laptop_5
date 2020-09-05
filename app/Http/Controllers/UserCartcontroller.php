@@ -34,9 +34,40 @@ class UserCartcontroller extends Controller
         return view('index', compact('products'));
     }
  
-    public function search(Request $request)
+    public function history(Request $request)
     {
+       
+        $user=$request->session()->get('key');
+        if(empty($user))
+            return view('user.watchorder');
+        else
+        {
+          
+            $order=Order::where(['user_id'=>$user->id])
+            ->where('status', 'not like', '0')->
+            get();
+           
+            return view('user.watchorder',['myOrder'=>$order]);
+        }
+    }
+    public function historyview(Request $request,$id)
+    {
+      
+        $user=$request->session()->get('key');
+        $order=Order::find($id);
+        if(empty($user))
+            return view('user.watchorder');
+        else if(!empty($order)&&($order->user_id!=$user->id))
+        {
+            return view('user.watchdetailorder');
+        }
+      
+        else
+        {
+         
 
+            return view('user.watchdetailorder',['myViewOrder'=>$order]);
+        }
     }
 
     public function livesearch(Request $request)

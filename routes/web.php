@@ -165,3 +165,5 @@ if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('comment/{id}','CommentController@postComment');
 
 route::get('dynamic_pdf/{id}/pdf','DynamicPDFController@pdf');
+route::get('myorder/history','UserCartcontroller@history');
+route::get('myorder/view/{id}','UserCartcontroller@historyview');

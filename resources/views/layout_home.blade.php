@@ -681,6 +681,9 @@ $(document).ready(function()
                           			<div class="dropdown-content">
 									<!--modal-->
 									<!-- Button trigger modal -->
+									
+										<button type="button" style="width: 100%;"   class="btn btn-primary btn-lg" onclick="window.location='/myorder/history'">Xem hóa đơn  </button>
+						
 										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%;">Đăng xuất   </button>
 
 									</div>
@@ -776,6 +779,8 @@ $(document).ready(function()
 					@yield('warranty')
 					@yield('deposit')
 					@yield('detail_home')
+					@yield('useroder')
+					@yield('userviewOrder')
 					<!--end tìm theo chi tiéte-->
 
 					<!--sản phẩm-->

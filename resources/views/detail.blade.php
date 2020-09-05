@@ -470,6 +470,8 @@
             <img src="{{ url('images/'.$product->image) }}" width="100%" height="100%" style="margin: auto">
             <p>{{$product->name}}</p>
             <p>{{number_format($product->price)}}</p>
+
+
             <a href="{{ url('product/'.$product->slug) }}"><button type="button" class="btn btn-default get"> xem sản phẩm</button>
             </a>
         </div>
