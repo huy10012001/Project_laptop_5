@@ -26,7 +26,7 @@ class registerRequest extends FormRequest
         
         return [
             'name' => 'required|min:2|max:30|regex:/^[a-zA-Z[:space:]ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{2,30}$/u',
-            'SĐT' => 'required',
+            'SĐT' => 'required|numeric|min:10|regex:/(0)[0-9]{9}/',
             'address' => 'required',
             'email' => 'required|email|unique:user',
           
@@ -46,6 +46,10 @@ class registerRequest extends FormRequest
             'email.email'=> 'tên email không hợp lệ',
             'email.required'=>'email phải nhập',
             'SĐT.required'=>'SĐT phải nhập',
+            'SĐT.min'=>'số điện thoại 10 số vui lòng nhập lại',
+            'SĐT.max'=>'số điện thoại 10 số vui lòng nhập lại',
+            'SĐT.numeric'=>'số điện thoại không hợp lệ vui lòng nhập lại',
+            'SĐT.regex'=>'số điện thoại không hợp lệ vui lòng nhập lại',
             'address.required'=>'Địa chỉ phải nhập',
             'password.required'=>'mật khẩu phải nhập',
             

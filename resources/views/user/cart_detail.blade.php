@@ -413,12 +413,12 @@ function dat(login)
                             {{ csrf_field() }}
                         
 								<h3  style="text-align: center;">Đăng Nhập</h3>
-									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+									<h5 style="color: rgb(12, 12, 12);" >Email <sup>*</sup></h5>
 									<input type="text"  class="form-control" name="email"  ><br>
 									<div class="text-danger error" data-error="email"></div>
 									<!-- định dạng lại c ss dòng này -->
 
-									<h5 style="color: rgb(15, 15, 15);">Password:</h5>
+									<h5 style="color: rgb(15, 15, 15);">Password <sup>*</sup></h5>
 									<input type="password"   name="password"  class="form-control" ><br>
 									<div class="text-danger error" data-error="password"></div>
 									<div id="dangnhap"></div>
@@ -450,24 +450,24 @@ function dat(login)
                             <form  id="registerCheckOut" action="" method="post">
                             {{ csrf_field() }}
 									<h3 style="text-align: center;">Tạo tài khoản</h3>
-									<h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+									<h5 style="color: rgb(12, 12, 12);" >Họ và tên <sup>*</sup></h5>
 									<input type="text" class="form-control" name="name" placeholder="Họ và tên"  ><br>
 									<div class="text-danger error" data-error="name"></div>
-									<h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+									<h5 style="color: rgb(12, 12, 12);" >SĐT <sup>*</sup></h5>
 									<input type="text"  class="form-control" name="SĐT" placeholder="Nhập số điện thoại"  ><br>
 									<div class="text-danger error" data-error="SĐT"></div>
-									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+									<h5 style="color: rgb(12, 12, 12);" >Địa chỉ <sup>*</sup></h5>
 									<input type="text" class="form-control" name="address"><br>
 									<div class="text-danger error" data-error="address"></div>
-									<h5 style="color: rgb(12, 12, 12);" >Email:</h5>
+									<h5 style="color: rgb(12, 12, 12);" >Email <sup>*</sup></h5>
 
 									<input id="emailR" type="text" class="form-control" name="email"  ><br>
 									<div class="text-danger error" data-error="email"></div>
 
-									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu:</h5>
+									<h5 style="color: rgb(15, 15, 15);">Mật Khẩu <sup>*</sup></h5>
 									<input type="password"  name="password"  class="form-control" placeholder="Mật khẩu"  ><br>
 									<div class="text-danger error" data-error="password"></div>
-									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu:</h5>
+									<h5 style="color: rgb(15, 15, 15);">Nhập lại mật khẩu <sup>*</sup></h5>
 									<input type="password"  name="password_confirmation"  class="form-control" placeholder="Mật khẩu"  ><br>
 									<div class="text-danger error" data-error="password_confirmation"></div>
 										<button type="submit" class="btn btn-primary" style=" border-radius: 15px;">xác nhận tạo tài khoảng</button>

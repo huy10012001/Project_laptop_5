@@ -160,6 +160,7 @@ Route::view('/ship', 'ship');
 Route::view('/warranty', 'warranty');
 Route::view('/deposit', 'deposit');
 Route::view('/news', 'news');
+Route::view('/admin/laptopshop', 'admin.laptopshop');
 //coment 
 if (($_SERVER["REQUEST_METHOD"] ?? 'GET') == 'POST')
 Route::post('comment/{id}','CommentController@postComment');

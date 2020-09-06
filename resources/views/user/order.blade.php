@@ -379,13 +379,13 @@ if(performance.navigation.type == 2){
 
 <form  id="update"  hidden method="post" action="javascrip:void(0)">
         {{csrf_field()}}
-            <h5 style="color: rgb(12, 12, 12);" >Họ và tên:</h5>
+            <h5 style="color: rgb(12, 12, 12);" >Họ và tên <sup>*</sup></h5>
             <input   value="{{Session::get('key')->name}}" type="text" class="form-control" name="name" ><br>
             <div class="text-danger error" data-error="name"></div>
-            <h5 style="color: rgb(12, 12, 12);" >SĐT:</h5>
+            <h5 style="color: rgb(12, 12, 12);" >SĐT <sup>*</sup></h5>
             <input    value="{{Session::get('key')->phone}}" type="text" class="form-control" name="phone" placeholder="Nhập số điện thoại"><br>
             <div class="text-danger error" data-error="phone"></div>
-            <h5    style="color: rgb(12, 12, 12);" >Địa chỉ:</h5>
+            <h5    style="color: rgb(12, 12, 12);" >Địa chỉ <sup>*</sup></h5>
             <input   value="{{Session::get('key')->address}}"  type="text" class="form-control" name="address"  placeholder="Nhập số điện thoại"><br>
             <div class="text-danger error" data-error="address"></div>
             <button id="huy " onclick="huy()" type="button"  class="btn btn-primary ">Hủy</button>

@@ -41,9 +41,9 @@
                                     @endphp
                                     <td>{{ $nameproduct}}</td>
                                     <td>{{number_format($MOrder->total,0,",",".")}}</td>
-                                    <td>
+                                    <td style="white-space: nowrap;" >
                                     @if($MOrder->status==2)
-                                    đã giao hàng
+                                    đã hoàn thành
                                     @else
                                     đang xử lý
                                     @endif

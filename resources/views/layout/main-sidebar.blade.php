@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ url('/') }}" class="brand-link">
+    <a href="{{ url('/admin/laptopshop') }}" class="brand-link">
         <img src="{{ asset('img/AdminLTELogo.png') }}"
              alt="Product Demo"
              class="brand-image img-circle elevation-3"

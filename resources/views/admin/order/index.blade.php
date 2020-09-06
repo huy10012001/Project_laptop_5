@@ -115,7 +115,9 @@ select option[value="2"] {
                                 </div></td>
                                 @endif-->
                                 <td>	{{number_format($o->total,0,",",".")}} đ</td>
-                                <td>{{$o->date}}</td>
+                                <td>
+                                {{date('d/m/Y', strtotime($o->date)) }}
+                                </td>
                                 <td class="text-right">
                                 <a class="btn btn-danger btn-sm" href="{{ url('dynamic_pdf/'.$o->id.'/pdf')}}">
                                         <i class="fas fa-folder"></i> xuất hóa đơn

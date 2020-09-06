@@ -48,8 +48,9 @@
                             <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Tên Người dùng</th>
-                               
+                                <th>Tên Người bình luận</th>
+                                <th>Email</th>
+                             
                                 <th>Tên sản phẩm</th>
                                 <th>Nội dung</th>
                                 
@@ -61,6 +62,8 @@
                             <tr>
                                     <td>{{$p->id}}</td>
                                     <td>{{$p->user->name}}</td>
+                                    <td>{{$p->user->email}}</td>
+                              
                                     <td>{{$p->product->name}}</td>
                                     <td>{{$p->content}}</td>
                                   
