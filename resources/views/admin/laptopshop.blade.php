@@ -105,7 +105,7 @@
                       <strong>1/1/2020-
                       {{date('d/m/Y', strtotime(App\Order::where('status','2')->orderBy('id', 'desc')->first()->date)) }}
                      </strong>
-                   
+                    
                      
 
                     <div class="chart">

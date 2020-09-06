@@ -59,7 +59,7 @@
 
 					if(data.status=="admin")
 					{
-						window.location.href ="{{ asset('/admin/product/index')}}"
+						window.location.href ="{{ asset('/admin/laptopshop')}}"
 					}
 
                     else
