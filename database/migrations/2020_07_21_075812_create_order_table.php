@@ -20,7 +20,7 @@ class CreateOrderTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('user')->onUpdate('cascade');
             $table->enum('status', array('0','1','2'))->default('0');
-           $table->integer('total');
+           $table->bigInteger('total');
            $table->date('date')->nullable();
            $table->string('name')->nullable();
            $table->string('phone')->nullable();

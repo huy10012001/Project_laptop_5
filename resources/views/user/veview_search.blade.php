@@ -130,6 +130,22 @@
                 </div>
                 <div class="product-overlay">
                     <div class="overlay-content">
+                    <div class="row">
+                            <div class="core" >
+                            <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />Cpu:<?php  echo json_decode($p->description,true)['3'] ?></p></div>
+                            <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />Card màn hình:<?php  echo json_decode($p->description,true)['19'] ?></p></div>
+                            </div>
+                            <div class="ram" >
+                            <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Màn hình:<?php  echo json_decode($p->description,true)['21'] ?></p></div>
+                            <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />Ổ cứng:<?php  echo json_decode($p->description,true)['16'] ?></p></div>
+                            </div>
+                            <div class="rom" >
+                                <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />RAM:<?php  echo json_decode($p->description,true)['11'] ?></p></div>
+                                <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Trọng lượng:<?php  echo json_decode($p->description,true)['47'] ?></p></div>
+                            </div>
+``          
+
+                        </div>
                     <h2>{{number_format($p->price,0,",",".")}} đ</h2>
                         <p  style="word-break: break-all;" >{{$p->name}}</p>
                         <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>

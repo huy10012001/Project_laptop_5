@@ -123,55 +123,15 @@
               <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
               
                <p style="word-break: break-all;" >{{$s_p->name}}</p>
-               <div style="font-size: 12px;">
-               <div class="row" >
-                  <div class="col-sm-6"> Cpu:<?php  echo json_decode($s_p->description,true)['3'] ?></div>
-                  <div class="col-sm-6"> Card màn hình:<?php  echo json_decode($s_p->description,true)['19'] ?></div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6"> Màn hình:<?php  echo json_decode($s_p->description,true)['21'] ?></div>
-                   <div class="col-sm-6"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+                <div class="row" style="font-size: 12px;">
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
               </div>
-             <div class="row">
-               <div class="col-sm-6"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
-               <div class="col-sm-6"> Trọng lương:<?php  echo json_decode($s_p->description,true)['47'] ?></div>
-             </div>
-               </div>
                 <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-                 <!--
-            <div class="product-overlay">
-             
-              <div class="overlay-content">
-                   
-                <div class="row">
-          
-                            <div class="core" >
-                            <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />Cpu:<?php  echo json_decode($s_p->description,true)['3'] ?></p></div>
-                            <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />Card màn hình:<?php  echo json_decode($s_p->description,true)['19'] ?></p></div>
-                            </div>
-                            <div class="ram" >
-                            <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Màn hình:<?php  echo json_decode($s_p->description,true)['21'] ?></p></div>
-                            <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></p></div>
-                            </div>
-                            <div class="rom" >
-                                <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />RAM:<?php  echo json_decode($s_p->description,true)['11'] ?></p></div>
-                                <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Trọng lượng:<?php  echo json_decode($s_p->description,true)['47'] ?></p></div>
-                            </div>
-``     
-                        </div>
-                             
-
-                <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$s_p->name}}</p>
-                  <a   onclick="AddCart('{{$s_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>   -->
-          </div>
          
-        
-           
-          <div class="choose">
+          </div>
+         <div class="choose">
             <ul class="nav nav-pills nav-justified">
               <li><a href="{{ url('product/'.$s_p->slug) }}"></i>Chi tiết sản phẩm</a></li>
             </ul>
@@ -191,30 +151,13 @@
               <img  height="200px" src="{{ url('images/'.$s_p->image) }}" alt="" />
               <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
                <p style="word-break: break-all;" >{{$s_p->name}}</p>
+               <div class="row" style="font-size: 12px;" >
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+              </div>
                 <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                <div class="core" >
-                            <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />Cpu:<?php  echo json_decode($s_p->description,true)['3'] ?></p></div>
-                            <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />Card màn hình:<?php  echo json_decode($s_p->description,true)['19'] ?></p></div>
-                            </div>
-                            <div class="ram" >
-                            <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Màn hình:<?php  echo json_decode($s_p->description,true)['21'] ?></p></div>
-                            <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></p></div>
-                            </div>
-                            <div class="rom" >
-                                <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />RAM:<?php  echo json_decode($s_p->description,true)['11'] ?></p></div>
-                                <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Trọng lượng:<?php  echo json_decode($s_p->description,true)['47'] ?></p></div>
-                            </div>
-
-                </div>
-                <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$s_p->name}}</p>
-                  <a   onclick="AddCart('{{$s_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
+           
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -267,29 +210,13 @@
               <img  height="200px" src="{{ url('images/'.$n_p->image) }}" alt="" />
               <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
                <p style="word-break: break-all;" >{{$n_p->name}}</p>
+               <div class="row" style="font-size: 12px;">
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+              </div>
                 <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$n_p->name}}</p>
-                  <a   onclick="AddCart('{{$n_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
+            
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -311,29 +238,13 @@
               <img  height="200px" src="{{ url('images/'.$n_p->image) }}" alt="" />
               <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
                <p style="word-break: break-all;" >{{$n_p->name}}</p>
+               <div class="row" style="font-size: 12px;">
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+              </div>
                 <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($n_p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$n_p->name}}</p>
-                  <a   onclick="AddCart('{{$n_p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
+           
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -409,29 +320,13 @@
               <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
               <h2>{{number_format($p->price,0,",",".")}} đ</h2>
                <p style="word-break: break-all;" >{{$p->name}}</p>
+               <div class="row" style="font-size: 12px;">
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+              </div>
                 <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$p->name}}</p>
-                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
+
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -453,29 +348,13 @@
               <img  height="200px" src="{{ url('images/'.$p->image) }}" alt="" />
               <h2>{{number_format($p->price,0,",",".")}} đ</h2>
                <p style="word-break: break-all;" >{{$p->name}}</p>
+               <div class="row" style="font-size: 12px;">
+               <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
+               <div class="col-sm-8"> Ổ cứng:<?php  echo json_decode($s_p->description,true)['16'] ?></div>
+              </div>
                 <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            <div class="product-overlay">
-              <div class="overlay-content">
-                <div class="row">
-                  <div class="core" >
-                  <div class="col-sm-5">  <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_22.png')}}" alt="" />core 3</p></div>
-                  <div class="col-sm-7"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_23.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                <div class="ram" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />Intel UHD Graphics</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_25.png')}}" alt="" />16.5 in</p></div>
-                </div>
-                <div class="rom" >
-                  <div class="col-sm-6" > <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_24.png')}}" alt="" />ssd 520gb</p></div>
-                  <div class="col-sm-6"> <p class="core"> <img  height="40px" src="{{URL::asset('fronend/images/Screenshot_27.png')}}" alt="" />16.5 in</p></div>
-                  </div>
-                </div>
-                <h2>{{number_format($p->price,0,",",".")}} đ</h2>
-                  <p  style="word-break: break-all;" >{{$p->name}}</p>
-                  <a   onclick="AddCart('{{$p->product_id}}')"     class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
-                </div>
-            </div>
+         
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
