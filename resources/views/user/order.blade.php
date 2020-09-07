@@ -228,12 +228,14 @@ if(performance.navigation.type == 2){
                                 //nếu giỏ hàng thay đổi trong lúc order
                                 if(data.status=="thay đổi")
                                 {
+                                    $("#waitModal").modal("hide");
                                     $("#AlertModal .modal-body").html("Giỏ hàng của bạn có sự thay đổi");
                                     $("#AlertModal").modal("show");
                                 }
 
                             else if(data.status=="giỏ hàng của bạn trống")
                                 {
+                                    $("#waitModal").modal("hide");
                                     $("#AlertModal .modal-body").html("Giỏ hàng của bạn trống");
                                     $("#AlertModal").modal("show");
                                 }
