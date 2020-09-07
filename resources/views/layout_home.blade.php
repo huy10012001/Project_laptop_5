@@ -383,33 +383,33 @@ $(document).ready(function()
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 
 	$("#loginModal").on('hide.bs.modal', function(){
-		
+
 		$('#uploadTabLogin').removeClass('active');
 		$('#browseTabLogin').removeClass('active');
 		$('#liLogin').removeClass('active');
 		$('#liRegister').removeClass('active');
  	});
-	
+
 	$("#loginModal").on('show.bs.modal', function(){
 		$(this).find('input').css('border','');
 		$("#dangnhap").html("");
-	
+
 		$("#dangnhap").html("");
 		$('.error').each(function() {
 			$(this).text('');
 		});
-	
+
  	});
 	 $("#modalCheckOut").on('show.bs.modal', function(){
-		
+
 		$(this).find('input').css('border','');
 		$("#dangnhap").html("");
 		$('.error').each(function() {
 			$(this).text('');
 		});
-	
+
  	});
-	
+
 	 //search
 	 $('#search').submit(function(e)
     {
@@ -440,7 +440,7 @@ $(document).ready(function()
     //đăng nhập và đăng ký
     $('#login').submit(function(e)
     {
-	
+
 		$('.error').each(function() {
 			$(this).text('');
 		});
@@ -678,13 +678,13 @@ $(document).ready(function()
 									  <button class="dropbtn" style="text-align: center;border-radius: 5px;">
 
 									   <b>Chào {{Session::get('key')->name}}</b> <br>  </button>
-                          			<div class="dropdown-content">
+                          			<div class="dropdown-content"  style="padding: 10px;">
 									<!--modal-->
 									<!-- Button trigger modal -->
-									
-										<button type="button" style="width: 100%;"   class="btn btn-primary btn-lg" onclick="window.location='/myorder/history'">Xem hóa đơn  </button>
-						
-										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%;">Đăng xuất   </button>
+
+										<button type="button" style="width: 100%; border-radius: 5px; "   class="btn btn-primary btn-lg" onclick="window.location='/myorder/history'">Xem hóa đơn  </button>
+
+										<button type="button"  onclick="logOut()" id="target1"  class="btn btn-primary btn-lg" style="width: 100%; border-radius: 5px;">Đăng xuất   </button>
 
 									</div>
                         		</div>
@@ -1195,7 +1195,7 @@ $(document).ready(function()
 
 
                     </div>
-                    
+
 
 				</div>
 			</div>

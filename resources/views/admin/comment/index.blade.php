@@ -80,7 +80,7 @@
                           
                             <th>Id</th>
                                 <th>Tên Người dùng</th>
-                               
+                                <th>Email</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Nội dung</th>
                                 <th></th>

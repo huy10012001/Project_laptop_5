@@ -100,6 +100,9 @@
 
         </div>
     </div>
+    <div class="col-sm-12">
+        <a href="/product/dell"><img src="https://laptopxachtayshop.com/images/banner/11-56-11_28-07-2020.jpg" alt="" style="width:100%;"></a>
+    </div>
     <div class="spm">
         <div style="text-align: right;">
         <a   href="{{ url('product') }}">Xem tất cả</a>
@@ -121,7 +124,7 @@
             <div class="productinfo text-center">
               <img  height="200px" src="{{ url('images/'.$s_p->image) }}" alt="" />
               <h2>{{number_format($s_p->price,0,",",".")}} đ</h2>
-              
+
                <p style="word-break: break-all;" >{{$s_p->name}}</p>
                 <div class="row" style="font-size: 12px;">
                <div class="col-sm-4"> Ram:<?php  echo json_decode($s_p->description,true)['11'] ?></div>
@@ -129,7 +132,7 @@
               </div>
                 <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-         
+
           </div>
          <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -157,7 +160,7 @@
               </div>
                 <a onclick="AddCart('{{$s_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-           
+
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -216,7 +219,7 @@
               </div>
                 <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-            
+
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -244,7 +247,7 @@
               </div>
                 <a onclick="AddCart('{{$n_p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-           
+
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
@@ -354,7 +357,7 @@
               </div>
                 <a onclick="AddCart('{{$p->product_id}}')" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>thêm vào giỏ hàng</a>
             </div>
-         
+
           </div>
           <div class="choose">
             <ul class="nav nav-pills nav-justified">
