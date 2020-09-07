@@ -101,11 +101,11 @@
 
       
                     <p class="text-center">
-                       
+                       @if(App\Order::where('status','2')->orderBy('id', 'desc')->first())
                       <strong>1/1/2020-
                       {{date('d/m/Y', strtotime(App\Order::where('status','2')->orderBy('id', 'desc')->first()->date)) }}
                      </strong>
-                    
+                    @endif
                      
 
                     <div class="chart">
@@ -174,8 +174,8 @@
                   <!-- /.col -->
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                    
-                      <h5 class="description-header">{{number_format(800000000,0,",",".")}} đ</h5>
+
+                      <h5 class="description-header">{{number_format(App\Order::where('status','2')->sum('total')*85/100,0,",",".")}} đ</h5>
                       <span class="description-text">Tổng chi phí</span>
                     </div>
                     <!-- /.description-block -->
@@ -184,7 +184,7 @@
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
                       
-                      <h5 class="description-header">{{number_format(App\Order::where('status','2')->sum('total')-800000000,0,",",".")}} đ</h5>
+                      <h5 class="description-header">{{number_format(App\Order::where('status','2')->sum('total')*15/100,0,",",".")}} đ</h5>
                       <span class="description-text">tổng lợi nhuận</span>
                     </div>
                     <!-- /.description-block -->
@@ -558,7 +558,11 @@
                     <h3 class="card-title">Thành viên mới đăng ký</h3>
 
                     <div class="card-tools">
+                      @if(App\User::all()->count()<8)
+                      <span class="badge badge-danger">{{App\User::all()->count()}} thành viên mới</span>
+                      @else
                       <span class="badge badge-danger">8 thành viên mới</span>
+                      @endif
                       <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                       </button>
                       <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
