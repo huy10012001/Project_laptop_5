@@ -51,7 +51,7 @@
                                 <th>Tên</th>
                                 <th>Email</th>
                                 <th>Sđt</th>
-                               
+                                <th>Địa chỉ</th>
                                 <th>Tin nhắn</th>
                                 
                                 <th></th>
@@ -64,7 +64,7 @@
                                     <td>{{$p->name}}</td>
                                     <td>{{$p->email}}</td>
                                     <td>{{$p->phone}}</td>
-                                  
+                                    <td>{{$p->address}}</td>
                                     <td>{{$p->message}}</td>
                                    
                                     <td><a class="btn btn-danger btn-sm" onclick="deleteContact('{{$p->id}}')">
