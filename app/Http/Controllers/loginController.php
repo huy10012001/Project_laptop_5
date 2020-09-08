@@ -41,7 +41,7 @@ class loginController extends Controller
               
                if($role->name=="admin" ||$role->name=="super admin")
                
-               return view('admin/laptopshop');
+               return  redirect('admin/laptopshop');
             }
             return view('login');
          
