@@ -57,7 +57,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Số Thành viên</span>
-                <span class="info-box-number">{{App\User::all()->count()}}</span>
+                <span class="info-box-number">{{App\User::all()->count()-1}}</span>
               </div>
               <!-- /.info-box-content -->
             </div>

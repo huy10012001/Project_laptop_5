@@ -564,7 +564,7 @@
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <form action="{{ url('comment/'.$p->id) }}" method="post" role="form">
-                        <h4> Viết bình luận của bạn ... <span class="glyphicon glyphicon-pencil"></span></h4>
+                        <h4> Viết bình luận của bạn về sản phẩm {{$p->name}} <span class="glyphicon glyphicon-pencil"></span></h4>
                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
                         <div class="form-group">
                             <textarea class="form-control" name="content" rows="3"></textarea>
