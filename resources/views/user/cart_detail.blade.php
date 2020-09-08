@@ -307,7 +307,7 @@ function dat(login)
                             <td class="">
 							<div class="buttons_added">
                              <input aria-label="quantity"
-                             class="input-qty" max="10" min="1" name="" required  type="number" 
+                             class="input-qty" max="100" min="1" name="" required  type="number" 
                              value="{{$product['qty']}}"
                              onChange="onChange(this.value,<?php echo $product['id']?>,'',<?php echo $product['time_at'] ?>
                              )">
@@ -559,7 +559,7 @@ $('input.input-qty').each(function() {
                             
                             <td class="">
 						        <div class="buttons_added">
-                                <input aria-label="quantity" class="input-qty" max="10" min="1" name="" type="number" 
+                                <input aria-label="quantity" class="input-qty" max="100" min="1" name="" type="number" 
                                  value="{{ $p->pivot->qty}}"
                                  onChange="onChange(this.value,'{{$p->id}}','{{$orders->id}}','{{$p->pivot->created_at}}')">
                                 </div>
