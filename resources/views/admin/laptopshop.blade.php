@@ -558,21 +558,23 @@
                     <h3 class="card-title">Thành viên mới đăng ký</h3>
 
                     <div class="card-tools">
-                      @if(App\User::all()->count()<8)
-                      <span class="badge badge-danger">{{App\User::all()->count()}} thành viên mới</span>
+                  
+                      @if(App\User::all()->count()<8 && App\User::all()->count()>1) 
+                      <span class="badge badge-danger">{{App\User::all()->count()-1}} thành viên mới</span>
                       @else
                       <span class="badge badge-danger">8 thành viên mới</span>
                       @endif
                       <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                       </button>
                       <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
-                      </button>
+                      </button>   
                     </div>
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body p-0">
                     <ul class="users-list clearfix">
-                        @php  $users=App\User::orderBy('id','desc')->get()@endphp
+                        @php  $users=App\User::where('id', 'not like', 1)->orderBy('id','desc')->get()@endphp
+                        
                         @foreach($users->take(8) as $user)
                       <li>
                         
