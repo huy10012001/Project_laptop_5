@@ -48,7 +48,7 @@ class ProductRequest extends FormRequest
             'name.unique'=> 'Tên sản phẩm hoặc tên danh mục đã tồn tại!',
             'name.required' => 'Tên sản phẩm cần được yêu cầu!',
             'category.required' => 'Tên thương hiệu cần được yêu cầu!',
-            'name.min' => 'Tên sản phẩm phải từ 180 ký tự',
+            'name.min' => 'Tên sản phẩm phải từ 3 ký tự',
             'name.max' => 'Tên sản phẩm không vượt quá 180 ký tự',
             'price.required' => 'Bạn chưa nhập giá!',
             'price.integer' => 'Giá phải là số!',
