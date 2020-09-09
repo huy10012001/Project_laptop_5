@@ -376,7 +376,7 @@ $(document).ready(function() {
 
             <div class="sort" >
             
-                <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px; background: rgb(245, 244, 244); margin-top:-10px; ">
+                <div class="col-sm-12" style="padding-right:60px;padding-bottom:10px;margin-bottom:10px;  margin-top:-10px; ">
                     <div class="dropdown" style=" float:right;">
                         <button  id="sapxep" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Laptop mới nhất
                         <span class="caret"></span></button>

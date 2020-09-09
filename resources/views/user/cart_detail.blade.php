@@ -8,7 +8,19 @@
 
 function onChange(qty,product_id,order_id,timecreate)
 {
-   $.ajax({
+    if(qty=="")
+    {
+        $("#AlertModal .modal-body").html("bạn phải nhập số lượng sản phẩm ");
+         $("#AlertModal").modal("show");
+    }
+    else if(qty<1)
+    {
+        $("#AlertModal .modal-body").html("số lượng sản phẩm phải từ 1 tới 100 ");
+         $("#AlertModal").modal("show");
+    }
+    else 
+   {
+       $.ajax({
 			type:  "GET",//type là get
       		url: " {{ asset('cart/update')}}",//truy cập tới url cart/delete
       		data:{ qty:qty, order_id:order_id,product_id:product_id,timecreate:timecreate},//pass tham số vào key
@@ -43,6 +55,8 @@ function onChange(qty,product_id,order_id,timecreate)
                 }
 			 }
     });
+   }
+  
 }
 //Hàm xóa item ở giỏ hàng
 function deleteCart(product_id,order_id,timecreate)

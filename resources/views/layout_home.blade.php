@@ -584,7 +584,7 @@ $(document).ready(function()
 </script>
 <body>
 
-<header id="header"  ><!--header-->
+<header id="header" style="margin-top:-25px" ><!--header-->
 		<div class="header_top" ><!--header_top-->
 			<div class="container">
 				<div class="row" >

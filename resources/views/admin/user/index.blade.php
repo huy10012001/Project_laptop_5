@@ -36,7 +36,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($user as $p)
+                            @foreach($user->skip(1) as $p)
+                            
                             <tr>
                                     <td>{{$p->id}}</td>
                                     <td>{{$p->name}}</td>
@@ -68,7 +69,7 @@
                                     <td class="text-right">
                                    
                                     <a class="btn btn-info btn-sm" href="{{ url('admin/user/viewRole/'.$p->id) }}">
-                                        <i class="fas fa-pencil-alt"></i>  Sửa vai trò
+                                        <i class="fas fa-pencil-alt"></i>  Xem vai trò
                                     </a>
                                    
                                     </td>

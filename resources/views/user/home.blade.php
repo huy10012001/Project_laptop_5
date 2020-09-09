@@ -24,7 +24,7 @@
                     <div class="carousel-inner">
                         <div class="item active">
                              <div class="col-sm-6" style="margin-top:-50px;">
-                                <h1><span>lapTop</span>-Shop</h1>
+                                <h1><span>LapTop</span>-Shop</h1>
                                 <h2>giao hàng tận nơi</h2>
                                 <p>miễn phí giao hàng tận tay bạn , thanh toán khi sản phẩm được giao và kiểm tra. </p>
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
@@ -36,8 +36,8 @@
                         </div>
                         <div class="item">
                             <div class="col-sm-6"style="margin-top:-50px;">
-                                <h1><span>lapTop</span>-Shop</h1>
-                                <h2>100% hàng chất lương</h2>
+                                <h1><span>LapTop</span>-Shop</h1>
+                                <h2>100% hàng chất lương<l/h2>
                                 <p>uy tính và chất lượng đặt trên hàng đầu. </p>
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
                             </div>
@@ -49,7 +49,7 @@
 
                         <div class="item">
                             <div class="col-sm-6" style="margin-top:-50px;">
-                                <h1><span>lapTop</span>-Shop</h1>
+                                <h1><span>LapTop</span>-Shop</h1>
                                 <h2>giao dịch trực tiếp trên website</h2>
                                 <p>uy tính chất lượng là điều quan trọng tạo nên LapTop-shop của chúng tôi. </p>
                                 <button type="button" class="btn btn-default get">xem sản phẩm</button>
